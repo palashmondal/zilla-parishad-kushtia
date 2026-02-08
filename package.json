@@ -1,0 +1,33 @@
+{
+  "name": "zpkushtia-tools",
+  "version": "2.0.0",
+  "description": "ZP Kushtia Tools - জেলা পরিষদ, কুষ্টিয়া",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "legacy": "node server.js",
+    "test": "curl http://localhost:3000/api/health"
+  },
+  "keywords": [
+    "zilla-parishad",
+    "kushtia",
+    "bangladesh",
+    "scholarship",
+    "humanitarian-aid",
+    "project-management"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "morgan": "^1.10.1",
+    "mysql2": "^3.6.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
