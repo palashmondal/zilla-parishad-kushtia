@@ -137,3 +137,12 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+.DS_Store
+.claudeignore
+
+# Project-specific
+uploads/
+ssl/
+*.pdf
+.claude/
+.nova
