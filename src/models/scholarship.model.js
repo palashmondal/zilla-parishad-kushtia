@@ -4,7 +4,8 @@ const SCHOLARSHIP_FIELDS = `
     id, serial, name, father_name, mother_name,
     sang, post, upazila, zila, phone,
     passing_year, school, gpa, category,
-    financial_year, amount, status
+    financial_year, amount, status,
+    created_at, updated_at
 `;
 
 const scholarshipModel = {
@@ -74,7 +75,9 @@ const scholarshipModel = {
     },
 
     async getStats() {
-        const [totalResult] = await pool.execute('SELECT COUNT(*) as total FROM scholarship');
+        const [totalResult] = await pool.execute(
+            'SELECT COUNT(*) as total_count, COALESCE(SUM(amount), 0) as total_amount FROM scholarship'
+        );
         const [categoryResult] = await pool.execute(
             'SELECT category, COUNT(*) as count FROM scholarship GROUP BY category'
         );
@@ -82,7 +85,8 @@ const scholarshipModel = {
             'SELECT financial_year, COUNT(*) as count FROM scholarship GROUP BY financial_year'
         );
         return {
-            total: totalResult[0].total,
+            total_count: totalResult[0].total_count,
+            total_amount: totalResult[0].total_amount,
             byCategory: categoryResult,
             byYear: yearResult
         };
@@ -109,7 +113,10 @@ const scholarshipModel = {
     },
 
     async getAll(page = 1, limit = 20, search = '', year = '') {
-        const offset = (page - 1) * limit;
+        const safeLimit = parseInt(limit, 10) || 20;
+        const safePage = parseInt(page, 10) || 1;
+        const offset = (safePage - 1) * safeLimit;
+
         let sql = `SELECT ${SCHOLARSHIP_FIELDS} FROM scholarship`;
         let countSql = 'SELECT COUNT(*) as total FROM scholarship';
         const params = [];
@@ -135,8 +142,7 @@ const scholarshipModel = {
             countSql += whereClause;
         }
 
-        sql += ' ORDER BY id DESC LIMIT ? OFFSET ?';
-        params.push(limit, offset);
+        sql += ` ORDER BY id DESC LIMIT ${safeLimit} OFFSET ${offset}`;
 
         const [results] = await pool.execute(sql, params);
         const [countResult] = await pool.execute(countSql, countParams);
@@ -144,9 +150,9 @@ const scholarshipModel = {
         return {
             data: results,
             total: countResult[0].total,
-            page,
-            limit,
-            totalPages: Math.ceil(countResult[0].total / limit)
+            page: safePage,
+            limit: safeLimit,
+            totalPages: Math.ceil(countResult[0].total / safeLimit)
         };
     }
 };

@@ -44,17 +44,21 @@ app.set('trust proxy', 1);
 // Middleware
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(generalLimiter);
 app.use(morgan(isProduction ? 'combined' : 'dev'));
 
-// Static files
+// Static files (no rate limiting on static assets)
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/admin', express.static(path.join(__dirname, '..', 'admin')));
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use('/favicon', express.static(path.join(__dirname, '..', 'favicon')));
 
-// API routes
-app.use('/api', apiRoutes);
+// API routes (rate limiting applied only to API endpoints)
+// Conditionally apply rate limiting - disabled in development
+if (isProduction) {
+    app.use('/api', generalLimiter, apiRoutes);
+} else {
+    app.use('/api', apiRoutes);
+}
 
 // 404 handler
 app.use((req, res) => {

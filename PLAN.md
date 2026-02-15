@@ -69,20 +69,7 @@ zpkushtia.info/
 
 ---
 
-## Immediate Fix: Update Logo Paths in Public HTML Files
-
-Since HTML files were moved to `public/` but the logo is at `public/assets/images/zpk_logo.jpg`, the `<img src="zpk_logo.jpg">` references are broken. Fix:
-
-**Files to update:**
-- `public/scholarship.html` (line 309): `src="zpk_logo.jpg"` → `src="assets/images/zpk_logo.jpg"`
-- `public/humanitarian_aid.html` (line 308): `src="zpk_logo.jpg"` → `src="assets/images/zpk_logo.jpg"`
-
 **Note:** The root-level HTML files (`scholarship.html`, `humanitarian_aid.html`) are legacy backups and will be removed later. Only the `public/` copies need updating since `src/server.js` serves static files from `public/`.
-
-**Database:** Already using MySQL (`mysql2` package). Database renamed from `zpk_beneficiaries` → `zpk`.
-- `config/database.js` — already uses `'zpk'` ✅
-- `zpk_mysql_structure.sql` — already references `zpk` ✅
-- `README.md:156` — still has old name `zpk_beneficiaries`, needs update to `zpk`
 
 ---
 

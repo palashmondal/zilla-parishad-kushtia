@@ -238,11 +238,11 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* ──── floating nav buttons ──── */
+        /* ──── floating nav buttons (LEFT side) ──── */
         .float-nav-container {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 30px;
+            left: 40px;
             z-index: 50;
             display: flex;
             gap: 10px;
@@ -280,10 +280,290 @@
             height: 16px;
         }
 
+        /* ──── Admin Profile Display with Dropdown (RIGHT side) ──── */
+        .admin-profile {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+        }
+        .admin-profile.hidden {
+            display: none;
+        }
+        .admin-profile-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px 10px 10px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid #c8e6d8;
+            border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(26,107,60,0.15);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        .admin-profile-card:hover {
+            border-color: #1a6b3c;
+            box-shadow: 0 6px 24px rgba(26,107,60,0.25);
+        }
+        .admin-profile-card.open {
+            border-color: #1a6b3c;
+            box-shadow: 0 6px 24px rgba(26,107,60,0.3);
+        }
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c6ede8 0%, #7dd3d0 100%);
+            border: 2px solid #1a6b3c;
+            display: flex;
+            align-items: center;
+            justify-center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .admin-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .admin-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex: 1;
+        }
+        .admin-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a6b3c;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .admin-role {
+            font-size: 10px;
+            font-weight: 600;
+            color: #2d4a3e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .admin-chevron {
+            width: 16px;
+            height: 16px;
+            color: #1a6b3c;
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+        }
+        .admin-profile-card.open .admin-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Profile Dropdown Menu */
+        .admin-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            min-width: 200px;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid #c8e6d8;
+            border-radius: 1.2rem;
+            box-shadow: 0 8px 32px rgba(26,107,60,0.2);
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .admin-dropdown.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #2d4a3e;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border-bottom: 1px solid rgba(200,230,216,0.3);
+        }
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .dropdown-item:hover {
+            background: rgba(200,230,216,0.3);
+            color: #1a6b3c;
+        }
+        .dropdown-item.logout {
+            color: #dc2626;
+        }
+        .dropdown-item.logout:hover {
+            background: rgba(220,38,38,0.1);
+            color: #b91c1c;
+        }
+        .dropdown-item svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* ──── Login Button (shown when not logged in) - RIGHT side ──── */
+        .login-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid #c8e6d8;
+            border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(26,107,60,0.15);
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a6b3c;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        .login-button:hover {
+            background: linear-gradient(135deg, #1a6b3c 0%, #22864d 100%);
+            color: #fff;
+            border-color: #1a6b3c;
+            box-shadow: 0 6px 24px rgba(26,107,60,0.3);
+            transform: translateY(-2px);
+        }
+        .login-button svg {
+            width: 16px;
+            height: 16px;
+        }
+        .login-button.hidden {
+            display: none;
+        }
+
+        /* ──── Dashboard Button (shown when logged in) - LEFT side ──── */
+        .dashboard-button {
+            position: fixed;
+            top: 30px;
+            left: 240px;
+            z-index: 50;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid #c8e6d8;
+            border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(26,107,60,0.15);
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a6b3c;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+        .dashboard-button:hover {
+            background: linear-gradient(135deg, #1a6b3c 0%, #145530 100%);
+            color: #fff;
+            border-color: #1a6b3c;
+            box-shadow: 0 6px 24px rgba(26,107,60,0.3);
+            transform: translateY(-2px);
+        }
+        .dashboard-button svg {
+            width: 16px;
+            height: 16px;
+        }
+        .dashboard-button.hidden {
+            display: none;
+        }
+
+        /* ──── Edit/Delete Modals ──── */
+        #edit-modal .modal-card,
+        #delete-modal .modal-card {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.97);
+            transition: opacity 0.38s cubic-bezier(.34,1.56,.64,1),
+                        transform 0.38s cubic-bezier(.34,1.56,.64,1);
+        }
+        #edit-modal .modal-card.open,
+        #delete-modal .modal-card.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Input/textarea/select focus */
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+        }
+
         input:focus { outline: none !important; }
     </style>
 </head>
 <body class="bg-[#eef5f0] min-h-screen flex flex-col items-start justify-start relative overflow-x-hidden p-4 pt-10 md:pt-20">
+
+    <!-- Admin Profile Display (shown when logged in) -->
+    <div id="admin-profile" class="admin-profile hidden">
+        <div class="admin-profile-card" onclick="toggleAdminDropdown(event)">
+            <div class="admin-avatar" id="admin-avatar">
+                <!-- Profile photo or default icon -->
+                <svg class="w-6 h-6 text-[#1a6b3c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+            </div>
+            <div class="admin-info">
+                <div class="admin-name" id="admin-name">প্রশাসক</div>
+            </div>
+            <svg class="admin-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+
+            <!-- Dropdown Menu -->
+            <div class="admin-dropdown" id="admin-dropdown" onclick="event.stopPropagation()">
+                <div class="dropdown-item" onclick="goToDashboard()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    ড্যাশবোর্ড
+                </div>
+                <div class="dropdown-item" onclick="goToProfile()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    প্রোফাইল পেজ
+                </div>
+
+                <div class="dropdown-item logout" onclick="logout()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    লগআউট
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Button (shown when not logged in) -->
+    <a href="/admin/login.html" id="login-button" class="login-button hidden">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+        </svg>
+        প্রবেশ করুন
+    </a>
+
+ 
 
     <!-- Floating Navigation Buttons -->
     <div class="float-nav-container">
@@ -439,7 +719,208 @@
                 </div>
             </div>
 
+            <!-- Admin Action Buttons (hidden by default, shown when admin logged in) -->
+            <div id="admin-actions" class="hidden mt-6 pt-4 border-t border-[#c8e6d8] flex gap-3">
+                <button onclick="openEditModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm
+                    bg-gradient-to-r from-[#1a6b3c] to-[#1a56a0] text-white
+                    shadow-lg hover:shadow-xl transition-all duration-200
+                    active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    সম্পাদনা করুন
+                </button>
+                <button onclick="openDeleteModal()" class="py-3 px-4 rounded-xl font-bold text-sm
+                    bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white
+                    shadow-lg hover:shadow-xl transition-all duration-200
+                    active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    মুছে ফেলুন
+                </button>
+            </div>
+
             <button onclick="closeModal()" class="modal-close-btn w-full mt-6 text-white font-bold py-4 rounded-2xl shadow-xl active:scale-[0.98] text-[15px]">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <!-- ───── EDIT MODAL ───── -->
+    <div id="edit-modal" class="modal-backdrop fixed inset-0 z-[110] flex items-center justify-center p-4 hidden">
+        <div class="modal-card bg-white w-full max-w-3xl rounded-[2rem] shadow-2xl p-8 relative max-h-[90vh] overflow-y-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-[#1a6b3c]">রেকর্ড সম্পাদনা</h2>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Edit Form -->
+            <form id="edit-form" class="space-y-4" onsubmit="handleEditSubmit(event)">
+                <input type="hidden" id="edit-id">
+
+                <!-- Field groups -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">নাম *</label>
+                        <input type="text" id="edit-name" required
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Father Name -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">পিতার নাম</label>
+                        <input type="text" id="edit-father-name"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Mother Name -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">মাতার নাম</label>
+                        <input type="text" id="edit-mother-name"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Serial/NID/Birth Reg -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">ক্রমিক নং</label>
+                        <input type="text" id="edit-nid-birth"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Institution -->
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">শিক্ষা প্রতিষ্ঠান</label>
+                        <input type="text" id="edit-institution"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- GPA -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">জিপিএ</label>
+                        <input type="text" id="edit-result"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Mobile -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">মোবাইল</label>
+                        <input type="text" id="edit-mobile"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Upazila -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">উপজেলা</label>
+                        <input type="text" id="edit-upazila"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">শিক্ষার্থী ক্যাটাগরি</label>
+                        <input type="text" id="edit-category" placeholder="SSC/HSC/ডিগ্রী"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Amount -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">টাকার পরিমাণ</label>
+                        <input type="number" id="edit-amount" step="0.01"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Financial Year -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">অর্থবছর</label>
+                        <input type="text" id="edit-financial-year" placeholder="২০২৪-২৫"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">স্ট্যাটাস</label>
+                        <select id="edit-status"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                            <option value="delivered" selected>Delivered</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Address (full width) -->
+                <div>
+                    <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">ঠিকানা (সাং, পোস্ট)</label>
+                    <textarea id="edit-address" rows="2" placeholder="গ্রাম/সাং, পোস্ট অফিস"
+                        class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800"></textarea>
+                    <p class="text-xs text-gray-500 mt-1">* কমা (,) দিয়ে আলাদা করুন: গ্রাম/সাং, পোস্ট অফিস</p>
+                </div>
+
+                <!-- Hidden fields (not in database) -->
+                <input type="hidden" id="edit-class-name">
+                <input type="hidden" id="edit-session-year">
+                <input type="hidden" id="edit-exam-name">
+                <input type="hidden" id="edit-bank">
+                <input type="hidden" id="edit-check-no">
+                <input type="hidden" id="edit-check-date">
+                <input type="hidden" id="edit-reference">
+                <input type="hidden" id="edit-application-details">
+                <input type="hidden" id="edit-remarks">
+
+                <!-- Save/Cancel buttons -->
+                <div class="flex gap-3 mt-6 pt-4 border-t border-[#c8e6d8]">
+                    <button type="submit" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#1a6b3c] to-[#1a56a0] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+                        সংরক্ষণ করুন
+                    </button>
+                    <button type="button" onclick="closeEditModal()" class="py-3 px-4 rounded-xl font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-200">
+                        বাতিল
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ───── DELETE CONFIRMATION MODAL ───── -->
+    <div id="delete-modal" class="modal-backdrop fixed inset-0 z-[120] flex items-center justify-center p-4 hidden">
+        <div class="modal-card bg-white w-full max-w-md rounded-[2rem] shadow-2xl p-6 relative">
+            <!-- Warning Icon -->
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#fef3c7] to-[#fbbf24] flex items-center justify-center border-2 border-[#f59e0b]">
+                    <svg class="w-8 h-8 text-[#d97706]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">নিশ্চিত করুন</h3>
+            <p class="text-center text-gray-600 mb-6">
+                আপনি কি নিশ্চিত যে এই রেকর্ডটি মুছে ফেলতে চান?<br>
+                <span class="text-sm text-red-600 font-semibold mt-2 block">এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।</span>
+            </p>
+
+            <!-- Record preview -->
+            <div class="bg-gray-50 rounded-lg p-3 mb-6 border border-gray-200">
+                <p class="font-bold text-gray-800" id="delete-preview-name"></p>
+                <p class="text-sm text-gray-600" id="delete-preview-details"></p>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-200">
+                    বাতিল
+                </button>
+                <button onclick="confirmDelete()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+                    মুছে ফেলুন
+                </button>
+            </div>
         </div>
     </div>
 
@@ -448,15 +929,11 @@
     // API URL Configuration - auto-detect based on environment
     const API_URL = (() => {
         const hostname = window.location.hostname;
-        // Production
-        if (hostname === 'zpkushtia.info' || hostname === 'www.zpkushtia.info') {
-            return 'https://zpkushtia.info:3443/api';
-        }
         // Local development
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            return `${window.location.protocol}//${hostname}:${window.location.protocol === 'https:' ? '3443' : '3000'}/api`;
+            return `http://${hostname}:3000/api`;
         }
-        // Default fallback (same origin)
+        // Production & default — same origin (Nginx proxies to Node)
         return '/api';
     })();
 
@@ -669,6 +1146,370 @@
         document.getElementById('modal').classList.remove('open');
         triggerSearch();
     }
+
+    // ─────────────────────────────────────────────────────────────
+    // AUTHENTICATION & ADMIN FEATURES
+    // ─────────────────────────────────────────────────────────────
+
+    let isAdmin = false;
+    let authToken = null;
+    let currentRecordId = null;
+    let currentRecord = null;
+
+    // Check if admin is logged in
+    async function checkAdminAuth() {
+        authToken = localStorage.getItem('zpk_admin_token');
+        if (!authToken) {
+            hideAdminUI();
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/auth/me`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+
+            if (!response.ok) throw new Error('Invalid token');
+
+            const user = await response.json();
+            if (user.role === 'admin') {
+                isAdmin = true;
+                showAdminUI(user);
+            } else {
+                hideAdminUI();
+            }
+        } catch (error) {
+            console.error('Auth check failed:', error);
+            localStorage.removeItem('zpk_admin_token');
+            localStorage.removeItem('zpk_admin_user');
+            hideAdminUI();
+        }
+    }
+
+    // Show admin UI elements
+    function showAdminUI(user) {
+        isAdmin = true;
+
+        // Hide login button
+        const loginButton = document.getElementById('login-button');
+        if (loginButton) {
+            loginButton.classList.add('hidden');
+        }
+
+        // Show dashboard button
+        const dashboardButton = document.getElementById('dashboard-button');
+        if (dashboardButton) {
+            dashboardButton.classList.remove('hidden');
+        }
+
+        // Show admin profile
+        const adminProfile = document.getElementById('admin-profile');
+        if (adminProfile) {
+            adminProfile.classList.remove('hidden');
+
+            // Set profile info - show user's name
+            const avatarEl = document.getElementById('admin-avatar');
+            const nameEl = document.getElementById('admin-name');
+
+            // Set avatar image or initials
+            if (avatarEl) {
+                if (user.photo_path) {
+                    avatarEl.innerHTML = `<img src="${user.photo_path}" alt="${user.full_name}" class="w-full h-full object-cover">`;
+                } else {
+                    const initials = (user.full_name || user.username).charAt(0).toUpperCase();
+                    avatarEl.innerHTML = `<span class="text-xl font-bold text-white">${initials}</span>`;
+                }
+            }
+
+            // Set user name
+            if (nameEl) {
+                nameEl.textContent = user.full_name || user.username;
+            }
+        }
+
+        // Show edit/delete buttons when modal is shown
+        // (buttons are shown/hidden in showDetails function)
+    }
+
+    // Hide admin UI elements
+    function hideAdminUI() {
+        isAdmin = false;
+
+        // Show login button
+        const loginButton = document.getElementById('login-button');
+        if (loginButton) {
+            loginButton.classList.remove('hidden');
+        }
+
+        // Hide dashboard button
+        const dashboardButton = document.getElementById('dashboard-button');
+        if (dashboardButton) {
+            dashboardButton.classList.add('hidden');
+        }
+
+        // Hide admin profile
+        const adminProfile = document.getElementById('admin-profile');
+        if (adminProfile) {
+            adminProfile.classList.add('hidden');
+        }
+    }
+
+    // Logout function
+    function logout() {
+        localStorage.removeItem('zpk_admin_token');
+        localStorage.removeItem('zpk_admin_user');
+        window.location.href = '/admin/login.html';
+    }
+
+    // Toggle admin dropdown menu
+    function toggleAdminDropdown(event) {
+        event.stopPropagation();
+        const profileCard = document.querySelector('.admin-profile-card');
+        const dropdown = document.getElementById('admin-dropdown');
+
+        profileCard.classList.toggle('open');
+        dropdown.classList.toggle('open');
+    }
+
+    // Go to profile page
+    function goToProfile() {
+        // TODO: Create admin profile page
+        window.location.href = '/admin/profile.html';
+    }
+
+    // Go to dashboard page
+    function goToDashboard() {
+        window.location.href = '/admin';
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        const adminProfile = document.getElementById('admin-profile');
+        if (adminProfile && !adminProfile.contains(event.target)) {
+            const profileCard = document.querySelector('.admin-profile-card');
+            const dropdown = document.getElementById('admin-dropdown');
+            if (profileCard) profileCard.classList.remove('open');
+            if (dropdown) dropdown.classList.remove('open');
+        }
+    });
+
+    // Modified showDetails to include edit/delete buttons for admins
+    const originalShowDetails = showDetails;
+    showDetails = function(r) {
+        currentRecordId = r.id;
+        currentRecord = r;
+
+        // Call original function
+        originalShowDetails(r);
+
+        // Show/hide admin actions based on login status
+        const adminActions = document.getElementById('admin-actions');
+        if (adminActions) {
+            if (isAdmin) {
+                adminActions.classList.remove('hidden');
+            } else {
+                adminActions.classList.add('hidden');
+            }
+        }
+    }
+
+    // ── EDIT MODAL ──
+    function openEditModal() {
+        console.log('openEditModal called', currentRecord);
+        if (!currentRecord) {
+            console.error('No current record available');
+            return;
+        }
+
+        // Build address from sang and post
+        const fullAddress = [currentRecord.sang, currentRecord.post].filter(Boolean).join(', ');
+
+        // Populate all fields (map database fields to form fields)
+        document.getElementById('edit-id').value = currentRecord.id;
+        document.getElementById('edit-name').value = currentRecord.name || '';
+        document.getElementById('edit-father-name').value = currentRecord.father_name || '';
+        document.getElementById('edit-mother-name').value = currentRecord.mother_name || '';
+        document.getElementById('edit-nid-birth').value = currentRecord.serial || '';
+        document.getElementById('edit-class-name').value = '';
+        document.getElementById('edit-institution').value = currentRecord.school || '';
+        document.getElementById('edit-session-year').value = '';
+        document.getElementById('edit-exam-name').value = '';
+        document.getElementById('edit-result').value = currentRecord.gpa || '';
+        document.getElementById('edit-address').value = fullAddress;
+        document.getElementById('edit-upazila').value = currentRecord.upazila || '';
+        document.getElementById('edit-mobile').value = currentRecord.phone || '';
+        document.getElementById('edit-category').value = currentRecord.category || '';
+        document.getElementById('edit-amount').value = currentRecord.amount || '';
+        document.getElementById('edit-bank').value = '';
+        document.getElementById('edit-check-no').value = '';
+        document.getElementById('edit-check-date').value = '';
+        document.getElementById('edit-financial-year').value = currentRecord.financial_year || '';
+        document.getElementById('edit-reference').value = '';
+        document.getElementById('edit-status').value = currentRecord.status || 'delivered';
+        document.getElementById('edit-application-details').value = '';
+        document.getElementById('edit-remarks').value = '';
+
+        // Show edit modal
+        const editModal = document.getElementById('edit-modal');
+        editModal.classList.remove('hidden');
+        editModal.classList.add('open');
+        setTimeout(() => {
+            editModal.querySelector('.modal-card').classList.add('open');
+        }, 10);
+    }
+
+    function closeEditModal() {
+        const editModal = document.getElementById('edit-modal');
+        editModal.querySelector('.modal-card').classList.remove('open');
+        setTimeout(() => {
+            editModal.classList.remove('open');
+            editModal.classList.add('hidden');
+        }, 300);
+    }
+
+    async function handleEditSubmit(e) {
+        e.preventDefault();
+
+        const recordId = document.getElementById('edit-id').value;
+
+        // Parse address to separate sang and post (simple split by comma)
+        const addressValue = document.getElementById('edit-address').value.trim();
+        const addressParts = addressValue.split(',').map(s => s.trim());
+
+        // Map form fields to database columns
+        const updateData = {
+            name: document.getElementById('edit-name').value.trim(),
+            father_name: document.getElementById('edit-father-name').value.trim(),
+            mother_name: document.getElementById('edit-mother-name').value.trim(),
+            serial: document.getElementById('edit-nid-birth').value.trim(),
+            school: document.getElementById('edit-institution').value.trim(),
+            gpa: document.getElementById('edit-result').value.trim(),
+            sang: addressParts[0] || '',
+            post: addressParts[1] || addressValue,
+            upazila: document.getElementById('edit-upazila').value.trim(),
+            phone: document.getElementById('edit-mobile').value.trim(),
+            category: document.getElementById('edit-category').value.trim(),
+            amount: parseFloat(document.getElementById('edit-amount').value) || 0,
+            financial_year: document.getElementById('edit-financial-year').value.trim(),
+            status: document.getElementById('edit-status').value,
+            zila: 'কুষ্টিয়া',
+            passing_year: ''
+        };
+
+        // Remove empty or null values
+        Object.keys(updateData).forEach(key => {
+            if (updateData[key] === '' || updateData[key] === null) {
+                delete updateData[key];
+            }
+        });
+
+        try {
+            const response = await fetch(`${API_URL}/scholarship/${recordId}/update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                body: JSON.stringify(updateData)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Update failed');
+            }
+
+            const result = await response.json();
+
+            // Close edit modal
+            closeEditModal();
+
+            // Show success message
+            alert('রেকর্ড সফলভাবে আপডেট করা হয়েছে');
+
+            // Refresh the view modal with updated data
+            const updatedResponse = await fetch(`${API_URL}/scholarship/${recordId}`);
+            if (updatedResponse.ok) {
+                const updatedRecord = await updatedResponse.json();
+                showDetails(updatedRecord);
+            }
+
+        } catch (error) {
+            console.error('Edit error:', error);
+            alert('ত্রুটি: ' + error.message);
+        }
+    }
+
+    // ── DELETE MODAL ──
+    function openDeleteModal() {
+        console.log('openDeleteModal called', currentRecord);
+        if (!currentRecord) {
+            console.error('No current record available');
+            return;
+        }
+
+        // Build address from sang and post
+        const fullAddress = [currentRecord.sang, currentRecord.post].filter(Boolean).join(', ');
+
+        // Show preview
+        document.getElementById('delete-preview-name').textContent = currentRecord.name || '';
+        document.getElementById('delete-preview-details').textContent =
+            `পিতা: ${currentRecord.father_name || 'N/A'} | ঠিকানা: ${fullAddress || 'N/A'}`;
+
+        // Show delete modal
+        const deleteModal = document.getElementById('delete-modal');
+        deleteModal.classList.remove('hidden');
+        deleteModal.classList.add('open');
+        setTimeout(() => {
+            deleteModal.querySelector('.modal-card').classList.add('open');
+        }, 10);
+    }
+
+    function closeDeleteModal() {
+        const deleteModal = document.getElementById('delete-modal');
+        deleteModal.querySelector('.modal-card').classList.remove('open');
+        setTimeout(() => {
+            deleteModal.classList.remove('open');
+            deleteModal.classList.add('hidden');
+        }, 300);
+    }
+
+    async function confirmDelete() {
+        if (!currentRecordId) return;
+
+        try {
+            const response = await fetch(`${API_URL}/scholarship/${currentRecordId}/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Delete failed');
+            }
+
+            // Close both modals
+            closeDeleteModal();
+            closeModal();
+
+            // Show success message
+            alert('রেকর্ড সফলভাবে মুছে ফেলা হয়েছে');
+
+            // Clear search and refresh
+            document.getElementById('search-input').value = '';
+            dropdown.classList.add('hidden');
+
+        } catch (error) {
+            console.error('Delete error:', error);
+            alert('ত্রুটি: ' + error.message);
+        }
+    }
+
+    // Check authentication on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        checkAdminAuth();
+    });
     </script>
 </body>
 </html>

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const humanitarianController = require('../controllers/humanitarian.controller');
 const { searchLimiter } = require('../middleware/rateLimiter');
+const { requireAuth, requireAdmin } = require('../middleware/auth');
 
 // Public routes
 router.get('/search', searchLimiter, humanitarianController.search);
@@ -10,9 +11,12 @@ router.get('/stats', humanitarianController.getStats);
 router.get('/list', humanitarianController.getAll);
 router.get('/:id', humanitarianController.getById);
 
-// Protected routes (auth middleware will be added in Phase 2)
-router.post('/create', humanitarianController.create);
-router.put('/:id/update', humanitarianController.update);
-router.delete('/:id/delete', humanitarianController.delete);
+// Protected routes (require authentication + admin role)
+router.post('/', requireAuth, requireAdmin, humanitarianController.create);
+router.post('/create', requireAuth, requireAdmin, humanitarianController.create); // Keep for backward compatibility
+router.put('/:id', requireAuth, requireAdmin, humanitarianController.update);
+router.put('/:id/update', requireAuth, requireAdmin, humanitarianController.update); // Keep for backward compatibility
+router.delete('/:id', requireAuth, requireAdmin, humanitarianController.delete);
+router.delete('/:id/delete', requireAuth, requireAdmin, humanitarianController.delete); // Keep for backward compatibility
 
 module.exports = router;
