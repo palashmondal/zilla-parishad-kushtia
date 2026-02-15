@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রোফাইল | জেলা পরিষদ, কুষ্টিয়া</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Hind Siliguri', sans-serif; }
+
+        .profile-card {
+            background: linear-gradient(135deg, rgba(13,115,119,0.05) 0%, rgba(20,145,155,0.05) 100%);
+            border: 2px solid #a5f3fc;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(13,115,119,0.15);
+        }
+
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a5f3fc 0%, #5eead4 100%);
+            border: 4px solid #0d7377;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .info-row {
+            display: flex;
+            padding: 1rem;
+            border-bottom: 1px solid #e0f7f9;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #0d7377;
+            min-width: 150px;
+            font-size: 14px;
+        }
+
+        .info-value {
+            color: #2d4a3e;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #0d7377 0%, #14919b 100%);
+            color: white;
+            border-radius: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(13,115,119,0.2);
+        }
+
+        .btn-back:hover {
+            box-shadow: 0 6px 20px rgba(13,115,119,0.3);
+            transform: translateY(-2px);
+        }
+
+        .edit-mode .info-value {
+            display: none;
+        }
+
+        .edit-mode .edit-input {
+            display: block !important;
+        }
+
+        .edit-mode .view-only {
+            display: none;
+        }
+
+        .edit-input {
+            display: none;
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #a5f3fc;
+            border-radius: 8px;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d4a3e;
+        }
+
+        .edit-input:focus {
+            outline: none;
+            border-color: #0d7377;
+        }
+
+        .avatar-upload {
+            position: relative;
+            cursor: pointer;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+
+        .avatar-upload input[type="file"] {
+            display: none;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120px;
+            height: 120px;
+            background: rgba(13, 115, 119, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .avatar-upload:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#f0f9ff] to-[#e0f7f9] min-h-screen p-8">
+    <div class="max-w-3xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <a href="/humanitarian_aid.html" class="btn-back">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                ফিরে যান
+            </a>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="profile-card" id="profileCard">
+            <div class="text-center mb-8">
+                <div class="avatar-upload" onclick="openPhotoUpload()">
+                    <div class="avatar-large" id="avatar">
+                        <svg class="w-16 h-16 text-[#0d7377]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </div>
+                    <div class="avatar-overlay">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <input type="file" id="photoInput" accept="image/*" onchange="uploadPhoto()">
+                </div>
+                <h1 class="text-3xl font-bold text-[#0d7377] mt-4" id="fullName">অ্যাডমিন প্রোফাইল</h1>
+                <p class="text-sm font-semibold text-[#14919b] mt-1" id="displayDesignation">-</p>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="bg-white rounded-xl overflow-hidden">
+                <div class="info-row view-only">
+                    <div class="info-label">ব্যবহারকারী নাম:</div>
+                    <div class="info-value" id="username">-</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">সম্পূর্ণ নাম:</div>
+                    <div class="info-value" id="fullNameValue">-</div>
+                    <input type="text" class="edit-input" id="fullNameInput">
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ইমেইল:</div>
+                    <div class="info-value" id="email">-</div>
+                    <input type="email" class="edit-input" id="emailInput">
+                </div>
+                <div class="info-row">
+                    <div class="info-label">পদবী:</div>
+                    <div class="info-value" id="designation">-</div>
+                    <input type="text" class="edit-input" id="designationInput">
+                </div>
+                <div class="info-row view-only">
+                    <div class="info-label">অফিস:</div>
+                    <div class="info-value">জেলা পরিষদ, কুষ্টিয়া</div>
+                </div>
+                <div class="info-row view-only">
+                    <div class="info-label">সর্বশেষ লগইন:</div>
+                    <div class="info-value" id="lastLogin">-</div>
+                </div>
+                <div class="info-row view-only">
+                    <div class="info-label">অ্যাকাউন্ট তৈরি:</div>
+                    <div class="info-value" id="createdAt">-</div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-8">
+                <div class="flex gap-4" id="viewActions">
+                    <button onclick="enableEditMode()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#0d7377] to-[#14919b] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+                        প্রোফাইল সম্পাদনা করুন
+                    </button>
+                    <button onclick="changePassword()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#0d7377] to-[#14919b] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+                        পাসওয়ার্ড পরিবর্তন করুন
+                    </button>
+                    <button onclick="logout()" class="py-3 px-6 rounded-xl font-bold text-sm bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+                        লগআউট
+                    </button>
+                </div>
+                <div class="flex gap-4" id="editActions" style="display: none;">
+                    <button onclick="saveProfile()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#10b981] to-[#059669] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+                        সংরক্ষণ করুন
+                    </button>
+                    <button onclick="cancelEdit()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#6b7280] to-[#4b5563] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+                        বাতিল করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="passwordModal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold text-[#0d7377] mb-6">পাসওয়ার্ড পরিবর্তন করুন</h2>
+            <form onsubmit="submitPasswordChange(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-[#0d7377] mb-2">বর্তমান পাসওয়ার্ড</label>
+                    <input type="password" id="currentPassword" required class="w-full px-4 py-3 border-2 border-[#a5f3fc] rounded-xl focus:outline-none focus:border-[#0d7377]">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold text-[#0d7377] mb-2">নতুন পাসওয়ার্ড</label>
+                    <input type="password" id="newPassword" required minlength="6" class="w-full px-4 py-3 border-2 border-[#a5f3fc] rounded-xl focus:outline-none focus:border-[#0d7377]">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-bold text-[#0d7377] mb-2">নতুন পাসওয়ার্ড নিশ্চিত করুন</label>
+                    <input type="password" id="confirmPassword" required minlength="6" class="w-full px-4 py-3 border-2 border-[#a5f3fc] rounded-xl focus:outline-none focus:border-[#0d7377]">
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#0d7377] to-[#14919b] text-white shadow-lg hover:shadow-xl transition-all duration-200">
+                        পরিবর্তন করুন
+                    </button>
+                    <button type="button" onclick="closePasswordModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#6b7280] to-[#4b5563] text-white shadow-lg hover:shadow-xl transition-all duration-200">
+                        বাতিল করুন
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = (() => {
+            const hostname = window.location.hostname;
+            if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                return `http://${hostname}:3000/api`;
+            }
+            return '/api';
+        })();
+
+        let currentUser = null;
+
+        // Load user profile
+        async function loadProfile() {
+            const token = localStorage.getItem('zpk_admin_token');
+            if (!token) {
+                window.location.href = '/admin/login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error('Authentication failed');
+
+                currentUser = await response.json();
+
+                // Update UI
+                document.getElementById('fullName').textContent = currentUser.full_name || currentUser.username;
+                document.getElementById('displayDesignation').textContent = currentUser.designation || '-';
+                document.getElementById('username').textContent = currentUser.username;
+                document.getElementById('fullNameValue').textContent = currentUser.full_name || '-';
+                document.getElementById('email').textContent = currentUser.email;
+                document.getElementById('designation').textContent = currentUser.designation || '-';
+
+                // Update input values
+                document.getElementById('fullNameInput').value = currentUser.full_name || '';
+                document.getElementById('emailInput').value = currentUser.email || '';
+                document.getElementById('designationInput').value = currentUser.designation || '';
+
+                // Format dates
+                if (currentUser.last_login) {
+                    const lastLogin = new Date(currentUser.last_login);
+                    document.getElementById('lastLogin').textContent = lastLogin.toLocaleString('bn-BD');
+                }
+
+                if (currentUser.created_at) {
+                    const createdAt = new Date(currentUser.created_at);
+                    document.getElementById('createdAt').textContent = createdAt.toLocaleString('bn-BD');
+                }
+
+                // Update avatar
+                updateAvatar(currentUser);
+
+            } catch (error) {
+                console.error('Profile load error:', error);
+                localStorage.removeItem('zpk_admin_token');
+                window.location.href = '/admin/login.html';
+            }
+        }
+
+        // Update avatar display
+        function updateAvatar(user) {
+            const avatar = document.getElementById('avatar');
+            if (user.photo_path) {
+                avatar.innerHTML = `<img src="${user.photo_path}" alt="${user.full_name}" class="w-full h-full object-cover">`;
+            } else {
+                const initials = (user.full_name || user.username).charAt(0).toUpperCase();
+                avatar.innerHTML = `<span class="text-5xl font-bold text-[#0d7377]">${initials}</span>`;
+            }
+        }
+
+        // Enable edit mode
+        function enableEditMode() {
+            document.getElementById('profileCard').classList.add('edit-mode');
+            document.getElementById('viewActions').style.display = 'none';
+            document.getElementById('editActions').style.display = 'flex';
+        }
+
+        // Cancel edit mode
+        function cancelEdit() {
+            document.getElementById('profileCard').classList.remove('edit-mode');
+            document.getElementById('viewActions').style.display = 'flex';
+            document.getElementById('editActions').style.display = 'none';
+            // Reset input values
+            document.getElementById('fullNameInput').value = currentUser.full_name || '';
+            document.getElementById('emailInput').value = currentUser.email || '';
+            document.getElementById('designationInput').value = currentUser.designation || '';
+        }
+
+        // Save profile changes
+        async function saveProfile() {
+            const token = localStorage.getItem('zpk_admin_token');
+            if (!token) return;
+
+            const data = {
+                full_name: document.getElementById('fullNameInput').value,
+                email: document.getElementById('emailInput').value,
+                designation: document.getElementById('designationInput').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/auth/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    alert(result.message || 'প্রোফাইল আপডেট ব্যর্থ হয়েছে');
+                    return;
+                }
+
+                // Update token if provided
+                if (result.token) {
+                    localStorage.setItem('zpk_admin_token', result.token);
+                }
+
+                alert('প্রোফাইল সফলভাবে আপডেট হয়েছে!');
+
+                // Reload profile data
+                await loadProfile();
+                cancelEdit();
+
+            } catch (error) {
+                console.error('Save profile error:', error);
+                alert('প্রোফাইল সংরক্ষণে ত্রুটি হয়েছে');
+            }
+        }
+
+        // Open photo upload
+        function openPhotoUpload() {
+            if (document.getElementById('profileCard').classList.contains('edit-mode') || confirm('প্রোফাইল ছবি পরিবর্তন করতে চান?')) {
+                document.getElementById('photoInput').click();
+            }
+        }
+
+        // Upload photo
+        async function uploadPhoto() {
+            const token = localStorage.getItem('zpk_admin_token');
+            const fileInput = document.getElementById('photoInput');
+            const file = fileInput.files[0];
+
+            if (!file || !token) return;
+
+            const formData = new FormData();
+            formData.append('photo', file);
+
+            try {
+                const response = await fetch(`${API_URL}/auth/profile/photo`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    alert(result.message || 'ছবি আপলোড ব্যর্থ হয়েছে');
+                    return;
+                }
+
+                // Update profile with new photo path
+                const updateResponse = await fetch(`${API_URL}/auth/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ photo_path: result.photo_path })
+                });
+
+                if (updateResponse.ok) {
+                    const updateResult = await updateResponse.json();
+                    if (updateResult.token) {
+                        localStorage.setItem('zpk_admin_token', updateResult.token);
+                    }
+                    await loadProfile();
+                    alert('প্রোফাইল ছবি আপডেট হয়েছে!');
+                }
+
+            } catch (error) {
+                console.error('Photo upload error:', error);
+                alert('ছবি আপলোড করতে ত্রুটি হয়েছে');
+            }
+
+            fileInput.value = '';
+        }
+
+        // Change password
+        function changePassword() {
+            document.getElementById('passwordModal').classList.add('active');
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('active');
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        async function submitPasswordChange(event) {
+            event.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                alert('নতুন পাসওয়ার্ড এবং নিশ্চিতকরণ পাসওয়ার্ড মিলছে না');
+                return;
+            }
+
+            const token = localStorage.getItem('zpk_admin_token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/change-password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    alert(result.message || 'পাসওয়ার্ড পরিবর্তন ব্যর্থ হয়েছে');
+                    return;
+                }
+
+                alert('পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!');
+                closePasswordModal();
+
+            } catch (error) {
+                console.error('Password change error:', error);
+                alert('পাসওয়ার্ড পরিবর্তনে ত্রুটি হয়েছে');
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('zpk_admin_token');
+            localStorage.removeItem('zpk_admin_user');
+            window.location.href = '/admin/login.html';
+        }
+
+        // Load profile on page load
+        window.addEventListener('DOMContentLoaded', loadProfile);
+    </script>
+</body>
+</html>

@@ -197,7 +197,7 @@ The application will be available at `http://localhost:3000`.
 | দরিদ্র ও অসহায় ব্যক্তির জন্য মানবিক সহায়তা | Aid for poor and helpless persons |
 | জুলাই যোদ্ধার জন্য মানবিক সহায়তা | Aid for July fighters |
 | বীর মুক্তিযোদ্ধার জন্য মানবিক সহায়তা | Aid for freedom fighters |
-
+| জেলা পরিষদ কর্মচারী কল্যাণ | Aid for staffs of zilla parishad |
 ---
 
 ## API Endpoints

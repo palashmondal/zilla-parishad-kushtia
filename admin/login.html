@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অ্যাডমিন প্রবেশ | জেলা পরিষদ, কুষ্টিয়া</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
+    <link rel="shortcut icon" href="../favicon/favicon.ico" />
+
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Hind Siliguri', sans-serif; }
+
+        /* Glow spheres */
+        .glow-sphere {
+            position: absolute; width: 900px; height: 900px;
+            border-radius: 50%; z-index: 0;
+            filter: blur(110px); opacity: 0.22;
+            animation: float 22s infinite alternate;
+            pointer-events: none;
+        }
+        .sphere-1 { background: radial-gradient(circle, #0d7377 0%, transparent 68%); top: -28%; left: -14%; }
+        .sphere-2 { background: radial-gradient(circle, #0ea5e9 0%, transparent 68%); bottom: -18%; right: -10%; }
+        @keyframes float { 0% { transform: translate(0,0); } 100% { transform: translate(50px,44px); } }
+
+        /* Login card animation */
+        .login-card {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.97);
+            animation: cardFadeIn 0.5s cubic-bezier(.34,1.56,.64,1) forwards;
+            animation-delay: 0.1s;
+        }
+        @keyframes cardFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Input focus */
+        input:focus {
+            outline: none;
+        }
+
+        /* Button loading state */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+        }
+        .btn-loading::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spinner 0.6s linear infinite;
+        }
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error message shake */
+        .error-shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body class="bg-[#f0f9ff] min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <!-- Glow spheres -->
+    <div class="glow-sphere sphere-1"></div>
+    <div class="glow-sphere sphere-2"></div>
+
+    <!-- Login Card -->
+    <div class="login-card bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl p-8 relative z-10 border-2 border-[#a5f3fc]">
+        <!-- Logo/Header -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#0d7377] to-[#14919b] flex items-center justify-center border-2 border-[#5eead4] shadow-lg">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-[#0d7377] mb-1">অ্যাডমিন প্রবেশ</h1>
+            <p class="text-gray-600 text-sm">জেলা পরিষদ, কুষ্টিয়া</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message" class="hidden mb-6 p-4 bg-red-50 border-2 border-red-300 rounded-xl">
+            <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div>
+                    <p class="text-sm font-bold text-red-800">ত্রুটি</p>
+                    <p id="error-text" class="text-sm text-red-700"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="space-y-5">
+            <!-- Username Field -->
+            <div>
+                <label class="block text-xs font-bold text-[#0d7377] mb-2 uppercase tracking-wide">ইউজারনেম</label>
+                <div class="relative">
+                    <div class="absolute left-4 top-1/2 -translate-y-1/2 text-[#0d7377]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="username" name="username" required
+                        class="w-full pl-12 pr-4 py-3 border-2 border-[#a5f3fc] rounded-xl
+                        focus:border-[#0d7377] focus:ring-2 focus:ring-[#5eead4]
+                        font-semibold text-gray-800 transition-all"
+                        placeholder="admin" autocomplete="username">
+                </div>
+            </div>
+
+            <!-- Password Field -->
+            <div>
+                <label class="block text-xs font-bold text-[#0d7377] mb-2 uppercase tracking-wide">পাসওয়ার্ড</label>
+                <div class="relative">
+                    <div class="absolute left-4 top-1/2 -translate-y-1/2 text-[#0d7377]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <input type="password" id="password" name="password" required
+                        class="w-full pl-12 pr-12 py-3 border-2 border-[#a5f3fc] rounded-xl
+                        focus:border-[#0d7377] focus:ring-2 focus:ring-[#5eead4]
+                        font-semibold text-gray-800 transition-all"
+                        placeholder="••••••••" autocomplete="current-password">
+                    <button type="button" id="toggle-password" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0d7377] transition-colors">
+                        <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="login-btn"
+                class="w-full py-3.5 px-4 rounded-xl font-bold text-base
+                bg-gradient-to-r from-[#0d7377] to-[#14919b] text-white
+                shadow-lg hover:shadow-xl transition-all duration-200
+                active:scale-[0.98] flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                </svg>
+                <span>প্রবেশ করুন</span>
+            </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-xs text-gray-500">
+            <p>© ২০২৬ জেলা পরিষদ, কুষ্টিয়া</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:3000/api'
+            : '/api';
+
+        // Toggle password visibility
+        document.getElementById('toggle-password').addEventListener('click', () => {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+            }
+        });
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+
+            errorText.textContent = message;
+            errorDiv.classList.remove('hidden');
+            errorDiv.classList.add('error-shake');
+
+            setTimeout(() => {
+                errorDiv.classList.remove('error-shake');
+            }, 500);
+        }
+
+        // Hide error message
+        function hideError() {
+            document.getElementById('error-message').classList.add('hidden');
+        }
+
+        // Login form submission
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideError();
+
+            const loginBtn = document.getElementById('login-btn');
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                showError('ইউজারনেম এবং পাসওয়ার্ড প্রয়োজন');
+                return;
+            }
+
+            // Show loading state
+            loginBtn.classList.add('btn-loading');
+            loginBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'লগইন ব্যর্থ হয়েছে');
+                }
+
+                // Store token in localStorage
+                localStorage.setItem('zpk_admin_token', data.token);
+                localStorage.setItem('zpk_admin_user', JSON.stringify(data.user));
+
+                // Success - redirect to humanitarian aid page (temporary until dashboard exists)
+                window.location.href = '/humanitarian_aid.html';
+
+            } catch (error) {
+                showError(error.message || 'একটি ত্রুটি ঘটেছে। আবার চেষ্টা করুন।');
+            } finally {
+                // Remove loading state
+                loginBtn.classList.remove('btn-loading');
+                loginBtn.disabled = false;
+            }
+        });
+
+        // Check if already logged in
+        const token = localStorage.getItem('zpk_admin_token');
+        if (token) {
+            // Verify token is still valid
+            fetch(`${API_URL}/auth/me`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(res => {
+                if (res.ok) {
+                    // Already logged in - redirect
+                    window.location.href = '/humanitarian_aid.html';
+                } else {
+                    // Token invalid - clear storage
+                    localStorage.removeItem('zpk_admin_token');
+                    localStorage.removeItem('zpk_admin_user');
+                }
+            })
+            .catch(() => {
+                // Network error - keep login page
+                localStorage.removeItem('zpk_admin_token');
+                localStorage.removeItem('zpk_admin_user');
+            });
+        }
+    </script>
+</body>
+</html>
