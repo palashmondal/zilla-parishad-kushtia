@@ -6,81 +6,145 @@
     <title>মানবিক সহায়তা পরিচালনা - জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
     <style>
         * { font-family: 'Hind Siliguri', sans-serif; }
+
+        /* Beautiful Select Dropdown - DaisyUI Inspired */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23059669'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.25rem;
+            padding-right: 2.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        select:hover {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23047857'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-color: #f0fdf4;
+        }
+
+        /* Status-specific styling */
+        select[name="status"] option[value="pending"] {
+            background: linear-gradient(to right, #fef3c7 0%, transparent 100%);
+            color: #92400e;
+        }
+
+        select[name="status"] option[value="approved"] {
+            background: linear-gradient(to right, #dbeafe 0%, transparent 100%);
+            color: #1e40af;
+        }
+
+        select[name="status"] option[value="disbursed"] {
+            background: linear-gradient(to right, #d1fae5 0%, transparent 100%);
+            color: #065f46;
+        }
+
+        /* Beautiful option hover effect */
+        select option {
+            padding: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Custom scrollbar for dropdown */
+        select::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        select::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        select::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        select::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Beautiful Data Table */
+        .table-row {
+            transition: all 0.2s ease;
+        }
+
+        .table-row:hover {
+            background: #f9fafb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        /* Beautiful Currency Display */
+        .currency-amount {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%);
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.5rem;
+            border: 2px solid #a7f3d0;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .currency-amount:hover {
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
+            transform: translateY(-1px);
+            border-color: #6ee7b7;
+        }
+
+        .currency-symbol {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #059669;
+            opacity: 1;
+        }
+
+        /* Action Button Animations */
+        .action-btn {
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Header -->
-    <header class="bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <a href="/humanitarian_aid.html" class="flex items-center gap-4 hover:opacity-90 transition">
-                    <img src="/assets/images/zpk_logo.jpg" alt="লোগো" class="w-12 h-12 rounded-full border-2 border-white">
-                    <div>
-                        <h1 class="text-2xl font-bold">জেলা পরিষদ, কুষ্টিয়া</h1>
-                        <p class="text-sm text-green-100">মানবিক সহায়তা পরিচালনা</p>
-                    </div>
-                </a>
-                <!-- Profile Dropdown -->
-                <div class="relative">
-                    <button id="profile-dropdown" class="flex items-center gap-3 hover:bg-white/10 rounded-lg px-3 py-2 transition">
-                        <img data-user-avatar src="" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white object-cover">
-                        <div class="text-right hidden md:block">
-                            <p class="font-semibold text-sm" data-user-field="full_name"></p>
-                            <p class="text-xs text-green-100"><span data-user-role-badge></span></p>
-                        </div>
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-
-                    <!-- Dropdown Menu -->
-                    <div id="profile-dropdown-menu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50">
-                        <div class="px-4 py-3 border-b border-gray-200">
-                            <p class="text-sm font-semibold text-gray-900" data-user-field="full_name"></p>
-                            <p class="text-xs text-gray-500" data-user-field="email"></p>
-                        </div>
-                        <a href="/admin/profile.html" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                            </svg>
-                            আমার প্রোফাইল
-                        </a>
-                        <button data-logout-btn class="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                            </svg>
-                            লগআউট
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <div id="header-container"></div>
 
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b border-gray-200">
-        <div class="container mx-auto px-4">
-            <div class="flex gap-6 overflow-x-auto">
-                <a href="/admin/" class="px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
-                    ড্যাশবোর্ড
-                </a>
-                <a href="/admin/scholarship-manage.html" class="px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
-                    শিক্ষাবৃত্তি
-                </a>
-                <a href="/admin/humanitarian-manage.html" class="px-4 py-3 font-semibold text-green-600 border-b-2 border-green-600 whitespace-nowrap">
-                    মানবিক সহায়তা
-                </a>
-                <a href="/admin/users-manage.html" data-role="admin" class="px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
-                    ব্যবহারকারী
-                </a>
-                <a href="/" class="px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
-                    পাবলিক সাইট
-                </a>
-            </div>
-        </div>
-    </nav>
+    <div id="menu-container"></div>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
@@ -114,37 +178,50 @@
                     <input type="text" id="search-input" placeholder="নাম, পিতার নাম, মোবাইল নম্বর..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">অর্থবছর</label>
-                    <select id="year-filter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                        <option value="">সকল বছর</option>
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <svg class="w-4 h-4 inline mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        অর্থবছর
+                    </label>
+                    <div class="relative">
+                        <select id="year-filter" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white hover:border-green-400 transition-all font-medium">
+                            <option value="" selected>📅 সকল বছর</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Table Section -->
-        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <!-- Records List Section -->
+        <div class="space-y-4">
             <!-- Loading Spinner -->
-            <div id="loading" class="hidden p-8 text-center">
-                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-                <p class="mt-4 text-gray-600">লোড হচ্ছে...</p>
+            <div id="loading" class="hidden p-12 text-center bg-white rounded-xl">
+                <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-green-600"></div>
+                <p class="mt-4 text-lg text-gray-600 font-medium">লোড হচ্ছে...</p>
             </div>
 
-            <!-- Table -->
-            <div id="table-container" class="overflow-x-auto">
+            <!-- Table Header (Column Names) -->
+            <div id="table-header" class="hidden bg-white rounded-t-xl shadow-sm border-b-2 border-gray-200">
                 <table class="w-full">
-                    <thead class="bg-gray-50 border-b border-gray-200">
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">নাম</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">পিতার নাম</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">মোবাইল</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">উপজেলা</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">শ্রেণী</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">অর্থবছর</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">পরিমাণ</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">কার্যক্রম</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">নাম</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">পিতার নাম</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">মোবাইল</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">উপজেলা</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">শ্রেণী</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">অর্থবছর</th>
+                            <th class="px-6 py-3 text-right text-xs font-semibold text-green-600 uppercase">💰 পরিমাণ</th>
+                            <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase">কার্যক্রম</th>
                         </tr>
                     </thead>
+                </table>
+            </div>
+
+            <!-- Table Container -->
+            <div id="table-container" class="bg-white rounded-b-xl shadow-md overflow-hidden">
+                <table class="w-full">
                     <tbody id="table-body" class="bg-white divide-y divide-gray-200">
                         <!-- Data will be inserted here -->
                     </tbody>
@@ -152,16 +229,16 @@
             </div>
 
             <!-- Empty State -->
-            <div id="empty-state" class="hidden p-8 text-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div id="empty-state" class="hidden p-12 text-center bg-white rounded-xl">
+                <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">কোনো রেকর্ড পাওয়া যায়নি</h3>
-                <p class="mt-1 text-sm text-gray-500">নতুন রেকর্ড যোগ করতে উপরের বাটনে ক্লিক করুন</p>
+                <h3 class="mt-4 text-lg font-semibold text-gray-900">কোনো রেকর্ড পাওয়া যায়নি</h3>
+                <p class="mt-2 text-sm text-gray-500">নতুন রেকর্ড যোগ করতে উপরের বাটনে ক্লিক করুন</p>
             </div>
 
             <!-- Pagination -->
-            <div id="pagination-container" class="px-6 py-4 border-t border-gray-200"></div>
+            <div id="pagination-container" class="flex justify-center py-6"></div>
         </div>
     </main>
 
@@ -251,12 +328,19 @@
                             <input type="number" name="amount_eng" required step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">অবস্থা</label>
-                            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
-                                <option value="pending">মুলতুবি</option>
-                                <option value="approved">অনুমোদিত</option>
-                                <option value="disbursed">বিতরণকৃত</option>
-                            </select>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                <svg class="w-4 h-4 inline mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                অবস্থা
+                            </label>
+                            <div class="relative">
+                                <select name="status" class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 bg-white hover:border-green-400 transition-all font-medium">
+                                    <option value="pending">⏳ মুলতুবি</option>
+                                    <option value="approved">✅ অনুমোদিত</option>
+                                    <option value="disbursed">💰 বিতরণকৃত</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">আবেদনের বিবরণ</label>
@@ -301,9 +385,16 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <script src="assets/js/components.js"></script>
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/crud.js"></script>
     <script>
+        // Load dashboard components
+        DashboardComponents.loadAll('humanitarian', 'মানবিক সহায়তা পরিচালনা');
+
         let currentPage = 1;
         let currentSearch = '';
         let currentYear = '';
@@ -354,6 +445,7 @@
             const loading = document.getElementById('loading');
             const emptyState = document.getElementById('empty-state');
             const tableContainer = document.getElementById('table-container');
+            const tableHeader = document.getElementById('table-header');
 
             try {
                 loading.classList.remove('hidden');
@@ -373,34 +465,72 @@
 
                 if (!response.data || response.data.length === 0) {
                     emptyState.classList.remove('hidden');
+                    tableHeader.classList.add('hidden');
                     return;
                 }
 
                 tableContainer.classList.remove('hidden');
+                tableHeader.classList.remove('hidden');
                 tbody.innerHTML = '';
 
                 response.data.forEach((record, index) => {
                     const row = document.createElement('tr');
-                    row.className = 'hover:bg-gray-50 transition';
+                    row.className = 'table-row';
                     row.innerHTML = `
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900">${CRUDManager.escapeHtml(record.name)}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900">${CRUDManager.escapeHtml(record.father_name)}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${CRUDManager.toBengaliNumber(record.mobile || '-')}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900">${CRUDManager.escapeHtml(record.upazila || '-')}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900">${CRUDManager.escapeHtml(record.category || '-')}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${CRUDManager.toBengaliNumber(record.financial_year || '-')}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">${CRUDManager.formatCurrency(record.amount_eng)}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <button onclick="editRecord(${record.id})" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                </svg>
-                            </button>
-                            <button onclick="deleteRecord(${record.id})" class="text-red-600 hover:text-red-900">
-                                <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </button>
+                        <!-- Name -->
+                        <td class="px-6 py-4">
+                            <p class="text-base text-gray-900 font-medium">${CRUDManager.escapeHtml(record.name)}</p>
+                        </td>
+
+                        <!-- Father's Name -->
+                        <td class="px-6 py-4">
+                            <p class="text-base text-gray-600">${CRUDManager.escapeHtml(record.father_name)}</p>
+                        </td>
+
+                        <!-- Mobile (English) -->
+                        <td class="px-6 py-4">
+                            <p class="text-sm text-gray-700">${record.mobile || '-'}</p>
+                        </td>
+
+                        <!-- Upazila -->
+                        <td class="px-6 py-4">
+                            <p class="text-base text-gray-700">${CRUDManager.escapeHtml(record.upazila || '-')}</p>
+                        </td>
+
+                        <!-- Category -->
+                        <td class="px-6 py-4">
+                            <p class="text-base text-gray-700">${CRUDManager.escapeHtml(record.category || '-')}</p>
+                        </td>
+
+                        <!-- Financial Year -->
+                        <td class="px-6 py-4 text-center">
+                            <p class="text-sm text-gray-600 font-medium">${CRUDManager.toBengaliNumber(record.financial_year || '-')}</p>
+                        </td>
+
+                        <!-- Amount -->
+                        <td class="px-6 py-4">
+                            <div class="flex justify-end">
+                                <div class="currency-amount font-bold text-gray-900 text-base">
+                                    <span class="currency-symbol">৳</span>
+                                    <span>${CRUDManager.toBengaliNumber(parseFloat(record.amount_eng).toLocaleString('en-IN'))}</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Action Buttons -->
+                        <td class="px-6 py-4">
+                            <div class="flex justify-center gap-2">
+                                <button onclick="editRecord(${record.id})" class="action-btn p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" title="সম্পাদনা">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                    </svg>
+                                </button>
+                                <button onclick="deleteRecord(${record.id})" class="action-btn p-2 bg-red-500 text-white rounded-lg hover:bg-red-600" title="মুছুন">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </td>
                     `;
                     tbody.appendChild(row);

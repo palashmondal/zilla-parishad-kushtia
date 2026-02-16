@@ -230,12 +230,9 @@ const AuthManager = {
             }
         });
 
-        // Special handling for role badges
+        // Special handling for role badges (now showing designation)
         document.querySelectorAll('[data-user-role-badge]').forEach(el => {
-            el.textContent = user.role === 'admin' ? 'প্রশাসক' : 'ব্যবহারকারী';
-            el.className = user.role === 'admin'
-                ? 'px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold'
-                : 'px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold';
+            el.textContent = user.designation || (user.role === 'admin' ? 'প্রশাসক' : 'ব্যবহারকারী');
         });
     },
 
