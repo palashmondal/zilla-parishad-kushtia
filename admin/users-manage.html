@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ব্যবহারকারী পরিচালনা - জেলা পরিষদ, কুষ্টিয়া</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
+    <style>
+        * { font-family: 'Hind Siliguri', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <div id="header-container"></div>
+
+    <!-- Navigation -->
+    <div id="menu-container"></div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Success/Error Messages -->
+        <div id="success-message" class="hidden mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            <p id="success-text"></p>
+        </div>
+        <div id="error-message" class="hidden mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            <p id="error-text"></p>
+        </div>
+
+        <!-- Header Section -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">ব্যবহারকারী তালিকা</h2>
+                    <p class="text-gray-600">সকল সিস্টেম ব্যবহারকারীদের তথ্য</p>
+                </div>
+                <button onclick="openAddModal()" class="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-md">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    নতুন ব্যবহারকারী যোগ করুন
+                </button>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <!-- Loading Spinner -->
+            <div id="loading" class="hidden p-8 text-center">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+                <p class="mt-4 text-gray-600">লোড হচ্ছে...</p>
+            </div>
+
+            <!-- Table -->
+            <div id="table-container" class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ছবি</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">নাম</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ইউজারনেম</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ইমেইল</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">পদবী</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ভূমিকা</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">অবস্থা</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">কার্যক্রম</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden p-8 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">কোনো ব্যবহারকারী পাওয়া যায়নি</h3>
+                <p class="mt-1 text-sm text-gray-500">নতুন ব্যবহারকারী যোগ করতে উপরের বাটনে ক্লিক করুন</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Modal -->
+    <div id="form-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-xl bg-white">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-900" id="modal-title">নতুন ব্যবহারকারী যোগ করুন</h3>
+                <button onclick="closeFormModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="user-form" class="space-y-6">
+                <input type="hidden" id="user-id" name="id">
+
+                <!-- Basic Information -->
+                <div class="border-b pb-4">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">মৌলিক তথ্য</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ইউজারনেম <span class="text-red-500">*</span></label>
+                            <input type="text" name="username" id="username-input" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <p id="username-feedback" class="text-xs mt-1 hidden"></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ইমেইল</label>
+                            <input type="email" name="email" id="email-input" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <p id="email-feedback" class="text-xs mt-1 hidden"></p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">পূর্ণ নাম <span class="text-red-500">*</span></label>
+                            <input type="text" name="full_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div id="password-field">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">পাসওয়ার্ড <span class="text-red-500">*</span></label>
+                            <input type="password" name="password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <p class="text-xs text-gray-500 mt-1">কমপক্ষে ৬ অক্ষর হতে হবে</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional Information -->
+                <div class="border-b pb-4">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">পেশাগত তথ্য</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">পদবী</label>
+                            <input type="text" name="designation" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">অফিসের নাম</label>
+                            <input type="text" name="office_name" value="জেলা পরিষদ, কুষ্টিয়া" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Access Control -->
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">অ্যাক্সেস নিয়ন্ত্রণ</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ভূমিকা <span class="text-red-500">*</span></label>
+                            <select name="role" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                                <option value="user">ব্যবহারকারী</option>
+                                <option value="admin">প্রশাসক</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">অবস্থা <span class="text-red-500">*</span></label>
+                            <select name="is_active" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                                <option value="1">সক্রিয়</option>
+                                <option value="0">নিষ্ক্রিয়</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end gap-3 pt-4 border-t">
+                    <button type="button" onclick="closeFormModal()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                        বাতিল
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                        সংরক্ষণ করুন
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/crud.js"></script>
+    <script>
+        // Load dashboard components
+        DashboardComponents.loadAll('users', 'ব্যবহারকারী পরিচালনা');
+
+        let editingId = null;
+        let usernameCheckTimeout = null;
+        let emailCheckTimeout = null;
+        let isUsernameAvailable = true;
+        let isEmailValid = true;
+
+        // Initialize - Require admin role
+        AuthManager.init(true).then(async (user) => {
+            if (!user) return;
+            await loadData();
+        });
+
+        // Username availability check
+        const usernameInput = document.getElementById('username-input');
+        const usernameFeedback = document.getElementById('username-feedback');
+
+        if (usernameInput) {
+            usernameInput.addEventListener('input', (e) => {
+                const username = e.target.value.trim();
+
+                clearTimeout(usernameCheckTimeout);
+                usernameFeedback.classList.add('hidden');
+
+                if (username.length < 3) {
+                    usernameFeedback.textContent = 'ইউজারনেম কমপক্ষে ৩ অক্ষর হতে হবে';
+                    usernameFeedback.className = 'text-xs mt-1 text-red-600';
+                    usernameFeedback.classList.remove('hidden');
+                    isUsernameAvailable = false;
+                    return;
+                }
+
+                usernameCheckTimeout = setTimeout(async () => {
+                    try {
+                        const response = await AuthManager.fetch(`${AuthManager.API_URL}/users`);
+                        if (response.ok) {
+                            const users = await response.json();
+                            const exists = users.some(u => u.username === username && u.id !== editingId);
+
+                            if (exists) {
+                                usernameFeedback.textContent = '✗ এই ইউজারনেম ইতিমধ্যে ব্যবহৃত হয়েছে';
+                                usernameFeedback.className = 'text-xs mt-1 text-red-600';
+                                isUsernameAvailable = false;
+                            } else {
+                                usernameFeedback.textContent = '✓ ইউজারনেম উপলব্ধ';
+                                usernameFeedback.className = 'text-xs mt-1 text-green-600';
+                                isUsernameAvailable = true;
+                            }
+                            usernameFeedback.classList.remove('hidden');
+                        }
+                    } catch (error) {
+                        console.error('Username check error:', error);
+                    }
+                }, 500);
+            });
+        }
+
+        // Email validation
+        const emailInput = document.getElementById('email-input');
+        const emailFeedback = document.getElementById('email-feedback');
+
+        if (emailInput) {
+            emailInput.addEventListener('input', (e) => {
+                const email = e.target.value.trim();
+
+                clearTimeout(emailCheckTimeout);
+                emailFeedback.classList.add('hidden');
+
+                if (email === '') {
+                    isEmailValid = true;
+                    return;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!emailRegex.test(email)) {
+                    emailFeedback.textContent = '✗ সঠিক ইমেইল ফরম্যাট নয়';
+                    emailFeedback.className = 'text-xs mt-1 text-red-600';
+                    emailFeedback.classList.remove('hidden');
+                    isEmailValid = false;
+                    return;
+                }
+
+                emailCheckTimeout = setTimeout(async () => {
+                    try {
+                        const response = await AuthManager.fetch(`${AuthManager.API_URL}/users`);
+                        if (response.ok) {
+                            const users = await response.json();
+                            const exists = users.some(u => u.email === email && u.id !== editingId);
+
+                            if (exists) {
+                                emailFeedback.textContent = '✗ এই ইমেইল ইতিমধ্যে ব্যবহৃত হয়েছে';
+                                emailFeedback.className = 'text-xs mt-1 text-red-600';
+                                isEmailValid = false;
+                            } else {
+                                emailFeedback.textContent = '✓ ইমেইল উপলব্ধ';
+                                emailFeedback.className = 'text-xs mt-1 text-green-600';
+                                isEmailValid = true;
+                            }
+                            emailFeedback.classList.remove('hidden');
+                        }
+                    } catch (error) {
+                        console.error('Email check error:', error);
+                    }
+                }, 500);
+            });
+        }
+
+        // Load data
+        async function loadData() {
+            const tbody = document.getElementById('table-body');
+            const loading = document.getElementById('loading');
+            const emptyState = document.getElementById('empty-state');
+            const tableContainer = document.getElementById('table-container');
+
+            try {
+                loading.classList.remove('hidden');
+                tableContainer.classList.add('hidden');
+                emptyState.classList.add('hidden');
+
+                const response = await AuthManager.fetch(`${AuthManager.API_URL}/users`);
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.message || `HTTP ${response.status}`);
+                }
+
+                const users = await response.json();
+
+                loading.classList.add('hidden');
+
+                if (!users || users.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                tableContainer.classList.remove('hidden');
+                tbody.innerHTML = '';
+
+                users.forEach((user) => {
+                    const avatarUrl = user.photo_path || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name || user.username)}&background=16a34a&color=fff&size=128`;
+
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-50 transition';
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <img src="${avatarUrl}" alt="${user.full_name}" class="w-10 h-10 rounded-full object-cover">
+                        </td>
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">${CRUDManager.escapeHtml(user.full_name || '-')}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${CRUDManager.escapeHtml(user.username)}</td>
+                        <td class="px-6 py-4 text-sm text-gray-900">${CRUDManager.escapeHtml(user.email || '-')}</td>
+                        <td class="px-6 py-4 text-sm text-gray-900">${CRUDManager.escapeHtml(user.designation || '-')}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${user.role === 'admin' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">
+                                ${user.role === 'admin' ? 'প্রশাসক' : 'ব্যবহারকারী'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${user.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}">
+                                ${user.is_active ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <button onclick="editRecord(${user.id})" class="text-blue-600 hover:text-blue-900 mr-3">
+                                <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
+                            <button onclick="deleteRecord(${user.id}, '${CRUDManager.escapeHtml(user.username)}')" class="text-red-600 hover:text-red-900">
+                                <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+            } catch (error) {
+                loading.classList.add('hidden');
+                console.error('Load data error:', error);
+                CRUDManager.showError('ডেটা লোড করতে ব্যর্থ: ' + error.message);
+            }
+        }
+
+        // Open add modal
+        function openAddModal() {
+            editingId = null;
+            document.getElementById('modal-title').textContent = 'নতুন ব্যবহারকারী যোগ করুন';
+            document.getElementById('user-form').reset();
+            document.querySelector('[name="office_name"]').value = 'জেলা পরিষদ, কুষ্টিয়া';
+            document.querySelector('[name="password"]').required = true;
+            document.getElementById('password-field').classList.remove('hidden');
+
+            // Reset validation feedback
+            usernameFeedback.classList.add('hidden');
+            emailFeedback.classList.add('hidden');
+            isUsernameAvailable = true;
+            isEmailValid = true;
+
+            CRUDManager.openModal('form-modal');
+        }
+
+        // Close form modal
+        function closeFormModal() {
+            CRUDManager.closeModal('form-modal');
+            editingId = null;
+        }
+
+        // Edit record
+        async function editRecord(id) {
+            try {
+                editingId = id;
+                const response = await AuthManager.fetch(`${AuthManager.API_URL}/users/${id}`);
+
+                if (!response.ok) {
+                    throw new Error('ব্যবহারকারী লোড করতে ব্যর্থ');
+                }
+
+                const user = await response.json();
+
+                document.getElementById('modal-title').textContent = 'ব্যবহারকারী সম্পাদনা';
+
+                const form = document.getElementById('user-form');
+                form.querySelector('[name="username"]').value = user.username || '';
+                form.querySelector('[name="email"]').value = user.email || '';
+                form.querySelector('[name="full_name"]').value = user.full_name || '';
+                form.querySelector('[name="designation"]').value = user.designation || '';
+                form.querySelector('[name="office_name"]').value = user.office_name || 'জেলা পরিষদ, কুষ্টিয়া';
+                form.querySelector('[name="role"]').value = user.role || 'user';
+                form.querySelector('[name="is_active"]').value = user.is_active ? '1' : '0';
+
+                // Reset validation feedback
+                usernameFeedback.classList.add('hidden');
+                emailFeedback.classList.add('hidden');
+                isUsernameAvailable = true;
+                isEmailValid = true;
+
+                // Password not required for edit
+                document.querySelector('[name="password"]').required = false;
+                document.getElementById('password-field').innerHTML = `
+                    <label class="block text-sm font-medium text-gray-700 mb-1">নতুন পাসওয়ার্ড</label>
+                    <input type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                    <p class="text-xs text-gray-500 mt-1">পাসওয়ার্ড পরিবর্তন করতে চাইলে এখানে লিখুন</p>
+                `;
+
+                CRUDManager.openModal('form-modal');
+            } catch (error) {
+                CRUDManager.showError('ব্যবহারকারী লোড করতে ব্যর্থ: ' + error.message);
+            }
+        }
+
+        // Delete record
+        async function deleteRecord(id, username) {
+            if (!confirm(`আপনি কি নিশ্চিত যে "${username}" ব্যবহারকারীকে মুছে ফেলতে চান?`)) {
+                return;
+            }
+
+            try {
+                const response = await AuthManager.fetch(`${AuthManager.API_URL}/users/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('ব্যবহারকারী মুছতে ব্যর্থ');
+                }
+
+                CRUDManager.showSuccess('ব্যবহারকারী সফলভাবে মুছে ফেলা হয়েছে');
+                await loadData();
+            } catch (error) {
+                CRUDManager.showError('ব্যবহারকারী মুছতে ব্যর্থ: ' + error.message);
+            }
+        }
+
+        // Form submit
+        document.getElementById('user-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Check validation
+            if (!isUsernameAvailable) {
+                CRUDManager.showError('ইউজারনেম উপলব্ধ নয়। অন্য একটি ইউজারনেম চেষ্টা করুন।');
+                return;
+            }
+
+            if (!isEmailValid) {
+                CRUDManager.showError('ইমেইল সঠিক নয় বা ইতিমধ্যে ব্যবহৃত হয়েছে।');
+                return;
+            }
+
+            try {
+                const formData = new FormData(e.target);
+                const data = {};
+
+                formData.forEach((value, key) => {
+                    if (value !== '' && value !== null) {
+                        data[key] = value;
+                    }
+                });
+
+                // Convert is_active to boolean
+                if (data.is_active !== undefined) {
+                    data.is_active = data.is_active === '1';
+                }
+
+                let response;
+                if (editingId) {
+                    // Don't send empty password on edit
+                    if (!data.password) {
+                        delete data.password;
+                    }
+                    response = await AuthManager.fetch(`${AuthManager.API_URL}/users/${editingId}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(data)
+                    });
+                } else {
+                    response = await AuthManager.fetch(`${AuthManager.API_URL}/users`, {
+                        method: 'POST',
+                        body: JSON.stringify(data)
+                    });
+                }
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'সংরক্ষণ করতে ব্যর্থ');
+                }
+
+                CRUDManager.showSuccess(editingId ? 'ব্যবহারকারী সফলভাবে আপডেট হয়েছে' : 'নতুন ব্যবহারকারী সফলভাবে যোগ করা হয়েছে');
+                closeFormModal();
+                await loadData();
+            } catch (error) {
+                CRUDManager.showError('সংরক্ষণ করতে ব্যর্থ: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

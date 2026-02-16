@@ -1,0 +1,123 @@
+<!-- Header Component -->
+<header class="bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg">
+    <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+            <a href="/scholarship.html" class="flex items-center gap-4 hover:opacity-90 transition">
+                <img src="/assets/images/zpk_logo.jpg" alt="লোগো" class="w-12 h-12 rounded-full border-2 border-white">
+                <div>
+                    <h1 class="text-2xl font-bold">জেলা পরিষদ, কুষ্টিয়া</h1>
+                    <p class="text-sm text-green-100" id="header-subtitle">প্রশাসক ড্যাশবোর্ড</p>
+                </div>
+            </a>
+            <!-- Profile Dropdown -->
+            <div class="relative dropdown-container">
+                <button id="profile-dropdown" class="flex items-center gap-3 hover:bg-white/10 rounded-xl px-4 py-2.5 transition-all duration-200 group">
+                    <div class="relative">
+                        <img data-user-avatar src="" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white object-cover shadow-md ring-2 ring-white/20 group-hover:ring-white/40 transition-all">
+                        <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 border-2 border-white rounded-full"></div>
+                    </div>
+                    <div class="text-right hidden md:block">
+                        <p class="font-semibold text-sm leading-tight" data-user-field="full_name"></p>
+                        <p class="text-xs text-green-100 leading-tight mt-0.5"><span data-user-role-badge></span></p>
+                    </div>
+                    <svg class="w-4 h-4 text-white transition-transform duration-200 dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div id="profile-dropdown-menu" class="hidden absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 dropdown-menu">
+                    <!-- User Info Header -->
+                    <div class="px-5 py-4 bg-gradient-to-br from-green-50 to-blue-50 border-b border-gray-100">
+                        <div class="flex items-center gap-3">
+                            <div class="relative">
+                                <img data-user-avatar src="" alt="Profile" class="w-12 h-12 rounded-full border-2 border-white object-cover shadow-sm">
+                                <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-bold text-gray-900 truncate" data-user-field="full_name"></p>
+                                <p class="text-xs text-gray-600 truncate" data-user-field="email"></p>
+                                <span class="inline-block mt-1 px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full" data-user-role-badge></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Items -->
+                    <div class="py-2">
+                        <a href="/admin/profile.html" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-transparent transition-all duration-200 group">
+                            <div class="w-9 h-9 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-medium">আমার প্রোফাইল</p>
+                                <p class="text-xs text-gray-500">প্রোফাইল দেখুন এবং সম্পাদনা করুন</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Logout Section -->
+                    <div class="border-t border-gray-100 py-2">
+                        <button data-logout-btn class="flex items-center gap-3 w-full px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-all duration-200 group">
+                            <div class="w-9 h-9 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                </svg>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-medium">লগআউট</p>
+                                <p class="text-xs text-red-500">অ্যাকাউন্ট থেকে বের হন</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<style>
+/* Beautiful Dropdown Animations */
+.dropdown-menu {
+    animation: dropdownSlide 0.2s ease-out;
+    transform-origin: top right;
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.dropdown-container:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Smooth transitions */
+.dropdown-menu a, .dropdown-menu button {
+    position: relative;
+    overflow: hidden;
+}
+
+.dropdown-menu a::before, .dropdown-menu button::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: currentColor;
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+}
+
+.dropdown-menu a:hover::before {
+    transform: scaleY(1);
+}
+</style>
