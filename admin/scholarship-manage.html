@@ -6,6 +6,8 @@
     <title>শিক্ষাবৃত্তি পরিচালনা - জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
@@ -18,82 +20,51 @@
     <style>
         * { font-family: 'Hind Siliguri', sans-serif; }
 
-        /* DaisyUI-Style Select Dropdown */
-        select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background: #ffffff;
-            background-color: #ffffff;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2310b981' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-            background-position: right 0.75rem center;
-            background-repeat: no-repeat;
-            background-size: 1.25em 1.25em;
-            padding: 0.625rem 2.75rem 0.625rem 1rem;
-            border: 2px solid #d1d5db;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: 600;
-            font-size: 0.95rem;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            color: #1f2937;
-            line-height: 1.5;
+        /* Tom Select — green theme */
+        .ts-wrapper { font-family: 'Hind Siliguri', sans-serif; }
+        .ts-control {
+            border: 1px solid #d1d5db !important;
+            border-radius: 0.5rem !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 1rem !important;
+            font-weight: 400 !important;
+            line-height: 1.5rem !important;
+            color: #1f2937 !important;
+            background: #ffffff !important;
+            box-shadow: none !important;
+            cursor: pointer !important;
+            transition: border-color 0.2s, box-shadow 0.2s !important;
+            min-height: unset !important;
         }
-
-        select:hover {
-            border-color: #10b981;
-            background: #fafafa;
-            background-color: #fafafa;
-            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+        .ts-wrapper.focus .ts-control {
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 2px rgba(16,185,129,0.4) !important;
         }
-
-        select:focus {
-            outline: none;
-            border-color: #10b981;
-            background: #ffffff;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        .ts-control:hover {
+            border-color: #6ee7b7 !important;
         }
-
-        /* Clean white option backgrounds */
-        select option {
-            background: #ffffff;
-            background-color: #ffffff;
-            color: #1f2937;
-            padding: 8px 12px;
-            font-weight: 500;
-            font-size: 0.9375rem;
+        .ts-dropdown {
+            border: 2px solid #10b981 !important;
+            border-radius: 0.75rem !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+            font-family: 'Hind Siliguri', sans-serif !important;
+            font-size: 0.95rem !important;
+            overflow: hidden !important;
+            margin-top: 4px !important;
         }
-
-        select option:checked,
-        select option:hover {
-            background: #f0fdf4;
-            background-color: #f0fdf4;
-            color: #065f46;
+        .ts-dropdown .option {
+            padding: 0.6rem 1rem !important;
+            font-weight: 500 !important;
+            color: #1f2937 !important;
+            cursor: pointer !important;
+            transition: background 0.15s !important;
         }
-
-        /* Custom scrollbar */
-        select::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        select::-webkit-scrollbar-track {
-            background: #f9fafb;
-            border-radius: 4px;
-        }
-
-        select::-webkit-scrollbar-thumb {
-            background: #d1d5db;
-            border-radius: 4px;
-        }
-
-        select::-webkit-scrollbar-thumb:hover {
-            background: #9ca3af;
-        }
+        .ts-dropdown .option:hover,
+        .ts-dropdown .option.active { background: #f0fdf4 !important; color: #065f46 !important; }
+        .ts-dropdown .option.selected { background: #d1fae5 !important; color: #065f46 !important; font-weight: 700 !important; }
 
         /* Beautiful Data Table */
-        #table-container {
+        #table-wrapper {
             background: white;
         }
 
@@ -202,6 +173,29 @@
             color: #065f46;
         }
 
+        /* Detail Modal */
+        .detail-backdrop {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .detail-backdrop.open { opacity: 1; pointer-events: auto; }
+        .detail-card {
+            transform: translateY(24px) scale(0.97);
+            opacity: 0;
+            transition: transform 0.28s cubic-bezier(.22,1,.36,1), opacity 0.25s ease;
+        }
+        .detail-backdrop.open .detail-card { transform: translateY(0) scale(1); opacity: 1; }
+        .detail-amount-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%);
+            border: 1.5px solid #6ee7b7;
+        }
+        .detail-close-btn {
+            background: linear-gradient(135deg, #059669, #047857);
+            transition: filter 0.2s;
+        }
+        .detail-close-btn:hover { filter: brightness(1.1); }
+
         /* Action Button Animations */
         .action-btn {
             transition: all 0.2s ease;
@@ -264,11 +258,11 @@
                         </svg>
                         অর্থবছর
                     </label>
-                    <div class="relative">
-                        <select id="year-filter" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white hover:border-green-400 transition-all font-medium">
-                            <option value="" selected>📅 সকল বছর</option>
+                    
+                        <select id="year-filter" class="w-full border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white hover:border-green-400 transition-all font-medium">
+                            <option value="" selected>📅 সকল অর্থবছর</option>
                         </select>
-                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -281,8 +275,11 @@
                 <p class="mt-4 text-lg text-gray-600 font-medium">লোড হচ্ছে...</p>
             </div>
 
+            <!-- Table Wrapper: header + rows share the same width -->
+            <div id="table-wrapper" class="bg-white rounded-xl shadow-md overflow-hidden">
+
             <!-- Table Header (Column Names) -->
-            <div id="table-header" class="hidden bg-white rounded-t-xl shadow-sm border-b-2 border-gray-200">
+            <div id="table-header" class="hidden border-b-2 border-gray-200">
                 <div class="grid grid-cols-12 gap-3 px-6 py-3 items-center">
                     <div class="col-span-2 flex items-center gap-2">
                         <span class="text-xs font-semibold text-gray-600 uppercase">শিক্ষার্থী</span>
@@ -305,13 +302,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                         </svg>
                     </div>
-                    <div class="col-span-1 sortable-header text-center" onclick="sortTable('financial_year')" data-column="financial_year">
+                    <div class="col-span-1 sortable-header justify-center" onclick="sortTable('financial_year')" data-column="financial_year">
                         <span class="text-xs font-semibold text-gray-600 uppercase">বছর</span>
                         <svg class="sort-icon w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                         </svg>
                     </div>
-                    <div class="col-span-2 sortable-header text-right" onclick="sortTable('amount')" data-column="amount">
+                    <div class="col-span-2 sortable-header justify-end" onclick="sortTable('amount')" data-column="amount">
                         <span class="text-xs font-semibold text-green-600 uppercase tracking-wide">💰 টাকা</span>
                         <svg class="sort-icon w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
@@ -324,9 +321,11 @@
             </div>
 
             <!-- Records Container -->
-            <div id="table-container" class="bg-white rounded-b-xl shadow-md overflow-hidden">
+            <div id="table-container">
                 <!-- Records will be inserted here as table rows -->
             </div>
+
+            </div><!-- end table-wrapper -->
 
             <!-- Empty State -->
             <div id="empty-state" class="hidden p-12 text-center bg-white rounded-xl">
@@ -341,6 +340,113 @@
             <div id="pagination-container" class="flex justify-center py-6"></div>
         </div>
     </main>
+
+    <!-- ── Detail View Modal ── -->
+    <div id="detail-modal" class="detail-backdrop fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/40">
+        <div class="detail-card bg-white w-full max-w-lg rounded-[1.75rem] shadow-2xl p-6 relative">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center gap-3 flex-1">
+                    <div class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 border-2 border-gray-200">
+                        <img id="dm-avatar-img" src="" alt="" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h2 id="dm-name" class="text-xl font-extrabold text-slate-900 leading-tight mb-0.5"></h2>
+                        <p id="dm-school" class="text-sm font-semibold text-blue-600 truncate"></p>
+                    </div>
+                </div>
+                <button onclick="closeDetailModal()" class="text-slate-300 hover:text-red-500 transition-colors p-1 flex-shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="space-y-3 border-t border-emerald-100 pt-4">
+                <!-- Row 1: Parents -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">পিতার নাম</p>
+                        <p id="dm-father" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">মাতার নাম</p>
+                        <p id="dm-mother" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                </div>
+                <!-- Row 2: Address & Mobile -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">ঠিকানা</p>
+                        <p id="dm-address" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">মোবাইল নম্বর</p>
+                        <p id="dm-phone" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                </div>
+                <!-- Row 3: Upazila, Zila -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">উপজেলা</p>
+                        <p id="dm-upazila" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">জেলা</p>
+                        <p id="dm-zila" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                </div>
+                <!-- Row 4: GPA, Category, Passing Year -->
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">জিপিএ</p>
+                        <p id="dm-gpa" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">শিক্ষার্থী ক্যাটাগরি</p>
+                        <p id="dm-category" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">পাসের বছর</p>
+                        <p id="dm-passing-year" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                </div>
+                <!-- Financial Year -->
+                <div>
+                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">অর্থবছর</p>
+                    <p id="dm-year" class="font-semibold text-slate-800 text-[14px]"></p>
+                </div>
+                <!-- Amount Box -->
+                <div class="detail-amount-box p-4 rounded-xl">
+                    <p class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">জেলা পরিষদ কর্তৃক প্রদত্ত অর্থ</p>
+                    <p id="dm-amount" class="text-xl font-black text-emerald-700 tracking-tight"></p>
+                </div>
+            </div>
+            <!-- Edit / Delete Actions -->
+            <div class="mt-4 pt-3 border-t border-emerald-100 flex gap-3">
+                <button onclick="editRecordFromModal()" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-sm
+                    bg-gradient-to-r from-blue-500 to-blue-600 text-white
+                    shadow hover:shadow-md transition-all duration-200 active:scale-[0.98]
+                    flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    সম্পাদনা করুন
+                </button>
+                <button onclick="deleteRecordFromModal()" class="py-2.5 px-4 rounded-xl font-bold text-sm
+                    bg-gradient-to-r from-red-500 to-red-600 text-white
+                    shadow hover:shadow-md transition-all duration-200 active:scale-[0.98]
+                    flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    মুছে ফেলুন
+                </button>
+            </div>
+
+            <button onclick="closeDetailModal()" class="detail-close-btn w-full mt-3 text-white font-bold py-3 rounded-xl shadow-lg text-[14px]">বন্ধ করুন</button>
+        </div>
+    </div>
 
     <!-- Add/Edit Modal -->
     <div id="form-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
@@ -479,6 +585,39 @@
     <script src="assets/js/components.js"></script>
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/crud.js"></script>
+
+    <script>
+        const _tomInstances = new Map();
+
+        function initTomSelects() {
+            document.querySelectorAll('select').forEach(el => {
+                if (!_tomInstances.has(el)) {
+                    _tomInstances.set(el, new TomSelect(el, {
+                        create: false,
+                        sortField: false,
+                        allowEmptyOption: true,
+                        controlInput: null,
+                        onInitialize() {
+                            this.control.style.fontFamily = "'Hind Siliguri', sans-serif";
+                        }
+                    }));
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initTomSelects);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (CRUDManager && CRUDManager.openModal) {
+                const orig = CRUDManager.openModal.bind(CRUDManager);
+                CRUDManager.openModal = function(id) {
+                    orig(id);
+                    setTimeout(initTomSelects, 50);
+                };
+            }
+        });
+    </script>
+
     <script>
         // Load dashboard components
         DashboardComponents.loadAll('scholarship', 'শিক্ষাবৃত্তি পরিচালনা');
@@ -490,6 +629,7 @@
         let sortColumn = '';
         let sortDirection = 'asc';
         let allRecords = [];
+        let currentModalRecord = null;
 
         // Random kid profile pictures
         const kidAvatars = [
@@ -538,12 +678,19 @@
             try {
                 const years = await CRUDManager.fetchList('/scholarship/years');
                 const select = document.getElementById('year-filter');
+                const ts = _tomInstances.get(select);
                 years.forEach(year => {
-                    const option = document.createElement('option');
-                    option.value = year;
-                    option.textContent = CRUDManager.toBengaliNumber(year);
-                    select.appendChild(option);
+                    const label = CRUDManager.toBengaliNumber(year);
+                    if (ts) {
+                        ts.addOption({ value: year, text: label });
+                    } else {
+                        const option = document.createElement('option');
+                        option.value = year;
+                        option.textContent = label;
+                        select.appendChild(option);
+                    }
                 });
+                if (ts) ts.refreshOptions(false);
             } catch (error) {
                 console.error('Failed to load years:', error);
             }
@@ -587,7 +734,8 @@
 
                 allRecords.forEach((record, index) => {
                     const row = document.createElement('div');
-                    row.className = 'table-row grid grid-cols-12 gap-3 px-6 py-2.5 items-center';
+                    row.className = 'table-row grid grid-cols-12 gap-3 px-6 py-2.5 items-center cursor-pointer';
+                    row.addEventListener('click', () => showDetailModal(record));
                     row.innerHTML = `
                         <!-- Student Info with Avatar -->
                         <div class="col-span-2 flex items-center gap-2">
@@ -628,7 +776,7 @@
                         </div>
 
                         <!-- Action Buttons -->
-                        <div class="col-span-1 flex justify-center gap-2">
+                        <div class="col-span-1 flex justify-center gap-2" onclick="event.stopPropagation()">
                             <button onclick="editRecord(${record.id})" class="action-btn p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" title="সম্পাদনা">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
@@ -797,6 +945,50 @@
                 container.appendChild(row);
             });
         }
+
+        // Edit / Delete from detail modal
+        function editRecordFromModal() {
+            if (!currentModalRecord) return;
+            closeDetailModal();
+            editRecord(currentModalRecord.id);
+        }
+
+        async function deleteRecordFromModal() {
+            if (!currentModalRecord) return;
+            closeDetailModal();
+            await deleteRecord(currentModalRecord.id);
+        }
+
+        // Show detail modal
+        function showDetailModal(r) {
+            currentModalRecord = r;
+            const fullAddr = [r.sang, r.post].filter(Boolean).join(', ');
+            document.getElementById('dm-avatar-img').src = getAvatar(r.id);
+            document.getElementById('dm-avatar-img').alt = r.name;
+            document.getElementById('dm-name').innerText         = r.name || '';
+            document.getElementById('dm-school').innerText       = r.school || '';
+            document.getElementById('dm-father').innerText       = r.father_name || 'N/A';
+            document.getElementById('dm-mother').innerText       = r.mother_name || 'N/A';
+            document.getElementById('dm-address').innerText      = fullAddr || 'N/A';
+            document.getElementById('dm-phone').innerText        = r.phone || 'N/A';
+            document.getElementById('dm-upazila').innerText      = r.upazila || 'N/A';
+            document.getElementById('dm-zila').innerText         = r.zila || 'কুষ্টিয়া';
+            document.getElementById('dm-gpa').innerText          = r.gpa || 'N/A';
+            document.getElementById('dm-category').innerText     = r.category || 'N/A';
+            document.getElementById('dm-passing-year').innerText = r.passing_year || 'N/A';
+            document.getElementById('dm-year').innerText         = r.financial_year || '';
+            document.getElementById('dm-amount').innerText       = '৳ ' + parseFloat(r.amount || 0).toLocaleString('en-IN') + ' টাকা';
+            document.getElementById('detail-modal').classList.add('open');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.remove('open');
+        }
+
+        // Close modal on backdrop click
+        document.getElementById('detail-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeDetailModal();
+        });
 
         // Change page
         function changePage(page) {

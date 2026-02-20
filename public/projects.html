@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রকল্প অনুসন্ধান | জেলা পরিষদ, কুষ্টিয়া</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+<link rel="shortcut icon" href="favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="ZPK" />
+<link rel="manifest" href="favicon/site.webmanifest" />
+
+    <style>
+        /*
+         * ── PALETTE (Amber/Saffron theme — distinct from green & teal) ──
+         *   Deep Amber    #b45309   (ring, accents, buttons)
+         *   Amber Accent  #d97706   (lighter accent)
+         *   Glow/focus    #fbbf24   (amber-400)
+         *   Page bg       #fffbeb   (amber-50, very light warm white)
+         *   Border        #fcd34d   (amber-300)
+         *   Year badge bg #fef9c3   (amber-100)
+         * ──────────────────────────────────────────────────────────────── */
+
+        * { box-sizing: border-box; }
+        body { font-family: 'Hind Siliguri', sans-serif; }
+
+        /* ──── glow spheres ──── */
+        .glow-sphere {
+            position: absolute; width: 900px; height: 900px;
+            border-radius: 50%; z-index: 0;
+            filter: blur(110px); opacity: 0.22;
+            animation: float 22s infinite alternate;
+            pointer-events: none;
+        }
+        .sphere-1 { background: radial-gradient(circle, #b45309 0%, transparent 68%); top: -28%; left: -14%; }
+        .sphere-2 { background: radial-gradient(circle, #f59e0b 0%, transparent 68%); bottom: -18%; right: -10%; }
+        .sphere-3 { background: radial-gradient(circle, #d97706 0%, transparent 70%); top: 40%; right: -20%; opacity: 0.14; }
+        @keyframes float { 0% { transform: translate(0,0); } 100% { transform: translate(50px,44px); } }
+
+        /* ──── year dropdown trigger ──── */
+        .year-select-wrap { position: relative; flex-shrink: 0; }
+        .year-select-btn {
+            display: flex; align-items: center; gap: 7px;
+            background: #fef3c7; border: none;
+            border-radius: 1rem; padding: 11px 15px;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 13px; font-weight: 700; color: #78350f;
+            cursor: pointer; user-select: none;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .year-select-btn:hover { background: #fde68a; }
+        .year-select-btn .chevron { width: 14px; height: 14px; transition: transform 0.25s; color: #b45309; }
+        .year-select-btn.open .chevron { transform: rotate(180deg); }
+        .year-select-btn .dot { width: 7px; height: 7px; border-radius: 50%; background: #b45309; flex-shrink: 0; }
+
+        /* year dropdown panel */
+        .year-panel {
+            position: absolute; top: calc(100% + 10px); left: 0;
+            background: #fff; border: 1px solid #fcd34d;
+            border-radius: 1rem; box-shadow: 0 14px 44px rgba(180,83,9,0.13);
+            min-width: 175px; overflow: hidden; z-index: 200;
+            opacity: 0; transform: translateY(-8px) scale(0.97);
+            transition: opacity 0.28s cubic-bezier(.34,1.56,.64,1), transform 0.28s cubic-bezier(.34,1.56,.64,1);
+            pointer-events: none;
+        }
+        .year-panel.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+        .year-option {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 16px; font-size: 13px; font-weight: 600;
+            color: #78350f; cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            border-bottom: 1px solid #fef9c3;
+        }
+        .year-option:last-child { border-bottom: none; }
+        .year-option:hover { background: #fef3c7; color: #b45309; }
+        .year-option.active { background: #fef3c7; color: #b45309; }
+        .year-option .opt-dot { width: 7px; height: 7px; border-radius: 50%; background: transparent; flex-shrink: 0; transition: background 0.2s; }
+        .year-option.active .opt-dot { background: #b45309; }
+
+        /* ──── search bar ──── */
+        .search-bar {
+            display: flex; align-items: center; gap: 10px;
+            background: #fff; border: 1.5px solid #fcd34d;
+            border-radius: 1.6rem; padding: 9px 9px 9px 11px;
+            box-shadow: 0 8px 32px rgba(180,83,9,0.08), 0 2px 6px rgba(0,0,0,0.04);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+        .search-bar:focus-within {
+            border-color: #fbbf24;
+            box-shadow: 0 8px 32px rgba(180,83,9,0.14), 0 0 0 3px rgba(251,191,36,0.28);
+        }
+        .search-bar .search-icon { color: #fbbf24; flex-shrink: 0; margin-left: 2px; }
+        .search-bar input {
+            flex: 1; border: none; background: transparent;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 16px; color: #1e293b; outline: none;
+            padding: 10px 4px; min-width: 0;
+        }
+        .search-bar input::placeholder { color: #d4a017; }
+        .search-bar .search-btn {
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+            color: #fff; border: none; border-radius: 1.2rem;
+            padding: 13px 30px; font-family: 'Hind Siliguri', sans-serif;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px rgba(180,83,9,0.38);
+        }
+        .search-bar .search-btn:hover {
+            opacity: 0.92;
+            box-shadow: 0 6px 20px rgba(180,83,9,0.45);
+        }
+        .search-bar .search-btn:active { transform: scale(0.96); }
+
+        /* ──── suggestions dropdown ──── */
+        .sugg-wrap { position: relative; }
+        #dropdown {
+            position: absolute; top: calc(100% + 10px); left: 0; right: 0;
+            background: #fff; border: 1px solid #fcd34d;
+            border-radius: 1.2rem; box-shadow: 0 16px 48px rgba(180,83,9,0.12);
+            overflow: hidden; z-index: 150;
+            animation: dropIn 0.38s cubic-bezier(.34,1.56,.64,1) both;
+        }
+        #results { overflow-y: auto; overflow-x: hidden; }
+        #results::-webkit-scrollbar { width: 6px; }
+        #results::-webkit-scrollbar-track { background: transparent; }
+        #results::-webkit-scrollbar-thumb { background: #fbbf24; border-radius: 3px; }
+        #results::-webkit-scrollbar-thumb:hover { background: #b45309; }
+        @keyframes dropIn { from { opacity:0; transform:translateY(-14px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes rowFadeIn { to { opacity:1; transform:translateY(0); } }
+        #dropdown.hidden { display: none; }
+
+        .result-amount { font-size: 13px; font-weight: 700; color: #b45309; }
+
+        .result-row {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 16px; cursor: pointer;
+            border-bottom: 1px solid #fef9c3;
+            transition: background 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+            -webkit-user-select: none; user-select: none;
+            opacity: 0; transform: translateY(8px);
+            animation: rowFadeIn 0.32s cubic-bezier(.34,1.56,.64,1) both;
+        }
+        .result-row:last-child { border-bottom: none; }
+        .result-row:hover {
+            background: linear-gradient(90deg, #fef3c7, #fffbeb);
+            transform: translateX(3px);
+            box-shadow: inset 3px 0 0 #b45309;
+        }
+        .result-row:hover .avatar-placeholder { border-color: #b45309; box-shadow: 0 0 10px rgba(251,191,36,0.35); }
+
+        .avatar-placeholder {
+            width: 48px; height: 48px; flex-shrink: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%);
+            border: 2px solid #fde68a;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.22s;
+        }
+        .avatar-placeholder svg { width: 24px; height: 24px; color: #b45309; }
+
+        .result-info { flex: 1; min-width: 0; }
+        .result-line-1 {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            gap: 10px; margin-bottom: 5px;
+        }
+        .result-name {
+            font-size: 14px; font-weight: 700; color: #0f172a;
+            line-height: 1.4; flex: 1; min-width: 0; text-align: left;
+        }
+        .result-amount { font-size: 13px; font-weight: 700; color: #b45309; flex-shrink: 0; white-space: nowrap; }
+        .result-line-2 {
+            font-size: 12px; color: #64748b; font-weight: 500;
+            display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+        }
+        .result-line-2 .label { font-weight: 600; color: #b45309; }
+        .result-line-2 .sep { color: #d1a05a; }
+        .result-line-2 .chip {
+            font-size: 11px; font-weight: 700;
+            padding: 1px 7px; border-radius: 4px;
+        }
+        .chip-year   { color: #b45309; background: #fef9c3; }
+        .chip-fund   { color: #4d7c0f; background: #ecfccb; }
+        .chip-area   { color: #78350f; background: #fef3c7; }
+        .chip-method { color: #1e40af; background: #dbeafe; }
+        .chip-status { color: #374151; background: #f3f4f6; }
+        #more-hint { padding: 11px 16px; background: #fef9c3; border-top: 1px solid #fcd34d; text-align: center; }
+        #more-hint.hidden { display: none; }
+
+        /* Progress bar in result */
+        .progress-mini-wrap {
+            display: inline-flex; align-items: center;
+            vertical-align: middle; margin-left: 3px;
+        }
+        .progress-mini {
+            position: relative; display: inline-block;
+            width: 64px; height: 7px;
+            background: #cbd5e1; border-radius: 99px;
+        }
+        .progress-mini-fill {
+            position: absolute; top: 0; left: 0; height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #16a34a 0%, #4ade80 100%);
+            min-width: 4px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #fef3c7;
+            border-top: 3px solid #b45309;
+            border-radius: 50%; width: 24px; height: 24px;
+            animation: spin 1s linear infinite; margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* ──── modal ──── */
+        .modal-backdrop {
+            background: rgba(180,83,9,0.10);
+            backdrop-filter: blur(18px);
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.32s cubic-bezier(.4,0,.2,1);
+        }
+        .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+        .modal-card {
+            transform: translateY(28px) scale(0.96); opacity: 0;
+            transition: transform 0.38s cubic-bezier(.34,1.56,.64,1), opacity 0.3s cubic-bezier(.4,0,.2,1);
+        }
+        .modal-backdrop.open .modal-card { transform: translateY(0) scale(1); opacity: 1; }
+
+        /* modal internals */
+        .modal-avatar {
+            background: linear-gradient(135deg, #fef3c7, #fbbf24);
+        }
+        .modal-amount-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 60%, #fef9c3 100%);
+            border: 1px solid #fbbf24;
+        }
+        .modal-status-badge {
+            background: linear-gradient(135deg, #b45309, #d97706);
+        }
+        .modal-close-btn {
+            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+            transition: filter 0.2s, transform 0.1s;
+        }
+        .modal-close-btn:hover { filter: brightness(1.12); }
+        .modal-close-btn:active { transform: scale(0.97); }
+
+        /* Modal progress bar */
+        .progress-bar-track {
+            background: #fde68a; border-radius: 6px; height: 10px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; background: linear-gradient(90deg, #b45309, #d97706);
+            border-radius: 6px; transition: width 0.6s ease;
+        }
+
+        /* Status badges in modal */
+        .badge-completed { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .badge-delayed   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .badge-ongoing   { background: #fef9c3; color: #854d0e; border: 1px solid #fbbf24; }
+
+        /* ──── Progress log timeline ──── */
+        .progress-log-row {
+            display: flex; align-items: flex-start; gap: 12px;
+            background: #fffbeb; border: 1px solid #fde68a;
+            border-radius: 14px; padding: 11px 14px;
+            transition: background 0.15s;
+        }
+        .progress-log-row:hover { background: #fef3c7; }
+        .plog-dot {
+            width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px;
+        }
+        .plog-dot-normal   { background: #b45309; }
+        .plog-dot-delayed  { background: #ef4444; }
+        .plog-dot-complete { background: #16a34a; }
+        .plog-pct {
+            font-size: 12px; font-weight: 800; color: #b45309;
+            background: #fef3c7; border-radius: 6px;
+            padding: 1px 7px; flex-shrink: 0; margin-top: 1px;
+        }
+        .plog-date {
+            font-size: 11px; color: #92400e; font-weight: 600; flex-shrink: 0; margin-top: 2px;
+        }
+        .plog-status {
+            font-size: 13px; font-weight: 700; color: #78350f; line-height: 1.3;
+        }
+        .plog-note {
+            font-size: 12px; color: #92400e; margin-top: 3px; line-height: 1.4;
+        }
+        .plog-flag {
+            font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 5px; flex-shrink: 0; margin-top: 2px;
+        }
+        .plog-flag-delayed  { background: #fee2e2; color: #991b1b; }
+        .plog-flag-complete { background: #dcfce7; color: #166534; }
+
+        /* ──── floating nav buttons (LEFT side) ──── */
+        .float-nav-container {
+            position: fixed;
+            top: 30px;
+            left: 40px;
+            z-index: 50;
+            display: flex;
+            gap: 10px;
+        }
+        .float-nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid #fcd34d;
+            border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(180,83,9,0.15);
+            font-size: 13px;
+            font-weight: 600;
+            color: #b45309;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+        .float-nav-btn:hover {
+            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+            color: #fff;
+            border-color: #b45309;
+            box-shadow: 0 6px 24px rgba(180,83,9,0.3);
+            transform: translateY(-2px);
+        }
+        .float-nav-btn.active {
+            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+            color: #fff;
+            border-color: #b45309;
+        }
+        .float-nav-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ──── Admin Profile Display with Dropdown (RIGHT side) ──── */
+        .admin-profile {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+        }
+        .admin-profile.hidden { display: none; }
+        .admin-profile-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px 10px 10px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid #fcd34d;
+            border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(180,83,9,0.15);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        .admin-profile-card:hover { border-color: #b45309; box-shadow: 0 6px 24px rgba(180,83,9,0.25); }
+        .admin-profile-card.open  { border-color: #b45309; box-shadow: 0 6px 24px rgba(180,83,9,0.3); }
+        .admin-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%);
+            border: 2px solid #b45309;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; overflow: hidden;
+        }
+        .admin-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .admin-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+        .admin-name { font-size: 13px; font-weight: 700; color: #b45309; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .admin-role { font-size: 10px; font-weight: 600; color: #78350f; text-transform: uppercase; letter-spacing: 0.5px; }
+        .admin-chevron { width: 16px; height: 16px; color: #b45309; transition: transform 0.25s ease; flex-shrink: 0; }
+        .admin-profile-card.open .admin-chevron { transform: rotate(180deg); }
+
+        /* Profile Dropdown Menu */
+        .admin-dropdown {
+            position: absolute; top: calc(100% + 10px); left: 0; min-width: 200px;
+            background: rgba(255,255,255,0.98); backdrop-filter: blur(12px);
+            border: 1.5px solid #fcd34d; border-radius: 1.2rem;
+            box-shadow: 0 8px 32px rgba(180,83,9,0.2);
+            opacity: 0; transform: translateY(-10px) scale(0.95);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none; overflow: hidden;
+        }
+        .admin-dropdown.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        .dropdown-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 16px; color: #78350f; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.15s ease;
+            border-bottom: 1px solid rgba(252,211,77,0.3);
+        }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover { background: rgba(254,243,199,0.5); color: #b45309; }
+        .dropdown-item.logout { color: #dc2626; }
+        .dropdown-item.logout:hover { background: rgba(220,38,38,0.1); color: #b91c1c; }
+        .dropdown-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        /* ──── Login Button (shown when not logged in) ──── */
+        .login-button {
+            position: fixed; top: 20px; right: 20px; z-index: 50;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+            border: 1.5px solid #fcd34d; border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(180,83,9,0.15);
+            font-size: 13px; font-weight: 600; color: #b45309;
+            text-decoration: none; transition: all 0.25s ease; cursor: pointer;
+        }
+        .login-button:hover {
+            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+            color: #fff; border-color: #b45309;
+            box-shadow: 0 6px 24px rgba(180,83,9,0.3); transform: translateY(-2px);
+        }
+        .login-button svg { width: 16px; height: 16px; }
+        .login-button.hidden { display: none; }
+
+        /* ──── Dashboard Button (shown when logged in) ──── */
+        .dashboard-button {
+            position: fixed; top: 30px; left: 240px; z-index: 50;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+            border: 1.5px solid #fcd34d; border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(180,83,9,0.15);
+            font-size: 13px; font-weight: 600; color: #b45309;
+            text-decoration: none; transition: all 0.25s ease;
+        }
+        .dashboard-button:hover {
+            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+            color: #fff; border-color: #b45309;
+            box-shadow: 0 6px 24px rgba(180,83,9,0.3); transform: translateY(-2px);
+        }
+        .dashboard-button svg { width: 16px; height: 16px; }
+        .dashboard-button.hidden { display: none; }
+
+        /* ──── Edit/Delete/Progress Modals ──── */
+        #edit-modal .modal-card,
+        #delete-modal .modal-card,
+        #progress-modal .modal-card {
+            opacity: 0; transform: translateY(-20px) scale(0.97);
+            transition: opacity 0.38s cubic-bezier(.34,1.56,.64,1), transform 0.38s cubic-bezier(.34,1.56,.64,1);
+        }
+        #edit-modal .modal-card.open,
+        #delete-modal .modal-card.open,
+        #progress-modal .modal-card.open { opacity: 1; transform: translateY(0) scale(1); }
+
+        input:focus, textarea:focus, select:focus { outline: none; }
+        input:focus { outline: none !important; }
+    </style>
+</head>
+<body class="bg-[#fffbeb] min-h-screen flex flex-col items-start justify-start relative overflow-x-hidden p-4 pt-10 md:pt-20">
+
+    <!-- Admin Profile Display (shown when logged in) -->
+    <div id="admin-profile" class="admin-profile hidden">
+        <div class="admin-profile-card" onclick="toggleAdminDropdown(event)">
+            <div class="admin-avatar" id="admin-avatar">
+                <svg class="w-6 h-6 text-[#b45309]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+            </div>
+            <div class="admin-info">
+                <div class="admin-name" id="admin-name">প্রশাসক</div>
+            </div>
+            <svg class="admin-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+            <!-- Dropdown Menu -->
+            <div class="admin-dropdown" id="admin-dropdown" onclick="event.stopPropagation()">
+                <div class="dropdown-item" onclick="goToDashboard()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    ড্যাশবোর্ড
+                </div>
+                <div class="dropdown-item" onclick="goToProfile()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    প্রোফাইল পেজ
+                </div>
+                <div class="dropdown-item logout" onclick="logout()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                    </svg>
+                    লগআউট
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Button (shown when not logged in) -->
+    <a href="/admin/login.html" id="login-button" class="login-button hidden">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+        </svg>
+        প্রবেশ করুন
+    </a>
+
+    <!-- Floating Navigation Buttons -->
+    <div class="float-nav-container">
+        <a href="projects.html" class="float-nav-btn active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            প্রকল্প
+        </a>
+        <a href="scholarship.html" class="float-nav-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            শিক্ষাবৃত্তি
+        </a>
+        <a href="humanitarian_aid.html" class="float-nav-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            আর্থিক সহযোগিতা
+        </a>
+
+    </div>
+
+    <div class="glow-sphere sphere-1"></div>
+    <div class="glow-sphere sphere-2"></div>
+    <div class="glow-sphere sphere-3"></div>
+
+    <div class="w-full max-w-4xl mx-auto text-center" style="position:relative; z-index:10;">
+
+        <!-- Logo -->
+        <div class="mb-5">
+            <div class="inline-block p-4 bg-white rounded-[2rem] shadow-lg border border-white">
+                <img src="assets/images/zpk_logo.jpg" alt="Seal" class="w-32 h-32">
+            </div>
+        </div>
+
+        <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mb-7">জেলা পরিষদ, কুষ্টিয়া</h1>
+        <p class="text-base md:text-xl font-bold text-[#b45309] mb-8 tracking-wide">উন্নয়ন প্রকল্প ডাটাবেস</p>
+
+        <!-- Search bar with embedded year selector -->
+        <div class="sugg-wrap max-w-3xl mx-auto">
+            <div class="search-bar">
+                <!-- Year dropdown trigger -->
+                <div class="year-select-wrap">
+                    <button class="year-select-btn" id="yearBtn" onclick="toggleYearPanel(event)">
+                        <span class="dot"></span>
+                        <span id="yearBtnLabel">সকল অর্থবছর</span>
+                        <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <div class="year-panel" id="yearPanel">
+                        <div class="year-option active" data-year="all" onclick="pickYear(this, event)">
+                            <span class="opt-dot"></span> সকল অর্থবছর
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search icon -->
+                <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+
+                <!-- Input -->
+                <input type="text" id="search-input" placeholder="" autocomplete="off">
+
+                <!-- Button -->
+                <button class="search-btn" onclick="triggerSearch()">খুঁজুন</button>
+            </div>
+
+            <!-- Suggestions dropdown -->
+            <div id="dropdown" class="hidden">
+                <div id="results"></div>
+                <div id="more-hint" class="hidden">
+                    <span style="font-size:11px; color:#78350f; font-weight:600;">আরও ফলাফল দেখতে বিস্তারিত অনুসন্ধান করুন</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───── DETAIL MODAL ───── -->
+    <div id="modal" class="modal-backdrop fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="modal-card bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl p-8 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-start justify-between mb-6">
+                <div class="flex items-center gap-4 flex-1">
+                    <div class="modal-avatar w-16 h-16 rounded-2xl flex items-center justify-center text-[#b45309] flex-shrink-0">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h2 id="m-project-name" class="text-xl font-extrabold text-slate-900 leading-tight mb-1"></h2>
+                        <div class="flex items-center gap-2 flex-wrap mt-1">
+                            <span id="m-project-type-badge" class="text-xs font-bold px-2 py-1 rounded-full bg-[#fef3c7] text-[#92400e]"></span>
+                            <span id="m-method-badge" class="text-xs font-bold px-2 py-1 rounded-full bg-[#fef9c3] text-[#b45309]"></span>
+                            <span id="m-status-flags" class="flex gap-2"></span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-slate-300 hover:text-[#d97706] transition-colors p-2 flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="space-y-5 border-t border-[#fcd34d] pt-6">
+
+                <!-- Project ID & Year -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকল্প আইডি</p>
+                        <p id="m-id" class="font-semibold text-slate-800 text-[15px] font-mono"></p>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">অর্থবছর</p>
+                        <p id="m-financial-year" class="font-semibold text-slate-800 text-[15px]"></p>
+                    </div>
+                </div>
+
+                <!-- Upazila & Fund Type -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">উপজেলা</p>
+                        <p id="m-upazila" class="font-semibold text-slate-800 text-[15px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">তহবিলের ধরণ</p>
+                        <p id="m-fund-type" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                </div>
+
+                <!-- Status & Progress -->
+                <div>
+                    <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-2">বর্তমান অবস্থা ও অগ্রগতি</p>
+                    <div class="flex items-center gap-3 mb-2">
+                        <span id="m-current-status" class="text-sm font-semibold text-slate-700"></span>
+                        <span id="m-progress-pct" class="text-sm font-bold text-[#b45309]"></span>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="m-progress-bar" style="width:0%"></div>
+                    </div>
+                </div>
+
+                <!-- Dates -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">শুরু তারিখ</p>
+                        <p id="m-start-date" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">সম্ভাব্য সমাপ্তি</p>
+                        <p id="m-expected-end" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকৃত সমাপ্তি</p>
+                        <p id="m-actual-end" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                </div>
+
+                <!-- Remarks -->
+                <div id="m-remarks-section" class="hidden">
+                    <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">মন্তব্য</p>
+                    <p id="m-remarks" class="font-medium text-slate-600 text-[14px] leading-relaxed"></p>
+                </div>
+
+                <!-- Amount box -->
+                <div class="modal-amount-box p-5 rounded-2xl">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-[11px] font-bold text-[#92400e] uppercase tracking-wider mb-1">মোট বরাদ্দ</p>
+                            <p id="m-allocation" class="text-2xl font-black text-[#b45309] tracking-tight"></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[11px] font-bold text-[#92400e] uppercase tracking-wider mb-1">ছাড়কৃত অর্থ</p>
+                            <p id="m-released" class="text-xl font-black text-[#d97706] tracking-tight"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Log Timeline -->
+            <div id="m-progress-log-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">অগ্রগতির ইতিহাস</p>
+                <div id="m-progress-log-list" class="space-y-2"></div>
+            </div>
+
+            <!-- Admin Action Buttons -->
+            <div id="admin-actions" class="hidden mt-6 pt-4 border-t border-[#fcd34d] flex gap-3 flex-wrap">
+                <button onclick="openProgressModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm
+                    bg-gradient-to-r from-[#059669] to-[#047857] text-white
+                    shadow-lg hover:shadow-xl transition-all duration-200
+                    active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    অগ্রগতি যোগ করুন
+                </button>
+                <button onclick="openEditModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm
+                    bg-gradient-to-r from-[#b45309] to-[#d97706] text-white
+                    shadow-lg hover:shadow-xl transition-all duration-200
+                    active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    সম্পাদনা করুন
+                </button>
+                <button onclick="openDeleteModal()" class="py-3 px-4 rounded-xl font-bold text-sm
+                    bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white
+                    shadow-lg hover:shadow-xl transition-all duration-200
+                    active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    মুছে ফেলুন
+                </button>
+            </div>
+
+            <button onclick="closeModal()" class="modal-close-btn w-full mt-6 text-white font-bold py-4 rounded-2xl shadow-xl active:scale-[0.98] text-[15px]">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <!-- ───── EDIT MODAL ───── -->
+    <div id="edit-modal" class="modal-backdrop fixed inset-0 z-[110] flex items-center justify-center p-4 hidden">
+        <div class="modal-card bg-white w-full max-w-3xl rounded-[2rem] shadow-2xl p-8 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-[#b45309]">প্রকল্প সম্পাদনা</h2>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="edit-form" class="space-y-4" onsubmit="handleEditSubmit(event)">
+                <input type="hidden" id="edit-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">প্রকল্পের নাম *</label>
+                        <textarea id="edit-project-name" rows="2" required
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">উপজেলা</label>
+                        <input type="text" id="edit-upazila"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">প্রকল্পের ধরণ</label>
+                        <select id="edit-project-type"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                            <option value="শিক্ষা">শিক্ষা</option>
+                            <option value="ধর্মীয় ও সামাজিক">ধর্মীয় ও সামাজিক</option>
+                            <option value="সেবামূলক">সেবামূলক</option>
+                            <option value="ক্রীড়া">ক্রীড়া</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">বাস্তবায়ন পদ্ধতি</label>
+                        <select id="edit-implementation-method"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                            <option value="টেন্ডার">টেন্ডার</option>
+                            <option value="সিপিপিসি">সিপিপিসি</option>
+                            <option value="আরএফকিউ">আরএফকিউ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">বর্তমান অবস্থা</label>
+                        <input type="text" id="edit-current-status"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">অগ্রগতি (%)</label>
+                        <input type="number" id="edit-progress" min="0" max="100"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">মোট বরাদ্দ (টাকা)</label>
+                        <input type="number" id="edit-allocation" step="0.01"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">ছাড়কৃত অর্থ (টাকা)</label>
+                        <input type="number" id="edit-released" step="0.01"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">অর্থবছর</label>
+                        <input type="text" id="edit-financial-year" placeholder="২০২৫-২৬"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">শুরু তারিখ</label>
+                        <input type="date" id="edit-start-date"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">সম্ভাব্য সমাপ্তি</label>
+                        <input type="date" id="edit-expected-end"
+                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">তহবিলের ধরণ</label>
+                    <input type="text" id="edit-fund-type"
+                        class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">মন্তব্য</label>
+                    <textarea id="edit-remarks" rows="2"
+                        class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800"></textarea>
+                </div>
+                <div class="flex gap-3 mt-6 pt-4 border-t border-[#fcd34d]">
+                    <button type="submit" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#b45309] to-[#92400e] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+                        সংরক্ষণ করুন
+                    </button>
+                    <button type="button" onclick="closeEditModal()" class="py-3 px-4 rounded-xl font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-200">
+                        বাতিল
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ───── DELETE CONFIRMATION MODAL ───── -->
+    <div id="delete-modal" class="modal-backdrop fixed inset-0 z-[120] flex items-center justify-center p-4 hidden">
+        <div class="modal-card bg-white w-full max-w-md rounded-[2rem] shadow-2xl p-6 relative">
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#fef3c7] to-[#fbbf24] flex items-center justify-center border-2 border-[#f59e0b]">
+                    <svg class="w-8 h-8 text-[#d97706]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">নিশ্চিত করুন</h3>
+            <p class="text-center text-gray-600 mb-6">
+                আপনি কি নিশ্চিত যে এই প্রকল্পটি মুছে ফেলতে চান?<br>
+                <span class="text-sm text-red-600 font-semibold mt-2 block">এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।</span>
+            </p>
+            <div class="bg-gray-50 rounded-lg p-3 mb-6 border border-gray-200">
+                <p class="font-bold text-gray-800 text-sm" id="delete-preview-name"></p>
+                <p class="text-sm text-gray-600" id="delete-preview-details"></p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-200">
+                    বাতিল
+                </button>
+                <button onclick="confirmDelete()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+                    মুছে ফেলুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───── PROGRESS MODAL ───── -->
+    <div id="progress-modal" class="modal-backdrop fixed inset-0 z-[130] flex items-center justify-center p-4 hidden">
+        <div class="modal-card bg-white w-full max-w-xl rounded-[2rem] shadow-2xl relative max-h-[92vh] overflow-y-auto">
+
+            <!-- Header -->
+            <div class="sticky top-0 bg-white z-10 flex items-center justify-between px-8 pt-7 pb-4 border-b border-[#d1fae5]">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d1fae5] to-[#6ee7b7] flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#047857]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-900">অগ্রগতি যোগ করুন</h2>
+                        <p id="pm-project-title" class="text-xs text-[#059669] font-semibold truncate max-w-[280px]"></p>
+                    </div>
+                </div>
+                <button onclick="closeProgressModal()" class="text-slate-300 hover:text-red-500 transition-colors p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="px-8 py-6 space-y-7">
+
+                <!-- ── Section 1: Progress Snapshot ── -->
+                <div>
+                    <p class="text-[11px] font-bold text-[#059669] uppercase tracking-widest mb-4">অগ্রগতির তথ্য</p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">অগ্রগতি (%) *</label>
+                            <input type="number" id="pm-progress" min="0" max="100" required
+                                class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-bold text-lg
+                                       focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">নতুন ছাড়কৃত অর্থ (৳)</label>
+                            <input type="number" id="pm-released" min="0" step="0.01"
+                                class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-semibold
+                                       focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">বর্তমান অবস্থা *</label>
+                        <input type="text" id="pm-status"
+                            class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-semibold
+                                   focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                    </div>
+
+                    <div class="flex gap-6 mt-4">
+                        <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                            <input type="checkbox" id="pm-completed"
+                                class="w-5 h-5 rounded border-2 border-[#059669] accent-[#059669]">
+                            <span class="text-sm font-semibold text-slate-700">বাস্তবায়ন সম্পন্ন</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                            <input type="checkbox" id="pm-delayed"
+                                class="w-5 h-5 rounded border-2 border-[#dc2626] accent-[#dc2626]">
+                            <span class="text-sm font-semibold text-slate-700">বিলম্বিত</span>
+                        </label>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">আপডেট নোট</label>
+                        <textarea id="pm-note" rows="2" placeholder="যেমন: ভিত্তিপ্রস্তর স্থাপন সম্পন্ন হয়েছে…"
+                            class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-medium
+                                   focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5] resize-none"></textarea>
+                    </div>
+
+                    <!-- Progress submit -->
+                    <div id="pm-progress-msg" class="hidden mt-3 px-4 py-2.5 rounded-xl text-sm font-semibold"></div>
+                    <button onclick="handleProgressSubmit()" class="mt-4 w-full py-3 rounded-xl font-bold text-sm
+                        bg-gradient-to-r from-[#059669] to-[#047857] text-white
+                        shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.98]
+                        flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        অগ্রগতি সংরক্ষণ করুন
+                    </button>
+                </div>
+
+                <!-- Divider -->
+                <div class="flex items-center gap-3">
+                    <div class="flex-1 h-px bg-[#d1fae5]"></div>
+                    <span class="text-xs font-bold text-[#059669] uppercase tracking-widest">ছবি আপলোড</span>
+                    <div class="flex-1 h-px bg-[#d1fae5]"></div>
+                </div>
+
+                <!-- ── Section 2: Image Upload ── -->
+                <div>
+                    <p class="text-[11px] font-bold text-[#059669] uppercase tracking-widest mb-4">প্রকল্পের ছবি</p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">ছবির ধরন</label>
+                            <select id="pm-photo-type"
+                                class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-semibold
+                                       focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                                <option value="before">কাজের আগে</option>
+                                <option value="during" selected>কাজ চলাকালীন</option>
+                                <option value="after">কাজের পরে</option>
+                                <option value="general">সাধারণ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">ক্যাপশন (ঐচ্ছিক)</label>
+                            <input type="text" id="pm-caption" placeholder="ছবির বিবরণ…"
+                                class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-medium
+                                       focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                        </div>
+                    </div>
+
+                    <!-- File drop zone -->
+                    <div class="mt-4">
+                        <label for="pm-images"
+                            class="flex flex-col items-center justify-center gap-2 w-full h-28
+                                   border-2 border-dashed border-[#6ee7b7] rounded-xl
+                                   bg-[#f0fdf4] hover:bg-[#dcfce7] cursor-pointer transition-colors duration-200">
+                            <svg class="w-8 h-8 text-[#059669]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span class="text-sm font-semibold text-[#059669]">ছবি নির্বাচন করুন</span>
+                            <span class="text-xs text-slate-400">JPEG, PNG, WebP · সর্বোচ্চ ৫টি · প্রতিটি ৫MB</span>
+                        </label>
+                        <input type="file" id="pm-images" accept="image/jpeg,image/png,image/webp"
+                            multiple class="hidden" onchange="previewImages(this)">
+                    </div>
+
+                    <!-- Image previews -->
+                    <div id="pm-previews" class="hidden mt-3 grid grid-cols-3 gap-2"></div>
+
+                    <!-- Image upload feedback -->
+                    <div id="pm-image-msg" class="hidden mt-3 px-4 py-2.5 rounded-xl text-sm font-semibold"></div>
+                    <button onclick="handleImageUpload()" class="mt-4 w-full py-3 rounded-xl font-bold text-sm
+                        bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white
+                        shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.98]
+                        flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                        </svg>
+                        ছবি আপলোড করুন
+                    </button>
+                </div>
+
+            </div><!-- /px-8 -->
+
+            <!-- Footer close -->
+            <div class="px-8 pb-7">
+                <button onclick="closeProgressModal()" class="w-full py-3.5 rounded-2xl font-bold text-sm
+                    bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all duration-200">
+                    বন্ধ করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───── SCRIPT ───── -->
+    <script>
+    const API_URL = (() => {
+        const hostname = window.location.hostname;
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return `http://${hostname}:3000/api`;
+        }
+        return '/api';
+    })();
+
+    function formatBDMoney(amount) {
+        if (amount === null || amount === undefined || isNaN(amount)) return '0';
+        let num = Math.floor(Number(amount));
+        if (num === 0) return '0';
+        let str = num.toString();
+        if (str.length <= 3) return str;
+        let lastThree = str.substring(str.length - 3);
+        let otherNumbers = str.substring(0, str.length - 3);
+        if (otherNumbers !== '') lastThree = ',' + lastThree;
+        return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return 'N/A';
+        try {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('bn-BD', { year: 'numeric', month: 'short', day: 'numeric' });
+        } catch (e) {
+            return dateStr;
+        }
+    }
+
+    let selectedYear = "all";
+    let searchTimeout;
+    let availableYears = [];
+
+    // ── load years ──
+    async function loadFinancialYears() {
+        const yearPanel = document.getElementById('yearPanel');
+        try {
+            yearPanel.innerHTML = `
+                <div class="year-option active" data-year="all" onmousedown="pickYear(this, event)">
+                    <span class="opt-dot"></span> সকল অর্থবছর
+                </div>
+                <div style="padding:10px 16px;text-align:center;">
+                    <div class="spinner" style="width:16px;height:16px;border-width:2px;"></div>
+                </div>`;
+            const response = await fetch(`${API_URL}/projects/years`);
+            if (!response.ok) throw new Error('Failed to fetch years');
+            availableYears = await response.json();
+            yearPanel.innerHTML = `
+                <div class="year-option active" data-year="all" onmousedown="pickYear(this, event)">
+                    <span class="opt-dot"></span> সকল অর্থবছর
+                </div>`;
+            availableYears.forEach(year => {
+                const option = document.createElement('div');
+                option.className = 'year-option';
+                option.setAttribute('data-year', year);
+                option.setAttribute('onmousedown', 'pickYear(this, event)');
+                option.innerHTML = `<span class="opt-dot"></span> ${year}`;
+                yearPanel.appendChild(option);
+            });
+        } catch (error) {
+            console.error('✗ Failed to load financial years:', error);
+            yearPanel.innerHTML = `
+                <div class="year-option active" data-year="all" onmousedown="pickYear(this, event)">
+                    <span class="opt-dot"></span> সকল অর্থবছর
+                </div>
+                <div class="year-option" data-year="২০২৫-২৬" onmousedown="pickYear(this, event)">
+                    <span class="opt-dot"></span> ২০২৫-২৬
+                </div>`;
+            availableYears = ['২০২৫-২৬'];
+        }
+    }
+
+    // ── year selector ──
+    const yearBtn      = document.getElementById('yearBtn');
+    const yearPanel    = document.getElementById('yearPanel');
+    const yearBtnLabel = document.getElementById('yearBtnLabel');
+
+    function toggleYearPanel(e) {
+        e.stopPropagation();
+        yearPanel.classList.toggle('open');
+        yearBtn.classList.toggle('open');
+    }
+    function pickYear(el, e) {
+        e.preventDefault(); e.stopPropagation();
+        document.querySelectorAll('.year-option').forEach(o => o.classList.remove('active'));
+        el.classList.add('active');
+        selectedYear = el.dataset.year;
+        yearBtnLabel.textContent = selectedYear === 'all' ? 'সকল অর্থবছর' : selectedYear;
+        yearPanel.classList.remove('open');
+        yearBtn.classList.remove('open');
+        triggerSearch();
+    }
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.year-select-wrap')) {
+            yearPanel.classList.remove('open');
+            yearBtn.classList.remove('open');
+        }
+    });
+
+    // ── typewriter ──
+    const input     = document.getElementById('search-input');
+    const dropdown  = document.getElementById('dropdown');
+    const resultsEl = document.getElementById('results');
+    const moreHint  = document.getElementById('more-hint');
+
+    const phPhrases = [
+        "প্রকল্পের নাম লিখুন...",
+        "উপজেলা লিখুন...",
+        "টেন্ডার / সিপিপিসি / আরএফকিউ...",
+        "প্রকল্পের আইডি লিখুন (যেমন R-25-26-217)..."
+    ];
+    let phraseIdx = 0, charIdx = 0, isDeleting = false, spd = 80;
+    function typeWriter() {
+        const phText = phPhrases[phraseIdx];
+        input.setAttribute('placeholder', phText.slice(0, charIdx) + (charIdx < phText.length ? "|" : ""));
+        if (!isDeleting && charIdx <= phText.length) { charIdx++; spd = 80; }
+        if (charIdx > phText.length) { setTimeout(() => { isDeleting = true; typeWriter(); }, 2200); return; }
+        if (isDeleting && charIdx >= 0) { charIdx--; spd = 42; }
+        if (isDeleting && charIdx < 0) {
+            isDeleting = false; charIdx = 0; spd = 600;
+            phraseIdx = (phraseIdx + 1) % phPhrases.length;
+        }
+        setTimeout(typeWriter, spd);
+    }
+
+    window.onload = function() { loadFinancialYears(); typeWriter(); };
+
+    // ── search ──
+    const MAX_SHOW = 10;
+    const SHOW_WITHOUT_SCROLL = 5;
+
+    input.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(triggerSearch, 300);
+    });
+
+    async function triggerSearch() {
+        const q = input.value.trim();
+        if (q.length < 2) { dropdown.classList.add('hidden'); return; }
+
+        resultsEl.innerHTML = '<div style="padding:18px;text-align:center;"><div class="spinner"></div></div>';
+        dropdown.classList.remove('hidden');
+
+        try {
+            let url = `${API_URL}/projects/search?q=${encodeURIComponent(q)}`;
+            if (selectedYear !== 'all') url += `&year=${encodeURIComponent(selectedYear)}`;
+
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Search failed');
+            const results = await response.json();
+
+            resultsEl.innerHTML = '';
+            if (results.length === 0) {
+                resultsEl.innerHTML = '<div style="padding:18px;text-align:center;font-size:14px;color:#d4a017;">কোনো ফলাফল পাওয়া গেল না</div>';
+                resultsEl.style.maxHeight = 'none';
+                moreHint.classList.add('hidden');
+                return;
+            }
+
+            resultsEl.style.maxHeight = results.length > SHOW_WITHOUT_SCROLL ? '400px' : 'none';
+
+            results.slice(0, MAX_SHOW).forEach((r, i) => {
+                const row = document.createElement('div');
+                row.className = 'result-row';
+                row.style.animationDelay = (i * 0.06) + 's';
+                row.addEventListener('mousedown', (e) => { e.preventDefault(); showDetails(r); });
+
+                const pct = r.progress_percentage || 0;
+                row.innerHTML = `
+                    <div class="avatar-placeholder">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <div class="result-info">
+                        <div class="result-line-1">
+                            <span class="result-name">${r.project_name || ''}</span>
+                            <span class="result-amount">৳${formatBDMoney(r.allocation_amount)}</span>
+                        </div>
+                        <div class="result-line-2">
+                            ${r.financial_year ? '<span class="chip chip-year">' + r.financial_year + '</span><span class="sep">•</span>' : ''}
+                            ${r.fund_type ? '<span class="chip chip-fund">' + r.fund_type + '</span><span class="sep">•</span>' : ''}
+                            ${r.upazila ? '<span class="chip chip-area">' + r.upazila + '</span><span class="sep">•</span>' : ''}
+                            ${r.implementation_method ? '<span class="chip chip-method">' + r.implementation_method + '</span><span class="sep">•</span>' : ''}
+                            ${r.current_status ? '<span class="chip chip-status">' + r.current_status + '</span><span class="sep">•</span>' : ''}
+                            <span class="label">${pct}%</span>
+                            <span class="progress-mini-wrap"><span class="progress-mini"><span class="progress-mini-fill" style="width:${pct}%"></span></span></span>
+                        </div>
+                    </div>`;
+                resultsEl.appendChild(row);
+            });
+            moreHint.classList.toggle('hidden', results.length <= MAX_SHOW);
+
+        } catch (error) {
+            console.error('Search error:', error);
+            resultsEl.innerHTML = '<div style="padding:18px;text-align:center;font-size:14px;color:#d97706;">সার্ভার ত্রুটি। অনুগ্রহ করে আবার চেষ্টা করুন।</div>';
+            resultsEl.style.maxHeight = 'none';
+            moreHint.classList.add('hidden');
+        }
+    }
+
+    // ── close dropdown on outside click ──
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.sugg-wrap') && !e.target.closest('#modal')) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
+    // ── modal ──
+    function showDetails(r) {
+        // Project name & badges
+        document.getElementById('m-project-name').innerText = r.project_name || '';
+        document.getElementById('m-project-type-badge').innerText = r.project_type || '';
+        document.getElementById('m-method-badge').innerText = r.implementation_method || '';
+
+        // Status flags
+        const flagsEl = document.getElementById('m-status-flags');
+        flagsEl.innerHTML = '';
+        if (r.is_completed) {
+            flagsEl.innerHTML += '<span class="badge-completed text-xs font-bold px-2 py-1 rounded-full">সম্পন্ন</span>';
+        }
+        if (r.is_delayed) {
+            flagsEl.innerHTML += '<span class="badge-delayed text-xs font-bold px-2 py-1 rounded-full">বিলম্বিত</span>';
+        }
+        if (!r.is_completed && !r.is_delayed) {
+            flagsEl.innerHTML += '<span class="badge-ongoing text-xs font-bold px-2 py-1 rounded-full">চলমান</span>';
+        }
+
+        // Details
+        document.getElementById('m-id').innerText = r.id || '';
+        document.getElementById('m-financial-year').innerText = r.financial_year || '';
+        document.getElementById('m-upazila').innerText = r.upazila || '';
+        document.getElementById('m-fund-type').innerText = r.fund_type || '';
+        document.getElementById('m-current-status').innerText = r.current_status || '';
+
+        const pct = r.progress_percentage || 0;
+        document.getElementById('m-progress-pct').innerText = pct + '%';
+        document.getElementById('m-progress-bar').style.width = pct + '%';
+
+        // Dates
+        document.getElementById('m-start-date').innerText = r.start_date ? formatDate(r.start_date) : 'N/A';
+        document.getElementById('m-expected-end').innerText = r.expected_end_date ? formatDate(r.expected_end_date) : 'N/A';
+        document.getElementById('m-actual-end').innerText = r.actual_end_date ? formatDate(r.actual_end_date) : 'N/A';
+
+        // Remarks
+        const remarksSection = document.getElementById('m-remarks-section');
+        if (r.remarks && r.remarks.trim()) {
+            document.getElementById('m-remarks').innerText = r.remarks;
+            remarksSection.classList.remove('hidden');
+        } else {
+            remarksSection.classList.add('hidden');
+        }
+
+        // Amounts
+        document.getElementById('m-allocation').innerText = '৳ ' + formatBDMoney(r.allocation_amount) + ' টাকা';
+        document.getElementById('m-released').innerText = '৳ ' + formatBDMoney(r.released_amount) + ' টাকা';
+
+        // Progress log — fetch and render
+        const logSection = document.getElementById('m-progress-log-section');
+        const logList    = document.getElementById('m-progress-log-list');
+        logSection.classList.add('hidden');
+        logList.innerHTML = '<p class="text-xs text-[#b45309] opacity-60 text-center py-2">লোড হচ্ছে…</p>';
+
+        fetch(`${API_URL}/projects/${r.id}/progress`)
+            .then(res => res.ok ? res.json() : Promise.reject())
+            .then(logs => {
+                if (!logs || logs.length === 0) {
+                    logSection.classList.add('hidden');
+                    return;
+                }
+                logList.innerHTML = logs.map(log => {
+                    const dotClass = log.is_completed
+                        ? 'plog-dot-complete'
+                        : log.is_delayed ? 'plog-dot-delayed' : 'plog-dot-normal';
+                    const flag = log.is_completed
+                        ? '<span class="plog-flag plog-flag-complete">সম্পন্ন</span>'
+                        : log.is_delayed
+                            ? '<span class="plog-flag plog-flag-delayed">বিলম্ব</span>'
+                            : '';
+                    const note = log.note
+                        ? `<p class="plog-note">${log.note}</p>` : '';
+                    return `
+                    <div class="progress-log-row">
+                        <span class="plog-dot ${dotClass}"></span>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start gap-2 flex-wrap">
+                                <span class="plog-status">${log.current_status}</span>
+                                ${flag}
+                            </div>
+                            ${note}
+                        </div>
+                        <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                            <span class="plog-pct">${log.progress_percentage}%</span>
+                            <span class="plog-date">${formatDate(log.logged_at)}</span>
+                        </div>
+                    </div>`;
+                }).join('');
+                logSection.classList.remove('hidden');
+            })
+            .catch(() => { logSection.classList.add('hidden'); });
+
+        dropdown.classList.add('hidden');
+        document.getElementById('modal').classList.add('open');
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.remove('open');
+        triggerSearch();
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // AUTHENTICATION & ADMIN FEATURES
+    // ─────────────────────────────────────────────────────────────
+
+    let isAdmin = false;
+    let authToken = null;
+    let currentRecordId = null;
+    let currentRecord = null;
+
+    async function checkAdminAuth() {
+        authToken = localStorage.getItem('zpk_admin_token');
+        if (!authToken) { hideAdminUI(); return; }
+        try {
+            const response = await fetch(`${API_URL}/auth/me`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            if (!response.ok) throw new Error('Invalid token');
+            const user = await response.json();
+            if (user.role === 'admin') { isAdmin = true; showAdminUI(user); }
+            else { hideAdminUI(); }
+        } catch (error) {
+            console.error('Auth check failed:', error);
+            localStorage.removeItem('zpk_admin_token');
+            localStorage.removeItem('zpk_admin_user');
+            hideAdminUI();
+        }
+    }
+
+    function showAdminUI(user) {
+        isAdmin = true;
+        const loginButton = document.getElementById('login-button');
+        if (loginButton) loginButton.classList.add('hidden');
+        const dashboardButton = document.getElementById('dashboard-button');
+        if (dashboardButton) dashboardButton.classList.remove('hidden');
+        const adminProfile = document.getElementById('admin-profile');
+        if (adminProfile) {
+            adminProfile.classList.remove('hidden');
+            const avatarEl = document.getElementById('admin-avatar');
+            const nameEl = document.getElementById('admin-name');
+            if (avatarEl) {
+                if (user.photo_path) {
+                    avatarEl.innerHTML = `<img src="${user.photo_path}" alt="${user.full_name}" class="w-full h-full object-cover">`;
+                } else {
+                    const initials = (user.full_name || user.username).charAt(0).toUpperCase();
+                    avatarEl.innerHTML = `<span class="text-xl font-bold text-white">${initials}</span>`;
+                }
+            }
+            if (nameEl) nameEl.textContent = user.full_name || user.username;
+        }
+    }
+
+    function hideAdminUI() {
+        isAdmin = false;
+        const loginButton = document.getElementById('login-button');
+        if (loginButton) loginButton.classList.remove('hidden');
+        const dashboardButton = document.getElementById('dashboard-button');
+        if (dashboardButton) dashboardButton.classList.add('hidden');
+        const adminProfile = document.getElementById('admin-profile');
+        if (adminProfile) adminProfile.classList.add('hidden');
+    }
+
+    function logout() {
+        localStorage.removeItem('zpk_admin_token');
+        localStorage.removeItem('zpk_admin_user');
+        window.location.href = '/admin/login.html';
+    }
+
+    function toggleAdminDropdown(event) {
+        event.stopPropagation();
+        const profileCard = document.querySelector('.admin-profile-card');
+        const adminDropdown = document.getElementById('admin-dropdown');
+        profileCard.classList.toggle('open');
+        adminDropdown.classList.toggle('open');
+    }
+
+    function goToProfile() { window.location.href = '/admin/profile.html'; }
+    function goToDashboard() { window.location.href = '/admin'; }
+
+    document.addEventListener('click', (event) => {
+        const adminProfile = document.getElementById('admin-profile');
+        if (adminProfile && !adminProfile.contains(event.target)) {
+            const profileCard = document.querySelector('.admin-profile-card');
+            const adminDropdown = document.getElementById('admin-dropdown');
+            if (profileCard) profileCard.classList.remove('open');
+            if (adminDropdown) adminDropdown.classList.remove('open');
+        }
+    });
+
+    // Modified showDetails to include admin actions
+    const originalShowDetails = showDetails;
+    showDetails = function(r) {
+        currentRecordId = r.id;
+        currentRecord = r;
+        originalShowDetails(r);
+        const adminActions = document.getElementById('admin-actions');
+        if (adminActions) {
+            if (isAdmin) adminActions.classList.remove('hidden');
+            else adminActions.classList.add('hidden');
+        }
+    };
+
+    // ── EDIT MODAL ──
+    function openEditModal() {
+        if (!currentRecord) return;
+        document.getElementById('edit-id').value = currentRecord.id;
+        document.getElementById('edit-project-name').value = currentRecord.project_name || '';
+        document.getElementById('edit-upazila').value = currentRecord.upazila || '';
+        document.getElementById('edit-project-type').value = currentRecord.project_type || 'শিক্ষা';
+        document.getElementById('edit-implementation-method').value = currentRecord.implementation_method || 'টেন্ডার';
+        document.getElementById('edit-current-status').value = currentRecord.current_status || '';
+        document.getElementById('edit-progress').value = currentRecord.progress_percentage || 0;
+        document.getElementById('edit-allocation').value = currentRecord.allocation_amount || '';
+        document.getElementById('edit-released').value = currentRecord.released_amount || '';
+        document.getElementById('edit-financial-year').value = currentRecord.financial_year || '';
+        document.getElementById('edit-start-date').value = currentRecord.start_date ? currentRecord.start_date.split('T')[0] : '';
+        document.getElementById('edit-expected-end').value = currentRecord.expected_end_date ? currentRecord.expected_end_date.split('T')[0] : '';
+        document.getElementById('edit-fund-type').value = currentRecord.fund_type || '';
+        document.getElementById('edit-remarks').value = currentRecord.remarks || '';
+
+        const editModal = document.getElementById('edit-modal');
+        editModal.classList.remove('hidden');
+        editModal.classList.add('open');
+        setTimeout(() => { editModal.querySelector('.modal-card').classList.add('open'); }, 10);
+    }
+
+    function closeEditModal() {
+        const editModal = document.getElementById('edit-modal');
+        editModal.querySelector('.modal-card').classList.remove('open');
+        setTimeout(() => { editModal.classList.remove('open'); editModal.classList.add('hidden'); }, 300);
+    }
+
+    async function handleEditSubmit(e) {
+        e.preventDefault();
+        const recordId = document.getElementById('edit-id').value;
+        const updateData = {
+            project_name: document.getElementById('edit-project-name').value.trim(),
+            upazila: document.getElementById('edit-upazila').value.trim(),
+            project_type: document.getElementById('edit-project-type').value,
+            implementation_method: document.getElementById('edit-implementation-method').value,
+            current_status: document.getElementById('edit-current-status').value.trim(),
+            progress_percentage: parseInt(document.getElementById('edit-progress').value) || 0,
+            allocation_amount: parseFloat(document.getElementById('edit-allocation').value) || 0,
+            released_amount: parseFloat(document.getElementById('edit-released').value) || 0,
+            financial_year: document.getElementById('edit-financial-year').value.trim(),
+            start_date: document.getElementById('edit-start-date').value || null,
+            expected_end_date: document.getElementById('edit-expected-end').value || null,
+            fund_type: document.getElementById('edit-fund-type').value.trim(),
+            remarks: document.getElementById('edit-remarks').value.trim()
+        };
+        Object.keys(updateData).forEach(key => {
+            if (updateData[key] === '' || updateData[key] === null) delete updateData[key];
+        });
+        try {
+            const response = await fetch(`${API_URL}/projects/${recordId}/update`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                body: JSON.stringify(updateData)
+            });
+            if (!response.ok) { const err = await response.json(); throw new Error(err.message || 'Update failed'); }
+            closeEditModal();
+            alert('প্রকল্প সফলভাবে আপডেট করা হয়েছে');
+            const updatedResponse = await fetch(`${API_URL}/projects/${recordId}`);
+            if (updatedResponse.ok) { const updatedRecord = await updatedResponse.json(); showDetails(updatedRecord); }
+        } catch (error) {
+            console.error('Edit error:', error);
+            alert('ত্রুটি: ' + error.message);
+        }
+    }
+
+    // ── DELETE MODAL ──
+    function openDeleteModal() {
+        if (!currentRecord) return;
+        document.getElementById('delete-preview-name').textContent = currentRecord.project_name || '';
+        document.getElementById('delete-preview-details').textContent =
+            `আইডি: ${currentRecord.id || 'N/A'} | উপজেলা: ${currentRecord.upazila || 'N/A'}`;
+        const deleteModal = document.getElementById('delete-modal');
+        deleteModal.classList.remove('hidden');
+        deleteModal.classList.add('open');
+        setTimeout(() => { deleteModal.querySelector('.modal-card').classList.add('open'); }, 10);
+    }
+
+    function closeDeleteModal() {
+        const deleteModal = document.getElementById('delete-modal');
+        deleteModal.querySelector('.modal-card').classList.remove('open');
+        setTimeout(() => { deleteModal.classList.remove('open'); deleteModal.classList.add('hidden'); }, 300);
+    }
+
+    async function confirmDelete() {
+        if (!currentRecordId) return;
+        try {
+            const response = await fetch(`${API_URL}/projects/${currentRecordId}/delete`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            if (!response.ok) { const err = await response.json(); throw new Error(err.message || 'Delete failed'); }
+            closeDeleteModal();
+            closeModal();
+            alert('প্রকল্প সফলভাবে মুছে ফেলা হয়েছে');
+            document.getElementById('search-input').value = '';
+            dropdown.classList.add('hidden');
+        } catch (error) {
+            console.error('Delete error:', error);
+            alert('ত্রুটি: ' + error.message);
+        }
+    }
+
+    // Check authentication on page load
+    window.addEventListener('DOMContentLoaded', () => { checkAdminAuth(); });
+
+    // ─────────────────────────────────────────────────────────────
+    // PROGRESS MODAL
+    // ─────────────────────────────────────────────────────────────
+
+    function openProgressModal() {
+        if (!currentRecord) return;
+
+        // Pre-fill with current values
+        document.getElementById('pm-project-title').textContent =
+            currentRecord.project_name ? currentRecord.project_name.substring(0, 60) + (currentRecord.project_name.length > 60 ? '…' : '') : '';
+        document.getElementById('pm-progress').value  = currentRecord.progress_percentage || 0;
+        document.getElementById('pm-released').value  = currentRecord.released_amount || '';
+        document.getElementById('pm-status').value    = currentRecord.current_status || '';
+        document.getElementById('pm-completed').checked = !!currentRecord.is_completed;
+        document.getElementById('pm-delayed').checked   = !!currentRecord.is_delayed;
+        document.getElementById('pm-note').value      = '';
+        document.getElementById('pm-caption').value   = '';
+        document.getElementById('pm-photo-type').value = 'during';
+        document.getElementById('pm-images').value    = '';
+        document.getElementById('pm-previews').innerHTML = '';
+        document.getElementById('pm-previews').classList.add('hidden');
+        hideMsg('pm-progress-msg');
+        hideMsg('pm-image-msg');
+
+        const modal = document.getElementById('progress-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('open');
+        setTimeout(() => modal.querySelector('.modal-card').classList.add('open'), 10);
+    }
+
+    function closeProgressModal() {
+        const modal = document.getElementById('progress-modal');
+        modal.querySelector('.modal-card').classList.remove('open');
+        setTimeout(() => {
+            modal.classList.remove('open');
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    function showMsg(id, text, isError) {
+        const el = document.getElementById(id);
+        el.textContent = text;
+        el.className = `mt-3 px-4 py-2.5 rounded-xl text-sm font-semibold ${isError
+            ? 'bg-red-50 text-red-700 border border-red-200'
+            : 'bg-green-50 text-green-700 border border-green-200'}`;
+        el.classList.remove('hidden');
+    }
+
+    function hideMsg(id) {
+        document.getElementById(id).classList.add('hidden');
+    }
+
+    async function handleProgressSubmit() {
+        const pct = parseInt(document.getElementById('pm-progress').value, 10);
+        const status = document.getElementById('pm-status').value.trim();
+
+        if (isNaN(pct) || pct < 0 || pct > 100) {
+            showMsg('pm-progress-msg', 'অগ্রগতি ০ থেকে ১০০ এর মধ্যে হতে হবে', true);
+            return;
+        }
+        if (!status) {
+            showMsg('pm-progress-msg', 'বর্তমান অবস্থা পূরণ করুন', true);
+            return;
+        }
+
+        const body = {
+            progress_percentage: pct,
+            released_amount: parseFloat(document.getElementById('pm-released').value) || currentRecord.released_amount || 0,
+            current_status: status,
+            is_completed: document.getElementById('pm-completed').checked ? 1 : 0,
+            is_delayed:   document.getElementById('pm-delayed').checked   ? 1 : 0,
+            note: document.getElementById('pm-note').value.trim() || null
+        };
+
+        try {
+            const res = await fetch(`${API_URL}/projects/${currentRecordId}/progress`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || data.error || 'ব্যর্থ হয়েছে');
+
+            showMsg('pm-progress-msg', '✓ ' + data.message, false);
+
+            // Refresh the underlying detail modal data
+            const updatedRes = await fetch(`${API_URL}/projects/${currentRecordId}`);
+            if (updatedRes.ok) {
+                currentRecord = await updatedRes.json();
+                originalShowDetails(currentRecord);
+            }
+        } catch (err) {
+            showMsg('pm-progress-msg', 'ত্রুটি: ' + err.message, true);
+        }
+    }
+
+    function previewImages(input) {
+        const previewEl = document.getElementById('pm-previews');
+        previewEl.innerHTML = '';
+        const files = Array.from(input.files).slice(0, 5);
+        if (!files.length) { previewEl.classList.add('hidden'); return; }
+        previewEl.classList.remove('hidden');
+
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const div = document.createElement('div');
+                div.className = 'relative aspect-square rounded-xl overflow-hidden border-2 border-[#d1fae5]';
+                div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                previewEl.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function handleImageUpload() {
+        const filesInput = document.getElementById('pm-images');
+        if (!filesInput.files || filesInput.files.length === 0) {
+            showMsg('pm-image-msg', 'অনুগ্রহ করে ছবি নির্বাচন করুন', true);
+            return;
+        }
+
+        const formData = new FormData();
+        Array.from(filesInput.files).slice(0, 5).forEach(f => formData.append('images', f));
+        formData.append('photo_type', document.getElementById('pm-photo-type').value);
+        formData.append('caption',    document.getElementById('pm-caption').value.trim());
+
+        try {
+            const res = await fetch(`${API_URL}/projects/${currentRecordId}/images`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}` },
+                // No Content-Type header — browser sets multipart/form-data boundary automatically
+                body: formData
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || data.error || 'ব্যর্থ হয়েছে');
+
+            showMsg('pm-image-msg', `✓ ${data.count}টি ছবি আপলোড হয়েছে`, false);
+
+            // Clear file input and previews
+            filesInput.value = '';
+            document.getElementById('pm-previews').innerHTML = '';
+            document.getElementById('pm-previews').classList.add('hidden');
+        } catch (err) {
+            showMsg('pm-image-msg', 'ত্রুটি: ' + err.message, true);
+        }
+    }
+    </script>
+</body>
+</html>
