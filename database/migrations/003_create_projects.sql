@@ -89,6 +89,12 @@ CREATE TABLE IF NOT EXISTS `projects` (
     `actual_end_date`       DATE DEFAULT NULL
                             COMMENT 'প্রকৃত শেষ তারিখ — actual completion date if done',
 
+    -- প্রকল্পের অবস্থান — GPS coordinates stored as "lat,lng" string
+    -- e.g. "23.9012,89.1234" — stored as VARCHAR so it is simple to
+    -- read/write without spatial extensions; precision is display-only.
+    `lat_lng`               VARCHAR(60) DEFAULT NULL
+                            COMMENT 'প্রকল্পের অবস্থান — GPS lat,lng e.g. "23.9012,89.1234"',
+
     -- মন্তব্য — optional remarks or notes
     `remarks`               TEXT COLLATE utf8mb4_unicode_ci
                             COMMENT 'মন্তব্য — optional remarks or notes',
@@ -246,6 +252,16 @@ CREATE TABLE IF NOT EXISTS `project_progress_log` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='প্রকল্পের অগ্রগতির ইতিহাস — Time-series snapshots of project progress for charts';
+
+
+-- ============================================================
+-- Migration helper: add lat_lng to an existing projects table
+-- Run this once if the table was created before this column was added.
+-- ============================================================
+ALTER TABLE `projects`
+    ADD COLUMN IF NOT EXISTS `lat_lng` VARCHAR(60) DEFAULT NULL
+        COMMENT 'প্রকল্পের অবস্থান — GPS lat,lng e.g. "23.9012,89.1234"'
+    AFTER `actual_end_date`;
 
 
 -- ============================================================

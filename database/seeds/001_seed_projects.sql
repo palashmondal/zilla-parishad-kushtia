@@ -282,19 +282,38 @@ INSERT INTO `projects` (
 
 
 -- ============================================================
--- If you have added `project_approval_date` column manually,
--- run these UPDATEs to populate it:
+-- lat_lng UPDATE — seed realistic GPS coordinates per upazila
+-- Run after 003_create_projects.sql ALTER TABLE (adds lat_lng column)
+-- Coordinates are approximate upazila headquarters locations in Kushtia
 -- ============================================================
--- UPDATE `projects` SET `project_approval_date` = '2025-05-15' WHERE `project_id` = 'R-25-26-001';
--- UPDATE `projects` SET `project_approval_date` = '2025-05-20' WHERE `project_id` = 'R-25-26-002';
--- UPDATE `projects` SET `project_approval_date` = '2025-05-10' WHERE `project_id` = 'R-25-26-003';
--- UPDATE `projects` SET `project_approval_date` = '2025-04-20' WHERE `project_id` = 'R-25-26-004';
--- UPDATE `projects` SET `project_approval_date` = '2025-06-01' WHERE `project_id` = 'R-25-26-005';
--- UPDATE `projects` SET `project_approval_date` = '2025-06-10' WHERE `project_id` = 'R-25-26-006';
--- UPDATE `projects` SET `project_approval_date` = '2025-05-25' WHERE `project_id` = 'R-25-26-007';
--- UPDATE `projects` SET `project_approval_date` = '2025-05-05' WHERE `project_id` = 'R-25-26-008';
--- UPDATE `projects` SET `project_approval_date` = '2025-06-20' WHERE `project_id` = 'R-25-26-009';
--- UPDATE `projects` SET `project_approval_date` = '2025-05-28' WHERE `project_id` = 'R-25-26-010';
+-- NOTE: IDs in this table are auto-increment integers, not VARCHAR codes.
+-- Adjust these WHERE clauses to match the actual inserted row IDs in your DB.
+-- The order below matches the INSERT order above (001→1, 002→2, etc.)
+UPDATE `projects` SET `lat_lng` = '23.9088,89.1218' WHERE id=1;  -- কুষ্টিয়া সদর
+UPDATE `projects` SET `lat_lng` = '23.8721,89.2482' WHERE id=2;  -- কুমারখালী
+UPDATE `projects` SET `lat_lng` = '24.0285,88.9812' WHERE id=3;  -- ভেড়ামারা
+UPDATE `projects` SET `lat_lng` = '23.7645,88.9201' WHERE id=4;  -- দৌলতপুর
+UPDATE `projects` SET `lat_lng` = '23.9523,89.0378' WHERE id=5;  -- মিরপুর
+UPDATE `projects` SET `lat_lng` = '23.7874,89.1944' WHERE id=6;  -- খোকসা
+UPDATE `projects` SET `lat_lng` = '23.9012,89.1195' WHERE id=7;  -- কুষ্টিয়া সদর
+UPDATE `projects` SET `lat_lng` = '23.8698,89.2511' WHERE id=8;  -- কুমারখালী
+UPDATE `projects` SET `lat_lng` = '23.7602,88.9335' WHERE id=9;  -- দৌলতপুর
+UPDATE `projects` SET `lat_lng` = '23.9488,89.0412' WHERE id=10; -- মিরপুর
+
+
+-- ============================================================
+-- Populate project_approval_date for all seeded projects
+-- ============================================================
+UPDATE `projects` SET `project_approval_date` = '2025-05-15' WHERE `project_id` = 'R-25-26-001';
+UPDATE `projects` SET `project_approval_date` = '2025-05-20' WHERE `project_id` = 'R-25-26-002';
+UPDATE `projects` SET `project_approval_date` = '2025-05-10' WHERE `project_id` = 'R-25-26-003';
+UPDATE `projects` SET `project_approval_date` = '2025-04-20' WHERE `project_id` = 'R-25-26-004';
+UPDATE `projects` SET `project_approval_date` = '2025-06-01' WHERE `project_id` = 'R-25-26-005';
+UPDATE `projects` SET `project_approval_date` = '2025-06-10' WHERE `project_id` = 'R-25-26-006';
+UPDATE `projects` SET `project_approval_date` = '2025-05-25' WHERE `project_id` = 'R-25-26-007';
+UPDATE `projects` SET `project_approval_date` = '2025-05-05' WHERE `project_id` = 'R-25-26-008';
+UPDATE `projects` SET `project_approval_date` = '2025-06-20' WHERE `project_id` = 'R-25-26-009';
+UPDATE `projects` SET `project_approval_date` = '2025-05-28' WHERE `project_id` = 'R-25-26-010';
 
 
 -- ============================================================

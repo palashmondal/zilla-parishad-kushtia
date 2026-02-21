@@ -32,6 +32,13 @@ const DashboardComponents = {
                 if (subtitleElement) {
                     subtitleElement.textContent = subtitle;
                 }
+
+                // Populate user info now that header DOM exists
+                if (typeof AuthManager !== 'undefined') {
+                    AuthManager.displayUserInfo();
+                    AuthManager.applyRoleBasedUI();
+                    AuthManager.initProfileDropdown();
+                }
             }
         } catch (error) {
             console.error('Failed to load header:', error);
@@ -58,6 +65,11 @@ const DashboardComponents = {
                         activeLink.classList.remove('text-gray-600', 'hover:text-green-600');
                         activeLink.classList.add('font-semibold', 'text-green-600', 'border-b-2', 'border-green-600');
                     }
+                }
+
+                // Apply role-based visibility after menu is injected into DOM
+                if (typeof AuthManager !== 'undefined') {
+                    AuthManager.applyRoleBasedUI();
                 }
             }
         } catch (error) {

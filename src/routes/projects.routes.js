@@ -11,6 +11,7 @@ router.get('/years', projectsController.getYears);
 router.get('/stats', projectsController.getStats);
 router.get('/list', projectsController.getAll);
 router.get('/:id/progress', projectsController.getProgressLog);
+router.get('/:id/images', projectsController.getImages);
 router.get('/:id', projectsController.getById);
 
 // Protected routes (require authentication + admin role)
@@ -22,6 +23,7 @@ router.delete('/:id/delete', requireAuth, requireAdmin, projectsController.delet
 
 // Progress & image upload routes
 router.post('/:id/progress', requireAuth, requireAdmin, projectsController.addProgress);
-router.post('/:id/images', requireAuth, requireAdmin, uploadProjectImages.array('images', 5), projectsController.addImages);
+router.post('/:id/images', requireAuth, requireAdmin, uploadProjectImages.array('images', 10), projectsController.addImages);
+router.delete('/:id/images/:imageId', requireAuth, requireAdmin, projectsController.deleteImage);
 
 module.exports = router;

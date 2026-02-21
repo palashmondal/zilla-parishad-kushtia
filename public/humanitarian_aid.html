@@ -835,7 +835,7 @@
                     </svg>
                     সম্পাদনা করুন
                 </button>
-                <button type="button" onmousedown="event.stopPropagation(); openDeleteModal();" class="py-3 px-4 rounded-xl font-bold text-sm
+                <button id="delete-btn" type="button" onmousedown="event.stopPropagation(); openDeleteModal();" class="py-3 px-4 rounded-xl font-bold text-sm
                     bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white
                     shadow-lg hover:shadow-xl transition-all duration-200
                     active:scale-[0.98] flex items-center justify-center gap-2">
@@ -1434,12 +1434,10 @@
             const user = await response.json();
             if (user.role === 'admin') {
                 isAdmin = true;
-                showAdminUI(user);
                 // Load banks when admin is authenticated
                 loadUniqueBanks();
-            } else {
-                hideAdminUI();
             }
+            showAdminUI(user);
         } catch (error) {
             console.error('Auth check failed:', error);
             localStorage.removeItem('zpk_admin_token');
@@ -1473,13 +1471,12 @@
             const avatarEl = document.getElementById('admin-avatar');
             const nameEl = document.getElementById('admin-name');
 
-            // Set avatar image or initials
+            // Set avatar image or default silhouette
             if (avatarEl) {
                 if (user.photo_path) {
                     avatarEl.innerHTML = `<img src="${user.photo_path}" alt="${user.full_name}" class="w-full h-full object-cover">`;
                 } else {
-                    const initials = (user.full_name || user.username).charAt(0).toUpperCase();
-                    avatarEl.innerHTML = `<span class="text-xl font-bold text-white">${initials}</span>`;
+                    avatarEl.innerHTML = `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><circle cx="20" cy="20" r="20" fill="#a5f3fc"/><circle cx="20" cy="16" r="7" fill="#fff" opacity="0.9"/><path d="M6 38c0-8 6-13 14-13s14 5 14 13" fill="#fff" opacity="0.9"/></svg>`;
                 }
             }
 
@@ -1564,11 +1561,15 @@
         // Call original function
         originalShowDetails(r);
 
-        // Show/hide admin actions based on login status
+        // Show admin actions for any logged-in user; delete only for admins
         const adminActions = document.getElementById('admin-actions');
         if (adminActions) {
-            if (isAdmin) {
+            if (authToken) {
                 adminActions.classList.remove('hidden');
+                const deleteBtn = document.getElementById('delete-btn');
+                if (deleteBtn) {
+                    deleteBtn.style.display = isAdmin ? '' : 'none';
+                }
             } else {
                 adminActions.classList.add('hidden');
             }

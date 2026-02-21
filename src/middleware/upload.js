@@ -27,8 +27,8 @@ const uploadProjectImages = multer({
     storage: projectImageStorage,
     fileFilter: imageFilter,
     limits: {
-        fileSize: 5 * 1024 * 1024, // 5 MB
-        files: 5
+        fileSize: 5 * 1024 * 1024, // 5 MB per file
+        files: 10                   // up to 10 files per request
     }
 });
 

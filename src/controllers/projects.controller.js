@@ -101,7 +101,16 @@ const projectsController = {
                 return res.status(400).json({ error: 'Invalid project ID' });
             }
 
-            const updated = await projectsModel.update(id.trim(), req.body);
+            // First, fetch the project to get its integer id
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'Project not found' });
+            }
+
+            // Filter out fields that should not be updated
+            const { id: _, project_id: __, created_at, updated_at, created_by, ...updateData } = req.body;
+
+            const updated = await projectsModel.update(project.id, updateData);
             if (!updated) {
                 return res.status(404).json({ error: 'Project not found' });
             }
@@ -122,7 +131,12 @@ const projectsController = {
                 return res.status(400).json({ error: 'Invalid project ID' });
             }
 
-            const deleted = await projectsModel.delete(id.trim());
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'Project not found' });
+            }
+
+            const deleted = await projectsModel.delete(project.id);
             if (!deleted) {
                 return res.status(404).json({ error: 'Project not found' });
             }
@@ -136,13 +150,42 @@ const projectsController = {
         }
     },
 
+    async getImages(req, res) {
+        try {
+            const id = req.params.id;
+            if (!id || id.trim().length === 0) {
+                return res.status(400).json({ error: 'Invalid project ID' });
+            }
+
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'Project not found' });
+            }
+
+            const images = await projectsModel.getImages(project.id);
+            res.json(images);
+        } catch (error) {
+            console.error('Projects getImages error:', error);
+            res.status(500).json({
+                error: 'Failed to fetch images',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
     async getProgressLog(req, res) {
         try {
             const id = req.params.id;
             if (!id || id.trim().length === 0) {
                 return res.status(400).json({ error: 'Invalid project ID' });
             }
-            const logs = await projectsModel.getProgressLog(id.trim());
+
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'Project not found' });
+            }
+
+            const logs = await projectsModel.getProgressLog(project.id);
             res.json(logs);
         } catch (error) {
             console.error('Projects getProgressLog error:', error);
@@ -160,6 +203,11 @@ const projectsController = {
                 return res.status(400).json({ error: 'Invalid project ID' });
             }
 
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
+            }
+
             const { progress_percentage, released_amount, current_status,
                     is_completed, is_delayed, note } = req.body;
 
@@ -172,7 +220,7 @@ const projectsController = {
                 return res.status(400).json({ error: 'অগ্রগতি ০ থেকে ১০০ এর মধ্যে হতে হবে' });
             }
 
-            await projectsModel.addProgressLog(id.trim(), {
+            await projectsModel.addProgressLog(project.id, {
                 progress_percentage: pct,
                 released_amount: parseFloat(released_amount) || 0,
                 current_status: current_status.trim(),
@@ -193,25 +241,48 @@ const projectsController = {
 
     async addImages(req, res) {
         try {
+            console.log('=== addImages called ===');
+            console.log('req.params.id:', req.params.id);
+            console.log('req.files:', req.files);
+            console.log('req.body:', req.body);
+
             const id = req.params.id;
             if (!id || id.trim().length === 0) {
                 return res.status(400).json({ error: 'Invalid project ID' });
             }
 
+            // First, fetch the project to get its integer id
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
+            }
+
+            console.log('Project found, integer id:', project.id);
+
             if (!req.files || req.files.length === 0) {
+                console.log('No files in request');
                 return res.status(400).json({ error: 'কোনো ছবি নির্বাচন করা হয়নি' });
             }
 
-            const { photo_type = 'general', caption = '' } = req.body;
+            // Support per-file metadata arrays OR a single value applied to all files.
+            // Frontend sends: photo_type[] and caption[] arrays (one per file)
+            // or a single photo_type / caption string for batch upload.
+            const photoTypes  = req.body.photo_type  || [];
+            const captions    = req.body.caption      || [];
 
-            const images = req.files.map(file => ({
-                photo_path: `projects/${file.filename}`,
-                photo_type,
-                caption: caption.trim() || null,
-                file_size_bytes: file.size
+            const toArr = v => Array.isArray(v) ? v : [v];
+            const typesArr    = toArr(photoTypes);
+            const captionsArr = toArr(captions);
+
+            const images = req.files.map((file, i) => ({
+                photo_path:       `projects/${file.filename}`,
+                photo_type:       typesArr[i]    || typesArr[0]    || 'general',
+                caption:          (captionsArr[i] || captionsArr[0] || '').trim() || null,
+                file_size_bytes:  file.size
             }));
 
-            await projectsModel.addImages(id.trim(), images, req.user.id);
+            // Use the integer id for the database insert
+            await projectsModel.addImages(project.id, images, req.user.id);
 
             res.json({
                 message: 'ছবি আপলোড করা হয়েছে',
@@ -221,6 +292,33 @@ const projectsController = {
             console.error('Projects addImages error:', error);
             res.status(500).json({
                 error: 'Image upload failed',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
+    async deleteImage(req, res) {
+        try {
+            const { id, imageId } = req.params;
+            if (!id || !imageId) {
+                return res.status(400).json({ error: 'Invalid project or image ID' });
+            }
+
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
+            }
+
+            const deleted = await projectsModel.deleteImage(parseInt(imageId, 10), project.id);
+            if (!deleted) {
+                return res.status(404).json({ error: 'ছবিটি পাওয়া যায়নি' });
+            }
+
+            res.json({ message: 'ছবিটি মুছে ফেলা হয়েছে' });
+        } catch (error) {
+            console.error('Projects deleteImage error:', error);
+            res.status(500).json({
+                error: 'Image delete failed',
                 message: isProduction ? 'An internal error occurred' : error.message
             });
         }
