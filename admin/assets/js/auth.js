@@ -143,9 +143,14 @@ const AuthManager = {
         const token = this.getToken();
 
         const headers = {
-            'Content-Type': 'application/json',
             ...options.headers
         };
+
+        // Only set Content-Type for non-FormData requests
+        // FormData automatically sets the correct multipart/form-data with boundary
+        if (!(options.body instanceof FormData)) {
+            headers['Content-Type'] = 'application/json';
+        }
 
         if (token) {
             headers['Authorization'] = `Bearer ${token}`;
@@ -216,17 +221,14 @@ const AuthManager = {
         });
 
         // Special handling for profile pictures
+        const defaultAvatarSvg = `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" fill="#a7f3d0"/><circle cx="20" cy="16" r="7" fill="#fff" opacity="0.9"/><path d="M6 38c0-8 6-13 14-13s14 5 14 13" fill="#fff" opacity="0.9"/></svg>`;
+        const defaultAvatarUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(defaultAvatarSvg)}`;
         document.querySelectorAll('[data-user-avatar]').forEach(el => {
             if (user.photo_path) {
                 el.src = user.photo_path;
             } else {
-                // Generate avatar with initials
-                const initials = user.full_name
-                    ? user.full_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
-                    : user.username.substring(0, 2).toUpperCase();
-                el.alt = initials;
-                // Use a placeholder with initials
-                el.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name || user.username)}&background=16a34a&color=fff&size=128`;
+                el.src = defaultAvatarUrl;
+                el.alt = user.full_name || user.username;
             }
         });
 
@@ -245,6 +247,10 @@ const AuthManager = {
 
         if (!dropdown || !dropdownMenu) return;
 
+        // Prevent duplicate listeners
+        if (dropdown.dataset.dropdownInit) return;
+        dropdown.dataset.dropdownInit = '1';
+
         dropdown.addEventListener('click', (e) => {
             e.stopPropagation();
             dropdownMenu.classList.toggle('hidden');
@@ -256,6 +262,17 @@ const AuthManager = {
                 dropdownMenu.classList.add('hidden');
             }
         });
+
+        // Attach logout button handler (header is injected dynamically)
+        const logoutBtn = dropdownMenu.querySelector('[data-logout-btn]');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('আপনি কি লগআউট করতে চান?')) {
+                    AuthManager.logout();
+                }
+            });
+        }
     },
 
     /**

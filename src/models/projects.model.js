@@ -1,11 +1,11 @@
 const pool = require('../../config/database');
 
 const PROJECT_FIELDS = `
-    id, project_name, allocation_amount, released_amount, fund_type,
-    financial_year, implementation_method,
+    id, project_id, project_name, allocation_amount, released_amount, fund_type,
+    financial_year, project_approval_date, approval_memo_number, implementation_method,
     upazila, project_type, current_status, progress_percentage,
     is_completed, is_delayed, performance_score,
-    start_date, expected_end_date, actual_end_date, remarks,
+    start_date, expected_end_date, actual_end_date, lat_lng, remarks,
     created_at, updated_at
 `;
 
@@ -63,8 +63,13 @@ const projectsModel = {
     },
 
     async findById(id) {
+        // Support both integer id and string project_id lookup
+        // If id is numeric, query by id column; otherwise query by project_id column
+        const isNumeric = /^\d+$/.test(String(id).trim());
+        const column = isNumeric ? 'id' : 'project_id';
+
         const [results] = await pool.execute(
-            `SELECT ${PROJECT_FIELDS} FROM projects WHERE id = ?`,
+            `SELECT ${PROJECT_FIELDS} FROM projects WHERE ${column} = ?`,
             [id]
         );
         return results[0] || null;
@@ -226,6 +231,17 @@ const projectsModel = {
     },
 
     // ── Image records ──────────────────────────────────────────
+    async getImages(projectId) {
+        const [results] = await pool.execute(
+            `SELECT id, photo_path, photo_type, caption, display_order, uploaded_at
+             FROM project_images
+             WHERE project_id = ?
+             ORDER BY display_order ASC, uploaded_at ASC`,
+            [projectId]
+        );
+        return results;
+    },
+
     async addImages(projectId, images, uploadedBy) {
         // images = [{ photo_path, photo_type, caption, file_size_bytes }, ...]
         for (const img of images) {
@@ -239,6 +255,19 @@ const projectsModel = {
                  uploadedBy || null]
             );
         }
+    },
+
+    async deleteImage(imageId, projectId) {
+        // Returns the photo_path so the caller can optionally delete the file from disk.
+        // We validate project ownership to prevent cross-project deletion.
+        const [[row]] = await pool.execute(
+            `SELECT id, photo_path FROM project_images WHERE id = ? AND project_id = ?`,
+            [imageId, projectId]
+        );
+        if (!row) return null;
+
+        await pool.execute(`DELETE FROM project_images WHERE id = ?`, [imageId]);
+        return row.photo_path;
     }
 };
 

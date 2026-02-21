@@ -43,7 +43,26 @@ app.set('trust proxy', 1);
 
 // Middleware
 app.use(cors(corsOptions));
-app.use(express.json());
+
+// JSON and URL-encoded parsers (skip multipart/form-data for file uploads)
+app.use((req, res, next) => {
+    const contentType = req.get('content-type') || '';
+    console.log(`[${req.method}] ${req.url} - Content-Type: ${contentType}`);
+    if (contentType.includes('multipart/form-data')) {
+        console.log('  -> Skipping JSON parser (multipart detected)');
+        return next();
+    }
+    express.json({ limit: '50mb' })(req, res, next);
+});
+
+app.use((req, res, next) => {
+    const contentType = req.get('content-type') || '';
+    if (contentType.includes('multipart/form-data')) {
+        return next();
+    }
+    express.urlencoded({ extended: true, limit: '50mb' })(req, res, next);
+});
+
 app.use(morgan(isProduction ? 'combined' : 'dev'));
 
 // Static files (no rate limiting on static assets)

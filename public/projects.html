@@ -6,6 +6,15 @@
     <title>প্রকল্প অনুসন্ধান | জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet — lightweight OSM map for project location -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Stub lightbox handlers so inline onerror/onload attrs are always defined,
+         even before the lightbox IIFE script tag has executed. -->
+    <script>
+        function lbOnLoad() { if (typeof window._lbOnLoad === 'function') window._lbOnLoad(); }
+        function lbOnError() { if (typeof window._lbOnError === 'function') window._lbOnError(); }
+    </script>
 
 <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
@@ -253,11 +262,18 @@
 
         /* Modal progress bar */
         .progress-bar-track {
-            background: #fde68a; border-radius: 6px; height: 10px; overflow: hidden;
+            background: #e5e7eb; border-radius: 8px; height: 16px; overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
         .progress-bar-fill {
-            height: 100%; background: linear-gradient(90deg, #b45309, #d97706);
-            border-radius: 6px; transition: width 0.6s ease;
+            height: 100%; border-radius: 8px; transition: width 0.6s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .progress-bar-green {
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+        }
+        .progress-bar-orange {
+            background: linear-gradient(90deg, #f97316, #ea580c);
         }
 
         /* Status badges in modal */
@@ -454,6 +470,312 @@
 
         input:focus, textarea:focus, select:focus { outline: none; }
         input:focus { outline: none !important; }
+
+        /* ──── Photo Gallery ──── */
+        .photo-tab {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 5px 11px; border-radius: 9999px;
+            font-size: 11px; font-weight: 700; cursor: pointer;
+            border: 1.5px solid #fcd34d; background: #fff; color: #92400e;
+            transition: background 0.15s, color 0.15s;
+        }
+        .photo-tab.active { background: #b45309; color: #fff; border-color: #b45309; }
+        .photo-tab:hover:not(.active) { background: #fef3c7; }
+
+        .photo-thumb {
+            position: relative; aspect-ratio: 4/3; overflow: hidden;
+            border-radius: 0.75rem; cursor: pointer;
+            border: 2px solid #fcd34d;
+            transition: transform 0.18s, box-shadow 0.18s;
+        }
+        .photo-thumb:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(180,83,9,0.22); }
+        .photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .photo-thumb .photo-type-badge {
+            position: absolute; bottom: 5px; left: 5px;
+            font-size: 9px; font-weight: 800; padding: 2px 7px;
+            border-radius: 9999px; letter-spacing: 0.03em;
+        }
+        .ptype-before  { background: #fef3c7; color: #92400e; }
+        .ptype-during  { background: #dbeafe; color: #1e40af; }
+        .ptype-after   { background: #d1fae5; color: #065f46; }
+        .ptype-general { background: #f3e8ff; color: #6b21a8; }
+
+        /* ══════════════════════════════════════════════
+           PROJECT LOCATION MAP
+        ══════════════════════════════════════════════ */
+        #m-map-section {
+            margin-top: 1.5rem; padding-top: 1.25rem;
+            border-top: 1px solid #fcd34d;
+        }
+        #m-map-container {
+            width: 100%; height: 260px;
+            border-radius: 1.2rem; overflow: hidden;
+            border: 2px solid #fcd34d;
+            box-shadow: 0 6px 24px rgba(180,83,9,0.12);
+            position: relative;
+            transition: box-shadow 0.25s;
+        }
+        #m-map-container:hover {
+            box-shadow: 0 8px 30px rgba(180,83,9,0.2);
+        }
+        /* Leaflet attribution override to match theme */
+        #m-map-container .leaflet-control-attribution {
+            font-size: 9px; background: rgba(255,255,255,0.75);
+        }
+        /* Coordinate display pill below map */
+        .map-coord-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 8px; padding: 4px 12px;
+            background: #fef3c7; border: 1px solid #fcd34d;
+            border-radius: 9999px; font-size: 11px; font-weight: 600;
+            color: #92400e; font-family: 'Courier New', monospace;
+        }
+        .map-coord-pill svg { width: 12px; height: 12px; color: #b45309; }
+        /* Open in maps link */
+        .map-open-link {
+            display: inline-flex; align-items: center; gap: 5px;
+            margin-top: 8px; margin-left: 8px; padding: 4px 12px;
+            background: #fff; border: 1px solid #fcd34d;
+            border-radius: 9999px; font-size: 11px; font-weight: 700;
+            color: #b45309; text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+        }
+        .map-open-link:hover { background: #b45309; color: #fff; border-color: #b45309; }
+        .map-open-link svg { width: 12px; height: 12px; }
+
+        /* Photo upload zone (used in public popup for admins) */
+        .photo-upload-zone {
+            border: 2px dashed #fcd34d; border-radius: 1rem;
+            background: #fffbeb; padding: 1.5rem 1rem;
+            text-align: center; cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+        }
+        .photo-upload-zone:hover, .photo-upload-zone.drag-over {
+            border-color: #b45309; background: #fef3c7;
+        }
+        .photo-upload-zone input[type="file"] {
+            position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+        }
+        .upload-preview-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 0.5rem; margin-top: 0.5rem;
+        }
+        .upload-preview-item {
+            position: relative; aspect-ratio: 4/3; border-radius: 0.6rem; overflow: hidden;
+            border: 2px solid #fcd34d; background: #fef3c7;
+        }
+        .upload-preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .upload-preview-item .preview-remove {
+            position: absolute; top: 3px; right: 3px;
+            width: 18px; height: 18px; border-radius: 50%;
+            background: rgba(220,38,38,0.85); color: #fff;
+            border: none; cursor: pointer; font-size: 10px; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .upload-preview-item .preview-type-badge {
+            position: absolute; bottom: 2px; left: 2px;
+            font-size: 7px; font-weight: 800; padding: 1px 4px;
+            border-radius: 9999px; background: rgba(0,0,0,0.5); color: #fff;
+        }
+        /* Delete button on existing photos */
+        .photo-thumb .photo-delete-btn {
+            position: absolute; top: 4px; right: 4px;
+            width: 22px; height: 22px; border-radius: 50%;
+            background: rgba(220,38,38,0.85); color: #fff;
+            border: none; cursor: pointer; font-size: 11px;
+            display: none; align-items: center; justify-content: center;
+            z-index: 2; transition: background 0.15s;
+        }
+        .photo-thumb:hover .photo-delete-btn { display: flex; }
+        .photo-delete-btn:hover { background: #dc2626 !important; }
+
+        /* Custom amber marker */
+        .zpk-marker-pin {
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* ══════════════════════════════════════════════
+           LIGHTBOX — centered card viewer
+        ══════════════════════════════════════════════ */
+
+        /* backdrop */
+        #zpk-lightbox {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            padding: 24px;
+            background: rgba(8, 5, 2, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.28s cubic-bezier(.4,0,.2,1);
+        }
+        #zpk-lightbox.lb-open {
+            opacity: 1; pointer-events: auto;
+        }
+
+        /* the card itself */
+        .lb-card {
+            position: relative;
+            display: flex; flex-direction: column;
+            width: 100%; max-width: 900px;
+            max-height: calc(100vh - 48px);
+            background: rgba(20, 12, 4, 0.55);
+            backdrop-filter: blur(28px) saturate(1.6) brightness(0.75);
+            -webkit-backdrop-filter: blur(28px) saturate(1.6) brightness(0.75);
+            border-radius: 22px;
+            border: 1px solid rgba(251,191,36,0.22);
+            box-shadow:
+                0 32px 80px rgba(0,0,0,0.7),
+                0 0 0 1px rgba(255,255,255,0.04) inset,
+                0 1px 0 rgba(251,191,36,0.15) inset;
+            overflow: hidden;
+            transform: scale(0.9) translateY(24px);
+            opacity: 0;
+            transition: transform 0.36s cubic-bezier(.34,1.4,.64,1),
+                        opacity   0.28s cubic-bezier(.4,0,.2,1);
+        }
+        #zpk-lightbox.lb-open .lb-card {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        /* top bar inside card */
+        .lb-topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 18px 12px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.38), transparent);
+            flex-shrink: 0;
+            gap: 10px;
+        }
+        .lb-counter {
+            font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.6);
+            letter-spacing: 0.06em; flex-shrink: 0;
+        }
+        .lb-type-pill {
+            font-size: 10px; font-weight: 800; letter-spacing: 0.07em;
+            padding: 3px 10px; border-radius: 9999px;
+            background: rgba(251,191,36,0.18);
+            border: 1px solid rgba(251,191,36,0.3);
+            color: #fbbf24;
+        }
+        .lb-close-btn {
+            flex-shrink: 0;
+            width: 34px; height: 34px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            color: #fff; cursor: pointer;
+            transition: background 0.2s, transform 0.18s;
+        }
+        .lb-close-btn:hover {
+            background: rgba(239,68,68,0.6);
+            transform: scale(1.1) rotate(90deg);
+        }
+        .lb-close-btn svg { width: 16px; height: 16px; }
+
+        /* image stage inside card */
+        .lb-stage {
+            flex: 1; min-height: 0;
+            display: flex; align-items: center; justify-content: center;
+            padding: 4px 52px 4px;
+            position: relative; overflow: hidden;
+        }
+        .lb-img-wrap {
+            position: relative; max-width: 100%; max-height: 100%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #lb-main-img {
+            max-width: 100%;
+            max-height: calc(100vh - 260px);
+            object-fit: contain;
+            border-radius: 14px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.55);
+            display: block;
+            transition: opacity 0.24s ease, transform 0.24s cubic-bezier(.34,1.4,.64,1);
+        }
+        #lb-main-img.lb-slide-out-left  { opacity: 0; transform: translateX(-48px) scale(0.95); }
+        #lb-main-img.lb-slide-out-right { opacity: 0; transform: translateX(48px)  scale(0.95); }
+        #lb-main-img.lb-slide-in        { opacity: 0; transform: translateX(0)     scale(0.96); }
+        #lb-main-img.lb-slide-in.lb-visible { opacity: 1; transform: translateX(0) scale(1); }
+
+        /* caption */
+        .lb-caption-area {
+            display: flex; align-items: center; justify-content: center;
+            padding: 6px 18px 0;
+            flex-shrink: 0;
+        }
+        .lb-caption-text {
+            font-size: 12px; font-weight: 500;
+            color: rgba(255,255,255,0.55);
+            text-align: center; max-width: 560px;
+        }
+
+        /* prev / next arrows — inside card, floating over image */
+        .lb-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.07);
+            border: 1.5px solid rgba(255,255,255,0.13);
+            border-radius: 50%;
+            color: #fff; cursor: pointer; z-index: 3;
+            transition: background 0.18s, transform 0.18s, border-color 0.18s;
+        }
+        .lb-arrow:hover {
+            background: rgba(180,83,9,0.75);
+            border-color: #d97706;
+            transform: translateY(-50%) scale(1.12);
+        }
+        .lb-arrow:active { transform: translateY(-50%) scale(0.94); }
+        .lb-arrow svg { width: 18px; height: 18px; }
+        .lb-arrow-prev { left: 10px; }
+        .lb-arrow-next { right: 10px; }
+        .lb-arrow.lb-hidden { opacity: 0; pointer-events: none; }
+
+        /* thumbnail strip at bottom of card */
+        .lb-strip-wrap {
+            padding: 10px 14px 14px;
+            display: flex; justify-content: center;
+            flex-shrink: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.32), transparent);
+        }
+        .lb-strip {
+            display: flex; gap: 7px;
+            overflow-x: auto; scroll-behavior: smooth;
+            padding: 2px 2px 2px;
+            max-width: 100%;
+        }
+        .lb-strip::-webkit-scrollbar { height: 3px; }
+        .lb-strip::-webkit-scrollbar-track { background: transparent; }
+        .lb-strip::-webkit-scrollbar-thumb { background: rgba(251,191,36,0.4); border-radius: 99px; }
+        .lb-thumb {
+            flex-shrink: 0;
+            width: 62px; height: 46px;
+            border-radius: 8px; overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.12);
+            cursor: pointer;
+            transition: border-color 0.18s, transform 0.18s, opacity 0.18s;
+            opacity: 0.5;
+        }
+        .lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .lb-thumb:hover { opacity: 0.8; transform: scale(1.06); }
+        .lb-thumb.lb-thumb-active {
+            border-color: #fbbf24; opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 0 0 2px rgba(251,191,36,0.35), 0 3px 10px rgba(0,0,0,0.4);
+        }
+
+        /* loading spinner */
+        .lb-spinner {
+            width: 38px; height: 38px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #fbbf24;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
     </style>
 </head>
 <body class="bg-[#fffbeb] min-h-screen flex flex-col items-start justify-start relative overflow-x-hidden p-4 pt-10 md:pt-20">
@@ -585,12 +907,7 @@
                         </svg>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h2 id="m-project-name" class="text-xl font-extrabold text-slate-900 leading-tight mb-1"></h2>
-                        <div class="flex items-center gap-2 flex-wrap mt-1">
-                            <span id="m-project-type-badge" class="text-xs font-bold px-2 py-1 rounded-full bg-[#fef3c7] text-[#92400e]"></span>
-                            <span id="m-method-badge" class="text-xs font-bold px-2 py-1 rounded-full bg-[#fef9c3] text-[#b45309]"></span>
-                            <span id="m-status-flags" class="flex gap-2"></span>
-                        </div>
+                        <h2 id="m-project-name" class="text-xl font-extrabold text-slate-900 leading-tight"></h2>
                     </div>
                 </div>
                 <button onclick="closeModal()" class="text-slate-300 hover:text-[#d97706] transition-colors p-2 flex-shrink-0">
@@ -600,74 +917,115 @@
 
             <div class="space-y-5 border-t border-[#fcd34d] pt-6">
 
-                <!-- Project ID & Year -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকল্প আইডি</p>
-                        <p id="m-id" class="font-semibold text-slate-800 text-[15px] font-mono"></p>
-                    </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">অর্থবছর</p>
-                        <p id="m-financial-year" class="font-semibold text-slate-800 text-[15px]"></p>
-                    </div>
-                </div>
-
-                <!-- Upazila & Fund Type -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">উপজেলা</p>
-                        <p id="m-upazila" class="font-semibold text-slate-800 text-[15px]"></p>
-                    </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">তহবিলের ধরণ</p>
-                        <p id="m-fund-type" class="font-semibold text-slate-800 text-[14px]"></p>
-                    </div>
-                </div>
-
-                <!-- Status & Progress -->
-                <div>
-                    <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-2">বর্তমান অবস্থা ও অগ্রগতি</p>
-                    <div class="flex items-center gap-3 mb-2">
-                        <span id="m-current-status" class="text-sm font-semibold text-slate-700"></span>
-                        <span id="m-progress-pct" class="text-sm font-bold text-[#b45309]"></span>
-                    </div>
-                    <div class="progress-bar-track">
-                        <div class="progress-bar-fill" id="m-progress-bar" style="width:0%"></div>
-                    </div>
-                </div>
-
-                <!-- Dates -->
+                <!-- Row 1: ID · Year · Upazila -->
                 <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">শুরু তারিখ</p>
-                        <p id="m-start-date" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকল্প আইডি</p>
+                        <p id="m-id" class="font-semibold text-slate-800 text-[13px] font-mono"></p>
                     </div>
                     <div>
-                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">সম্ভাব্য সমাপ্তি</p>
-                        <p id="m-expected-end" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">অর্থবছর</p>
+                        <p id="m-financial-year" class="font-semibold text-slate-800 text-[14px]"></p>
                     </div>
                     <div>
-                        <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকৃত সমাপ্তি</p>
-                        <p id="m-actual-end" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">উপজেলা</p>
+                        <p id="m-upazila" class="font-semibold text-slate-800 text-[14px]"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2: Fund Type · Status -->
+                <div class="grid grid-cols-2 gap-4 items-start">
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">তহবিলের ধরণ</p>
+                        <p id="m-fund-type" class="font-semibold text-slate-800 text-[13px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">বর্তমান অবস্থা</p>
+                        <p id="m-current-status" class="font-semibold text-slate-700 text-[13px]"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2.5: Approval Date · Memo Number -->
+                <div class="grid grid-cols-2 gap-4 items-start">
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">অনুমোদনের তারিখ</p>
+                        <p id="m-approval-date" class="font-bold text-[#b45309] text-[15px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">স্মারক নংবর</p>
+                        <p id="m-memo-number" class="font-bold text-[#b45309] text-[14px] font-mono"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2.7: Project Type · Implementation · Status -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকল্পের ধরন</p>
+                        <p id="m-quick-type" class="font-semibold text-slate-800 text-[13px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">বাস্তবায়ন পদ্ধতি</p>
+                        <p id="m-quick-method" class="font-semibold text-slate-800 text-[13px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">বর্তমান অবস্থা</p>
+                        <p id="m-quick-status" class="font-semibold text-slate-700 text-[13px]"></p>
+                    </div>
+                </div>
+
+                <!-- Row 3: Start · Expected End · Actual End -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">শুরু তারিখ</p>
+                        <p id="m-start-date" class="font-semibold text-slate-800 text-[13px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">সম্ভাব্য সমাপ্তি</p>
+                        <p id="m-expected-end" class="font-semibold text-slate-800 text-[13px]"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকৃত সমাপ্তি</p>
+                        <p id="m-actual-end" class="font-semibold text-slate-800 text-[13px]"></p>
                     </div>
                 </div>
 
                 <!-- Remarks -->
                 <div id="m-remarks-section" class="hidden">
-                    <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">মন্তব্য</p>
-                    <p id="m-remarks" class="font-medium text-slate-600 text-[14px] leading-relaxed"></p>
+                    <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">মন্তব্য</p>
+                    <p id="m-remarks" class="font-medium text-slate-600 text-[13px] leading-relaxed"></p>
                 </div>
 
-                <!-- Amount box -->
+                <!-- Amount box with progress bars -->
                 <div class="modal-amount-box p-5 rounded-2xl">
-                    <div class="flex justify-between items-start">
+                    <div class="flex justify-between items-start mb-4">
                         <div>
-                            <p class="text-[11px] font-bold text-[#92400e] uppercase tracking-wider mb-1">মোট বরাদ্দ</p>
+                            <p class="text-[10px] font-bold text-[#92400e] uppercase tracking-wider mb-1">মোট বরাদ্দ</p>
                             <p id="m-allocation" class="text-2xl font-black text-[#b45309] tracking-tight"></p>
                         </div>
                         <div class="text-right">
-                            <p class="text-[11px] font-bold text-[#92400e] uppercase tracking-wider mb-1">ছাড়কৃত অর্থ</p>
+                            <p class="text-[10px] font-bold text-[#92400e] uppercase tracking-wider mb-1">ছাড়কৃত অর্থ</p>
                             <p id="m-released" class="text-xl font-black text-[#d97706] tracking-tight"></p>
+                        </div>
+                    </div>
+                    <!-- Progress bar: project completion -->
+                    <div class="mb-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[11px] font-bold text-green-700 uppercase tracking-wider">কাজের অগ্রগতি</span>
+                            <span id="m-progress-pct-bar" class="text-[12px] font-bold text-green-700 px-2 py-0.5 bg-green-50 rounded"></span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill progress-bar-green" id="m-progress-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <!-- Progress bar: fund release -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[11px] font-bold text-orange-700 uppercase tracking-wider">তহবিল ছাড়ের হার</span>
+                            <span id="m-fund-release-pct" class="text-[12px] font-bold text-orange-700 px-2 py-0.5 bg-orange-50 rounded"></span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill progress-bar-orange" id="m-fund-release-bar"
+                                style="width:0%; background: linear-gradient(90deg, #d97706, #f59e0b);"></div>
                         </div>
                     </div>
                 </div>
@@ -677,6 +1035,78 @@
             <div id="m-progress-log-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">অগ্রগতির ইতিহাস</p>
                 <div id="m-progress-log-list" class="space-y-2"></div>
+            </div>
+
+            <!-- Location Map -->
+            <div id="m-map-section" class="hidden">
+                <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">প্রকল্পের অবস্থান</p>
+                <div id="m-map-container"></div>
+                <div class="flex items-center flex-wrap gap-1 mt-1">
+                    <span class="map-coord-pill">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span id="m-coord-text"></span>
+                    </span>
+                    <a id="m-map-link" href="#" target="_blank" rel="noopener" class="map-open-link">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                        গুগল ম্যাপে দেখুন
+                    </a>
+                </div>
+            </div>
+
+            <!-- Photo Gallery -->
+            <div id="m-photos-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <div class="flex items-center justify-between mb-3">
+                    <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider">প্রকল্পের ছবি</p>
+                    <button id="m-add-photo-btn" onclick="openPublicQuickUpload()" type="button"
+                        class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold
+                               bg-gradient-to-r from-[#b45309] to-[#d97706] text-white
+                               shadow hover:shadow-md transition-all active:scale-95">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path d="M12 4v16m8-8H4"/>
+                        </svg>
+                        ছবি যোগ করুন
+                    </button>
+                </div>
+                <!-- Empty state — shown when project has no photos yet -->
+                <div id="m-photos-empty" class="hidden flex flex-col items-center justify-center gap-2 py-6 rounded-2xl border border-dashed border-[#fcd34d] bg-[#fffbeb]">
+                    <svg class="w-10 h-10 text-[#fbbf24] opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <p class="text-sm font-semibold text-[#92400e] opacity-70">এই প্রকল্পের এখনো কোনো ছবি নেই</p>
+                </div>
+                <div id="m-photos-tabs" class="flex gap-2 flex-wrap mb-3"></div>
+                <div id="m-photos-grid" class="grid grid-cols-3 gap-2"></div>
+            </div>
+
+            <!-- Public quick photo upload panel (admin only) -->
+            <div id="m-quick-upload-panel" class="hidden mt-4 pt-4 border-t border-[#fcd34d]">
+                <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">ছবি আপলোড করুন</p>
+                <div class="photo-upload-zone" id="m-quick-drop-zone" style="padding:1rem;">
+                    <input type="file" id="m-quick-file-input" accept="image/jpeg,image/png,image/webp" multiple>
+                    <p class="text-sm font-semibold text-amber-700">ছবি টেনে আনুন বা ক্লিক করুন</p>
+                    <p class="text-xs text-gray-400 mt-0.5">JPEG · PNG · WebP · সর্বোচ্চ ১০টি · ৫ MB</p>
+                </div>
+                <div id="m-quick-preview-grid" class="upload-preview-grid"></div>
+                <div id="m-quick-per-file-meta" class="mt-2 space-y-2"></div>
+                <div class="flex gap-2 mt-3">
+                    <button type="button" id="m-quick-upload-btn" onclick="submitPublicQuickUpload()"
+                        class="flex-1 py-2 px-4 rounded-xl font-bold text-sm
+                               bg-gradient-to-r from-[#b45309] to-[#d97706] text-white
+                               shadow-lg hover:shadow-xl transition-all active:scale-[0.98]">
+                        আপলোড করুন
+                    </button>
+                    <button type="button" onclick="closePublicQuickUpload()"
+                        class="px-4 py-2 rounded-xl border border-[#fcd34d] text-sm font-bold text-[#b45309] hover:bg-[#fef3c7] transition-all">
+                        বাতিল
+                    </button>
+                </div>
+                <div id="m-quick-upload-status" class="hidden mt-2 text-sm font-semibold text-[#b45309]"></div>
             </div>
 
             <!-- Admin Action Buttons -->
@@ -701,7 +1131,7 @@
                     </svg>
                     সম্পাদনা করুন
                 </button>
-                <button onclick="openDeleteModal()" class="py-3 px-4 rounded-xl font-bold text-sm
+                <button id="delete-btn" onclick="openDeleteModal()" class="py-3 px-4 rounded-xl font-bold text-sm
                     bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white
                     shadow-lg hover:shadow-xl transition-all duration-200
                     active:scale-[0.98] flex items-center justify-center gap-2">
@@ -800,6 +1230,21 @@
                     <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">তহবিলের ধরণ</label>
                     <input type="text" id="edit-fund-type"
                         class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                </div>
+                <!-- lat_lng — GPS location of project site -->
+                <div>
+                    <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        প্রকল্পের জিপিএস অবস্থান (Lat, Lng)
+                    </label>
+                    <input type="text" id="edit-lat-lng" placeholder="যেমন: 23.9012,89.1234"
+                        pattern="^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$"
+                        class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-mono text-gray-800 text-sm"
+                        title="Latitude এবং Longitude কমা দিয়ে লিখুন, যেমন: 23.9012,89.1234">
+                    <p class="text-[10px] text-[#b45309] mt-1 opacity-70">Google Maps খুলে স্থানে right-click → "এই স্থানটি কী" থেকে কপি করুন</p>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">মন্তব্য</label>
@@ -1220,23 +1665,13 @@
 
     // ── modal ──
     function showDetails(r) {
-        // Project name & badges
+        // Project name
         document.getElementById('m-project-name').innerText = r.project_name || '';
-        document.getElementById('m-project-type-badge').innerText = r.project_type || '';
-        document.getElementById('m-method-badge').innerText = r.implementation_method || '';
 
-        // Status flags
-        const flagsEl = document.getElementById('m-status-flags');
-        flagsEl.innerHTML = '';
-        if (r.is_completed) {
-            flagsEl.innerHTML += '<span class="badge-completed text-xs font-bold px-2 py-1 rounded-full">সম্পন্ন</span>';
-        }
-        if (r.is_delayed) {
-            flagsEl.innerHTML += '<span class="badge-delayed text-xs font-bold px-2 py-1 rounded-full">বিলম্বিত</span>';
-        }
-        if (!r.is_completed && !r.is_delayed) {
-            flagsEl.innerHTML += '<span class="badge-ongoing text-xs font-bold px-2 py-1 rounded-full">চলমান</span>';
-        }
+        // Quick Info Row
+        document.getElementById('m-quick-type').innerText = r.project_type || '';
+        document.getElementById('m-quick-method').innerText = r.implementation_method || '';
+        document.getElementById('m-quick-status').innerText = r.current_status || '';
 
         // Details
         document.getElementById('m-id').innerText = r.id || '';
@@ -1245,9 +1680,21 @@
         document.getElementById('m-fund-type').innerText = r.fund_type || '';
         document.getElementById('m-current-status').innerText = r.current_status || '';
 
+        // Approval date and memo number
+        document.getElementById('m-approval-date').innerText = r.project_approval_date ? formatDate(r.project_approval_date) : 'N/A';
+        document.getElementById('m-memo-number').innerText = r.approval_memo_number || 'N/A';
+
+        // Progress percentage for the progress bars
         const pct = r.progress_percentage || 0;
-        document.getElementById('m-progress-pct').innerText = pct + '%';
+        document.getElementById('m-progress-pct-bar').innerText = pct + '%';
         document.getElementById('m-progress-bar').style.width = pct + '%';
+
+        // Fund release percentage
+        const alloc   = parseFloat(r.allocation_amount) || 0;
+        const released = parseFloat(r.released_amount) || 0;
+        const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
+        document.getElementById('m-fund-release-pct').innerText = fundPct + '%';
+        document.getElementById('m-fund-release-bar').style.width = fundPct + '%';
 
         // Dates
         document.getElementById('m-start-date').innerText = r.start_date ? formatDate(r.start_date) : 'N/A';
@@ -1313,7 +1760,245 @@
 
         dropdown.classList.add('hidden');
         document.getElementById('modal').classList.add('open');
+
+        // Location map
+        loadProjectMap(r.lat_lng, r.project_name, r.upazila);
+
+        // Photos — fetch and render gallery
+        loadProjectPhotos(r.id);
     }
+
+    // ── Project Location Map (Leaflet) ─────────────────────────
+    let _leafletMap = null;
+    let _leafletMarker = null;
+
+    function loadProjectMap(latLng, projectName, upazila) {
+        const section = document.getElementById('m-map-section');
+        const container = document.getElementById('m-map-container');
+        const coordText = document.getElementById('m-coord-text');
+        const mapLink   = document.getElementById('m-map-link');
+
+        // Hide if no coordinates
+        if (!latLng || !latLng.trim()) {
+            section.classList.add('hidden');
+            return;
+        }
+
+        const parts = latLng.split(',').map(s => parseFloat(s.trim()));
+        if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) {
+            section.classList.add('hidden');
+            return;
+        }
+        const [lat, lng] = parts;
+
+        section.classList.remove('hidden');
+        coordText.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+        mapLink.href = `https://www.google.com/maps?q=${lat},${lng}`;
+
+        // Leaflet must be initialised after the modal animation finishes
+        // (modal transition = 0.38s) so the container has real pixel dimensions.
+        // 420 ms gives a comfortable margin beyond the 380 ms CSS transition.
+        setTimeout(() => {
+            // Build popup HTML (shared by both branches)
+            const popupHtml = `
+                <div style="font-family:'Hind Siliguri',sans-serif;min-width:180px;line-height:1.5">
+                    <p style="font-weight:700;font-size:13px;color:#0f172a;margin:0 0 4px">${projectName || ''}</p>
+                    <p style="font-size:11px;color:#b45309;font-weight:600;margin:0">📍 ${upazila || ''}</p>
+                    <p style="font-size:10px;color:#64748b;margin:4px 0 0;font-family:monospace">${lat.toFixed(5)}, ${lng.toFixed(5)}</p>
+                </div>`;
+
+            // Custom amber SVG pin icon
+            const amberIcon = L.divIcon({
+                className: '',
+                html: `<div style="
+                    width:38px;height:38px;
+                    background:linear-gradient(135deg,#b45309,#d97706);
+                    border-radius:50% 50% 50% 0;
+                    transform:rotate(-45deg);
+                    border:3px solid #fff;
+                    box-shadow:0 3px 12px rgba(180,83,9,0.5);
+                    display:flex;align-items:center;justify-content:center;
+                "><svg style="transform:rotate(45deg);width:16px;height:16px;" fill="white"
+                    viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg></div>`,
+                iconSize: [38, 38],
+                iconAnchor: [19, 38],
+                popupAnchor: [0, -40],
+            });
+
+            if (_leafletMap) {
+                // ── Reuse existing map instance ──────────────────────
+                // Disable animation to avoid blank tiles during rapid reopens
+                _leafletMap.setView([lat, lng], 14, { animate: false });
+
+                // Update marker position and popup content in-place
+                if (_leafletMarker) {
+                    _leafletMarker.setLatLng([lat, lng]);
+                    _leafletMarker.setPopupContent(popupHtml);
+                    _leafletMarker.openPopup();
+                } else {
+                    _leafletMarker = L.marker([lat, lng], { icon: amberIcon })
+                        .addTo(_leafletMap)
+                        .bindPopup(popupHtml, { maxWidth: 240 })
+                        .openPopup();
+                }
+            } else {
+                // ── First open: initialise Leaflet ───────────────────
+                _leafletMap = L.map(container, {
+                    zoomControl: true,
+                    scrollWheelZoom: false,   // polite inside a modal scroll area
+                    attributionControl: true,
+                });
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(_leafletMap);
+
+                _leafletMap.setView([lat, lng], 14);
+
+                _leafletMarker = L.marker([lat, lng], { icon: amberIcon })
+                    .addTo(_leafletMap)
+                    .bindPopup(popupHtml, { maxWidth: 240 })
+                    .openPopup();
+            }
+
+            // Force Leaflet to recalculate container dimensions
+            // (needed any time the container was hidden/zero-size during init)
+            _leafletMap.invalidateSize();
+        }, 420);
+    }
+
+    // ── Photo gallery ──────────────────────────────────────────
+    let allPhotos = [];
+    let activePhotoType = 'all';
+
+    const PHOTO_TYPE_LABELS = {
+        before:  'কাজের আগে',
+        during:  'চলাকালীন',
+        after:   'কাজের পরে',
+        general: 'সাধারণ'
+    };
+
+    function setPhotosEmptyState(isEmpty) {
+        const emptyEl = document.getElementById('m-photos-empty');
+        const tabsEl  = document.getElementById('m-photos-tabs');
+        const grid    = document.getElementById('m-photos-grid');
+        if (isEmpty) {
+            emptyEl.classList.remove('hidden');
+            tabsEl.classList.add('hidden');
+            grid.classList.add('hidden');
+        } else {
+            emptyEl.classList.add('hidden');
+            tabsEl.classList.remove('hidden');
+            grid.classList.remove('hidden');
+        }
+    }
+
+    async function loadProjectPhotos(projectId) {
+        const section  = document.getElementById('m-photos-section');
+        const grid     = document.getElementById('m-photos-grid');
+        const tabsEl   = document.getElementById('m-photos-tabs');
+
+        grid.innerHTML = '';
+        tabsEl.innerHTML = '';
+        allPhotos = [];
+        activePhotoType = 'all';
+
+        // Always show the section (header + add button are always useful)
+        section.classList.remove('hidden');
+
+        try {
+            const res = await fetch(`${API_URL}/projects/${projectId}/images`);
+            if (!res.ok) { setPhotosEmptyState(true); return; }
+            const photos = await res.json();
+
+            if (!photos || photos.length === 0) {
+                setPhotosEmptyState(true);
+                return;
+            }
+
+            allPhotos = photos;
+            setPhotosEmptyState(false);
+
+            // Build type filter tabs
+            const types = ['all', ...new Set(photos.map(p => p.photo_type))];
+            types.forEach(type => {
+                const tab = document.createElement('button');
+                tab.className = 'photo-tab' + (type === 'all' ? ' active' : '');
+                tab.textContent = type === 'all' ? `সব (${photos.length})` : PHOTO_TYPE_LABELS[type] || type;
+                tab.dataset.type = type;
+                tab.onclick = () => {
+                    document.querySelectorAll('.photo-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    activePhotoType = type;
+                    renderPhotoGrid(type);
+                };
+                tabsEl.appendChild(tab);
+            });
+
+            renderPhotoGrid('all');
+        } catch (e) {
+            setPhotosEmptyState(true);
+        }
+    }
+
+    function renderPhotoGrid(typeFilter) {
+        const grid = document.getElementById('m-photos-grid');
+        grid.innerHTML = '';
+        const filtered = typeFilter === 'all'
+            ? allPhotos
+            : allPhotos.filter(p => p.photo_type === typeFilter);
+
+        filtered.forEach((photo, idx) => {
+            const globalIdx = allPhotos.indexOf(photo);
+            const typeClass = `ptype-${photo.photo_type}`;
+            const typeLabel = PHOTO_TYPE_LABELS[photo.photo_type] || photo.photo_type;
+
+            const thumb = document.createElement('div');
+            thumb.className = 'photo-thumb';
+            thumb.onclick = (e) => {
+                // Don't open lightbox when clicking delete button
+                if (e.target.closest('.photo-delete-btn')) return;
+                openLightbox(globalIdx, allPhotos);
+            };
+            thumb.innerHTML = `
+                <img src="/uploads/${photo.photo_path}" alt="${photo.caption || 'প্রকল্পের ছবি'}"
+                    onerror="this.parentElement.style.display='none'">
+                <span class="photo-type-badge ${typeClass}">${typeLabel}</span>
+                ${authToken ? `<button class="photo-delete-btn" title="ছবি মুছুন"
+                    onclick="deletePubPhoto(${photo.id},this)">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <path d="M6 18L18 6M6 6l12 12"/>
+                    </svg></button>` : ''}`;
+            grid.appendChild(thumb);
+        });
+    }
+
+    async function deletePubPhoto(imageId, btn) {
+        if (!authToken) return;
+        if (!confirm('এই ছবিটি মুছে ফেলতে চান?')) return;
+        try {
+            btn.disabled = true;
+            const res = await fetch(`${API_URL}/projects/${currentRecordId}/images/${imageId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            if (!res.ok) throw new Error();
+            allPhotos = allPhotos.filter(p => p.id !== imageId);
+            if (allPhotos.length === 0) {
+                setPhotosEmptyState(true);
+            } else {
+                renderPhotoGrid(activePhotoType);
+                const allTab = document.querySelector('#m-photos-tabs [data-type="all"]');
+                if (allTab) allTab.textContent = `সব (${allPhotos.length})`;
+            }
+        } catch(e) {
+            btn.disabled = false;
+        }
+    }
+
+    // openLightbox is now handled by the ZPK Lightbox module below
+    // (window.openLightbox is defined there)
 
     function closeModal() {
         document.getElementById('modal').classList.remove('open');
@@ -1338,8 +2023,8 @@
             });
             if (!response.ok) throw new Error('Invalid token');
             const user = await response.json();
-            if (user.role === 'admin') { isAdmin = true; showAdminUI(user); }
-            else { hideAdminUI(); }
+            if (user.role === 'admin') { isAdmin = true; }
+            showAdminUI(user);
         } catch (error) {
             console.error('Auth check failed:', error);
             localStorage.removeItem('zpk_admin_token');
@@ -1349,7 +2034,6 @@
     }
 
     function showAdminUI(user) {
-        isAdmin = true;
         const loginButton = document.getElementById('login-button');
         if (loginButton) loginButton.classList.add('hidden');
         const dashboardButton = document.getElementById('dashboard-button');
@@ -1363,8 +2047,7 @@
                 if (user.photo_path) {
                     avatarEl.innerHTML = `<img src="${user.photo_path}" alt="${user.full_name}" class="w-full h-full object-cover">`;
                 } else {
-                    const initials = (user.full_name || user.username).charAt(0).toUpperCase();
-                    avatarEl.innerHTML = `<span class="text-xl font-bold text-white">${initials}</span>`;
+                    avatarEl.innerHTML = `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><circle cx="20" cy="20" r="20" fill="#fde68a"/><circle cx="20" cy="16" r="7" fill="#fff" opacity="0.9"/><path d="M6 38c0-8 6-13 14-13s14 5 14 13" fill="#fff" opacity="0.9"/></svg>`;
                 }
             }
             if (nameEl) nameEl.textContent = user.full_name || user.username;
@@ -1416,10 +2099,147 @@
         originalShowDetails(r);
         const adminActions = document.getElementById('admin-actions');
         if (adminActions) {
-            if (isAdmin) adminActions.classList.remove('hidden');
-            else adminActions.classList.add('hidden');
+            if (authToken) {
+                adminActions.classList.remove('hidden');
+                const deleteBtn = document.getElementById('delete-btn');
+                if (deleteBtn) deleteBtn.style.display = isAdmin ? '' : 'none';
+            } else {
+                adminActions.classList.add('hidden');
+            }
         }
+        // Show/hide photo add button based on auth
+        const addPhotoBtn = document.getElementById('m-add-photo-btn');
+        if (addPhotoBtn) {
+            if (authToken) addPhotoBtn.classList.remove('hidden');
+            else           addPhotoBtn.classList.add('hidden');
+        }
+        // Close quick upload panel when switching projects
+        closePublicQuickUpload();
     };
+
+    // ── Public popup quick photo upload ────────────────────────
+    const PUB_PHOTO_TYPES = {
+        general: 'সাধারণ', before: 'কাজের আগে',
+        during: 'চলাকালীন', after: 'কাজের পরে'
+    };
+    let pubQuickFiles = [];
+
+    function openPublicQuickUpload() {
+        pubQuickFiles = [];
+        renderPubQuickPreviews();
+        document.getElementById('m-quick-upload-panel').classList.remove('hidden');
+        document.getElementById('m-quick-upload-status').classList.add('hidden');
+    }
+    function closePublicQuickUpload() {
+        const panel = document.getElementById('m-quick-upload-panel');
+        if (panel) panel.classList.add('hidden');
+        pubQuickFiles = [];
+        const grid = document.getElementById('m-quick-preview-grid');
+        const meta = document.getElementById('m-quick-per-file-meta');
+        if (grid) grid.innerHTML = '';
+        if (meta) meta.innerHTML = '';
+    }
+
+    (function initPubQuickUpload() {
+        document.addEventListener('DOMContentLoaded', () => {
+            const zone  = document.getElementById('m-quick-drop-zone');
+            const input = document.getElementById('m-quick-file-input');
+            if (!zone || !input) return;
+            input.addEventListener('change', () => { addPubFiles(Array.from(input.files)); input.value=''; });
+            zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+            zone.addEventListener('dragleave', ()  => zone.classList.remove('drag-over'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault(); zone.classList.remove('drag-over');
+                addPubFiles(Array.from(e.dataTransfer.files).filter(f =>
+                    ['image/jpeg','image/jpg','image/png','image/webp'].includes(f.type)));
+            });
+        });
+    })();
+
+    function addPubFiles(files) {
+        const rem = 10 - pubQuickFiles.length;
+        if (rem <= 0) return;
+        files.slice(0, rem).forEach(f => {
+            if (f.size > 5*1024*1024) return;
+            pubQuickFiles.push({ file: f, type: 'general', caption: '' });
+        });
+        renderPubQuickPreviews();
+    }
+
+    function renderPubQuickPreviews() {
+        const grid = document.getElementById('m-quick-preview-grid');
+        const meta = document.getElementById('m-quick-per-file-meta');
+        if (!grid || !meta) return;
+        grid.innerHTML = ''; meta.innerHTML = '';
+        pubQuickFiles.forEach((item, idx) => {
+            const wrap = document.createElement('div');
+            wrap.className = 'upload-preview-item';
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(item.file);
+            img.onload = () => URL.revokeObjectURL(img.src);
+            wrap.appendChild(img);
+            const badge = document.createElement('span');
+            badge.className = 'preview-type-badge';
+            badge.textContent = PUB_PHOTO_TYPES[item.type];
+            wrap.appendChild(badge);
+            const rm = document.createElement('button');
+            rm.type='button'; rm.className='preview-remove'; rm.innerHTML='✕';
+            rm.onclick = () => { pubQuickFiles.splice(idx,1); renderPubQuickPreviews(); };
+            wrap.appendChild(rm);
+            grid.appendChild(wrap);
+
+            const row = document.createElement('div');
+            row.className = 'flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2';
+            row.innerHTML = `
+                <span class="text-xs text-gray-500 truncate max-w-[100px]">${item.file.name}</span>
+                <select class="px-2 py-1 border border-amber-300 rounded text-xs bg-white ml-auto">
+                    ${Object.entries(PUB_PHOTO_TYPES).map(([v,l]) =>
+                        `<option value="${v}"${item.type===v?' selected':''}>${l}</option>`).join('')}
+                </select>
+                <input type="text" placeholder="ক্যাপশন" value="${item.caption}"
+                    class="flex-1 min-w-0 px-2 py-1 border border-amber-300 rounded text-xs">`;
+            row.querySelector('select').addEventListener('change', e => {
+                pubQuickFiles[idx].type = e.target.value;
+                badge.textContent = PUB_PHOTO_TYPES[e.target.value];
+            });
+            row.querySelector('input').addEventListener('input', e => { pubQuickFiles[idx].caption = e.target.value; });
+            meta.appendChild(row);
+        });
+    }
+
+    async function submitPublicQuickUpload() {
+        if (!pubQuickFiles.length) return;
+        const btn    = document.getElementById('m-quick-upload-btn');
+        const status = document.getElementById('m-quick-upload-status');
+        btn.disabled = true;
+        status.classList.remove('hidden');
+        status.textContent = `${pubQuickFiles.length}টি ছবি আপলোড হচ্ছে…`;
+        try {
+            const fd = new FormData();
+            pubQuickFiles.forEach(item => {
+                fd.append('images', item.file);
+                fd.append('photo_type', item.type);
+                fd.append('caption', item.caption || '');
+            });
+            const res = await fetch(`${API_URL}/projects/${currentRecordId}/images`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}` },
+                body: fd
+            });
+            if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.error || 'আপলোড ব্যর্থ'); }
+            status.textContent = `${pubQuickFiles.length}টি ছবি সফলভাবে আপলোড হয়েছে ✓`;
+            pubQuickFiles = [];
+            renderPubQuickPreviews();
+            setTimeout(closePublicQuickUpload, 1200);
+            // Reload photo gallery in the popup
+            await loadProjectPhotos(currentRecordId);
+            document.getElementById('m-photos-section').classList.remove('hidden');
+        } catch(e) {
+            status.textContent = 'ব্যর্থ: ' + e.message;
+        } finally {
+            btn.disabled = false;
+        }
+    }
 
     // ── EDIT MODAL ──
     function openEditModal() {
@@ -1437,6 +2257,7 @@
         document.getElementById('edit-start-date').value = currentRecord.start_date ? currentRecord.start_date.split('T')[0] : '';
         document.getElementById('edit-expected-end').value = currentRecord.expected_end_date ? currentRecord.expected_end_date.split('T')[0] : '';
         document.getElementById('edit-fund-type').value = currentRecord.fund_type || '';
+        document.getElementById('edit-lat-lng').value = currentRecord.lat_lng || '';
         document.getElementById('edit-remarks').value = currentRecord.remarks || '';
 
         const editModal = document.getElementById('edit-modal');
@@ -1467,6 +2288,7 @@
             start_date: document.getElementById('edit-start-date').value || null,
             expected_end_date: document.getElementById('edit-expected-end').value || null,
             fund_type: document.getElementById('edit-fund-type').value.trim(),
+            lat_lng: document.getElementById('edit-lat-lng').value.trim() || null,
             remarks: document.getElementById('edit-remarks').value.trim()
         };
         Object.keys(updateData).forEach(key => {
@@ -1679,6 +2501,233 @@
             showMsg('pm-image-msg', 'ত্রুটি: ' + err.message, true);
         }
     }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ZPK LIGHTBOX  — full-window image viewer
+    ════════════════════════════════════════════════════════════════ -->
+    <div id="zpk-lightbox" role="dialog" aria-modal="true" aria-label="ছবির বিস্তারিত" onclick="lbBackdropClick(event)">
+
+        <div class="lb-card">
+            <!-- Top bar: counter · type pill · close -->
+            <div class="lb-topbar">
+                <span class="lb-counter" id="lb-counter">১ / ১</span>
+                <span class="lb-type-pill" id="lb-type-pill"></span>
+                <button class="lb-close-btn" onclick="lbClose()" title="বন্ধ করুন (Esc)">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                        <path d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Main stage -->
+            <div class="lb-stage" id="lb-stage">
+                <!-- Prev arrow -->
+                <button class="lb-arrow lb-arrow-prev" id="lb-arrow-prev" onclick="lbNav(-1)" title="পূর্ববর্তী (←)">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+
+                <!-- Image wrapper -->
+                <div class="lb-img-wrap" id="lb-img-wrap">
+                    <div class="lb-spinner" id="lb-spinner"></div>
+                    <img id="lb-main-img" src="" alt="" style="display:none;"
+                         onload="lbOnLoad()" onerror="lbOnError()">
+                </div>
+
+                <!-- Next arrow -->
+                <button class="lb-arrow lb-arrow-next" id="lb-arrow-next" onclick="lbNav(1)" title="পরবর্তী (→)">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+                <!-- Caption -->
+                <div class="lb-caption-area">
+                    <p class="lb-caption-text" id="lb-caption-text"></p>
+                </div>
+            </div>
+
+            <!-- Thumbnail strip -->
+            <div class="lb-strip-wrap">
+                <div class="lb-strip" id="lb-strip"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    /* ── ZPK Lightbox ── */
+    (function () {
+        const LB = {
+            el:       null,
+            img:      null,
+            spinner:  null,
+            strip:    null,
+            counter:  null,
+            typePill: null,
+            caption:  null,
+            prevBtn:  null,
+            nextBtn:  null,
+            photos:   [],   // full allPhotos array reference
+            idx:      0,
+            slideDir: 0,    // -1 left, +1 right
+            open: false,
+        };
+
+        const PHOTO_TYPE_LABELS_LB = {
+            before: 'কাজের আগে', during: 'চলাকালীন',
+            after: 'কাজের পরে', general: 'সাধারণ'
+        };
+
+        function init() {
+            LB.el       = document.getElementById('zpk-lightbox');
+            LB.img      = document.getElementById('lb-main-img');
+            LB.spinner  = document.getElementById('lb-spinner');
+            LB.strip    = document.getElementById('lb-strip');
+            LB.counter  = document.getElementById('lb-counter');
+            LB.typePill = document.getElementById('lb-type-pill');
+            LB.caption  = document.getElementById('lb-caption-text');
+            LB.prevBtn  = document.getElementById('lb-arrow-prev');
+            LB.nextBtn  = document.getElementById('lb-arrow-next');
+        }
+
+        // Public: called by photo grid thumbnails
+        // photos array is passed directly to avoid scope issues
+        window.openLightbox = function (idx, photos) {
+            if (!LB.el) init();
+            LB.photos = photos || [];
+            LB.idx = idx;
+            LB.open = true;
+            buildStrip();
+            loadImage(0);
+            LB.el.classList.add('lb-open');
+            document.body.style.overflow = 'hidden';
+        };
+
+        function buildStrip() {
+            LB.strip.innerHTML = '';
+            LB.photos.forEach((p, i) => {
+                const t = document.createElement('div');
+                t.className = 'lb-thumb' + (i === LB.idx ? ' lb-thumb-active' : '');
+                t.dataset.idx = i;
+                t.innerHTML = `<img src="/uploads/${p.photo_path}" alt="${p.caption || ''}"
+                    onerror="this.parentElement.style.display='none'">`;
+                t.addEventListener('click', () => { lbGoTo(i, i < LB.idx ? -1 : 1); });
+                LB.strip.appendChild(t);
+            });
+        }
+
+        function updateStrip() {
+            LB.strip.querySelectorAll('.lb-thumb').forEach((t, i) => {
+                t.classList.toggle('lb-thumb-active', i === LB.idx);
+            });
+            // scroll active thumb into view
+            const active = LB.strip.querySelector('.lb-thumb-active');
+            if (active) active.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+        }
+
+        function updateMeta() {
+            const n = LB.photos.length;
+            // Bengali numeral helper
+            const bn = n => String(n).replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+            LB.counter.textContent = `${bn(LB.idx + 1)} / ${bn(n)}`;
+            const p = LB.photos[LB.idx];
+            LB.typePill.textContent = PHOTO_TYPE_LABELS_LB[p?.photo_type] || '';
+            LB.caption.textContent  = p?.caption || '';
+            LB.prevBtn.classList.toggle('lb-hidden', n <= 1);
+            LB.nextBtn.classList.toggle('lb-hidden', n <= 1);
+        }
+
+        // slide direction: -1 = going left (prev), +1 = going right (next), 0 = first load
+        function loadImage(dir) {
+            const img = LB.img;
+            LB.slideDir = dir;
+
+            // hide img, show spinner
+            img.style.display = 'none';
+            LB.spinner.style.display = 'block';
+            img.classList.remove('lb-slide-out-left','lb-slide-out-right','lb-slide-in','lb-visible');
+
+            updateMeta();
+            updateStrip();
+
+            const p = LB.photos[LB.idx];
+            if (!p) return;
+            img.src = `/uploads/${p.photo_path}`;
+            img.alt = p.caption || 'প্রকল্পের ছবি';
+        }
+
+        // Register via the stubs defined in <head> so inline onerror/onload always work
+        window._lbOnLoad = function () {
+            LB.spinner.style.display = 'none';
+            const img = LB.img;
+            img.style.display = 'block';
+            img.classList.remove('lb-slide-out-left','lb-slide-out-right','lb-slide-in','lb-visible');
+            img.classList.add('lb-slide-in');
+            requestAnimationFrame(() => requestAnimationFrame(() => img.classList.add('lb-visible')));
+        };
+
+        window._lbOnError = function () {
+            LB.spinner.style.display = 'none';
+            LB.img.src = '';
+            LB.img.style.display = 'none';
+        };
+
+        function lbGoTo(idx, dir) {
+            if (!LB.photos.length) return;
+            const prev = LB.idx;
+            LB.idx = (idx + LB.photos.length) % LB.photos.length;
+            loadImage(LB.idx > prev ? 1 : -1);
+        }
+
+        window.lbNav = function (dir) {
+            lbGoTo(LB.idx + dir, dir);
+        };
+
+        window.lbClose = function () {
+            if (!LB.el) return;
+            LB.el.classList.remove('lb-open');
+            LB.open = false;
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                LB.img.src = '';
+                LB.img.style.display = 'none';
+                LB.spinner.style.display = 'none';
+            }, 350);
+        };
+
+        window.lbBackdropClick = function (e) {
+            // close only if clicking the dark backdrop (outside the card)
+            if (e.target === document.getElementById('zpk-lightbox')) {
+                lbClose();
+            }
+        };
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (!LB.open) return;
+            if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    lbNav(-1);
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  lbNav(1);
+            if (e.key === 'Escape') lbClose();
+            if (e.key === 'Home')  { LB.idx = 0; loadImage(-1); }
+            if (e.key === 'End')   { LB.idx = LB.photos.length - 1; loadImage(1); }
+        });
+
+        // Touch/swipe support
+        let tsX = 0;
+        document.getElementById('zpk-lightbox').addEventListener('touchstart', e => {
+            tsX = e.changedTouches[0].clientX;
+        }, { passive: true });
+        document.getElementById('zpk-lightbox').addEventListener('touchend', e => {
+            if (!LB.open) return;
+            const dx = e.changedTouches[0].clientX - tsX;
+            if (Math.abs(dx) > 50) lbNav(dx < 0 ? 1 : -1);
+        }, { passive: true });
+
+        // Init on DOM ready
+        document.addEventListener('DOMContentLoaded', init);
+    })();
     </script>
 </body>
 </html>
