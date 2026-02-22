@@ -776,6 +776,157 @@
             border-radius: 50%;
             animation: spin 0.9s linear infinite;
         }
+
+        /* ══════════════════════════════════════════════
+           ADMIN-STYLE MODALS (detail / edit / progress)
+        ══════════════════════════════════════════════ */
+        /* New detail / edit / progress modal backdrops */
+        .zpk-modal-backdrop {
+            background: rgba(120,53,15,0.22);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        /* Form section cards */
+        .zpk-form-section {
+            background: #fffbf0;
+            border: 1px solid #fde68a;
+            border-left: 3px solid #f59e0b;
+            border-radius: 0.75rem;
+            padding: 0.9rem 1rem;
+        }
+        .zpk-form-section-title {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #92400e;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.75rem;
+        }
+        /* Input styles inside zpk modals */
+        .zpk-input {
+            width: 100%;
+            padding: 0.45rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: #f9fafb;
+            font-family: 'Hind Siliguri', sans-serif;
+            transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+        }
+        .zpk-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background: #fffbeb;
+            box-shadow: 0 0 0 2px rgba(245,158,11,0.25);
+        }
+        .zpk-input:hover:not(:focus) { border-color: #fbbf24; }
+        .zpk-label {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin-bottom: 0.35rem;
+        }
+        /* Buttons */
+        .zpk-btn-cancel {
+            padding: 0.5rem 1.1rem;
+            border-radius: 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid #e5e7eb;
+            background: #f3f4f6;
+            color: #4b5563;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        .zpk-btn-cancel:hover { background: #e5e7eb; }
+        .zpk-btn-save {
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            border: none;
+            background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 4px 12px rgba(180,83,9,0.35);
+            transition: filter 0.15s, box-shadow 0.15s, transform 0.1s;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        .zpk-btn-save:hover { filter: brightness(1.08); box-shadow: 0 6px 18px rgba(180,83,9,0.45); }
+        .zpk-btn-save:active { transform: scale(0.97); }
+        /* Detail info label/value pairs */
+        .zpk-detail-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #d4a017;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            margin-bottom: 0.3rem;
+        }
+        .zpk-detail-value {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.8rem;
+        }
+        /* Gradient header for new modals */
+        .zpk-modal-header {
+            background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+        .zpk-modal-header-icon {
+            width: 2.25rem; height: 2.25rem;
+            border-radius: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .zpk-modal-close {
+            width: 2rem; height: 2rem;
+            border-radius: 0.5rem;
+            background: rgba(255,255,255,0.15);
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: white; flex-shrink: 0;
+            transition: background 0.15s;
+        }
+        .zpk-modal-close:hover { background: rgba(255,255,255,0.28); }
+        /* Amount box in detail */
+        .zpk-amount-box {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 60%, #fef9c3 100%);
+            border: 1px solid #fbbf24;
+            border-radius: 1rem;
+            padding: 1.1rem;
+        }
+        /* Progress bar (reuse existing .progress-bar-track/.fill classes, just aliases here) */
+        .zpk-progress-track {
+            background: #e5e7eb; border-radius: 8px; height: 14px; overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+        }
+        .zpk-progress-fill {
+            height: 100%; border-radius: 8px; transition: width 0.6s ease;
+        }
+        .zpk-progress-fill-green  { background: linear-gradient(90deg,#22c55e,#16a34a); }
+        .zpk-progress-fill-orange { background: linear-gradient(90deg,#d97706,#f59e0b); }
+        /* Fund-release toggle stitch in progress modal */
+        #pm-fund-release-field { display: none; }
+        #pm-fund-release-field.open { display: block; }
+        /* Detail modal min-width fix */
+        #modal .modal-card { max-width: 42rem; }
     </style>
 </head>
 <body class="bg-[#fffbeb] min-h-screen flex flex-col items-start justify-start relative overflow-x-hidden p-4 pt-10 md:pt-20">
@@ -897,17 +1048,20 @@
     </div>
 
     <!-- ───── DETAIL MODAL ───── -->
-    <div id="modal" class="modal-backdrop fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div id="modal" class="modal-backdrop zpk-modal-backdrop fixed inset-0 z-[100] flex items-center justify-center p-4">
         <div class="modal-card bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl p-8 relative max-h-[90vh] overflow-y-auto">
+
+            <!-- Header: avatar + name + close -->
             <div class="flex items-start justify-between mb-6">
                 <div class="flex items-center gap-4 flex-1">
-                    <div class="modal-avatar w-16 h-16 rounded-2xl flex items-center justify-center text-[#b45309] flex-shrink-0">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="modal-avatar w-20 h-20 rounded-2xl flex items-center justify-center text-[#b45309] flex-shrink-0">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                         </svg>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h2 id="m-project-name" class="text-xl font-extrabold text-slate-900 leading-tight"></h2>
+                        <h2 id="m-project-name" class="text-2xl font-extrabold text-slate-900 leading-tight"></h2>
+                        <p id="m-quick-status" class="text-sm font-semibold text-[#d97706] mt-1"></p>
                     </div>
                 </div>
                 <button onclick="closeModal()" class="text-slate-300 hover:text-[#d97706] transition-colors p-2 flex-shrink-0">
@@ -920,98 +1074,76 @@
                 <!-- Row 1: ID · Year · Upazila -->
                 <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকল্প আইডি</p>
-                        <p id="m-id" class="font-semibold text-slate-800 text-[13px] font-mono"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্প আইডি</p>
+                        <p id="m-id" class="font-semibold text-slate-800 text-base font-mono"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">অর্থবছর</p>
-                        <p id="m-financial-year" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অর্থবছর</p>
+                        <p id="m-financial-year" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">উপজেলা</p>
-                        <p id="m-upazila" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">উপজেলা</p>
+                        <p id="m-upazila" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
 
-                <!-- Row 2: Fund Type · Status -->
+                <!-- Row 2: Fund Type -->
+                <div>
+                    <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তহবিলের ধরণ</p>
+                    <p id="m-fund-type" class="font-semibold text-slate-800 text-base"></p>
+                </div>
+
+                <!-- Row 3: Approval Date · Memo -->
                 <div class="grid grid-cols-2 gap-4 items-start">
                     <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">তহবিলের ধরণ</p>
-                        <p id="m-fund-type" class="font-semibold text-slate-800 text-[13px]"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের তারিখ</p>
+                        <p id="m-approval-date" class="font-bold text-[#b45309] text-lg"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">বর্তমান অবস্থা</p>
-                        <p id="m-current-status" class="font-semibold text-slate-700 text-[13px]"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক নংবর</p>
+                        <p id="m-memo-number" class="font-bold text-[#b45309] text-base font-mono"></p>
                     </div>
                 </div>
 
-                <!-- Row 2.5: Approval Date · Memo Number -->
-                <div class="grid grid-cols-2 gap-4 items-start">
-                    <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">অনুমোদনের তারিখ</p>
-                        <p id="m-approval-date" class="font-bold text-[#b45309] text-[15px]"></p>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">স্মারক নংবর</p>
-                        <p id="m-memo-number" class="font-bold text-[#b45309] text-[14px] font-mono"></p>
-                    </div>
-                </div>
-
-                <!-- Row 2.7: Project Type · Implementation · Status -->
+                <!-- Row 4: Project Type · Method · Status -->
                 <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকল্পের ধরন</p>
-                        <p id="m-quick-type" class="font-semibold text-slate-800 text-[13px]"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্পের ধরন</p>
+                        <p id="m-quick-type" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">বাস্তবায়ন পদ্ধতি</p>
-                        <p id="m-quick-method" class="font-semibold text-slate-800 text-[13px]"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">বাস্তবায়ন পদ্ধতি</p>
+                        <p id="m-quick-method" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">বর্তমান অবস্থা</p>
-                        <p id="m-quick-status" class="font-semibold text-slate-700 text-[13px]"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">বর্তমান অবস্থা</p>
+                        <p class="font-semibold text-slate-700 text-base" id="m-status-text"></p>
                     </div>
                 </div>
 
-                <!-- Row 3: Start · Expected End · Actual End -->
-                <div class="grid grid-cols-3 gap-4">
-                    <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">শুরু তারিখ</p>
-                        <p id="m-start-date" class="font-semibold text-slate-800 text-[13px]"></p>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">সম্ভাব্য সমাপ্তি</p>
-                        <p id="m-expected-end" class="font-semibold text-slate-800 text-[13px]"></p>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">প্রকৃত সমাপ্তি</p>
-                        <p id="m-actual-end" class="font-semibold text-slate-800 text-[13px]"></p>
-                    </div>
-                </div>
-
-                <!-- Remarks -->
+                <!-- Remarks (hidden when empty) -->
                 <div id="m-remarks-section" class="hidden">
-                    <p class="text-[10px] font-bold text-[#d4a017] uppercase tracking-wider mb-1.5">মন্তব্য</p>
-                    <p id="m-remarks" class="font-medium text-slate-600 text-[13px] leading-relaxed"></p>
+                    <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">মন্তব্য</p>
+                    <p id="m-remarks" class="font-medium text-slate-600 text-base leading-relaxed"></p>
                 </div>
 
-                <!-- Amount box with progress bars -->
-                <div class="modal-amount-box p-5 rounded-2xl">
-                    <div class="flex justify-between items-start mb-4">
+                <!-- Amount & progress bars -->
+                <div class="modal-amount-box p-6 rounded-2xl">
+                    <div class="flex justify-between items-start mb-5">
                         <div>
-                            <p class="text-[10px] font-bold text-[#92400e] uppercase tracking-wider mb-1">মোট বরাদ্দ</p>
-                            <p id="m-allocation" class="text-2xl font-black text-[#b45309] tracking-tight"></p>
+                            <p class="text-xs font-bold text-[#92400e] uppercase tracking-wider mb-2">মোট বরাদ্দ</p>
+                            <p id="m-allocation" class="text-3xl font-black text-[#b45309] tracking-tight"></p>
                         </div>
                         <div class="text-right">
-                            <p class="text-[10px] font-bold text-[#92400e] uppercase tracking-wider mb-1">ছাড়কৃত অর্থ</p>
-                            <p id="m-released" class="text-xl font-black text-[#d97706] tracking-tight"></p>
+                            <p class="text-xs font-bold text-[#92400e] uppercase tracking-wider mb-2">ছাড়কৃত অর্থ</p>
+                            <p id="m-released" class="text-2xl font-black text-[#d97706] tracking-tight"></p>
                         </div>
                     </div>
                     <!-- Progress bar: project completion -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-[11px] font-bold text-green-700 uppercase tracking-wider">কাজের অগ্রগতি</span>
-                            <span id="m-progress-pct-bar" class="text-[12px] font-bold text-green-700 px-2 py-0.5 bg-green-50 rounded"></span>
+                            <span class="text-sm font-bold text-green-700 uppercase tracking-wider">কাজের অগ্রগতি</span>
+                            <span id="m-progress-pct-bar" class="text-sm font-bold text-green-700 px-2.5 py-1 bg-green-50 rounded"></span>
                         </div>
                         <div class="progress-bar-track">
                             <div class="progress-bar-fill progress-bar-green" id="m-progress-bar" style="width:0%"></div>
@@ -1020,28 +1152,55 @@
                     <!-- Progress bar: fund release -->
                     <div>
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-[11px] font-bold text-orange-700 uppercase tracking-wider">তহবিল ছাড়ের হার</span>
-                            <span id="m-fund-release-pct" class="text-[12px] font-bold text-orange-700 px-2 py-0.5 bg-orange-50 rounded"></span>
+                            <span class="text-sm font-bold text-orange-700 uppercase tracking-wider">তহবিল ছাড়ের হার</span>
+                            <span id="m-fund-release-pct" class="text-sm font-bold text-orange-700 px-2.5 py-1 bg-orange-50 rounded"></span>
                         </div>
                         <div class="progress-bar-track">
-                            <div class="progress-bar-fill progress-bar-orange" id="m-fund-release-bar"
-                                style="width:0%; background: linear-gradient(90deg, #d97706, #f59e0b);"></div>
+                            <div class="progress-bar-fill progress-bar-orange" id="m-fund-release-bar" style="width:0%"></div>
                         </div>
                     </div>
                 </div>
-            </div>
+
+            </div><!-- /space-y-5 -->
 
             <!-- Progress Log Timeline -->
             <div id="m-progress-log-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
-                <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">অগ্রগতির ইতিহাস</p>
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider">অগ্রগতির ইতিহাস</p>
+                    <button id="m-add-progress-btn" onclick="openProgressModal()" type="button"
+                        class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold
+                               bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow
+                               hover:from-amber-600 hover:to-amber-800 active:scale-95 transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        অগ্রগতি যোগ করুন
+                    </button>
+                </div>
                 <div id="m-progress-log-list" class="space-y-2"></div>
             </div>
 
+            <!-- Progress log section shown even without logs (for the add button) -->
+            <div id="m-progress-log-auth-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <div class="flex items-center justify-between">
+                    <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider">অগ্রগতি</p>
+                    <button onclick="openProgressModal()" type="button"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold
+                               bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow
+                               hover:from-amber-600 hover:to-amber-800 active:scale-95 transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        অগ্রগতি যোগ করুন
+                    </button>
+                </div>
+            </div>
+
             <!-- Location Map -->
-            <div id="m-map-section" class="hidden">
-                <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">প্রকল্পের অবস্থান</p>
+            <div id="m-map-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider mb-4">প্রকল্পের অবস্থান</p>
                 <div id="m-map-container"></div>
-                <div class="flex items-center flex-wrap gap-1 mt-1">
+                <div class="flex items-center flex-wrap gap-2 mt-2">
                     <span class="map-coord-pill">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                             <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -1061,22 +1220,20 @@
             <!-- Photo Gallery -->
             <div id="m-photos-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <div class="flex items-center justify-between mb-3">
-                    <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider">প্রকল্পের ছবি</p>
+                    <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider">প্রকল্পের ছবি</p>
                     <button id="m-add-photo-btn" onclick="openPublicQuickUpload()" type="button"
-                        class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold
+                        class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold
                                bg-gradient-to-r from-[#b45309] to-[#d97706] text-white
                                shadow hover:shadow-md transition-all active:scale-95">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                             <path d="M12 4v16m8-8H4"/>
                         </svg>
                         ছবি যোগ করুন
                     </button>
                 </div>
-                <!-- Empty state — shown when project has no photos yet -->
                 <div id="m-photos-empty" class="hidden flex flex-col items-center justify-center gap-2 py-6 rounded-2xl border border-dashed border-[#fcd34d] bg-[#fffbeb]">
                     <svg class="w-10 h-10 text-[#fbbf24] opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                     <p class="text-sm font-semibold text-[#92400e] opacity-70">এই প্রকল্পের এখনো কোনো ছবি নেই</p>
                 </div>
@@ -1085,8 +1242,8 @@
             </div>
 
             <!-- Public quick photo upload panel (admin only) -->
-            <div id="m-quick-upload-panel" class="hidden mt-4 pt-4 border-t border-[#fcd34d]">
-                <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">ছবি আপলোড করুন</p>
+            <div id="m-quick-upload-panel" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider mb-3">ছবি আপলোড করুন</p>
                 <div class="photo-upload-zone" id="m-quick-drop-zone" style="padding:1rem;">
                     <input type="file" id="m-quick-file-input" accept="image/jpeg,image/png,image/webp" multiple>
                     <p class="text-sm font-semibold text-amber-700">ছবি টেনে আনুন বা ক্লিক করুন</p>
@@ -1110,153 +1267,214 @@
             </div>
 
             <!-- Admin Action Buttons -->
-            <div id="admin-actions" class="hidden mt-6 pt-4 border-t border-[#fcd34d] flex gap-3 flex-wrap">
-                <button onclick="openProgressModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm
-                    bg-gradient-to-r from-[#059669] to-[#047857] text-white
-                    shadow-lg hover:shadow-xl transition-all duration-200
-                    active:scale-[0.98] flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                    </svg>
-                    অগ্রগতি যোগ করুন
-                </button>
-                <button onclick="openEditModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm
-                    bg-gradient-to-r from-[#b45309] to-[#d97706] text-white
-                    shadow-lg hover:shadow-xl transition-all duration-200
-                    active:scale-[0.98] flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                    </svg>
-                    সম্পাদনা করুন
-                </button>
-                <button id="delete-btn" onclick="openDeleteModal()" class="py-3 px-4 rounded-xl font-bold text-sm
-                    bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white
-                    shadow-lg hover:shadow-xl transition-all duration-200
-                    active:scale-[0.98] flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                    </svg>
-                    মুছে ফেলুন
-                </button>
+            <div id="admin-actions" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <div class="flex gap-3 flex-wrap">
+                    <button onclick="openProgressModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm
+                        bg-gradient-to-r from-emerald-600 to-emerald-700 text-white
+                        shadow-lg hover:shadow-xl transition-all duration-200
+                        active:scale-[0.98] flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                        অগ্রগতি যোগ করুন
+                    </button>
+                    <button onclick="openEditModal()" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm
+                        bg-gradient-to-r from-[#b45309] to-[#d97706] text-white
+                        shadow-lg hover:shadow-xl transition-all duration-200
+                        active:scale-[0.98] flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                        সম্পাদনা করুন
+                    </button>
+                    <button id="delete-btn" onclick="openDeleteModal()" class="py-3 px-4 rounded-xl font-bold text-sm
+                        bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white
+                        shadow-lg hover:shadow-xl transition-all duration-200
+                        active:scale-[0.98] flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                        মুছে ফেলুন
+                    </button>
+                </div>
             </div>
 
-            <button onclick="closeModal()" class="modal-close-btn w-full mt-6 text-white font-bold py-4 rounded-2xl shadow-xl active:scale-[0.98] text-[15px]">বন্ধ করুন</button>
-        </div>
+            <!-- Close button -->
+            <button onclick="closeModal()" class="modal-close-btn w-full text-white font-bold py-3.5 rounded-xl shadow-xl active:scale-[0.98] text-[15px] mt-6">বন্ধ করুন</button>
+
+        </div><!-- /modal-card -->
     </div>
 
     <!-- ───── EDIT MODAL ───── -->
-    <div id="edit-modal" class="modal-backdrop fixed inset-0 z-[110] flex items-center justify-center p-4 hidden">
-        <div class="modal-card bg-white w-full max-w-3xl rounded-[2rem] shadow-2xl p-8 relative max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-[#b45309]">প্রকল্প সম্পাদনা</h2>
-                <button onclick="closeEditModal()" class="text-gray-400 hover:text-red-500 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+    <div id="edit-modal" class="modal-backdrop zpk-modal-backdrop fixed inset-0 z-[110] flex items-start justify-center py-8 px-4 hidden" style="overflow-y:auto;">
+        <div class="modal-card w-full max-w-3xl rounded-2xl overflow-hidden flex-shrink-0 mb-8"
+             style="background:linear-gradient(160deg,#fffbf0 0%,#ffffff 60%,#fff8ed 100%);
+                    box-shadow:0 32px 80px rgba(120,53,15,0.28),0 0 0 1px rgba(245,158,11,0.2);">
+
+            <!-- Gradient header -->
+            <div class="zpk-modal-header">
+                <div style="display:flex;align-items:center;gap:0.75rem;">
+                    <div class="zpk-modal-header-icon">
+                        <svg style="width:1.2rem;height:1.2rem;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 style="font-size:1.05rem;font-weight:700;color:white;line-height:1.3;margin:0;">প্রকল্প সম্পাদনা</h3>
+                        <p style="font-size:0.7rem;color:#fde68a;font-weight:500;margin:0;">তথ্য পরিবর্তন করুন এবং সংরক্ষণ করুন</p>
+                    </div>
+                </div>
+                <button onclick="closeEditModal()" class="zpk-modal-close">
+                    <svg style="width:1.1rem;height:1.1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
-            <form id="edit-form" class="space-y-4" onsubmit="handleEditSubmit(event)">
+
+            <!-- Form body -->
+            <form id="edit-form" style="padding:1.25rem;display:flex;flex-direction:column;gap:1rem;" onsubmit="handleEditSubmit(event)">
                 <input type="hidden" id="edit-id">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">প্রকল্পের নাম *</label>
-                        <textarea id="edit-project-name" rows="2" required
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800"></textarea>
+
+                <!-- Project name — full width -->
+                <div class="zpk-form-section">
+                    <div class="zpk-form-section-title">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                        প্রকল্পের নাম
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">উপজেলা</label>
-                        <input type="text" id="edit-upazila"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    <textarea id="edit-project-name" rows="2" required
+                        class="zpk-input resize-none" placeholder="প্রকল্পের পূর্ণ নাম লিখুন…"></textarea>
+                </div>
+
+                <!-- Row: upazila | financial_year -->
+                <div class="zpk-form-section">
+                    <div class="zpk-form-section-title">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        অবস্থান ও অর্থবছর
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">প্রকল্পের ধরণ</label>
-                        <select id="edit-project-type"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
-                            <option value="শিক্ষা">শিক্ষা</option>
-                            <option value="ধর্মীয় ও সামাজিক">ধর্মীয় ও সামাজিক</option>
-                            <option value="সেবামূলক">সেবামূলক</option>
-                            <option value="ক্রীড়া">ক্রীড়া</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">বাস্তবায়ন পদ্ধতি</label>
-                        <select id="edit-implementation-method"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
-                            <option value="টেন্ডার">টেন্ডার</option>
-                            <option value="সিপিপিসি">সিপিপিসি</option>
-                            <option value="আরএফকিউ">আরএফকিউ</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">বর্তমান অবস্থা</label>
-                        <input type="text" id="edit-current-status"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">অগ্রগতি (%)</label>
-                        <input type="number" id="edit-progress" min="0" max="100"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">মোট বরাদ্দ (টাকা)</label>
-                        <input type="number" id="edit-allocation" step="0.01"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">ছাড়কৃত অর্থ (টাকা)</label>
-                        <input type="number" id="edit-released" step="0.01"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">অর্থবছর</label>
-                        <input type="text" id="edit-financial-year" placeholder="২০২৫-২৬"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">শুরু তারিখ</label>
-                        <input type="date" id="edit-start-date"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">সম্ভাব্য সমাপ্তি</label>
-                        <input type="date" id="edit-expected-end"
-                            class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="zpk-label">উপজেলা</label>
+                            <select id="edit-upazila" class="zpk-input">
+                                <option value="">-- উপজেলা নির্বাচন করুন --</option>
+                                <option value="কুষ্টিয়া সদর">কুষ্টিয়া সদর</option>
+                                <option value="কুমারখালী">কুমারখালী</option>
+                                <option value="খোকসা">খোকসা</option>
+                                <option value="মিরপুর">মিরপুর</option>
+                                <option value="ভেড়ামারা">ভেড়ামারা</option>
+                                <option value="দৌলতপুর">দৌলতপুর</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="zpk-label">অর্থবছর</label>
+                            <select id="edit-financial-year" class="zpk-input">
+                                <option value="২০২২-২৩">২০২২-২৩</option>
+                                <option value="২০২৩-২৪">২০২৩-২৪</option>
+                                <option value="২০২৪-২৫">২০২৪-২৫</option>
+                                <option value="২০২৫-২৬">২০২৫-২৬</option>
+                                <option value="২০২৬-২৭">২০২৬-২৭</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">তহবিলের ধরণ</label>
-                    <input type="text" id="edit-fund-type"
-                        class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800">
+
+                <!-- Row: project_type | implementation_method -->
+                <div class="zpk-form-section">
+                    <div class="zpk-form-section-title">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        শ্রেণী ও পদ্ধতি
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="zpk-label">প্রকল্পের ধরন</label>
+                            <select id="edit-project-type" class="zpk-input">
+                                <option value="শিক্ষা">শিক্ষা</option>
+                                <option value="ধর্মীয় ও সামাজিক">ধর্মীয় ও সামাজিক</option>
+                                <option value="সেবামূলক">সেবামূলক</option>
+                                <option value="ক্রীড়া">ক্রীড়া</option>
+                                <option value="অবকাঠামো">অবকাঠামো</option>
+                                <option value="স্বাস্থ্য">স্বাস্থ্য</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="zpk-label">বাস্তবায়ন পদ্ধতি</label>
+                            <select id="edit-implementation-method" class="zpk-input">
+                                <option value="টেন্ডার">টেন্ডার</option>
+                                <option value="সিপিপিসি">সিপিপিসি</option>
+                                <option value="আরএফকিউ">আরএফকিউ</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <!-- lat_lng — GPS location of project site -->
-                <div>
-                    <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                        প্রকল্পের জিপিএস অবস্থান (Lat, Lng)
-                    </label>
+
+                <!-- Row: approval_date | memo -->
+                <div class="zpk-form-section" style="border-left-color:#d97706;">
+                    <div class="zpk-form-section-title">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        অনুমোদন তথ্য
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="zpk-label">অনুমোদনের তারিখ</label>
+                            <input type="date" id="edit-start-date" class="zpk-input">
+                        </div>
+                        <div>
+                            <label class="zpk-label">স্মারক নম্বর</label>
+                            <input type="text" id="edit-approval-memo" class="zpk-input" placeholder="যেমন: ০৫.০৫.৫৫৫৫.০০০.০০.০০০.২৫-৯৮৯">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row: fund_type | allocation -->
+                <div class="zpk-form-section">
+                    <div class="zpk-form-section-title">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        তহবিল ও বরাদ্দ
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="zpk-label">তহবিলের ধরণ</label>
+                            <input type="text" id="edit-fund-type" class="zpk-input" placeholder="যেমন: এডিপি, রাজস্ব…">
+                        </div>
+                        <div>
+                            <label class="zpk-label">মোট বরাদ্দ (টাকা) <span class="text-red-400">*</span></label>
+                            <div class="relative">
+                                <span style="position:absolute;left:0.625rem;top:50%;transform:translateY(-50%);color:#b45309;font-weight:700;font-size:0.875rem;pointer-events:none;">৳</span>
+                                <input type="number" id="edit-allocation" step="0.01" required
+                                    class="zpk-input" style="padding-left:1.75rem;" placeholder="0.00">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row: lat_lng (GPS) -->
+                <div class="zpk-form-section" style="border-left-color:#6366f1;">
+                    <div class="zpk-form-section-title" style="color:#4338ca;">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        জিপিএস অবস্থান
+                    </div>
                     <input type="text" id="edit-lat-lng" placeholder="যেমন: 23.9012,89.1234"
-                        pattern="^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$"
-                        class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-mono text-gray-800 text-sm"
-                        title="Latitude এবং Longitude কমা দিয়ে লিখুন, যেমন: 23.9012,89.1234">
-                    <p class="text-[10px] text-[#b45309] mt-1 opacity-70">Google Maps খুলে স্থানে right-click → "এই স্থানটি কী" থেকে কপি করুন</p>
+                        class="zpk-input font-mono" style="font-size:0.8rem;">
+                    <p class="text-xs text-indigo-400 mt-1.5 font-medium">Google Maps-এ স্থানে right-click → "এই স্থানটি কী" থেকে কপি করুন</p>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-[#b45309] mb-2 uppercase tracking-wide">মন্তব্য</label>
-                    <textarea id="edit-remarks" rows="2"
-                        class="w-full px-4 py-2 border-2 border-[#fcd34d] rounded-lg focus:outline-none focus:border-[#b45309] focus:ring-2 focus:ring-[#fbbf24] font-semibold text-gray-800"></textarea>
+
+                <!-- Remarks -->
+                <div class="zpk-form-section" style="border-left-color:#94a3b8;">
+                    <div class="zpk-form-section-title" style="color:#475569;">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                        মন্তব্য
+                    </div>
+                    <textarea id="edit-remarks" rows="2" class="zpk-input resize-none" placeholder="অতিরিক্ত তথ্য বা মন্তব্য…"></textarea>
                 </div>
-                <div class="flex gap-3 mt-6 pt-4 border-t border-[#fcd34d]">
-                    <button type="submit" class="flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#b45309] to-[#92400e] text-white shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]">
+
+                <!-- Actions -->
+                <div class="flex justify-end gap-3 pt-1">
+                    <button type="button" onclick="closeEditModal()" class="zpk-btn-cancel">বাতিল</button>
+                    <button type="submit" class="zpk-btn-save">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                         সংরক্ষণ করুন
-                    </button>
-                    <button type="button" onclick="closeEditModal()" class="py-3 px-4 rounded-xl font-bold text-sm bg-gray-200 text-gray-700 hover:bg-gray-300 transition-all duration-200">
-                        বাতিল
                     </button>
                 </div>
             </form>
@@ -1294,105 +1512,169 @@
     </div>
 
     <!-- ───── PROGRESS MODAL ───── -->
-    <div id="progress-modal" class="modal-backdrop fixed inset-0 z-[130] flex items-center justify-center p-4 hidden">
-        <div class="modal-card bg-white w-full max-w-xl rounded-[2rem] shadow-2xl relative max-h-[92vh] overflow-y-auto">
+    <div id="progress-modal" class="zpk-modal-backdrop fixed inset-0 z-[130] flex items-start justify-center py-10 px-4 hidden" style="overflow-y:auto;"
+         onclick="if(event.target===this)closeProgressModal()">
+        <div class="w-full max-w-lg rounded-2xl overflow-hidden flex-shrink-0 mb-8"
+             style="background:linear-gradient(160deg,#fffbf0 0%,#ffffff 60%,#fff8ed 100%);
+                    box-shadow:0 32px 80px rgba(120,53,15,0.28),0 0 0 1px rgba(245,158,11,0.2);">
 
-            <!-- Header -->
-            <div class="sticky top-0 bg-white z-10 flex items-center justify-between px-8 pt-7 pb-4 border-b border-[#d1fae5]">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d1fae5] to-[#6ee7b7] flex items-center justify-center">
-                        <svg class="w-5 h-5 text-[#047857]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            <!-- Gradient header -->
+            <div style="background:linear-gradient(135deg,#b45309 0%,#d97706 50%,#f59e0b 100%);padding:1.1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+                <div style="display:flex;align-items:center;gap:0.75rem;">
+                    <div style="width:2.25rem;height:2.25rem;border-radius:0.5rem;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg style="width:1.2rem;height:1.2rem;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-lg font-extrabold text-slate-900">অগ্রগতি যোগ করুন</h2>
-                        <p id="pm-project-title" class="text-xs text-[#059669] font-semibold truncate max-w-[280px]"></p>
+                        <h3 style="font-size:1.05rem;font-weight:700;color:white;line-height:1.3;margin:0;">অগ্রগতি আপডেট</h3>
+                        <p id="pm-project-title" style="font-size:0.7rem;color:#fde68a;font-weight:500;margin:0;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></p>
                     </div>
                 </div>
-                <button onclick="closeProgressModal()" class="text-slate-300 hover:text-red-500 transition-colors p-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                <button onclick="closeProgressModal()" class="zpk-modal-close">
+                    <svg style="width:1.1rem;height:1.1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
                 </button>
             </div>
 
-            <div class="px-8 py-6 space-y-7">
+            <!-- Form body -->
+            <div style="padding:1.25rem;display:flex;flex-direction:column;gap:1rem;">
 
-                <!-- ── Section 1: Progress Snapshot ── -->
-                <div>
-                    <p class="text-[11px] font-bold text-[#059669] uppercase tracking-widest mb-4">অগ্রগতির তথ্য</p>
+                <!-- Current progress display (read-only) -->
+                <div id="pm-current-display" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:0.75rem;padding:0.85rem 1rem;">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold text-amber-800 uppercase tracking-wide">বর্তমান অগ্রগতি</span>
+                        <span id="pm-current-pct-label" class="text-sm font-extrabold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">০%</span>
+                    </div>
+                    <div class="h-2.5 rounded-full overflow-hidden" style="background:#e5e7eb;">
+                        <div id="pm-current-bar" class="h-2.5 rounded-full transition-all duration-500"
+                             style="width:0%;background:linear-gradient(90deg,#fbbf24,#d97706);"></div>
+                    </div>
+                    <div class="flex justify-between mt-1.5">
+                        <span class="text-xs text-amber-700 font-medium">ছাড়কৃত: <span id="pm-current-released" class="font-bold">৳ ০</span></span>
+                        <span class="text-xs text-amber-600 font-medium">বরাদ্দ: <span id="pm-current-alloc" class="font-bold">৳ ০</span></span>
+                    </div>
+                </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">অগ্রগতি (%) *</label>
-                            <input type="number" id="pm-progress" min="0" max="100" required
-                                class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-bold text-lg
-                                       focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                <!-- Section 1: New progress % + fund release toggle -->
+                <div class="zpk-form-section">
+                    <!-- Live new preview bar -->
+                    <div style="margin-top:0.6rem;">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs text-gray-400 font-medium">নতুন পূর্বরূপ</span>
+                            <span id="pm-pct-preview" class="text-xs font-bold text-amber-700">০%</span>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">নতুন ছাড়কৃত অর্থ (৳)</label>
-                            <input type="number" id="pm-released" min="0" step="0.01"
-                                class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-semibold
-                                       focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                        <div class="h-2 rounded-full overflow-hidden" style="background:#f3f4f6;">
+                            <div id="pm-bar-preview" class="h-2 rounded-full transition-all duration-300"
+                                 style="width:0%;background:linear-gradient(90deg,#f59e0b,#b45309);"></div>
                         </div>
                     </div>
-
-                    <div class="mt-4">
-                        <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">বর্তমান অবস্থা *</label>
-                        <input type="text" id="pm-status"
-                            class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-semibold
-                                   focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                    <!-- Fund release toggle stitch -->
+                    <div style="margin-top:0.75rem;">
+                        <button type="button" id="pm-fund-toggle" onclick="togglePmFundRelease()"
+                                class="flex items-center gap-2 text-sm font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg px-3 py-1.5 transition-all">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            তহবিল ছাড় যোগ করুন
+                        </button>
+                        <div id="pm-fund-release-field" style="margin-top:0.625rem;">
+                            <label class="zpk-label">ছাড়কৃত অর্থ (টাকা)</label>
+                            <div class="relative">
+                                <span style="position:absolute;left:0.625rem;top:50%;transform:translateY(-50%);color:#b45309;font-weight:700;font-size:0.875rem;pointer-events:none;">৳</span>
+                                <input type="number" id="pm-released" min="0" step="0.01" placeholder="0.00"
+                                    class="zpk-input" style="padding-left:1.75rem;border-color:#6ee7b7;background:#f0fdf4;">
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="flex gap-6 mt-4">
+                <!-- Section 2: Status (filtered by method) -->
+                <div class="zpk-form-section">
+                    <div class="zpk-form-section-title">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        বর্তমান অবস্থা
+                    </div>
+                    <div>
+                        <label class="zpk-label">অবস্থা নির্বাচন করুন <span class="text-red-400">*</span></label>
+                        <div class="relative">
+                            <select id="pm-status" class="zpk-input" style="appearance:none;padding-right:2rem;">
+                                <option value="">-- অবস্থা নির্বাচন করুন --</option>
+                            </select>
+                            <svg style="pointer-events:none;position:absolute;right:0.625rem;top:50%;transform:translateY(-50%);width:1rem;height:1rem;color:#f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Mark complete / delayed -->
+                <div class="zpk-form-section" style="border-left-color:#10b981;">
+                    <div class="zpk-form-section-title" style="color:#065f46;">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        প্রকল্পটি চিহ্নিত করুন
+                    </div>
+                    <p class="text-xs text-gray-500 mb-3">প্রকল্পটি সম্পন্ন বা বিলম্বিত হিসেবে চিহ্নিত করতে চাইলে নীচের টগল চালু করুন।</p>
+                    <div class="flex items-center gap-6">
                         <label class="flex items-center gap-2.5 cursor-pointer select-none">
-                            <input type="checkbox" id="pm-completed"
-                                class="w-5 h-5 rounded border-2 border-[#059669] accent-[#059669]">
-                            <span class="text-sm font-semibold text-slate-700">বাস্তবায়ন সম্পন্ন</span>
+                            <div class="relative">
+                                <input type="checkbox" id="pm-completed" class="sr-only peer">
+                                <div class="w-10 h-5 rounded-full bg-gray-200 peer-checked:bg-emerald-500 transition-colors duration-200"></div>
+                                <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-700">✅ সম্পন্ন</span>
                         </label>
                         <label class="flex items-center gap-2.5 cursor-pointer select-none">
-                            <input type="checkbox" id="pm-delayed"
-                                class="w-5 h-5 rounded border-2 border-[#dc2626] accent-[#dc2626]">
-                            <span class="text-sm font-semibold text-slate-700">বিলম্বিত</span>
+                            <div class="relative">
+                                <input type="checkbox" id="pm-delayed" class="sr-only peer">
+                                <div class="w-10 h-5 rounded-full bg-gray-200 peer-checked:bg-red-400 transition-colors duration-200"></div>
+                                <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+                            </div>
+                            <span class="text-sm font-semibold text-gray-700">⚠️ বিলম্বিত</span>
                         </label>
                     </div>
+                </div>
 
-                    <div class="mt-4">
-                        <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">আপডেট নোট</label>
-                        <textarea id="pm-note" rows="2" placeholder="যেমন: ভিত্তিপ্রস্তর স্থাপন সম্পন্ন হয়েছে…"
-                            class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-medium
-                                   focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5] resize-none"></textarea>
+                <!-- Section 4: Note -->
+                <div class="zpk-form-section">
+                    <div class="zpk-form-section-title">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+                        আপডেট নোট
                     </div>
+                    <textarea id="pm-note" rows="3" class="zpk-input resize-none"
+                              placeholder="এই আপডেটের বিস্তারিত বিবরণ লিখুন…"></textarea>
+                </div>
 
-                    <!-- Progress submit -->
-                    <div id="pm-progress-msg" class="hidden mt-3 px-4 py-2.5 rounded-xl text-sm font-semibold"></div>
-                    <button onclick="handleProgressSubmit()" class="mt-4 w-full py-3 rounded-xl font-bold text-sm
-                        bg-gradient-to-r from-[#059669] to-[#047857] text-white
-                        shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.98]
-                        flex items-center justify-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                        অগ্রগতি সংরক্ষণ করুন
+                <!-- Feedback message -->
+                <div id="pm-progress-msg" class="hidden px-4 py-2.5 rounded-xl text-sm font-semibold"></div>
+
+                <!-- Actions -->
+                <div class="flex justify-end gap-3 pt-1">
+                    <button type="button" onclick="closeProgressModal()" class="zpk-btn-cancel">বাতিল</button>
+                    <button type="button" onclick="handleProgressSubmit()" class="zpk-btn-save">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        আপডেট সংরক্ষণ করুন
                     </button>
                 </div>
 
-                <!-- Divider -->
-                <div class="flex items-center gap-3">
-                    <div class="flex-1 h-px bg-[#d1fae5]"></div>
-                    <span class="text-xs font-bold text-[#059669] uppercase tracking-widest">ছবি আপলোড</span>
-                    <div class="flex-1 h-px bg-[#d1fae5]"></div>
+                <!-- ── Image Upload Section (divider) ── -->
+                <div class="flex items-center gap-3" style="margin-top:0.5rem;">
+                    <div class="flex-1 h-px bg-amber-200"></div>
+                    <span class="text-xs font-bold text-amber-700 uppercase tracking-widest">ছবি আপলোড</span>
+                    <div class="flex-1 h-px bg-amber-200"></div>
                 </div>
 
-                <!-- ── Section 2: Image Upload ── -->
-                <div>
-                    <p class="text-[11px] font-bold text-[#059669] uppercase tracking-widest mb-4">প্রকল্পের ছবি</p>
-
-                    <div class="grid grid-cols-2 gap-4">
+                <!-- Section 5: Image Upload -->
+                <div class="zpk-form-section" style="border-left-color:#0ea5e9;">
+                    <div class="zpk-form-section-title" style="color:#0369a1;">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        প্রকল্পের ছবি
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mb-3">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">ছবির ধরন</label>
-                            <select id="pm-photo-type"
-                                class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-semibold
-                                       focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                            <label class="zpk-label">ছবির ধরন</label>
+                            <select id="pm-photo-type" class="zpk-input" style="appearance:none;">
                                 <option value="before">কাজের আগে</option>
                                 <option value="during" selected>কাজ চলাকালীন</option>
                                 <option value="after">কাজের পরে</option>
@@ -1400,37 +1682,26 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wide">ক্যাপশন (ঐচ্ছিক)</label>
-                            <input type="text" id="pm-caption" placeholder="ছবির বিবরণ…"
-                                class="w-full px-4 py-2.5 border-2 border-[#d1fae5] rounded-xl text-slate-800 font-medium
-                                       focus:outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#d1fae5]">
+                            <label class="zpk-label">ক্যাপশন (ঐচ্ছিক)</label>
+                            <input type="text" id="pm-caption" placeholder="ছবির বিবরণ…" class="zpk-input">
                         </div>
                     </div>
-
-                    <!-- File drop zone -->
-                    <div class="mt-4">
-                        <label for="pm-images"
-                            class="flex flex-col items-center justify-center gap-2 w-full h-28
-                                   border-2 border-dashed border-[#6ee7b7] rounded-xl
-                                   bg-[#f0fdf4] hover:bg-[#dcfce7] cursor-pointer transition-colors duration-200">
-                            <svg class="w-8 h-8 text-[#059669]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                            <span class="text-sm font-semibold text-[#059669]">ছবি নির্বাচন করুন</span>
-                            <span class="text-xs text-slate-400">JPEG, PNG, WebP · সর্বোচ্চ ৫টি · প্রতিটি ৫MB</span>
-                        </label>
-                        <input type="file" id="pm-images" accept="image/jpeg,image/png,image/webp"
-                            multiple class="hidden" onchange="previewImages(this)">
-                    </div>
-
-                    <!-- Image previews -->
+                    <label for="pm-images"
+                        class="flex flex-col items-center justify-center gap-2 w-full h-24
+                               border-2 border-dashed border-sky-300 rounded-xl
+                               bg-sky-50 hover:bg-sky-100 cursor-pointer transition-colors duration-200">
+                        <svg class="w-7 h-7 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="text-sm font-semibold text-sky-600">ছবি নির্বাচন করুন</span>
+                        <span class="text-xs text-gray-400">JPEG, PNG, WebP · সর্বোচ্চ ৫টি · প্রতিটি ৫MB</span>
+                    </label>
+                    <input type="file" id="pm-images" accept="image/jpeg,image/png,image/webp" multiple class="hidden" onchange="previewImages(this)">
                     <div id="pm-previews" class="hidden mt-3 grid grid-cols-3 gap-2"></div>
-
-                    <!-- Image upload feedback -->
                     <div id="pm-image-msg" class="hidden mt-3 px-4 py-2.5 rounded-xl text-sm font-semibold"></div>
-                    <button onclick="handleImageUpload()" class="mt-4 w-full py-3 rounded-xl font-bold text-sm
-                        bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white
+                    <button onclick="handleImageUpload()" class="mt-3 w-full py-2.5 rounded-xl font-bold text-sm
+                        bg-gradient-to-r from-sky-500 to-sky-700 text-white
                         shadow-md hover:shadow-lg transition-all duration-200 active:scale-[0.98]
                         flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1440,15 +1711,7 @@
                     </button>
                 </div>
 
-            </div><!-- /px-8 -->
-
-            <!-- Footer close -->
-            <div class="px-8 pb-7">
-                <button onclick="closeProgressModal()" class="w-full py-3.5 rounded-2xl font-bold text-sm
-                    bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all duration-200">
-                    বন্ধ করুন
-                </button>
-            </div>
+            </div><!-- /body -->
         </div>
     </div>
 
@@ -1678,7 +1941,8 @@
         document.getElementById('m-financial-year').innerText = r.financial_year || '';
         document.getElementById('m-upazila').innerText = r.upazila || '';
         document.getElementById('m-fund-type').innerText = r.fund_type || '';
-        document.getElementById('m-current-status').innerText = r.current_status || '';
+        const mCurStatus = document.getElementById('m-current-status');
+        if (mCurStatus) mCurStatus.innerText = r.current_status || '';
 
         // Approval date and memo number
         document.getElementById('m-approval-date').innerText = r.project_approval_date ? formatDate(r.project_approval_date) : 'N/A';
@@ -1696,10 +1960,13 @@
         document.getElementById('m-fund-release-pct').innerText = fundPct + '%';
         document.getElementById('m-fund-release-bar').style.width = fundPct + '%';
 
-        // Dates
-        document.getElementById('m-start-date').innerText = r.start_date ? formatDate(r.start_date) : 'N/A';
-        document.getElementById('m-expected-end').innerText = r.expected_end_date ? formatDate(r.expected_end_date) : 'N/A';
-        document.getElementById('m-actual-end').innerText = r.actual_end_date ? formatDate(r.actual_end_date) : 'N/A';
+        // Dates (optional — may not be present in new modal design)
+        const mStartDate = document.getElementById('m-start-date');
+        if (mStartDate) mStartDate.innerText = r.start_date ? formatDate(r.start_date) : 'N/A';
+        const mExpEnd = document.getElementById('m-expected-end');
+        if (mExpEnd) mExpEnd.innerText = r.expected_end_date ? formatDate(r.expected_end_date) : 'N/A';
+        const mActEnd = document.getElementById('m-actual-end');
+        if (mActEnd) mActEnd.innerText = r.actual_end_date ? formatDate(r.actual_end_date) : 'N/A';
 
         // Remarks
         const remarksSection = document.getElementById('m-remarks-section');
@@ -2001,7 +2268,12 @@
     // (window.openLightbox is defined there)
 
     function closeModal() {
-        document.getElementById('modal').classList.remove('open');
+        const modal = document.getElementById('modal');
+        modal.classList.remove('open');
+        // New design: the modal-card has no separate open class; just hide backdrop
+        const card = modal.querySelector('.modal-card');
+        if (card) card.classList.remove('open');
+        document.body.style.overflow = '';
         triggerSearch();
     }
 
@@ -2097,6 +2369,8 @@
         currentRecordId = r.id;
         currentRecord = r;
         originalShowDetails(r);
+
+        // Admin action bar (edit / delete / progress buttons)
         const adminActions = document.getElementById('admin-actions');
         if (adminActions) {
             if (authToken) {
@@ -2107,6 +2381,21 @@
                 adminActions.classList.add('hidden');
             }
         }
+
+        // "অগ্রগতি যোগ করুন" button inside progress log header
+        const addProgressBtn = document.getElementById('m-add-progress-btn');
+        if (addProgressBtn) {
+            if (authToken) addProgressBtn.classList.remove('hidden');
+            else           addProgressBtn.classList.add('hidden');
+        }
+
+        // Auth-only progress-log section (shows add button even when no logs yet)
+        const authSection = document.getElementById('m-progress-log-auth-section');
+        if (authSection) {
+            if (authToken) authSection.classList.remove('hidden');
+            else           authSection.classList.add('hidden');
+        }
+
         // Show/hide photo add button based on auth
         const addPhotoBtn = document.getElementById('m-add-photo-btn');
         if (addPhotoBtn) {
@@ -2246,17 +2535,20 @@
         if (!currentRecord) return;
         document.getElementById('edit-id').value = currentRecord.id;
         document.getElementById('edit-project-name').value = currentRecord.project_name || '';
-        document.getElementById('edit-upazila').value = currentRecord.upazila || '';
+        // upazila is now a select
+        const upazilaEl = document.getElementById('edit-upazila');
+        upazilaEl.value = currentRecord.upazila || '';
+        // financial_year is now a select
+        const fyEl = document.getElementById('edit-financial-year');
+        fyEl.value = currentRecord.financial_year || '';
         document.getElementById('edit-project-type').value = currentRecord.project_type || 'শিক্ষা';
         document.getElementById('edit-implementation-method').value = currentRecord.implementation_method || 'টেন্ডার';
-        document.getElementById('edit-current-status').value = currentRecord.current_status || '';
-        document.getElementById('edit-progress').value = currentRecord.progress_percentage || 0;
         document.getElementById('edit-allocation').value = currentRecord.allocation_amount || '';
-        document.getElementById('edit-released').value = currentRecord.released_amount || '';
-        document.getElementById('edit-financial-year').value = currentRecord.financial_year || '';
-        document.getElementById('edit-start-date').value = currentRecord.start_date ? currentRecord.start_date.split('T')[0] : '';
-        document.getElementById('edit-expected-end').value = currentRecord.expected_end_date ? currentRecord.expected_end_date.split('T')[0] : '';
         document.getElementById('edit-fund-type').value = currentRecord.fund_type || '';
+        // approval date stored in project_approval_date
+        document.getElementById('edit-start-date').value = currentRecord.project_approval_date
+            ? currentRecord.project_approval_date.split('T')[0] : '';
+        document.getElementById('edit-approval-memo').value = currentRecord.approval_memo_number || '';
         document.getElementById('edit-lat-lng').value = currentRecord.lat_lng || '';
         document.getElementById('edit-remarks').value = currentRecord.remarks || '';
 
@@ -2264,36 +2556,38 @@
         editModal.classList.remove('hidden');
         editModal.classList.add('open');
         setTimeout(() => { editModal.querySelector('.modal-card').classList.add('open'); }, 10);
+        document.body.style.overflow = 'hidden';
     }
 
     function closeEditModal() {
         const editModal = document.getElementById('edit-modal');
-        editModal.querySelector('.modal-card').classList.remove('open');
+        const card = editModal.querySelector('.modal-card');
+        if (card) card.classList.remove('open');
         setTimeout(() => { editModal.classList.remove('open'); editModal.classList.add('hidden'); }, 300);
+        document.body.style.overflow = '';
     }
 
     async function handleEditSubmit(e) {
         e.preventDefault();
         const recordId = document.getElementById('edit-id').value;
         const updateData = {
-            project_name: document.getElementById('edit-project-name').value.trim(),
-            upazila: document.getElementById('edit-upazila').value.trim(),
-            project_type: document.getElementById('edit-project-type').value,
+            project_name:          document.getElementById('edit-project-name').value.trim(),
+            upazila:               document.getElementById('edit-upazila').value.trim(),
+            project_type:          document.getElementById('edit-project-type').value,
             implementation_method: document.getElementById('edit-implementation-method').value,
-            current_status: document.getElementById('edit-current-status').value.trim(),
-            progress_percentage: parseInt(document.getElementById('edit-progress').value) || 0,
-            allocation_amount: parseFloat(document.getElementById('edit-allocation').value) || 0,
-            released_amount: parseFloat(document.getElementById('edit-released').value) || 0,
-            financial_year: document.getElementById('edit-financial-year').value.trim(),
-            start_date: document.getElementById('edit-start-date').value || null,
-            expected_end_date: document.getElementById('edit-expected-end').value || null,
-            fund_type: document.getElementById('edit-fund-type').value.trim(),
-            lat_lng: document.getElementById('edit-lat-lng').value.trim() || null,
-            remarks: document.getElementById('edit-remarks').value.trim()
+            allocation_amount:     parseFloat(document.getElementById('edit-allocation').value) || 0,
+            financial_year:        document.getElementById('edit-financial-year').value.trim(),
+            fund_type:             document.getElementById('edit-fund-type').value.trim(),
+            project_approval_date: document.getElementById('edit-start-date').value || null,
+            approval_memo_number:  document.getElementById('edit-approval-memo').value.trim() || null,
+            lat_lng:               document.getElementById('edit-lat-lng').value.trim() || null,
+            remarks:               document.getElementById('edit-remarks').value.trim()
         };
         Object.keys(updateData).forEach(key => {
             if (updateData[key] === '' || updateData[key] === null) delete updateData[key];
         });
+        const submitBtn = e.target.querySelector('[type="submit"]');
+        if (submitBtn) { submitBtn.disabled = true; }
         try {
             const response = await fetch(`${API_URL}/projects/${recordId}/update`, {
                 method: 'PUT',
@@ -2302,12 +2596,13 @@
             });
             if (!response.ok) { const err = await response.json(); throw new Error(err.message || 'Update failed'); }
             closeEditModal();
-            alert('প্রকল্প সফলভাবে আপডেট করা হয়েছে');
             const updatedResponse = await fetch(`${API_URL}/projects/${recordId}`);
             if (updatedResponse.ok) { const updatedRecord = await updatedResponse.json(); showDetails(updatedRecord); }
         } catch (error) {
             console.error('Edit error:', error);
             alert('ত্রুটি: ' + error.message);
+        } finally {
+            if (submitBtn) { submitBtn.disabled = false; }
         }
     }
 
@@ -2355,91 +2650,128 @@
     // PROGRESS MODAL
     // ─────────────────────────────────────────────────────────────
 
+    // Status options per implementation method
+    const PM_STATUS_OPTIONS = {
+        'টেন্ডার':  ['টেন্ডার ফ্লোটিং','টেন্ডার মূল্যায়ন','কার্যাদেশ প্রদান','কাজ শুরু হয়নি','কাজ চলমান','আংশিক সম্পন্ন','চূড়ান্ত বিল প্রক্রিয়া','কাজ সম্পন্ন'],
+        'সিপিপিসি': ['সিপিপিসি অনুমোদন প্রক্রিয়া','কাজ শুরু হয়নি','কাজ চলমান','আংশিক সম্পন্ন','চূড়ান্ত বিল প্রক্রিয়া','কাজ সম্পন্ন'],
+        'আরএফকিউ':  ['আরএফকিউ প্রক্রিয়া','কাজ শুরু হয়নি','কাজ চলমান','আংশিক সম্পন্ন','চূড়ান্ত বিল প্রক্রিয়া','কাজ সম্পন্ন']
+    };
+
+    function populatePmStatusOptions(method) {
+        const sel = document.getElementById('pm-status');
+        const opts = PM_STATUS_OPTIONS[method] || ['কাজ শুরু হয়নি','কাজ চলমান','আংশিক সম্পন্ন','চূড়ান্ত বিল প্রক্রিয়া','কাজ সম্পন্ন'];
+        sel.innerHTML = '<option value="">-- অবস্থা নির্বাচন করুন --</option>' +
+            opts.map(o => `<option value="${o}">${o}</option>`).join('');
+    }
+
+    function updatePmPreview() { /* progress % input removed */ }
+
+    function togglePmFundRelease() {
+        const field = document.getElementById('pm-fund-release-field');
+        const btn   = document.getElementById('pm-fund-toggle');
+        const isOpen = field.classList.contains('open');
+        if (isOpen) {
+            field.classList.remove('open');
+            document.getElementById('pm-released').value = '';
+            btn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg> তহবিল ছাড় যোগ করুন`;
+        } else {
+            field.classList.add('open');
+            btn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg> তহবিল ছাড় বাতিল করুন`;
+            document.getElementById('pm-released').focus();
+        }
+    }
+
     function openProgressModal() {
         if (!currentRecord) return;
 
-        // Pre-fill with current values
-        document.getElementById('pm-project-title').textContent =
-            currentRecord.project_name ? currentRecord.project_name.substring(0, 60) + (currentRecord.project_name.length > 60 ? '…' : '') : '';
-        document.getElementById('pm-progress').value  = currentRecord.progress_percentage || 0;
-        document.getElementById('pm-released').value  = currentRecord.released_amount || '';
-        document.getElementById('pm-status').value    = currentRecord.current_status || '';
-        document.getElementById('pm-completed').checked = !!currentRecord.is_completed;
-        document.getElementById('pm-delayed').checked   = !!currentRecord.is_delayed;
-        document.getElementById('pm-note').value      = '';
-        document.getElementById('pm-caption').value   = '';
-        document.getElementById('pm-photo-type').value = 'during';
-        document.getElementById('pm-images').value    = '';
+        // Header subtitle
+        const name = currentRecord.project_name || '';
+        document.getElementById('pm-project-title').textContent = name.length > 55 ? name.substring(0, 52) + '…' : name;
+
+        // Populate current progress display
+        const pct      = currentRecord.progress_percentage || 0;
+        const released = parseFloat(currentRecord.released_amount || 0);
+        const alloc    = parseFloat(currentRecord.allocation_amount || 0);
+        document.getElementById('pm-current-pct-label').textContent = pct + '%';
+        document.getElementById('pm-current-bar').style.width = pct + '%';
+        document.getElementById('pm-current-released').textContent = '৳ ' + released.toLocaleString('en-IN');
+        document.getElementById('pm-current-alloc').textContent    = '৳ ' + alloc.toLocaleString('en-IN');
+
+        // Populate status options filtered by implementation method
+        populatePmStatusOptions(currentRecord.implementation_method || '');
+
+        // Reset fields
+        document.getElementById('pm-released').value = '';
+        document.getElementById('pm-completed').checked = false;
+        document.getElementById('pm-delayed').checked   = false;
+        document.getElementById('pm-note').value        = '';
+        document.getElementById('pm-caption').value     = '';
+        document.getElementById('pm-photo-type').value  = 'during';
+        document.getElementById('pm-images').value      = '';
         document.getElementById('pm-previews').innerHTML = '';
         document.getElementById('pm-previews').classList.add('hidden');
+        // Reset fund release stitch
+        document.getElementById('pm-fund-release-field').classList.remove('open');
+        document.getElementById('pm-fund-toggle').innerHTML =
+            `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg> তহবিল ছাড় যোগ করুন`;
+        updatePmPreview();
         hideMsg('pm-progress-msg');
         hideMsg('pm-image-msg');
 
-        const modal = document.getElementById('progress-modal');
-        modal.classList.remove('hidden');
-        modal.classList.add('open');
-        setTimeout(() => modal.querySelector('.modal-card').classList.add('open'), 10);
+        document.getElementById('progress-modal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 
     function closeProgressModal() {
-        const modal = document.getElementById('progress-modal');
-        modal.querySelector('.modal-card').classList.remove('open');
-        setTimeout(() => {
-            modal.classList.remove('open');
-            modal.classList.add('hidden');
-        }, 300);
+        document.getElementById('progress-modal').classList.add('hidden');
+        document.body.style.overflow = '';
     }
 
     function showMsg(id, text, isError) {
         const el = document.getElementById(id);
         el.textContent = text;
-        el.className = `mt-3 px-4 py-2.5 rounded-xl text-sm font-semibold ${isError
+        el.className = `px-4 py-2.5 rounded-xl text-sm font-semibold ${isError
             ? 'bg-red-50 text-red-700 border border-red-200'
             : 'bg-green-50 text-green-700 border border-green-200'}`;
         el.classList.remove('hidden');
     }
 
     function hideMsg(id) {
-        document.getElementById(id).classList.add('hidden');
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
     }
 
     async function handleProgressSubmit() {
-        const pct = parseInt(document.getElementById('pm-progress').value, 10);
-        const status = document.getElementById('pm-status').value.trim();
+        const status = document.getElementById('pm-status').value;
+        const fundOpen = document.getElementById('pm-fund-release-field').classList.contains('open');
 
-        if (isNaN(pct) || pct < 0 || pct > 100) {
-            showMsg('pm-progress-msg', 'অগ্রগতি ০ থেকে ১০০ এর মধ্যে হতে হবে', true);
-            return;
-        }
         if (!status) {
-            showMsg('pm-progress-msg', 'বর্তমান অবস্থা পূরণ করুন', true);
+            showMsg('pm-progress-msg', 'বর্তমান অবস্থা নির্বাচন করুন', true);
             return;
         }
 
         const body = {
-            progress_percentage: pct,
-            released_amount: parseFloat(document.getElementById('pm-released').value) || currentRecord.released_amount || 0,
             current_status: status,
             is_completed: document.getElementById('pm-completed').checked ? 1 : 0,
             is_delayed:   document.getElementById('pm-delayed').checked   ? 1 : 0,
             note: document.getElementById('pm-note').value.trim() || null
         };
+        if (fundOpen) {
+            body.released_amount = parseFloat(document.getElementById('pm-released').value) || 0;
+        }
 
         try {
             const res = await fetch(`${API_URL}/projects/${currentRecordId}/progress`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authToken}`
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
                 body: JSON.stringify(body)
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || data.error || 'ব্যর্থ হয়েছে');
 
-            showMsg('pm-progress-msg', '✓ ' + data.message, false);
+            showMsg('pm-progress-msg', '✓ ' + (data.message || 'অগ্রগতি সফলভাবে সংরক্ষিত হয়েছে'), false);
 
-            // Refresh the underlying detail modal data
+            // Refresh the underlying detail modal
             const updatedRes = await fetch(`${API_URL}/projects/${currentRecordId}`);
             if (updatedRes.ok) {
                 currentRecord = await updatedRes.json();

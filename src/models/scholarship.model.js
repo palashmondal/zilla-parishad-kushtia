@@ -79,16 +79,24 @@ const scholarshipModel = {
             'SELECT COUNT(*) as total_count, COALESCE(SUM(amount), 0) as total_amount FROM scholarship'
         );
         const [categoryResult] = await pool.execute(
-            'SELECT category, COUNT(*) as count FROM scholarship GROUP BY category'
+            'SELECT category, COUNT(*) as count FROM scholarship GROUP BY category ORDER BY count DESC'
         );
         const [yearResult] = await pool.execute(
-            'SELECT financial_year, COUNT(*) as count FROM scholarship GROUP BY financial_year'
+            'SELECT financial_year, COUNT(*) as count, COALESCE(SUM(amount),0) as total_amount FROM scholarship GROUP BY financial_year ORDER BY financial_year ASC'
+        );
+        const [schoolResult] = await pool.execute(
+            'SELECT school, COUNT(*) as count FROM scholarship WHERE school IS NOT NULL AND school != \'\' GROUP BY school ORDER BY count DESC LIMIT 15'
+        );
+        const [upazilaResult] = await pool.execute(
+            'SELECT upazila, COUNT(*) as count FROM scholarship WHERE upazila IS NOT NULL AND upazila != \'\' GROUP BY upazila ORDER BY count DESC'
         );
         return {
             total_count: totalResult[0].total_count,
             total_amount: totalResult[0].total_amount,
             byCategory: categoryResult,
-            byYear: yearResult
+            byYear: yearResult,
+            bySchool: schoolResult,
+            byUpazila: upazilaResult
         };
     },
 

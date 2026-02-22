@@ -84,16 +84,20 @@ const humanitarianModel = {
             'SELECT COUNT(*) as total_count, COALESCE(SUM(amount_eng), 0) as total_amount FROM humanitarian_aid'
         );
         const [categoryResult] = await pool.execute(
-            'SELECT category, COUNT(*) as count FROM humanitarian_aid GROUP BY category'
+            'SELECT category, COUNT(*) as count, COALESCE(SUM(amount_eng),0) as total_amount FROM humanitarian_aid GROUP BY category ORDER BY count DESC'
         );
         const [yearResult] = await pool.execute(
-            'SELECT financial_year, COUNT(*) as count FROM humanitarian_aid GROUP BY financial_year'
+            'SELECT financial_year, COUNT(*) as count, COALESCE(SUM(amount_eng),0) as total_amount FROM humanitarian_aid GROUP BY financial_year ORDER BY financial_year ASC'
+        );
+        const [upazilaResult] = await pool.execute(
+            'SELECT upazila, COUNT(*) as count, COALESCE(SUM(amount_eng),0) as total_amount FROM humanitarian_aid WHERE upazila IS NOT NULL AND upazila != \'\' GROUP BY upazila ORDER BY count DESC'
         );
         return {
             total_count: totalResult[0].total_count,
             total_amount: totalResult[0].total_amount,
             byCategory: categoryResult,
-            byYear: yearResult
+            byYear: yearResult,
+            byUpazila: upazilaResult
         };
     },
 

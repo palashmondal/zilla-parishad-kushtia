@@ -3,197 +3,1102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ড্যাশবোর্ড - জেলা পরিষদ, কুষ্টিয়া</title>
+    <title>ওভারভিউ ড্যাশবোর্ড - জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
     <link rel="shortcut icon" href="/favicon/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
-
     <style>
         * { font-family: 'Hind Siliguri', sans-serif; }
+
+        /* ── Layout ── */
+        .dash-main { max-width: 1600px; margin: 0 auto; padding: 1.5rem 1.5rem; }
+
+        /* ── Cards ── */
+        .card {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+        .card-body { padding: 1.25rem; position: relative; }
+        .card-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* ── KPI tiles ── */
+        .kpi-tile {
+            border-radius: 1rem;
+            padding: 1.25rem;
+            transition: transform 0.18s, box-shadow 0.18s;
+            cursor: default;
+            overflow: hidden;
+        }
+        .kpi-tile:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.13); }
+
+        /* ── Chart wrappers ── */
+        .chart-wrap { position: relative; width: 100%; }
+        .donut-center {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -60%);
+            text-align: center; pointer-events: none; z-index: 2;
+        }
+
+        /* ── Horizontal rank bars ── */
+        .rank-bar-track {
+            flex: 1;
+            background: #f1f5f9;
+            border-radius: 99px;
+            height: 7px;
+            overflow: hidden;
+            min-width: 60px;
+        }
+        .rank-bar-fill { height: 100%; border-radius: 99px; transition: width 0.9s ease; }
+
+        /* ── Section pill label ── */
+        .section-pill {
+            display: inline-flex; align-items: center; gap: 0.375rem;
+            padding: 0.2rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        /* ── Divider label ── */
+        .section-divider {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin: 2rem 0 1rem;
+        }
+        .section-divider-line { flex: 1; height: 2px; border-radius: 1px; }
+        .section-divider-text {
+            font-size: 1.05rem; font-weight: 700;
+            white-space: nowrap; display: flex; align-items: center; gap: 0.5rem;
+        }
+
+        /* ── Progress ring ── */
+        .progress-ring-svg { transform: rotate(-90deg); }
+
+        /* ── Filter pills ── */
+        .filter-pill {
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.15s;
+        }
+        .filter-pill.active { border-color: currentColor; }
+        .filter-pill:hover { opacity: 0.85; }
+
+        /* ── Tooltip chip ── */
+        .badge-chip {
+            display: inline-block;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 99px;
+            font-weight: 600;
+        }
+
+        /* scrollable rank list */
+        .rank-scroll { max-height: 310px; overflow-y: auto; padding-right: 4px; }
+        .rank-scroll::-webkit-scrollbar { width: 4px; }
+        .rank-scroll::-webkit-scrollbar-track { background: #f8fafc; }
+        .rank-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <div id="header-container"></div>
+<body class="bg-slate-100 min-h-screen">
 
-    <!-- Navigation -->
-    <div id="menu-container"></div>
+<!-- Header / Nav injected by components.js -->
+<div id="header-container"></div>
+<div id="menu-container"></div>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-        <!-- Welcome Section -->
-        <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 mb-8 border border-green-100">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">স্বাগতম, <span data-user-field="full_name"></span></h2>
-            <p class="text-gray-600">আজকের তারিখ: <span id="current-date"></span></p>
+<div class="dash-main">
+
+    <!-- ══ WELCOME BANNER ════════════════════════════════════════ -->
+    <div class="relative overflow-hidden rounded-2xl mb-6 px-7 py-5"
+         style="background: linear-gradient(130deg,#0f2d4a 0%,#145235 45%,#0f2d4a 100%);">
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div style="position:absolute;right:-60px;top:-60px;width:280px;height:280px;background:rgba(255,255,255,0.04);border-radius:50%;"></div>
+            <div style="position:absolute;left:-40px;bottom:-80px;width:200px;height:200px;background:rgba(255,255,255,0.03);border-radius:50%;"></div>
         </div>
-
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <!-- Scholarship Stats -->
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">মোট শিক্ষাবৃত্তি</p>
-                        <p class="text-3xl font-bold text-blue-600" id="total-scholarships">-</p>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-sm text-gray-500">মোট অর্থ: <span id="total-scholarship-amount" class="font-semibold">-</span></p>
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <p class="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-1">প্রশাসনিক ড্যাশবোর্ড</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-white mb-0.5">স্বাগতম, <span data-user-field="full_name" class="text-emerald-300"></span></h2>
+                <p class="text-slate-400 text-sm">জেলা পরিষদ, কুষ্টিয়া — সমন্বিত কার্যক্রম পর্যালোচনা</p>
             </div>
-
-            <!-- Humanitarian Stats -->
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">মানবিক সহায়তা</p>
-                        <p class="text-3xl font-bold text-green-600" id="total-humanitarian">-</p>
-                    </div>
-                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-sm text-gray-500">মোট অর্থ: <span id="total-humanitarian-amount" class="font-semibold">-</span></p>
+            <div class="text-right">
+                <p class="text-slate-400 text-xs mb-0.5">আজকের তারিখ</p>
+                <p class="text-white text-xl font-bold" id="current-date">—</p>
+                <p class="text-emerald-400 text-xs mt-1" id="last-updated">তথ্য লোড হচ্ছে...</p>
             </div>
+        </div>
+    </div>
 
-            <!-- Total Beneficiaries -->
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">মোট সুবিধাভোগী</p>
-                        <p class="text-3xl font-bold text-purple-600" id="total-beneficiaries">-</p>
-                    </div>
-                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-sm text-gray-500">দুটি প্রোগ্রাম মিলিয়ে</p>
+    <!-- ══ TOP KPI ROW ═══════════════════════════════════════════ -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" style="align-items:stretch;">
+
+        <!-- Tile 1: Scholarship -->
+        <div class="kpi-tile bg-white border-t-4 border-blue-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">শিক্ষাবৃত্তি</p>
+                <p class="text-3xl font-extrabold text-blue-600 leading-none" id="kpi-sch-count">—</p>
             </div>
-
-            <!-- Total Amount -->
-            <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-orange-500">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">মোট বিতরণকৃত অর্থ</p>
-                        <p class="text-2xl font-bold text-orange-600" id="total-amount">-</p>
-                    </div>
-                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                </div>
-                <p class="text-sm text-gray-500">সকল প্রোগ্রাম</p>
+            <div class="mt-auto pt-2 border-t border-gray-100">
+                <p class="text-sm font-bold text-blue-500 truncate" id="kpi-sch-amt">—</p>
+                <p class="text-xs text-gray-400">মোট শিক্ষাবৃত্তি অর্থ</p>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
-            <h3 class="text-xl font-bold text-gray-800 mb-4">দ্রুত কার্যক্রম</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a href="/admin/scholarship-manage.html" class="flex items-center gap-3 p-4 border-2 border-blue-200 rounded-lg hover:bg-blue-50 transition">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                    </svg>
-                    <div>
-                        <p class="font-semibold text-gray-800">নতুন শিক্ষাবৃত্তি যোগ করুন</p>
-                        <p class="text-sm text-gray-500">শিক্ষাবৃত্তি রেকর্ড তৈরি করুন</p>
-                    </div>
-                </a>
-
-                <a href="/admin/humanitarian-manage.html" class="flex items-center gap-3 p-4 border-2 border-green-200 rounded-lg hover:bg-green-50 transition">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                    </svg>
-                    <div>
-                        <p class="font-semibold text-gray-800">নতুন মানবিক সহায়তা যোগ করুন</p>
-                        <p class="text-sm text-gray-500">সহায়তা রেকর্ড তৈরি করুন</p>
-                    </div>
-                </a>
-
-                <a href="/admin/users-manage.html" data-role="admin" class="flex items-center gap-3 p-4 border-2 border-purple-200 rounded-lg hover:bg-purple-50 transition">
-                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                    </svg>
-                    <div>
-                        <p class="font-semibold text-gray-800">ব্যবহারকারী পরিচালনা</p>
-                        <p class="text-sm text-gray-500">নতুন ব্যবহারকারী যোগ করুন</p>
-                    </div>
-                </a>
+        <!-- Tile 2: Aid -->
+        <div class="kpi-tile bg-white border-t-4 border-emerald-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">সহায়তা</p>
+                <p class="text-3xl font-extrabold text-emerald-600 leading-none" id="kpi-aid-count">—</p>
+            </div>
+            <div class="mt-auto pt-2 border-t border-gray-100">
+                <p class="text-sm font-bold text-emerald-500 truncate" id="kpi-aid-amt">—</p>
+                <p class="text-xs text-gray-400">মোট সহায়তা অর্থ</p>
             </div>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <div id="footer-container"></div>
+        <!-- Tile 3: Projects -->
+        <div class="kpi-tile bg-white border-t-4 border-violet-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">প্রকল্প</p>
+                <p class="text-3xl font-extrabold text-violet-600 leading-none" id="kpi-proj-count">—</p>
+            </div>
+            <div class="mt-auto pt-2 border-t border-gray-100">
+                <p class="text-sm font-bold text-green-600" id="kpi-proj-done">—</p>
+                <p class="text-xs text-gray-400">সম্পন্ন প্রকল্প</p>
+            </div>
+        </div>
 
-    <script src="assets/js/auth.js"></script>
-    <script src="assets/js/components.js"></script>
-    <script src="assets/js/crud.js"></script>
-    <script>
-        // Load dashboard components
-        DashboardComponents.loadAll('dashboard', 'প্রশাসক ড্যাশবোর্ড');
+        <!-- Tile 4: Budget -->
+        <div class="kpi-tile bg-white border-t-4 border-amber-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">বাজেট</p>
+                <p class="text-2xl font-extrabold text-amber-600 leading-none" id="kpi-alloc">—</p>
+                <p class="text-xs text-gray-400 mt-0.5">মোট বরাদ্দ</p>
+            </div>
+            <div class="mt-auto pt-2 border-t border-gray-100">
+                <p class="text-sm font-bold text-orange-500" id="kpi-released">—</p>
+                <p class="text-xs text-gray-400">মুক্তকৃত অর্থ</p>
+            </div>
+        </div>
 
-        // Initialize auth
-        AuthManager.init().then(async (user) => {
-            if (!user) return;
+        <!-- Tile 5: Delayed -->
+        <div class="kpi-tile bg-white border-t-4 border-rose-400 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">বিলম্বিত</p>
+                <p class="text-3xl font-extrabold text-rose-500 leading-none" id="kpi-delayed">—</p>
+            </div>
+            <div class="mt-auto pt-2 border-t border-gray-100">
+                <p class="text-sm font-bold text-amber-500" id="kpi-ongoing">—</p>
+                <p class="text-xs text-gray-400">চলমান প্রকল্প</p>
+            </div>
+        </div>
 
-            // Set current date
-            const today = new Date();
-            const bengaliMonths = [
-                'জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
-                'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
-            ];
-            document.getElementById('current-date').textContent =
-                `${CRUDManager.toBengaliNumber(today.getDate())} ${bengaliMonths[today.getMonth()]} ${CRUDManager.toBengaliNumber(today.getFullYear())}`;
+        <!-- Tile 6: Avg Progress -->
+        <div class="kpi-tile bg-white border-t-4 border-sky-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+            <div>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">গড় অগ্রগতি</p>
+                <p class="text-3xl font-extrabold text-sky-600 leading-none" id="kpi-avg-progress">—</p>
+            </div>
+            <div class="mt-auto pt-2 border-t border-gray-100">
+                <div class="w-full bg-gray-100 rounded-full h-1.5">
+                    <div id="kpi-progress-bar" class="h-1.5 rounded-full bg-sky-500 transition-all duration-700" style="width:0%"></div>
+                </div>
+                <p class="text-xs text-gray-400 mt-1">সকল প্রকল্পের</p>
+            </div>
+        </div>
 
-            // Load stats
-            await loadStats();
-        });
+    </div>
 
-        async function loadStats() {
-            try {
-                // Fetch scholarship stats
-                const scholarshipStats = await CRUDManager.fetchList('/scholarship/stats');
-                document.getElementById('total-scholarships').textContent =
-                    CRUDManager.toBengaliNumber(scholarshipStats.total_count || 0);
-                document.getElementById('total-scholarship-amount').textContent =
-                    CRUDManager.formatCurrency(scholarshipStats.total_amount || 0);
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 1 — শিক্ষাবৃত্তি
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-divider">
+        <div class="section-divider-line bg-blue-200"></div>
+        <div class="section-divider-text text-blue-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+            শিক্ষাবৃত্তি বিশ্লেষণ
+        </div>
+        <div class="section-divider-line bg-blue-200"></div>
+        <a href="/admin/scholarship-manage.html" class="text-xs font-semibold text-blue-600 whitespace-nowrap hover:underline flex items-center gap-1">পরিচালনা <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg></a>
+    </div>
 
-                // Fetch humanitarian stats
-                const humanitarianStats = await CRUDManager.fetchList('/humanitarian/stats');
-                document.getElementById('total-humanitarian').textContent =
-                    CRUDManager.toBengaliNumber(humanitarianStats.total_count || 0);
-                document.getElementById('total-humanitarian-amount').textContent =
-                    CRUDManager.formatCurrency(humanitarianStats.total_amount || 0);
+    <!-- Row 1: Category donut + Year bar + Upazila horizontal bar -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
 
-                // Calculate totals
-                const totalBeneficiaries = (scholarshipStats.total_count || 0) + (humanitarianStats.total_count || 0);
-                const totalAmount = (parseFloat(scholarshipStats.total_amount) || 0) + (parseFloat(humanitarianStats.total_amount) || 0);
+        <!-- Category donut -->
+        <div class="card md:col-span-3">
+            <div class="card-header">
+                <div class="card-icon bg-blue-100"><svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">শ্রেণি বিভাজন</span>
+            </div>
+            <div class="card-body">
+                <div class="donut-center" style="top:44%">
+                    <p class="text-2xl font-extrabold text-gray-800" id="sch-cat-total">—</p>
+                    <p class="text-xs text-gray-400">মোট</p>
+                </div>
+                <div class="chart-wrap" style="height:220px;">
+                    <canvas id="schCatDonut"></canvas>
+                </div>
+            </div>
+        </div>
 
-                document.getElementById('total-beneficiaries').textContent =
-                    CRUDManager.toBengaliNumber(totalBeneficiaries);
-                document.getElementById('total-amount').textContent =
-                    CRUDManager.formatCurrency(totalAmount);
+        <!-- Year bar -->
+        <div class="card md:col-span-5">
+            <div class="card-header">
+                <div class="card-icon bg-blue-100"><svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">অর্থ বছর অনুযায়ী শিক্ষার্থী ও অর্থ</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:240px;">
+                    <canvas id="schYearBar"></canvas>
+                </div>
+            </div>
+        </div>
 
-            } catch (error) {
-                console.error('Failed to load stats:', error);
+        <!-- Upazila donut -->
+        <div class="card md:col-span-4">
+            <div class="card-header">
+                <div class="card-icon bg-indigo-100"><svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">উপজেলা বিভাজন</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:240px;">
+                    <canvas id="schUpazilaBar"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2: Top schools ranking -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="card-icon bg-sky-100"><svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
+            <span class="text-sm font-bold text-gray-700">শীর্ষ বিদ্যালয় — সর্বাধিক শিক্ষাবৃত্তি প্রাপক</span>
+            <span class="ml-auto badge-chip bg-sky-100 text-sky-700">শীর্ষ ১৫টি</span>
+        </div>
+        <div class="card-body">
+            <div class="rank-scroll" id="school-rank-list">
+                <p class="text-xs text-gray-400">লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 2 — মানবিক সহায়তা
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-divider">
+        <div class="section-divider-line bg-emerald-200"></div>
+        <div class="section-divider-text text-emerald-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            মানবিক সহায়তা বিশ্লেষণ
+        </div>
+        <div class="section-divider-line bg-emerald-200"></div>
+        <a href="/admin/humanitarian-manage.html" class="text-xs font-semibold text-emerald-600 whitespace-nowrap hover:underline flex items-center gap-1">পরিচালনা <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg></a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+
+        <!-- Year grouped bar (count + amount) -->
+        <div class="card md:col-span-5">
+            <div class="card-header">
+                <div class="card-icon bg-emerald-100"><svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">অর্থ বছর — উপকারভোগী ও বিতরণ</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:240px;">
+                    <canvas id="aidYearBar"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category donut -->
+        <div class="card md:col-span-3">
+            <div class="card-header">
+                <div class="card-icon bg-emerald-100"><svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">বিভাগ বিতরণ</span>
+            </div>
+            <div class="card-body">
+                <div class="donut-center" style="top:44%">
+                    <p class="text-2xl font-extrabold text-gray-800" id="aid-cat-total">—</p>
+                    <p class="text-xs text-gray-400">মোট</p>
+                </div>
+                <div class="chart-wrap" style="height:220px;">
+                    <canvas id="aidCatDonut"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upazila horizontal bar -->
+        <div class="card md:col-span-4">
+            <div class="card-header">
+                <div class="card-icon bg-teal-100"><svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">উপজেলা তুলনা</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:240px;">
+                    <canvas id="aidUpazilaBar"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category amount comparison line/bar combo -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="card-icon bg-teal-100"><svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+            <span class="text-sm font-bold text-gray-700">বিভাগ অনুযায়ী — উপকারভোগী সংখ্যা ও মোট অর্থ তুলনা</span>
+        </div>
+        <div class="card-body">
+            <div class="chart-wrap" style="height:220px;">
+                <canvas id="aidCatCompareBar"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 3 — প্রকল্প
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-divider">
+        <div class="section-divider-line bg-violet-200"></div>
+        <div class="section-divider-text text-violet-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            প্রকল্প বিশ্লেষণ
+        </div>
+        <div class="section-divider-line bg-violet-200"></div>
+        <a href="/admin/projects-manage.html" class="text-xs font-semibold text-violet-600 whitespace-nowrap hover:underline flex items-center gap-1">পরিচালনা <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg></a>
+    </div>
+
+    <!-- Status tiles -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+        <div class="rounded-xl p-4 bg-violet-50 border border-violet-100 text-center">
+            <p class="text-2xl font-extrabold text-violet-700" id="proj-total">—</p>
+            <p class="text-xs text-gray-500 mt-0.5">মোট প্রকল্প</p>
+        </div>
+        <div class="rounded-xl p-4 bg-emerald-50 border border-emerald-100 text-center">
+            <p class="text-2xl font-extrabold text-emerald-700" id="proj-done">—</p>
+            <p class="text-xs text-gray-500 mt-0.5">সম্পন্ন</p>
+        </div>
+        <div class="rounded-xl p-4 bg-sky-50 border border-sky-100 text-center">
+            <p class="text-2xl font-extrabold text-sky-700" id="proj-ongoing">—</p>
+            <p class="text-xs text-gray-500 mt-0.5">চলমান</p>
+        </div>
+        <div class="rounded-xl p-4 bg-rose-50 border border-rose-100 text-center">
+            <p class="text-2xl font-extrabold text-rose-600" id="proj-delayed">—</p>
+            <p class="text-xs text-gray-500 mt-0.5">বিলম্বিত</p>
+        </div>
+        <div class="rounded-xl p-4 bg-amber-50 border border-amber-100 text-center">
+            <p class="text-2xl font-extrabold text-amber-700" id="proj-avg-pct">—%</p>
+            <p class="text-xs text-gray-500 mt-0.5">গড় অগ্রগতি</p>
+        </div>
+    </div>
+
+    <!-- Row: Type donut + Status bar + Method donut -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+
+        <!-- Type donut -->
+        <div class="card md:col-span-3">
+            <div class="card-header">
+                <div class="card-icon bg-violet-100"><svg class="w-4 h-4 text-violet-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">প্রকল্পের ধরন</span>
+            </div>
+            <div class="card-body">
+                <div class="donut-center" style="top:44%">
+                    <p class="text-xl font-extrabold text-gray-800" id="proj-type-total">—</p>
+                    <p class="text-xs text-gray-400">প্রকল্প</p>
+                </div>
+                <div class="chart-wrap" style="height:220px;">
+                    <canvas id="projTypeDonut"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status polar/bar -->
+        <div class="card md:col-span-5">
+            <div class="card-header">
+                <div class="card-icon bg-fuchsia-100"><svg class="w-4 h-4 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">প্রকল্পের বর্তমান অবস্থা</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:230px;">
+                    <canvas id="projStatusBar"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Implementation method donut -->
+        <div class="card md:col-span-4">
+            <div class="card-header">
+                <div class="card-icon bg-indigo-100"><svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">বাস্তবায়ন পদ্ধতি</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:230px;">
+                    <canvas id="projMethodDonut"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row: Allocation vs Released per year + Fund types -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+
+        <!-- Alloc vs Released grouped bar -->
+        <div class="card md:col-span-7">
+            <div class="card-header">
+                <div class="card-icon bg-amber-100"><svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">অর্থ বছর — বরাদ্দ বনাম মুক্তকৃত অর্থ</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:250px;">
+                    <canvas id="projAllocReleasedBar"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fund type ranking -->
+        <div class="card md:col-span-5">
+            <div class="card-header">
+                <div class="card-icon bg-orange-100"><svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">তহবিলের উৎস তুলনা</span>
+            </div>
+            <div class="card-body">
+                <div class="rank-scroll" id="fund-type-rank-list">
+                    <p class="text-xs text-gray-400">লোড হচ্ছে...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row: Progress bar chart (filterable) + Method performance radar -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+
+        <!-- Progress grouped bar with dual filter -->
+        <div class="card md:col-span-8">
+            <div class="card-header flex-wrap gap-2">
+                <div class="card-icon bg-sky-100"><svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">গড় অগ্রগতি (%) — বছর ও পদ্ধতি ফিল্টার</span>
+                <div class="ml-auto flex flex-wrap items-center gap-3">
+                    <!-- Year filter -->
+                    <div class="flex items-center gap-1">
+                        <span class="text-xs text-gray-400 font-medium">বছর:</span>
+                        <div class="flex gap-1 flex-wrap" id="year-filter-pills"></div>
+                    </div>
+                    <!-- Method filter -->
+                    <div class="flex items-center gap-1">
+                        <span class="text-xs text-gray-400 font-medium">পদ্ধতি:</span>
+                        <div class="flex gap-1 flex-wrap" id="method-filter-pills"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:230px;">
+                    <canvas id="projProgressBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Method performance radar -->
+        <div class="card md:col-span-4">
+            <div class="card-header">
+                <div class="card-icon bg-fuchsia-100"><svg class="w-4 h-4 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg></div>
+                <div>
+                    <span class="text-sm font-bold text-gray-700">পদ্ধতি কর্মক্ষমতা</span>
+                    <p class="text-xs text-gray-400">প্রকল্প সংখ্যা · গড় অগ্রগতি · বরাদ্দ</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:230px;">
+                    <canvas id="methodRadarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /.dash-main -->
+
+<div id="footer-container"></div>
+
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/components.js"></script>
+<script src="assets/js/crud.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   PALETTE & HELPERS
+═══════════════════════════════════════════════════════════ */
+const PAL = {
+    blue:    ['#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe','#eff6ff'],
+    emerald: ['#059669','#10b981','#34d399','#6ee7b7','#a7f3d0','#d1fae5'],
+    violet:  ['#7c3aed','#8b5cf6','#a78bfa','#c4b5fd','#ddd6fe','#ede9fe'],
+    amber:   ['#d97706','#f59e0b','#fbbf24','#fcd34d','#fde68a'],
+    mixed:   ['#3b82f6','#10b981','#8b5cf6','#f59e0b','#ef4444','#ec4899','#06b6d4','#f97316','#84cc16','#a855f7'],
+    status:  ['#22c55e','#3b82f6','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#f97316','#a855f7','#ec4899','#14b8a6'],
+    methods: { 'টেন্ডার':'#6366f1','সিপিপিসি':'#10b981','আরএফকিউ':'#f59e0b','default':'#94a3b8' },
+};
+
+function bn(n) { return typeof CRUDManager !== 'undefined' ? CRUDManager.toBengaliNumber(n) : String(n); }
+function tk(n)  { return typeof CRUDManager !== 'undefined' ? CRUDManager.formatCurrency(n) : '৳'+Number(n).toLocaleString(); }
+function pct(a,b) { return b ? Math.round(a/b*100) : 0; }
+function shortTk(v) {
+    v = parseFloat(v)||0;
+    if (v >= 1e7) return '৳' + bn(Math.round(v/1e7)) + 'কোটি';
+    if (v >= 1e5) return '৳' + bn(Math.round(v/1e5)) + 'লক্ষ';
+    return '৳' + bn(Math.round(v));
+}
+const FONT = { family:'Hind Siliguri', size:11 };
+
+/* ── Chart factories ─────────────────────────────────────── */
+// Register datalabels globally for donut/pie usage
+Chart.register(ChartDataLabels);
+
+function donut(id, labels, data, colors, opts={}) {
+    const el = document.getElementById(id); if (!el) return null;
+    const total = data.reduce((a,b)=>a+b,0);
+    return new Chart(el, {
+        type: 'doughnut',
+        data: { labels, datasets:[{ data, backgroundColor:colors, borderWidth:3, borderColor:'#fff', hoverOffset:6 }] },
+        options: {
+            responsive:true, maintainAspectRatio:false, cutout:'66%',
+            plugins:{
+                legend:{
+                    display:true, position:'bottom',
+                    labels:{
+                        font:FONT, padding:8, boxWidth:11, boxHeight:11,
+                        generateLabels(chart) {
+                            const ds = chart.data.datasets[0];
+                            return chart.data.labels.map((label, i) => {
+                                const val = ds.data[i];
+                                const p = total ? Math.round(val/total*100) : 0;
+                                return {
+                                    text: `${label}  ${bn(p)}%`,
+                                    fillStyle: ds.backgroundColor[i],
+                                    strokeStyle: ds.backgroundColor[i],
+                                    lineWidth: 0,
+                                    hidden: false,
+                                    index: i
+                                };
+                            });
+                        }
+                    }
+                },
+                tooltip:{ callbacks:{ label(c){ return ` ${c.label}: ${bn(c.parsed)} (${bn(pct(c.parsed,total))}%)`; } } },
+                datalabels:{
+                    display(ctx) { return ctx.dataset.data[ctx.dataIndex] / total > 0.04; },
+                    formatter(value) {
+                        const p = total ? Math.round(value/total*100) : 0;
+                        return bn(p) + '%';
+                    },
+                    color:'#fff',
+                    font:{ family:'Hind Siliguri', size:11, weight:'700' },
+                    textShadowBlur:4,
+                    textShadowColor:'rgba(0,0,0,0.35)',
+                    anchor:'center',
+                    align:'center',
+                }
+            },
+            ...opts
+        }
+    });
+}
+
+function bar(id, labels, datasets, yFmt=null, opts={}) {
+    const el = document.getElementById(id); if (!el) return null;
+    const multi = datasets.length > 1;
+    return new Chart(el, {
+        type:'bar',
+        data:{ labels, datasets },
+        options:{
+            responsive:true, maintainAspectRatio:false,
+            plugins:{
+                legend:{ display:multi, position:'bottom', labels:{ font:FONT, padding:10, boxWidth:11, boxHeight:11 } },
+                tooltip:{ callbacks:{ label(c){ return ` ${c.dataset.label||''}: ${yFmt?yFmt(c.parsed.y):bn(c.parsed.y)}`; } } },
+                datalabels:{ display:false }
+            },
+            scales:{
+                x:{ ticks:{ font:FONT, maxRotation:35, minRotation:0 }, grid:{ display:false } },
+                y:{ ticks:{ font:FONT, callback:v=>yFmt?yFmt(v):bn(v) }, grid:{ color:'#f1f5f9' }, beginAtZero:true }
+            },
+            borderRadius:5,
+            ...opts
+        }
+    });
+}
+
+function hbar(id, labels, data, colors, tFmt=null) {
+    const el = document.getElementById(id); if (!el) return null;
+    return new Chart(el, {
+        type:'bar',
+        data:{ labels, datasets:[{ data, backgroundColor:colors, borderRadius:4, borderSkipped:false }] },
+        options:{
+            indexAxis:'y', responsive:true, maintainAspectRatio:false,
+            plugins:{
+                legend:{ display:false },
+                tooltip:{ callbacks:{ label(c){ return ` ${tFmt?tFmt(c.parsed.x):bn(c.parsed.x)}`; } } },
+                datalabels:{ display:false }
+            },
+            scales:{
+                x:{ ticks:{ font:FONT, callback:v=>tFmt?tFmt(v):bn(v) }, grid:{ color:'#f1f5f9' }, beginAtZero:true },
+                y:{ ticks:{ font:FONT } }
             }
         }
-    </script>
+    });
+}
+
+/* ── Rank list renderer ──────────────────────────────────── */
+function rankList(containerId, items, labelKey, countKey, maxCount, barColor, subtitle=null, subtitleFmt=null) {
+    const el = document.getElementById(containerId); if (!el) return;
+    el.innerHTML = items.map((item, i)=>{
+        const label = item[labelKey] || 'অন্যান্য';
+        const count = parseInt(item[countKey]) || 0;
+        const p = pct(count, maxCount);
+        const subText = subtitle && item[subtitle] ? `<span class="ml-2 badge-chip bg-gray-100 text-gray-500">${subtitleFmt ? subtitleFmt(item[subtitle]) : bn(item[subtitle])}</span>` : '';
+        return `<div class="flex items-center gap-3 py-1.5 ${i<items.length-1?'border-b border-gray-50':''}">
+            <span class="w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center flex-shrink-0" style="background:${barColor}22;color:${barColor}">${bn(i+1)}</span>
+            <span class="text-xs text-gray-700 flex-1 truncate" title="${label}">${label}${subText}</span>
+            <span class="text-xs font-bold text-gray-600 flex-shrink-0">${bn(count)}</span>
+            <div class="rank-bar-track">
+                <div class="rank-bar-fill" style="width:${p}%;background:${barColor}"></div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PROGRESS BAR CHART — dual filter (year + method)
+═══════════════════════════════════════════════════════════ */
+let progressBarInstance = null;
+let allMethods   = [];
+let allYearsProgress = [];
+let byYearAndMethod  = [];
+let activeMethodFilters = new Set();
+let activeYearFilters   = new Set();
+
+function buildProgressBar() {
+    // Determine which years & methods to show
+    const years   = activeYearFilters.size
+        ? allYearsProgress.filter(y => activeYearFilters.has(y))
+        : allYearsProgress;
+    const methods = activeMethodFilters.size
+        ? allMethods.filter(m => activeMethodFilters.has(m))
+        : allMethods;
+
+    // Build one dataset per method (grouped bars)
+    const datasets = methods.map((method, i) => {
+        const color = PAL.methods[method] || PAL.mixed[i % PAL.mixed.length];
+        return {
+            label: method,
+            data: years.map(yr => {
+                const row = byYearAndMethod.find(r => r.financial_year === yr && r.implementation_method === method);
+                return row ? parseFloat(row.avg_progress) || 0 : 0;
+            }),
+            backgroundColor: color + 'cc',
+            borderColor: color,
+            borderWidth: 1.5,
+            borderRadius: 5,
+            hoverBackgroundColor: color,
+        };
+    });
+
+    if (progressBarInstance) { progressBarInstance.destroy(); progressBarInstance = null; }
+    const el = document.getElementById('projProgressBarChart');
+    if (!el) return;
+
+    // Guard: nothing to show
+    if (!years.length || !datasets.length) {
+        el.style.display = 'none';
+        const msg = el.parentElement.querySelector('.no-data-msg') || document.createElement('p');
+        msg.className = 'no-data-msg text-xs text-gray-400 text-center py-10';
+        msg.textContent = 'ডেটা পাওয়া যায়নি';
+        el.parentElement.appendChild(msg);
+        return;
+    }
+    el.style.display = '';
+    const oldMsg = el.parentElement.querySelector('.no-data-msg');
+    if (oldMsg) oldMsg.remove();
+
+    progressBarInstance = new Chart(el, {
+        type: 'bar',
+        data: { labels: years, datasets },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            layout: { padding: { top: 26 } },
+            plugins: {
+                legend: { display: true, position: 'bottom', labels: { font: FONT, padding: 10, boxWidth: 11, boxHeight: 11 } },
+                tooltip: { callbacks: { label(c) { return ` ${c.dataset.label}: ${bn(c.parsed.y)}%`; } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    clip: false,
+                    display(ctx) {
+                        const v = ctx.dataset.data[ctx.dataIndex];
+                        return parseFloat(v) > 0;
+                    },
+                    formatter(value) {
+                        const v = parseFloat(value);
+                        return v > 0 ? bn(Math.round(v)) + '%' : '';
+                    },
+                    font: { family: 'Hind Siliguri', size: 10, weight: '700' },
+                    color(ctx) {
+                        return ctx.dataset.borderColor || '#374151';
+                    },
+                    backgroundColor(ctx) {
+                        return (ctx.dataset.borderColor || '#374151') + '18';
+                    },
+                    borderRadius: 3,
+                    padding: { top: 2, bottom: 2, left: 4, right: 4 },
+                }
+            },
+            scales: {
+                x: { ticks: { font: FONT, maxRotation: 30 }, grid: { display: false } },
+                y: {
+                    ticks: { font: FONT, callback: v => bn(v) + '%' },
+                    grid: { color: '#f1f5f9' }, beginAtZero: true, max: 110
+                }
+            },
+            borderRadius: 5,
+        }
+    });
+}
+
+function makePillGroup(containerId, items, activeSet, color, rebuildFn) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+
+    function createPill(text, value, isAll) {
+        const pill = document.createElement('button');
+        pill.className = 'filter-pill';
+        const c = isAll ? '#64748b' : color;
+        pill.style.cssText = `background:${c}18;color:${c}`;
+        pill.textContent = text;
+        pill.dataset.value = value;
+
+        const updateState = () => {
+            const allPill = container.querySelector('[data-value="all"]');
+            if (isAll) {
+                activeSet.clear();
+                container.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+            } else {
+                if (activeSet.has(value)) {
+                    activeSet.delete(value);
+                    pill.classList.remove('active');
+                } else {
+                    activeSet.add(value);
+                    pill.classList.add('active');
+                    if (allPill) allPill.classList.remove('active');
+                }
+                if (activeSet.size === 0 && allPill) allPill.classList.add('active');
+            }
+            rebuildFn();
+        };
+        pill.addEventListener('click', updateState);
+        return pill;
+    }
+
+    const allPill = createPill('সব', 'all', true);
+    allPill.classList.add('active');
+    container.appendChild(allPill);
+    items.forEach(item => container.appendChild(createPill(item, item, false)));
+}
+
+function renderProgressFilters() {
+    makePillGroup('year-filter-pills',   allYearsProgress,  activeYearFilters,   '#0ea5e9', buildProgressBar);
+    makePillGroup('method-filter-pills', allMethods,        activeMethodFilters, '#8b5cf6', buildProgressBar);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN LOADER
+═══════════════════════════════════════════════════════════ */
+async function loadDashboard() {
+    try {
+        const [sc, ai, pr] = await Promise.all([
+            CRUDManager.fetchList('/scholarship/stats'),
+            CRUDManager.fetchList('/humanitarian/stats'),
+            CRUDManager.fetchList('/projects/stats')
+        ]);
+
+        document.getElementById('last-updated').textContent = 'সর্বশেষ আপডেট: এইমাত্র';
+
+        /* ── Derived numbers ─────────────────────────────── */
+        const schCount   = parseInt(sc.total_count)  || 0;
+        const aidCount   = parseInt(ai.total_count)  || 0;
+        const projCount  = parseInt(pr.total_count)  || 0;
+        const projDone   = parseInt(pr.completed_count) || 0;
+        const projDelay  = parseInt(pr.delayed_count) || 0;
+        const projOngo   = projCount - projDone;
+        const alloc      = parseFloat(pr.total_allocation) || 0;
+        const released   = parseFloat(pr.total_released)   || 0;
+        const avgProg    = parseFloat(pr.avg_progress) || 0;
+
+        /* ── KPI tiles ───────────────────────────────────── */
+        document.getElementById('kpi-sch-count').textContent  = bn(schCount);
+        document.getElementById('kpi-sch-amt').textContent    = shortTk(sc.total_amount||0);
+        document.getElementById('kpi-aid-count').textContent  = bn(aidCount);
+        document.getElementById('kpi-aid-amt').textContent    = shortTk(ai.total_amount||0);
+        document.getElementById('kpi-proj-count').textContent = bn(projCount);
+        document.getElementById('kpi-proj-done').textContent  = bn(projDone) + ' সম্পন্ন';
+        document.getElementById('kpi-alloc').textContent      = shortTk(alloc);
+        document.getElementById('kpi-released').textContent   = shortTk(released);
+        document.getElementById('kpi-delayed').textContent    = bn(projDelay);
+        document.getElementById('kpi-ongoing').textContent    = bn(projOngo) + ' চলমান';
+        document.getElementById('kpi-avg-progress').textContent = bn(avgProg) + '%';
+        document.getElementById('kpi-progress-bar').style.width = avgProg + '%';
+
+        /* ── Project status tiles ────────────────────────── */
+        document.getElementById('proj-total').textContent    = bn(projCount);
+        document.getElementById('proj-done').textContent     = bn(projDone);
+        document.getElementById('proj-ongoing').textContent  = bn(projOngo);
+        document.getElementById('proj-delayed').textContent  = bn(projDelay);
+        document.getElementById('proj-avg-pct').textContent  = bn(avgProg);
+        document.getElementById('proj-type-total').textContent = bn(projCount);
+
+        /* ══ SCHOLARSHIP CHARTS ══════════════════════════════ */
+        const schCats  = (sc.byCategory||[]).sort((a,b)=>b.count-a.count);
+        const schYears = (sc.byYear||[]).sort((a,b)=>(a.financial_year||'').localeCompare(b.financial_year||''));
+        const schUpaz  = (sc.byUpazila||[]).sort((a,b)=>b.count-a.count).slice(0,10);
+        const schSchools=(sc.bySchool||[]).sort((a,b)=>b.count-a.count);
+
+        document.getElementById('sch-cat-total').textContent = bn(schCount);
+
+        // Category donut
+        donut('schCatDonut',
+            schCats.map(c=>c.category||'অন্যান্য'),
+            schCats.map(c=>parseInt(c.count)),
+            PAL.blue
+        );
+
+        // Year grouped bar (count bars + amount line via dual axis?)
+        // Simpler: stacked bars per year coloured by index
+        bar('schYearBar',
+            schYears.map(y=>y.financial_year||'—'),
+            [{
+                label:'শিক্ষার্থী',
+                data: schYears.map(y=>parseInt(y.count)),
+                backgroundColor: schYears.map((_,i)=> PAL.blue[Math.min(i,PAL.blue.length-1)]),
+                borderRadius:5, yAxisID:'y'
+            }],
+            null,
+            { plugins:{ legend:{ display:false } } }
+        );
+
+        // Upazila horizontal bar
+        hbar('schUpazilaBar',
+            schUpaz.map(u=>u.upazila||'—'),
+            schUpaz.map(u=>parseInt(u.count)),
+            schUpaz.map((_,i)=> PAL.mixed[i%PAL.mixed.length])
+        );
+
+        // School rank list
+        rankList('school-rank-list', schSchools, 'school', 'count', schSchools[0]?.count||1, '#3b82f6');
+
+        /* ══ AID CHARTS ══════════════════════════════════════ */
+        const aidCats  = (ai.byCategory||[]).sort((a,b)=>b.count-a.count);
+        const aidYears = (ai.byYear||[]).sort((a,b)=>(a.financial_year||'').localeCompare(b.financial_year||''));
+        const aidUpaz  = (ai.byUpazila||[]).sort((a,b)=>b.count-a.count).slice(0,10);
+
+        document.getElementById('aid-cat-total').textContent = bn(aidCount);
+
+        // Year grouped bar (count + total_amount)
+        bar('aidYearBar',
+            aidYears.map(y=>y.financial_year||'—'),
+            [
+                { label:'উপকারভোগী', data:aidYears.map(y=>parseInt(y.count)), backgroundColor:'#10b981', borderRadius:4 }
+            ],
+            null
+        );
+
+        // Category donut
+        donut('aidCatDonut',
+            aidCats.map(c=>c.category||'অন্যান্য'),
+            aidCats.map(c=>parseInt(c.count)),
+            PAL.emerald
+        );
+
+        // Upazila horizontal bar
+        hbar('aidUpazilaBar',
+            aidUpaz.map(u=>u.upazila||'—'),
+            aidUpaz.map(u=>parseInt(u.count)),
+            aidUpaz.map((_,i)=>['#059669','#10b981','#34d399','#0d9488','#0891b2','#2563eb','#7c3aed','#be185d','#ea580c','#ca8a04'][i%10])
+        );
+
+        // Category compare bar (count vs amount)
+        bar('aidCatCompareBar',
+            aidCats.map(c=>c.category||'অন্যান্য'),
+            [
+                { label:'উপকারভোগী', data:aidCats.map(c=>parseInt(c.count)), backgroundColor:'#10b981', borderRadius:4 },
+                { label:'মোট অর্থ (লক্ষ)', data:aidCats.map(c=>Math.round(parseFloat(c.total_amount||0)/100000)), backgroundColor:'#34d399', borderRadius:4 }
+            ],
+            v => bn(v)
+        );
+
+        /* ══ PROJECT CHARTS ══════════════════════════════════ */
+        const projTypes  = (pr.byType||[]).sort((a,b)=>b.count-a.count);
+        const projYears  = (pr.byYear||[]).sort((a,b)=>(a.financial_year||'').localeCompare(b.financial_year||''));
+        const projMethods= (pr.byMethod||[]).sort((a,b)=>b.count-a.count);
+        const projStatuses=(pr.byStatus||[]).sort((a,b)=>b.count-a.count).slice(0,10);
+        const projFunds  = (pr.byFundType||[]).sort((a,b)=>b.count-a.count);
+
+        // Type donut
+        donut('projTypeDonut',
+            projTypes.map(t=>t.project_type||'অন্যান্য'),
+            projTypes.map(t=>parseInt(t.count)),
+            PAL.violet
+        );
+
+        // Status horizontal bar
+        hbar('projStatusBar',
+            projStatuses.map(s=>s.current_status||'—'),
+            projStatuses.map(s=>parseInt(s.count)),
+            projStatuses.map((_,i)=>PAL.status[i%PAL.status.length])
+        );
+
+        // Method donut
+        donut('projMethodDonut',
+            projMethods.map(m=>m.implementation_method||'—'),
+            projMethods.map(m=>parseInt(m.count)),
+            [PAL.methods['টেন্ডার'],PAL.methods['সিপিপিসি'],PAL.methods['আরএফকিউ'],...PAL.mixed]
+        );
+
+        // Alloc vs Released grouped bar
+        bar('projAllocReleasedBar',
+            projYears.map(y=>y.financial_year||'—'),
+            [
+                { label:'বরাদ্দ', data:projYears.map(y=>Math.round(parseFloat(y.total_allocation||0)/100000)), backgroundColor:'#8b5cf6', borderRadius:4 },
+                { label:'মুক্তকৃত', data:projYears.map(y=>Math.round(parseFloat(y.total_released||0)/100000)), backgroundColor:'#34d399', borderRadius:4 }
+            ],
+            v => '৳'+bn(v)+'লক্ষ'
+        );
+
+        // Fund type rank list
+        rankList('fund-type-rank-list', projFunds, 'fund_type', 'count', projFunds[0]?.count||1, '#f59e0b',
+            'total_allocation', shortTk);
+
+        /* ── Progress bar with dual filter ────────────────── */
+        byYearAndMethod  = (pr.byYearAndMethod || []);
+
+        // Fallback: if byYearAndMethod is empty but byYear + byMethod exist,
+        // synthesise a flat dataset from byYear avg_progress per method
+        if (!byYearAndMethod.length && projYears.length && projMethods.length) {
+            projYears.forEach(yr => {
+                projMethods.forEach(m => {
+                    byYearAndMethod.push({
+                        financial_year: yr.financial_year,
+                        implementation_method: m.implementation_method,
+                        avg_progress: yr.avg_progress || 0,
+                        count: yr.count || 0
+                    });
+                });
+            });
+        }
+
+        allMethods       = [...new Set(byYearAndMethod.map(r=>r.implementation_method).filter(Boolean))].sort();
+        allYearsProgress = [...new Set(byYearAndMethod.map(r=>r.financial_year).filter(Boolean))].sort();
+        renderProgressFilters();
+        buildProgressBar();
+
+        /* ── Method performance radar ──────────────────────── */
+        // Axes: প্রকল্প সংখ্যা (normalised 0-100), গড় অগ্রগতি, বরাদ্দ (normalised)
+        if (projMethods.length >= 2) {
+            const maxCount = Math.max(...projMethods.map(m => parseInt(m.count)||0)) || 1;
+            const maxAlloc = Math.max(...projMethods.map(m => parseFloat(m.total_allocation)||0)) || 1;
+            const radarData = {
+                labels: ['প্রকল্প সংখ্যা', 'গড় অগ্রগতি (%)', 'বরাদ্দ (লক্ষ)', 'সম্পন্ন হার', 'দক্ষতা স্কোর'],
+                datasets: projMethods.map((m, i) => {
+                    const c = PAL.methods[m.implementation_method] || PAL.mixed[i % PAL.mixed.length];
+                    const countNorm  = Math.round((parseInt(m.count)||0) / maxCount * 100);
+                    const avgProg    = parseFloat(m.avg_progress) || 0;
+                    const allocNorm  = Math.round((parseFloat(m.total_allocation)||0) / maxAlloc * 100);
+                    // Efficiency = avg_progress weighted by count share
+                    const efficiency = Math.round(avgProg * ((parseInt(m.count)||0) / maxCount));
+                    // completion proxy: methods with higher avg progress → higher completion
+                    const completion = Math.min(100, Math.round(avgProg * 1.1));
+                    return {
+                        label: m.implementation_method,
+                        data: [countNorm, avgProg, allocNorm, completion, efficiency],
+                        borderColor: c,
+                        backgroundColor: c + '28',
+                        pointBackgroundColor: c,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: c,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                    };
+                })
+            };
+            const radarEl = document.getElementById('methodRadarChart');
+            if (radarEl) {
+                new Chart(radarEl, {
+                    type: 'radar',
+                    data: radarData,
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: true, position: 'bottom', labels: { font: FONT, padding: 8, boxWidth: 11, boxHeight: 11 } },
+                            tooltip: { callbacks: { label(c) { return ` ${c.dataset.label}: ${bn(c.parsed.r)}`; } } },
+                            datalabels: { display: false }
+                        },
+                        scales: {
+                            r: {
+                                min: 0, max: 100,
+                                ticks: { display: false, stepSize: 25 },
+                                grid: { color: '#e2e8f0' },
+                                angleLines: { color: '#e2e8f0' },
+                                pointLabels: { font: { family: 'Hind Siliguri', size: 10 }, color: '#475569' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+    } catch(e) {
+        console.error('Dashboard load error:', e);
+        document.getElementById('last-updated').textContent = 'তথ্য লোড করতে সমস্যা হয়েছে';
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
+DashboardComponents.loadAll('dashboard', 'প্রশাসক ড্যাশবোর্ড');
+
+AuthManager.init().then(async user => {
+    if (!user) return;
+    const today = new Date();
+    const months = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+    document.getElementById('current-date').textContent =
+        `${CRUDManager.toBengaliNumber(today.getDate())} ${months[today.getMonth()]} ${CRUDManager.toBengaliNumber(today.getFullYear())}`;
+    await loadDashboard();
+});
+</script>
 </body>
 </html>
