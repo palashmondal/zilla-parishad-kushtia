@@ -1,4 +1,5 @@
 const pool = require('../../config/database');
+const { calcProgress } = require('../utils/progressCalc');
 
 const PROJECT_FIELDS = `
     id, project_id, project_name, allocation_amount, released_amount, fund_type,
@@ -89,14 +90,51 @@ const projectsModel = {
                     COALESCE(SUM(allocation_amount), 0) as total_allocation,
                     COALESCE(SUM(released_amount), 0) as total_released,
                     SUM(is_completed) as completed_count,
-                    SUM(is_delayed) as delayed_count
+                    SUM(is_delayed) as delayed_count,
+                    ROUND(AVG(progress_percentage), 1) as avg_progress
              FROM projects`
         );
         const [typeResult] = await pool.execute(
-            'SELECT project_type, COUNT(*) as count FROM projects GROUP BY project_type'
+            `SELECT project_type, COUNT(*) as count,
+                    COALESCE(SUM(allocation_amount),0) as total_allocation,
+                    COALESCE(SUM(released_amount),0) as total_released,
+                    ROUND(AVG(progress_percentage),1) as avg_progress
+             FROM projects GROUP BY project_type ORDER BY count DESC`
         );
         const [yearResult] = await pool.execute(
-            'SELECT financial_year, COUNT(*) as count FROM projects GROUP BY financial_year'
+            `SELECT financial_year, COUNT(*) as count,
+                    COALESCE(SUM(allocation_amount),0) as total_allocation,
+                    COALESCE(SUM(released_amount),0) as total_released,
+                    SUM(is_completed) as completed_count,
+                    ROUND(AVG(progress_percentage),1) as avg_progress
+             FROM projects GROUP BY financial_year ORDER BY financial_year ASC`
+        );
+        const [methodResult] = await pool.execute(
+            `SELECT implementation_method, COUNT(*) as count,
+                    COALESCE(SUM(allocation_amount),0) as total_allocation,
+                    ROUND(AVG(progress_percentage),1) as avg_progress
+             FROM projects WHERE implementation_method IS NOT NULL AND implementation_method != ''
+             GROUP BY implementation_method ORDER BY count DESC`
+        );
+        const [fundTypeResult] = await pool.execute(
+            `SELECT fund_type, COUNT(*) as count,
+                    COALESCE(SUM(allocation_amount),0) as total_allocation
+             FROM projects WHERE fund_type IS NOT NULL AND fund_type != ''
+             GROUP BY fund_type ORDER BY count DESC LIMIT 12`
+        );
+        const [statusResult] = await pool.execute(
+            `SELECT current_status, COUNT(*) as count
+             FROM projects WHERE current_status IS NOT NULL AND current_status != ''
+             GROUP BY current_status ORDER BY count DESC LIMIT 10`
+        );
+        const [yearProgressResult] = await pool.execute(
+            `SELECT financial_year, implementation_method,
+                    ROUND(AVG(progress_percentage),1) as avg_progress,
+                    COUNT(*) as count
+             FROM projects
+             WHERE financial_year IS NOT NULL
+             GROUP BY financial_year, implementation_method
+             ORDER BY financial_year ASC, implementation_method ASC`
         );
         return {
             total_count: totalResult[0].total_count,
@@ -104,8 +142,13 @@ const projectsModel = {
             total_released: totalResult[0].total_released,
             completed_count: totalResult[0].completed_count,
             delayed_count: totalResult[0].delayed_count,
+            avg_progress: totalResult[0].avg_progress,
             byType: typeResult,
-            byYear: yearResult
+            byYear: yearResult,
+            byMethod: methodResult,
+            byFundType: fundTypeResult,
+            byStatus: statusResult,
+            byYearAndMethod: yearProgressResult
         };
     },
 
@@ -188,17 +231,40 @@ const projectsModel = {
 
     async addProgressLog(projectId, data, loggedBy) {
         const {
-            progress_percentage,
             released_amount,
             current_status,
             is_completed = 0,
-            is_delayed = 0,
-            note = null
+            is_delayed   = 0,
+            note         = null
         } = data;
 
         const conn = await pool.getConnection();
         try {
             await conn.beginTransaction();
+
+            // Fetch current project fields needed for the formula (single query)
+            const [rows] = await conn.execute(
+                `SELECT allocation_amount, released_amount, implementation_method FROM projects WHERE id = ?`,
+                [projectId]
+            );
+            if (!rows || rows.length === 0) throw new Error('Project not found: ' + projectId);
+            const project = rows[0];
+
+            // Determine effective released_amount:
+            // If a new release was provided use it; otherwise keep the existing DB value
+            const effectiveReleased = (released_amount !== null && released_amount !== undefined)
+                ? parseFloat(released_amount)
+                : parseFloat(project.released_amount || 0);
+
+            // Auto-calculate progress using the formula
+            const progress_percentage = calcProgress({
+                current_status,
+                implementation_method: project.implementation_method,
+                allocation_amount:     project.allocation_amount,
+                released_amount:       effectiveReleased,
+                is_completed,
+                is_delayed
+            });
 
             // 1. Insert snapshot into progress log
             await conn.execute(
@@ -206,7 +272,7 @@ const projectsModel = {
                     (project_id, progress_percentage, released_amount,
                      current_status, is_completed, is_delayed, note, logged_by)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [projectId, progress_percentage, released_amount,
+                [projectId, progress_percentage, effectiveReleased,
                  current_status, is_completed ? 1 : 0, is_delayed ? 1 : 0,
                  note || null, loggedBy || null]
             );
@@ -217,11 +283,12 @@ const projectsModel = {
                     progress_percentage = ?, released_amount = ?,
                     current_status = ?, is_completed = ?, is_delayed = ?
                  WHERE id = ?`,
-                [progress_percentage, released_amount, current_status,
+                [progress_percentage, effectiveReleased, current_status,
                  is_completed ? 1 : 0, is_delayed ? 1 : 0, projectId]
             );
 
             await conn.commit();
+            return progress_percentage;
         } catch (err) {
             await conn.rollback();
             throw err;

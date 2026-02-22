@@ -208,28 +208,22 @@ const projectsController = {
                 return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
             }
 
-            const { progress_percentage, released_amount, current_status,
+            const { released_amount, current_status,
                     is_completed, is_delayed, note } = req.body;
 
-            if (progress_percentage === undefined || !current_status) {
-                return res.status(400).json({ error: 'অগ্রগতি এবং বর্তমান অবস্থা আবশ্যক' });
+            if (!current_status) {
+                return res.status(400).json({ error: 'বর্তমান অবস্থা আবশ্যক' });
             }
 
-            const pct = parseInt(progress_percentage, 10);
-            if (isNaN(pct) || pct < 0 || pct > 100) {
-                return res.status(400).json({ error: 'অগ্রগতি ০ থেকে ১০০ এর মধ্যে হতে হবে' });
-            }
-
-            await projectsModel.addProgressLog(project.id, {
-                progress_percentage: pct,
-                released_amount: parseFloat(released_amount) || 0,
+            const calculatedPct = await projectsModel.addProgressLog(project.id, {
+                released_amount: released_amount !== undefined ? parseFloat(released_amount) : null,
                 current_status: current_status.trim(),
                 is_completed: is_completed ? 1 : 0,
                 is_delayed: is_delayed ? 1 : 0,
                 note: note ? note.trim() : null
             }, req.user.id);
 
-            res.json({ message: 'অগ্রগতি সংরক্ষণ করা হয়েছে' });
+            res.json({ message: 'অগ্রগতি সংরক্ষণ করা হয়েছে', progress_percentage: calculatedPct });
         } catch (error) {
             console.error('Projects addProgress error:', error);
             res.status(500).json({
