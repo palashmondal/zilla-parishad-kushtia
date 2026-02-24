@@ -79,6 +79,14 @@ const humanitarianModel = {
         return results.map(r => r.financial_year);
     },
 
+    async getCategories() {
+        const [results] = await pool.execute(
+            `SELECT DISTINCT category FROM humanitarian_aid
+             WHERE category IS NOT NULL AND category != '' ORDER BY category ASC`
+        );
+        return results.map(r => r.category);
+    },
+
     async getStats() {
         const [totalResult] = await pool.execute(
             'SELECT COUNT(*) as total_count, COALESCE(SUM(amount_eng), 0) as total_amount FROM humanitarian_aid'
@@ -121,7 +129,7 @@ const humanitarianModel = {
         return result.affectedRows > 0;
     },
 
-    async getAll(page = 1, limit = 20, search = '', year = '') {
+    async getAll(page = 1, limit = 20, search = '', year = '', category = '') {
         const safeLimit = parseInt(limit, 10) || 20;
         const safePage = parseInt(page, 10) || 1;
         const offset = (safePage - 1) * safeLimit;
@@ -143,6 +151,12 @@ const humanitarianModel = {
             conditions.push('financial_year = ?');
             params.push(year);
             countParams.push(year);
+        }
+
+        if (category && category !== 'all') {
+            conditions.push('category = ?');
+            params.push(category);
+            countParams.push(category);
         }
 
         if (conditions.length > 0) {
