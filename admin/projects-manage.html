@@ -1157,8 +1157,8 @@
 
                         <!-- Row 2: Project ID | Financial Year -->
                         <div class="form-field">
-                            <label>প্রকল্প আইডি <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
-                            <input type="text" name="id" id="form-id" placeholder="R-25-26-001" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                            <label>প্রকল্প আইডি</label>
+                            <input type="text" name="project_id" id="form-id" placeholder="R-25-26-001" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
                         <div class="form-field">
                             <label>অর্থবছর <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
@@ -3238,8 +3238,9 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(formData)
                     });
-                    // New project — use the project_id from form (used as PK)
-                    savedId = formData.id || (await res.json().catch(()=>({}))).id || formData.id;
+                    // Server returns the auto-increment integer id
+                    const json = await res.json().catch(() => ({}));
+                    savedId = json.id;
                 }
 
                 // Upload pending photos (if any) using the saved project ID

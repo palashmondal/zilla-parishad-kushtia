@@ -159,10 +159,13 @@ const projectsModel = {
     },
 
     async create(data) {
-        const fields = Object.keys(data);
+        // Remove 'id' — it is AUTO_INCREMENT and must not be sent by the client
+        const { id: _id, created_at, updated_at, ...insertData } = data;
+        const fields = Object.keys(insertData);
+        if (fields.length === 0) throw new Error('No data provided for insert');
         const placeholders = fields.map(() => '?').join(', ');
         const sql = `INSERT INTO projects (${fields.join(', ')}) VALUES (${placeholders})`;
-        const [result] = await pool.execute(sql, Object.values(data));
+        const [result] = await pool.execute(sql, Object.values(insertData));
         return result.insertId;
     },
 
