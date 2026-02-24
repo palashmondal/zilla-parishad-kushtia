@@ -10,6 +10,25 @@ const PROJECT_FIELDS = `
     created_at, updated_at
 `;
 
+// DATE columns — empty string must become NULL (MySQL strict mode rejects '')
+const DATE_FIELDS = ['project_approval_date', 'start_date', 'expected_end_date', 'actual_end_date'];
+// Nullable text columns — send NULL instead of empty string
+const NULLABLE_TEXT = ['project_id', 'approval_memo_number', 'lat_lng', 'remarks', 'reference', 'performance_score'];
+
+function sanitizeProjectData(data) {
+    const out = {};
+    for (const [k, v] of Object.entries(data)) {
+        if (DATE_FIELDS.includes(k)) {
+            out[k] = (v === '' || v === null || v === undefined) ? null : v;
+        } else if (NULLABLE_TEXT.includes(k)) {
+            out[k] = (v === '' || v === null || v === undefined) ? null : v;
+        } else {
+            out[k] = v;
+        }
+    }
+    return out;
+}
+
 const projectsModel = {
     async search(searchQuery, yearFilter, priorityFilter) {
         if (!searchQuery || searchQuery.trim().length < 2) {
@@ -161,18 +180,20 @@ const projectsModel = {
     async create(data) {
         // Remove 'id' — it is AUTO_INCREMENT and must not be sent by the client
         const { id: _id, created_at, updated_at, ...insertData } = data;
-        const fields = Object.keys(insertData);
+        const sanitized = sanitizeProjectData(insertData);
+        const fields = Object.keys(sanitized);
         if (fields.length === 0) throw new Error('No data provided for insert');
         const placeholders = fields.map(() => '?').join(', ');
         const sql = `INSERT INTO projects (${fields.join(', ')}) VALUES (${placeholders})`;
-        const [result] = await pool.execute(sql, Object.values(insertData));
+        const [result] = await pool.execute(sql, Object.values(sanitized));
         return result.insertId;
     },
 
     async update(id, data) {
-        const setClauses = Object.keys(data).map(key => `${key} = ?`).join(', ');
+        const sanitized = sanitizeProjectData(data);
+        const setClauses = Object.keys(sanitized).map(key => `${key} = ?`).join(', ');
         const sql = `UPDATE projects SET ${setClauses} WHERE id = ?`;
-        const [result] = await pool.execute(sql, [...Object.values(data), id]);
+        const [result] = await pool.execute(sql, [...Object.values(sanitized), id]);
         return result.affectedRows > 0;
     },
 
