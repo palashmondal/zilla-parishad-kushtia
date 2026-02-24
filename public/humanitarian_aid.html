@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>আর্থিক সহযোগিতা | জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
+    <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
 
 <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
@@ -26,7 +27,8 @@
          * ─────────────────────────────────────────────────────── */
 
         * { box-sizing: border-box; }
-        body { font-family: 'Hind Siliguri', sans-serif; }
+        html { font-size: 18px; }
+        body { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; font-size: 1rem; }
 
         /* ──── floating nav buttons (LEFT side) ──── */
         .float-nav-container {
@@ -89,7 +91,7 @@
             display: flex; align-items: center; gap: 7px;
             background: #e0f7fa; border: none;
             border-radius: 1rem; padding: 11px 15px;
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
             font-size: 13px; font-weight: 700; color: #0d5c5f;
             cursor: pointer; user-select: none;
             transition: background 0.2s, color 0.2s;
@@ -140,7 +142,7 @@
         .search-bar .search-icon { color: #14919b; flex-shrink: 0; margin-left: 2px; }
         .search-bar input {
             flex: 1; border: none; background: transparent;
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
             font-size: 16px; color: #1e293b; outline: none;
             padding: 10px 4px; min-width: 0;
         }
@@ -149,7 +151,7 @@
             flex-shrink: 0;
             background: linear-gradient(135deg, #0d7377 0%, #14919b 100%);
             color: #fff; border: none; border-radius: 1.2rem;
-            padding: 13px 30px; font-family: 'Hind Siliguri', sans-serif;
+            padding: 13px 30px; font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
             font-size: 15px; font-weight: 700; cursor: pointer;
             transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
             box-shadow: 0 4px 16px rgba(13,115,119,0.38);
@@ -1079,21 +1081,19 @@
         return '/api';
     })();
 
-    // Format money in Bangladesh convention (e.g., 1,00,000 for lakh)
+    // Convert Latin digits 0-9 to Bengali digits ০-৯
+    function bn(s) {
+        const d = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+        return String(s).replace(/[0-9]/g, c => d[c]);
+    }
+
+    // Format money in Bangladesh convention (e.g., ১,০০,০০০ for lakh)
     // BD format: last 3 digits separated, then every 2 digits
     function formatBDMoney(amount) {
-        if (amount === null || amount === undefined || isNaN(amount)) return '0';
-        let num = Math.floor(Number(amount)); // Remove decimal points
-        if (num === 0) return '0';
-        let str = num.toString();
-        if (str.length <= 3) return str;
-        let lastThree = str.substring(str.length - 3);
-        let otherNumbers = str.substring(0, str.length - 3);
-        if (otherNumbers !== '') {
-            lastThree = ',' + lastThree;
-        }
-        // Add comma every 2 digits for remaining numbers
-        return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+        if (amount === null || amount === undefined || isNaN(amount)) return '০';
+        let num = Math.floor(Number(amount));
+        if (num === 0) return '০';
+        return bn(num.toString());
     }
 
     let selectedYear = "all";
@@ -1276,17 +1276,17 @@
         document.getElementById('m-category').innerText   = r.category || '';
         document.getElementById('m-father').innerText     = r.father_name || 'N/A';
         document.getElementById('m-mother').innerText     = r.mother_name || 'N/A';
-        document.getElementById('m-nid').innerText        = r.nid_birth_reg_no || 'N/A';
+        document.getElementById('m-nid').innerText        = r.nid_birth_reg_no ? bn(r.nid_birth_reg_no) : 'N/A';
         document.getElementById('m-profession').innerText = r.profession || 'N/A';
         document.getElementById('m-address').innerText    = r.address || 'N/A';
-        document.getElementById('m-mobile').innerText     = r.mobile || 'N/A';
+        document.getElementById('m-mobile').innerText     = r.mobile ? bn(r.mobile) : 'N/A';
         document.getElementById('m-upazila').innerText    = r.upazila || '';
         document.getElementById('m-zila').innerText       = r.zila || 'কুষ্টিয়া';
         document.getElementById('m-relation').innerText   = r.relation_to_beneficiary || 'নিজ';
         document.getElementById('m-year').innerText       = r.financial_year || '';
         document.getElementById('m-amount').innerText     = "৳ " + formatBDMoney(r.amount_eng) + " টাকা";
         document.getElementById('m-bank').innerText       = r.bank || 'N/A';
-        document.getElementById('m-check-no').innerText   = r.check_no || 'N/A';
+        document.getElementById('m-check-no').innerText   = r.check_no ? bn(r.check_no) : 'N/A';
         document.getElementById('m-check-date').innerText = r.check_date || 'N/A';
         document.getElementById('m-reference').innerText  = r.reference || 'N/A';
         document.getElementById('m-app-details').innerText = r.application_details || 'N/A';

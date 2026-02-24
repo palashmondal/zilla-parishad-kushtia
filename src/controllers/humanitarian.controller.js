@@ -50,6 +50,19 @@ const humanitarianController = {
         }
     },
 
+    async getCategories(req, res) {
+        try {
+            const categories = await humanitarianModel.getCategories();
+            res.json(categories);
+        } catch (error) {
+            console.error('Humanitarian categories fetch error:', error);
+            res.status(500).json({
+                error: 'Failed to fetch categories',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
     async getStats(req, res) {
         try {
             const stats = await humanitarianModel.getStats();
@@ -69,8 +82,9 @@ const humanitarianController = {
             const limit = Math.min(parseInt(req.query.limit, 10) || 20, 100);
             const search = req.query.search || '';
             const year = req.query.year || '';
+            const category = req.query.category || '';
 
-            const results = await humanitarianModel.getAll(page, limit, search, year);
+            const results = await humanitarianModel.getAll(page, limit, search, year, category);
             res.json(results);
         } catch (error) {
             console.error('Humanitarian getAll error:', error);

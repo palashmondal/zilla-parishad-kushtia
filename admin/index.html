@@ -7,7 +7,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Leaflet.heat heatmap plugin -->
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
+    <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
     <link rel="shortcut icon" href="/favicon/favicon.ico" />
@@ -15,7 +21,8 @@
     <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <style>
-        * { font-family: 'Hind Siliguri', sans-serif; }
+        html { font-size: 18px; }
+        * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
 
         /* ── Layout ── */
         .dash-main { max-width: 1600px; margin: 0 auto; padding: 1.5rem 1.5rem; }
@@ -73,6 +80,69 @@
             min-width: 60px;
         }
         .rank-bar-fill { height: 100%; border-radius: 99px; transition: width 0.9s ease; }
+
+        /* ── Map section ── */
+        .map-outer {
+            display: flex;
+            gap: 0;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+        }
+        /* Left sidebar */
+        .map-sidebar {
+            width: 176px;
+            flex-shrink: 0;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+        .map-sidebar::-webkit-scrollbar { width: 4px; }
+        .map-sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+        .map-sidebar-title {
+            padding: 0.75rem 0.875rem 0.5rem;
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            z-index: 2;
+        }
+        #proj-map {
+            flex: 1;
+            height: 500px;
+            min-width: 0;
+            z-index: 1;
+        }
+        .map-upazila-card {
+            padding: 0.6rem 0.875rem;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.15s;
+            cursor: default;
+        }
+        .map-upazila-card:last-child { border-bottom: none; }
+        .map-upazila-card:hover { background: #f1f5f9; }
+        .map-legend {
+            background: rgba(255,255,255,0.95);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
+            font-size: 12px;
+            min-width: 130px;
+        }
+        .map-legend-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+        .map-legend-row:last-child { margin-bottom: 0; }
+        .map-dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.8);
+            flex-shrink: 0;
+        }
 
         /* ── Section pill label ── */
         .section-pill {
@@ -541,6 +611,55 @@
         </div>
     </div>
 
+    <!-- ══════════════════════════════════════════════════════════
+         MAP SECTION — প্রকল্পের অবস্থান হিটম্যাপ
+    ══════════════════════════════════════════════════════════ -->
+    <div class="section-divider mt-2">
+        <div class="section-divider-line bg-teal-200"></div>
+        <div class="section-divider-text text-teal-700">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            প্রকল্পের ভৌগোলিক বিতরণ
+        </div>
+        <div class="section-divider-line bg-teal-200"></div>
+    </div>
+
+    <!-- Map card -->
+    <div class="card mb-6">
+        <!-- Card header -->
+        <div class="card-header">
+            <div class="card-icon bg-teal-100">
+                <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+            </div>
+            <span class="text-sm font-bold text-gray-700">কুষ্টিয়া জেলা — প্রকল্পের হিটম্যাপ ও অবস্থান</span>
+            <div class="ml-auto flex items-center gap-2">
+                <button id="map-toggle-heat" onclick="toggleMapView('heat')"
+                    class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
+                    হিটম্যাপ
+                </button>
+                <button id="map-toggle-markers" onclick="toggleMapView('markers')"
+                    class="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
+                    মার্কার
+                </button>
+                <button id="map-toggle-both" onclick="toggleMapView('both')"
+                    class="text-xs font-semibold px-3 py-1 rounded-full bg-teal-600 text-white transition-all">
+                    উভয়
+                </button>
+            </div>
+        </div>
+        <!-- Sidebar + map side by side -->
+        <div class="map-outer">
+            <!-- Left: upazila list -->
+            <div class="map-sidebar">
+                <div class="map-sidebar-title">উপজেলা</div>
+                <div id="map-upazila-summary">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+            <!-- Right: Leaflet map -->
+            <div id="proj-map"></div>
+        </div>
+    </div>
+
 </div><!-- /.dash-main -->
 
 <div id="footer-container"></div>
@@ -571,7 +690,7 @@ function shortTk(v) {
     if (v >= 1e5) return '৳' + bn(Math.round(v/1e5)) + 'লক্ষ';
     return '৳' + bn(Math.round(v));
 }
-const FONT = { family:'Hind Siliguri', size:11 };
+const FONT = { family:'Siyam Rupali', size:11 };
 
 /* ── Chart factories ─────────────────────────────────────── */
 // Register datalabels globally for donut/pie usage
@@ -615,7 +734,7 @@ function donut(id, labels, data, colors, opts={}) {
                         return bn(p) + '%';
                     },
                     color:'#fff',
-                    font:{ family:'Hind Siliguri', size:11, weight:'700' },
+                    font:{ family:'Siyam Rupali', size:11, weight:'700' },
                     textShadowBlur:4,
                     textShadowColor:'rgba(0,0,0,0.35)',
                     anchor:'center',
@@ -764,7 +883,7 @@ function buildProgressBar() {
                         const v = parseFloat(value);
                         return v > 0 ? bn(Math.round(v)) + '%' : '';
                     },
-                    font: { family: 'Hind Siliguri', size: 10, weight: '700' },
+                    font: { family: 'Siyam Rupali', size: 10, weight: '700' },
                     color(ctx) {
                         return ctx.dataset.borderColor || '#374151';
                     },
@@ -1072,7 +1191,7 @@ async function loadDashboard() {
                                 ticks: { display: false, stepSize: 25 },
                                 grid: { color: '#e2e8f0' },
                                 angleLines: { color: '#e2e8f0' },
-                                pointLabels: { font: { family: 'Hind Siliguri', size: 10 }, color: '#475569' }
+                                pointLabels: { font: { family: 'Siyam Rupali', size: 10 }, color: '#475569' }
                             }
                         }
                     }
@@ -1083,6 +1202,225 @@ async function loadDashboard() {
     } catch(e) {
         console.error('Dashboard load error:', e);
         document.getElementById('last-updated').textContent = 'তথ্য লোড করতে সমস্যা হয়েছে';
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PROJECT LOCATION MAP (Leaflet + Leaflet.heat)
+═══════════════════════════════════════════════════════════ */
+let _projMap = null;
+let _heatLayer = null;
+let _markerGroup = null;
+let _mapView = 'both'; // 'heat' | 'markers' | 'both'
+let _mapProjects = [];
+
+// Priority → colour for markers
+const PRIORITY_COLOR = {
+    top_priority: '#dc2626',
+    medium:       '#d97706',
+    general:      '#2563eb'
+};
+// Progress → heat intensity weight
+function heatWeight(pct) {
+    const p = parseFloat(pct) || 0;
+    return Math.max(0.15, p / 100);
+}
+
+// Build or rebuild the Leaflet map with project data
+function buildProjectMap(projects) {
+    _mapProjects = projects;
+
+    // ── Init map (only once) ──────────────────────────────────
+    if (!_projMap) {
+        _projMap = L.map('proj-map', {
+            center: [23.89, 89.12],
+            zoom: 11,
+            zoomControl: true,
+            scrollWheelZoom: true
+        });
+
+        // OSM tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            maxZoom: 18
+        }).addTo(_projMap);
+
+        // Custom legend control
+        const legend = L.control({ position: 'bottomright' });
+        legend.onAdd = () => {
+            const div = L.DomUtil.create('div', 'map-legend');
+            div.innerHTML = `
+                <p style="font-weight:700;font-size:11px;color:#374151;margin-bottom:6px;">অগ্রাধিকার</p>
+                <div class="map-legend-row"><span class="map-dot" style="background:#dc2626"></span> সর্বোচ্চ</div>
+                <div class="map-legend-row"><span class="map-dot" style="background:#d97706"></span> মধ্যম</div>
+                <div class="map-legend-row"><span class="map-dot" style="background:#2563eb"></span> সাধারণ</div>
+                <hr style="border:none;border-top:1px solid #e5e7eb;margin:6px 0;">
+                <p style="font-weight:700;font-size:11px;color:#374151;margin-bottom:4px;">তাপ তীব্রতা</p>
+                <p style="font-size:10px;color:#6b7280;">অগ্রগতি % অনুযায়ী</p>`;
+            return div;
+        };
+        legend.addTo(_projMap);
+    }
+
+    // ── Parse coordinates ─────────────────────────────────────
+    const validProjects = projects.filter(p => {
+        if (!p.lat_lng || typeof p.lat_lng !== 'string') return false;
+        const parts = p.lat_lng.split(',');
+        if (parts.length !== 2) return false;
+        const lat = parseFloat(parts[0]);
+        const lng = parseFloat(parts[1]);
+        return !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
+    }).map(p => {
+        const parts = p.lat_lng.split(',');
+        return { ...p, lat: parseFloat(parts[0]), lng: parseFloat(parts[1]) };
+    });
+
+    if (validProjects.length === 0) return;
+
+    // ── Heat layer ────────────────────────────────────────────
+    if (_heatLayer) _projMap.removeLayer(_heatLayer);
+    const heatPoints = validProjects.map(p => [p.lat, p.lng, heatWeight(p.progress_percentage)]);
+    _heatLayer = L.heatLayer(heatPoints, {
+        radius: 35,
+        blur: 25,
+        maxZoom: 14,
+        max: 1.0,
+        gradient: { 0.0: '#3b82f6', 0.3: '#8b5cf6', 0.55: '#f59e0b', 0.75: '#ef4444', 1.0: '#7f1d1d' }
+    });
+
+    // ── Marker cluster group ──────────────────────────────────
+    if (_markerGroup) { _markerGroup.clearLayers(); } else { _markerGroup = L.layerGroup(); }
+
+    validProjects.forEach(p => {
+        const color = PRIORITY_COLOR[p.priority] || PRIORITY_COLOR.general;
+        const pct   = parseInt(p.progress_percentage) || 0;
+        const amt   = p.allocation_amount ? '৳' + Math.round(parseFloat(p.allocation_amount) / 100000) + 'লক্ষ' : '—';
+
+        // Circle marker sized by allocation
+        const radius = Math.min(14, Math.max(7, Math.sqrt(parseFloat(p.allocation_amount)||0) / 500));
+
+        const marker = L.circleMarker([p.lat, p.lng], {
+            radius: radius,
+            fillColor: color,
+            color: '#fff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.88
+        });
+
+        // Progress arc overlay using SVG path in popup
+        const progressColor = pct >= 80 ? '#16a34a' : pct >= 40 ? '#d97706' : '#dc2626';
+        marker.bindPopup(`
+            <div style="font-family:Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;min-width:210px;padding:2px;">
+                <p style="font-weight:700;font-size:13px;color:#0f172a;margin:0 0 6px;line-height:1.4;">${p.project_name || '—'}</p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+                    <span style="font-size:11px;background:#f1f5f9;padding:2px 8px;border-radius:99px;font-weight:600;color:#475569;">📍 ${p.upazila || '—'}</span>
+                    <span style="font-size:11px;background:#fef3c7;padding:2px 8px;border-radius:99px;font-weight:600;color:#92400e;">${p.financial_year || '—'}</span>
+                </div>
+                <div style="background:#f8fafc;border-radius:8px;padding:8px 10px;margin-bottom:8px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+                        <span style="font-size:11px;font-weight:600;color:#475569;">অগ্রগতি</span>
+                        <span style="font-size:12px;font-weight:700;color:${progressColor};">${pct}%</span>
+                    </div>
+                    <div style="background:#e2e8f0;border-radius:99px;height:6px;overflow:hidden;">
+                        <div style="width:${pct}%;height:100%;background:${progressColor};border-radius:99px;transition:width 0.6s;"></div>
+                    </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;">
+                    <span>বরাদ্দ: <strong style="color:#b45309;">${amt}</strong></span>
+                    <span>${p.implementation_method || '—'}</span>
+                </div>
+            </div>`, { maxWidth: 260 });
+
+        _markerGroup.addLayer(marker);
+    });
+
+    applyMapView(_mapView);
+
+    // Auto-fit bounds
+    try {
+        const bounds = L.latLngBounds(validProjects.map(p => [p.lat, p.lng]));
+        _projMap.fitBounds(bounds.pad(0.12));
+    } catch (_) {}
+}
+
+function applyMapView(view) {
+    if (!_projMap) return;
+    _mapView = view;
+
+    // Remove both first
+    if (_heatLayer  && _projMap.hasLayer(_heatLayer))  _projMap.removeLayer(_heatLayer);
+    if (_markerGroup && _projMap.hasLayer(_markerGroup)) _projMap.removeLayer(_markerGroup);
+
+    if (view === 'heat') {
+        if (_heatLayer) _projMap.addLayer(_heatLayer);
+    } else if (view === 'markers') {
+        if (_markerGroup) _projMap.addLayer(_markerGroup);
+    } else { // both
+        if (_heatLayer)   _projMap.addLayer(_heatLayer);
+        if (_markerGroup) _projMap.addLayer(_markerGroup);
+    }
+
+    // Update toggle button styles
+    ['heat','markers','both'].forEach(v => {
+        const btn = document.getElementById('map-toggle-' + v);
+        if (!btn) return;
+        btn.className = v === view
+            ? 'text-xs font-semibold px-3 py-1 rounded-full bg-teal-600 text-white transition-all'
+            : 'text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all';
+    });
+}
+
+function toggleMapView(view) { applyMapView(view); }
+
+// Build the upazila summary pills
+function buildUpazilaMapSummary(projects) {
+    const byUpazila = {};
+    projects.forEach(p => {
+        const u = p.upazila || 'অজানা';
+        if (!byUpazila[u]) byUpazila[u] = { count: 0, totalAlloc: 0, done: 0, priorityTop: 0 };
+        byUpazila[u].count++;
+        byUpazila[u].totalAlloc += parseFloat(p.allocation_amount) || 0;
+        if (p.is_completed) byUpazila[u].done++;
+        if (p.priority === 'top_priority') byUpazila[u].priorityTop++;
+    });
+
+    const container = document.getElementById('map-upazila-summary');
+    if (!container) return;
+    container.innerHTML = Object.entries(byUpazila)
+        .sort((a, b) => b[1].count - a[1].count)
+        .map(([upazila, d]) => {
+            const allotTk = d.totalAlloc >= 1e7
+                ? Math.round(d.totalAlloc / 1e7) + ' কোটি'
+                : Math.round(d.totalAlloc / 1e5) + ' লক্ষ';
+            const topBadge = d.priorityTop > 0
+                ? `<span style="font-size:10px;background:#fef2f2;color:#dc2626;border-radius:99px;padding:1px 6px;font-weight:700;">🔴 ${d.priorityTop}</span>`
+                : '';
+            return `<div class="map-upazila-card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                    <span style="font-size:12px;font-weight:700;color:#0f172a;line-height:1.3;">${upazila}</span>
+                    ${topBadge}
+                </div>
+                <div style="font-size:10px;color:#64748b;display:flex;flex-direction:column;gap:2px;">
+                    <span>📋 ${d.count}টি প্রকল্প</span>
+                    <span>💰 ৳${allotTk}</span>
+                    <span style="color:#16a34a;font-weight:600;">✓ ${d.done}টি সম্পন্ন</span>
+                </div>
+            </div>`;
+        }).join('');
+}
+
+async function loadProjectMapData() {
+    try {
+        // Fetch all projects (up to 500) to get lat_lng
+        const resp = await CRUDManager.fetchList('/projects/list', { limit: 500, page: 1 });
+        const projects = (resp.data || []).filter(p => p.lat_lng && p.lat_lng.trim() !== '');
+        if (projects.length === 0) return;
+
+        buildProjectMap(projects);
+        buildUpazilaMapSummary(projects);
+    } catch (err) {
+        console.warn('Map load error:', err);
     }
 }
 
@@ -1098,6 +1436,7 @@ AuthManager.init().then(async user => {
     document.getElementById('current-date').textContent =
         `${CRUDManager.toBengaliNumber(today.getDate())} ${months[today.getMonth()]} ${CRUDManager.toBengaliNumber(today.getFullYear())}`;
     await loadDashboard();
+    await loadProjectMapData();
 });
 </script>
 </body>
