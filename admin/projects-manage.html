@@ -1671,8 +1671,8 @@
     <script src="assets/js/crud.js"></script>
 
     <script>
-        // Tom Select init
-        const _tomInstances = new Map();
+        // Tom Select init — must be var so Safari can access it across <script> blocks
+        var _tomInstances = new Map();
         function initTomSelects() {
             document.querySelectorAll('select:not([data-no-tomselect])').forEach(el => {
                 if (!_tomInstances.has(el)) {
@@ -1695,7 +1695,7 @@
         });
 
         // ── Flatpickr date pickers ────────────────────────────────────
-        const _fpInstances = {};
+        var _fpInstances = {};
 
         function initFlatpickrs() {
             const cfg = {
