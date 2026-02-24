@@ -859,6 +859,10 @@
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অগ্রাধিকার</p>
                         <p id="dm-priority" class="font-semibold text-base"></p>
                     </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সুপারিশকারী</p>
+                        <p id="dm-reference" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
                 </div>
 
                 <!-- Row 2.5: Approval Date · Memo Number -->
@@ -1220,7 +1224,7 @@
                             <input type="text" name="fund_type" required placeholder="তহবিলের ধরন লিখুন…" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
 
-                        <!-- Row 5.5: Priority -->
+                        <!-- Row 5.5: Priority | Reference -->
                         <div class="form-field">
                             <label>অগ্রাধিকার</label>
                             <select name="priority" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white">
@@ -1229,7 +1233,10 @@
                                 <option value="top_priority">🔴 সর্বোচ্চ অগ্রাধিকার</option>
                             </select>
                         </div>
-                        <div class="form-field"></div><!-- spacer -->
+                        <div class="form-field">
+                            <label>সুপারিশকারী</label>
+                            <input type="text" name="reference" placeholder="যে ব্যক্তি/সংস্থা সুপারিশ করেছেন…" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                        </div>
 
                         <!-- Row 6: Allocation Amount | GPS Location -->
                         <div class="form-field">
@@ -2002,6 +2009,9 @@
             const pVal = r.priority || 'general';
             dmPriority.innerText = priorityMap[pVal] || pVal;
             dmPriority.style.color = priorityColors[pVal] || '#64748b';
+
+            // Reference (who recommended the project)
+            document.getElementById('dm-reference').innerText = r.reference || 'N/A';
             // dm-status removed (duplicate of dm-quick-status)
 
             // Approval date (Row 2, right column)

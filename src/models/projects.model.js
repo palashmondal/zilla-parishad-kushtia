@@ -6,12 +6,12 @@ const PROJECT_FIELDS = `
     financial_year, project_approval_date, approval_memo_number, implementation_method,
     upazila, project_type, current_status, progress_percentage,
     is_completed, is_delayed, performance_score,
-    start_date, expected_end_date, actual_end_date, lat_lng, remarks,
+    start_date, expected_end_date, actual_end_date, lat_lng, remarks, priority, reference,
     created_at, updated_at
 `;
 
 const projectsModel = {
-    async search(searchQuery, yearFilter) {
+    async search(searchQuery, yearFilter, priorityFilter) {
         if (!searchQuery || searchQuery.trim().length < 2) {
             return [];
         }
@@ -55,6 +55,12 @@ const projectsModel = {
         if (yearFilter && yearFilter !== 'all') {
             selectClause += ' AND financial_year = ?';
             queryParams.push(yearFilter);
+        }
+
+        const validPriorities = ['general', 'medium', 'top_priority'];
+        if (priorityFilter && validPriorities.includes(priorityFilter)) {
+            selectClause += ' AND priority = ?';
+            queryParams.push(priorityFilter);
         }
 
         selectClause += ' ORDER BY relevance_score DESC, project_name ASC LIMIT 10';
@@ -172,7 +178,7 @@ const projectsModel = {
         return result.affectedRows > 0;
     },
 
-    async getAll(page = 1, limit = 20, search = '', year = '') {
+    async getAll(page = 1, limit = 20, search = '', year = '', priority = '') {
         const safeLimit = parseInt(limit, 10) || 20;
         const safePage = parseInt(page, 10) || 1;
         const offset = (safePage - 1) * safeLimit;
@@ -194,6 +200,13 @@ const projectsModel = {
             conditions.push('financial_year = ?');
             params.push(year);
             countParams.push(year);
+        }
+
+        const validPriorities = ['general', 'medium', 'top_priority'];
+        if (priority && validPriorities.includes(priority)) {
+            conditions.push('priority = ?');
+            params.push(priority);
+            countParams.push(priority);
         }
 
         if (conditions.length > 0) {
@@ -322,6 +335,40 @@ const projectsModel = {
                  uploadedBy || null]
             );
         }
+    },
+
+    // ── Document records ───────────────────────────────────────
+    async getDocuments(projectId) {
+        const [results] = await pool.execute(
+            `SELECT id, file_path, original_name, caption, file_type, file_size_bytes, uploaded_at
+             FROM project_documents
+             WHERE project_id = ?
+             ORDER BY uploaded_at ASC`,
+            [projectId]
+        );
+        return results;
+    },
+
+    async addDocuments(projectId, docs, uploadedBy) {
+        for (const doc of docs) {
+            await pool.execute(
+                `INSERT INTO project_documents
+                    (project_id, file_path, original_name, caption, file_type, file_size_bytes, uploaded_by)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                [projectId, doc.file_path, doc.original_name, doc.caption || null,
+                 doc.file_type || null, doc.file_size_bytes || null, uploadedBy || null]
+            );
+        }
+    },
+
+    async deleteDocument(docId, projectId) {
+        const [[row]] = await pool.execute(
+            `SELECT id, file_path FROM project_documents WHERE id = ? AND project_id = ?`,
+            [docId, projectId]
+        );
+        if (!row) return null;
+        await pool.execute(`DELETE FROM project_documents WHERE id = ?`, [docId]);
+        return row.file_path;
     },
 
     async deleteImage(imageId, projectId) {
