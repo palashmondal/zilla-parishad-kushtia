@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>মানবিক সহায়তা পরিচালনা - জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
-    <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
@@ -19,12 +18,11 @@
     <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <style>
-        html { font-size: 18px; }
-        * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
+        * { font-family: 'Hind Siliguri', sans-serif; }
 
-        /* Tom Select overrides — green theme, Siyam Rupali */
+        /* Tom Select overrides — green theme, Hind Siliguri */
         .ts-wrapper {
-            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
+            font-family: 'Hind Siliguri', sans-serif;
         }
 
         .ts-control {
@@ -54,7 +52,7 @@
             border: 2px solid #10b981 !important;
             border-radius: 0.75rem !important;
             box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
-            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important;
+            font-family: 'Hind Siliguri', sans-serif !important;
             font-size: 0.95rem !important;
             overflow: hidden !important;
             margin-top: 4px !important;
@@ -240,7 +238,7 @@
             </div>
 
             <!-- Search and Filter -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">অনুসন্ধান করুন</label>
                     <input type="text" id="search-input" placeholder="নাম, পিতার নাম, মোবাইল নম্বর..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
@@ -252,20 +250,11 @@
                         </svg>
                         অর্থবছর
                     </label>
-                    <select id="year-filter" class="w-full border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white hover:border-green-400 transition-all font-medium">
-                        <option value="" selected>📅 সকল অর্থবছর</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        <svg class="w-4 h-4 inline mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                        </svg>
-                        সহায়তার ধরন
-                    </label>
-                    <select id="category-filter" class="w-full border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white hover:border-green-400 transition-all font-medium">
-                        <option value="" selected>🏷️ সকল ধরন</option>
-                    </select>
+                   
+                        <select id="year-filter" class="w-full  border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white hover:border-green-400 transition-all font-medium">
+                            <option value="" selected>📅 সকল অর্থবছর</option>
+                        </select>
+                   
                 </div>
             </div>
         </div>
@@ -606,7 +595,7 @@
                         allowEmptyOption: true,
                         controlInput: null,   // no search input — these are short lists
                         onInitialize() {
-                            this.control.style.fontFamily = "Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace";
+                            this.control.style.fontFamily = "'Hind Siliguri', sans-serif";
                         }
                     }));
                 }
@@ -635,7 +624,6 @@
         let currentPage = 1;
         let currentSearch = '';
         let currentYear = '';
-        let currentCategory = '';
         let editingId = null;
         let currentDetailId = null;
         let allRecords = [];
@@ -663,7 +651,7 @@
         // Initialize — load data immediately (list/years are public endpoints),
         // run auth check in parallel for redirect protection and role-based UI.
         AuthManager.init(); // handles redirect to login if unauthenticated
-        Promise.all([loadYears(), loadCategories()]).then(() => loadData());
+        loadYears().then(() => loadData());
 
         // Search debouncing
         const searchInput = document.getElementById('search-input');
@@ -677,13 +665,6 @@
         // Year filter
         document.getElementById('year-filter').addEventListener('change', (e) => {
             currentYear = e.target.value;
-            currentPage = 1;
-            loadData();
-        });
-
-        // Category filter
-        document.getElementById('category-filter').addEventListener('change', (e) => {
-            currentCategory = e.target.value;
             currentPage = 1;
             loadData();
         });
@@ -711,28 +692,6 @@
             }
         }
 
-        // Load categories for filter
-        async function loadCategories() {
-            try {
-                const categories = await CRUDManager.fetchList('/humanitarian/categories');
-                const select = document.getElementById('category-filter');
-                const ts = _tomInstances.get(select);
-                categories.forEach(cat => {
-                    if (ts) {
-                        ts.addOption({ value: cat, text: cat });
-                    } else {
-                        const option = document.createElement('option');
-                        option.value = cat;
-                        option.textContent = cat;
-                        select.appendChild(option);
-                    }
-                });
-                if (ts) ts.refreshOptions(false);
-            } catch (error) {
-                console.error('Failed to load categories:', error);
-            }
-        }
-
         // Load data
         async function loadData() {
             const tbody = document.getElementById('table-body');
@@ -749,8 +708,7 @@
                     page: currentPage,
                     limit: 20,
                     search: currentSearch,
-                    year: currentYear,
-                    category: currentCategory
+                    year: currentYear
                 };
 
                 const response = await CRUDManager.fetchList('/humanitarian/list', params);
@@ -870,7 +828,7 @@
                     <td class="px-4 py-2.5 text-right">
                         <div class="currency-amount inline-flex font-bold text-gray-900 text-base">
                             <span class="currency-symbol">৳</span>
-                            <span>${CRUDManager.toBengaliNumber(Math.floor(parseFloat(record.amount_eng||0)))}</span>
+                            <span>${CRUDManager.toBengaliNumber(parseFloat(record.amount_eng).toLocaleString('en-IN'))}</span>
                         </div>
                     </td>
                     <!-- Action Buttons -->
@@ -911,7 +869,7 @@
             document.getElementById('dm-relation').innerText    = r.relation_to_beneficiary || 'নিজ';
             document.getElementById('dm-year').innerText        = r.financial_year || '';
             document.getElementById('dm-app-details').innerText = r.application_details || 'N/A';
-            document.getElementById('dm-amount').innerText      = '৳ ' + CRUDManager.toBengaliNumber(Math.floor(parseFloat(r.amount_eng||0))) + ' টাকা';
+            document.getElementById('dm-amount').innerText      = '৳ ' + parseFloat(r.amount_eng || 0).toLocaleString('en-IN') + ' টাকা';
             document.getElementById('dm-bank').innerText        = r.bank || 'N/A';
             document.getElementById('dm-check-no').innerText    = r.check_no || 'N/A';
             document.getElementById('dm-check-date').innerText  = r.check_date || 'N/A';

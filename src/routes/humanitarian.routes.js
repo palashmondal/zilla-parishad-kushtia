@@ -7,7 +7,6 @@ const { requireAuth, requireAdmin } = require('../middleware/auth');
 // Public routes
 router.get('/search', searchLimiter, humanitarianController.search);
 router.get('/years', humanitarianController.getYears);
-router.get('/categories', humanitarianController.getCategories);
 router.get('/stats', humanitarianController.getStats);
 router.get('/list', humanitarianController.getAll);
 router.get('/:id', humanitarianController.getById);
