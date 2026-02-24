@@ -5,7 +5,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const projectsController = {
     async search(req, res) {
         try {
-            const results = await projectsModel.search(req.query.q, req.query.year, req.query.priority);
+            const results = await projectsModel.search(req.query.q, req.query.year);
             res.json(results);
         } catch (error) {
             console.error('Projects search error:', error);
@@ -69,9 +69,8 @@ const projectsController = {
             const limit = Math.min(parseInt(req.query.limit, 10) || 20, 100);
             const search = req.query.search || '';
             const year = req.query.year || '';
-            const priority = req.query.priority || '';
 
-            const results = await projectsModel.getAll(page, limit, search, year, priority);
+            const results = await projectsModel.getAll(page, limit, search, year);
             res.json(results);
         } catch (error) {
             console.error('Projects getAll error:', error);
@@ -289,71 +288,6 @@ const projectsController = {
                 error: 'Image upload failed',
                 message: isProduction ? 'An internal error occurred' : error.message
             });
-        }
-    },
-
-    async getDocuments(req, res) {
-        try {
-            const project = await projectsModel.findById(req.params.id.trim());
-            if (!project) return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
-            const docs = await projectsModel.getDocuments(project.id);
-            res.json(docs);
-        } catch (error) {
-            console.error('Projects getDocuments error:', error);
-            res.status(500).json({ error: 'Could not fetch documents' });
-        }
-    },
-
-    async addDocuments(req, res) {
-        try {
-            const project = await projectsModel.findById(req.params.id.trim());
-            if (!project) return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
-            if (!req.files || req.files.length === 0)
-                return res.status(400).json({ error: 'কোনো ফাইল নির্বাচন করা হয়নি' });
-
-            const captions = req.body.caption || [];
-            const toArr = v => Array.isArray(v) ? v : [v];
-            const captionsArr = toArr(captions);
-
-            // Multer decodes multipart filenames as Latin-1 by default.
-            // Re-encode the raw bytes back to UTF-8 to recover Bengali/non-ASCII names.
-            const fixName = s => Buffer.from(s, 'latin1').toString('utf8');
-
-            const docs = req.files.map((file, i) => ({
-                file_path:       `project-docs/${file.filename}`,
-                original_name:   fixName(file.originalname),
-                caption:         (captionsArr[i] || '').trim() || null,
-                file_type:       file.mimetype,
-                file_size_bytes: file.size
-            }));
-
-            await projectsModel.addDocuments(project.id, docs, req.user.id);
-            res.json({ message: 'ফাইল আপলোড হয়েছে', count: docs.length });
-        } catch (error) {
-            console.error('Projects addDocuments error:', error);
-            res.status(500).json({ error: 'Document upload failed', message: error.message });
-        }
-    },
-
-    async deleteDocument(req, res) {
-        try {
-            const { id, docId } = req.params;
-            const project = await projectsModel.findById(id.trim());
-            if (!project) return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
-
-            const deleted = await projectsModel.deleteDocument(parseInt(docId, 10), project.id);
-            if (!deleted) return res.status(404).json({ error: 'ফাইলটি পাওয়া যায়নি' });
-
-            // Optionally delete from disk
-            const fs = require('fs');
-            const path = require('path');
-            const fullPath = path.join(__dirname, '../../uploads', deleted);
-            fs.unlink(fullPath, () => {}); // ignore errors if already gone
-
-            res.json({ message: 'ফাইলটি মুছে ফেলা হয়েছে' });
-        } catch (error) {
-            console.error('Projects deleteDocument error:', error);
-            res.status(500).json({ error: 'Document delete failed', message: error.message });
         }
     },
 
