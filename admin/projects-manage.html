@@ -5,13 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>প্রকল্প তালিকা পরিচালনা - জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
+    <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
     <!-- Leaflet — lightweight OSM map for project location -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+    <!-- Flatpickr — beautiful date picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- LightGallery — image viewer with zoom, fullscreen, thumbnails (download is built-in) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lightgallery-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/lightgallery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/zoom/lg-zoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/fullscreen/lg-fullscreen.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/thumbnail/lg-thumbnail.min.js"></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
@@ -22,10 +34,11 @@
     <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <style>
-        * { font-family: 'Hind Siliguri', sans-serif; }
+        html { font-size: 18px; }
+        * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
 
         .ts-wrapper {
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
             border: none !important;
             box-shadow: none !important;
         }
@@ -53,7 +66,7 @@
             border: 2px solid #f59e0b !important;
             border-radius: 0.75rem !important;
             box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
-            font-family: 'Hind Siliguri', sans-serif !important;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important;
             font-size: 0.95rem !important;
             overflow: hidden !important;
             margin-top: 4px !important;
@@ -201,29 +214,22 @@
             margin-bottom: 0.35rem;
         }
 
-        /* ── Date input — full custom ── */
+        /* ── Flatpickr date input — ZPK amber theme ── */
         .date-field-wrapper {
             position: relative;
         }
-        .date-field-wrapper::before {
-            content: '';
-            position: absolute;
-            left: 0.65rem;
-            top: 50%;
+        /* calendar icon on the left */
+        .date-field-wrapper .fp-icon {
+            position: absolute; left: 0.65rem; top: 50%;
             transform: translateY(-50%);
-            width: 1rem;
-            height: 1rem;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23d97706' stroke-width='2' viewBox='0 0 24 24'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E");
-            background-size: contain;
-            background-repeat: no-repeat;
-            pointer-events: none;
-            z-index: 1;
+            width: 1rem; height: 1rem;
+            color: #d97706; pointer-events: none; z-index: 1;
         }
-        .date-field-wrapper input[type="date"] {
+        .date-field-wrapper input.flatpickr-input {
             width: 100%;
             padding: 0.55rem 0.75rem 0.55rem 2.1rem;
             font-size: 0.875rem;
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
             color: #1f2937;
             background: #fafafa;
             border: 1.5px solid #e5e7eb;
@@ -231,26 +237,121 @@
             outline: none;
             cursor: pointer;
             transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
-            -webkit-appearance: none;
-            appearance: none;
         }
-        .date-field-wrapper input[type="date"]:focus {
+        .date-field-wrapper input.flatpickr-input:focus,
+        .date-field-wrapper input.flatpickr-input.active {
             background: #fffbeb;
             border-color: #f59e0b;
             box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
         }
-        .date-field-wrapper input[type="date"]:hover {
+        .date-field-wrapper input.flatpickr-input:hover {
             border-color: #fcd34d;
             background: #fffdf5;
         }
-        /* Remove the ugly default calendar icon in webkit */
-        .date-field-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
-            opacity: 0.5;
-            cursor: pointer;
-            filter: invert(55%) sepia(80%) saturate(500%) hue-rotate(5deg);
+
+        /* ── Flatpickr calendar popup — amber theme ── */
+        .flatpickr-calendar {
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important;
+            border-radius: 14px !important;
+            border: 1.5px solid #fde68a !important;
+            box-shadow: 0 12px 40px rgba(180,83,9,0.13), 0 2px 8px rgba(0,0,0,0.07) !important;
+            background: #fff !important;
+            padding: 4px !important;
         }
-        .date-field-wrapper input[type="date"]::-webkit-datetime-edit-fields-wrapper { padding: 0; }
-        .date-field-wrapper input[type="date"]::-webkit-datetime-edit { padding: 0; }
+        /* Month/year header — white background */
+        .flatpickr-months {
+            background: #fff !important;
+            border-radius: 10px 10px 0 0 !important;
+            border-bottom: 1.5px solid #fde68a !important;
+        }
+        .flatpickr-month {
+            background: transparent !important;
+            color: #1f2937 !important;
+        }
+        .flatpickr-current-month {
+            color: #1f2937 !important;
+            font-size: 0.95rem !important;
+            font-weight: 700 !important;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            color: #1f2937 !important;
+            font-weight: 700 !important;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+            -webkit-appearance: none !important;
+            appearance: none !important;
+        }
+        .flatpickr-current-month .cur-year {
+            color: #1f2937 !important;
+            font-weight: 700 !important;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important;
+            background: transparent !important;
+            border: none !important;
+            outline: none !important;
+        }
+        .flatpickr-current-month .arrowUp,
+        .flatpickr-current-month .arrowDown,
+        .flatpickr-current-month .numInputWrapper span { display: none !important; }
+        .flatpickr-prev-month svg, .flatpickr-next-month svg { fill: #b45309 !important; }
+        .flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg { fill: #d97706 !important; }
+        /* Day names row */
+        .flatpickr-weekdays {
+            background: #fffbeb !important;
+        }
+        span.flatpickr-weekday {
+            background: transparent !important;
+            color: #92400e !important;
+            font-weight: 700 !important;
+            font-size: 0.7rem !important;
+        }
+        /* Day cells */
+        .flatpickr-day {
+            border-radius: 8px !important;
+            color: #374151 !important;
+            font-size: 0.82rem !important;
+            font-weight: 500 !important;
+            height: 34px !important;
+            line-height: 34px !important;
+            max-width: 34px !important;
+            transition: background 0.14s, color 0.14s !important;
+        }
+        .flatpickr-day:hover,
+        .flatpickr-day.prevMonthDay:hover,
+        .flatpickr-day.nextMonthDay:hover {
+            background: #fef3c7 !important;
+            border-color: #fde68a !important;
+            color: #92400e !important;
+        }
+        /* Today */
+        .flatpickr-day.today {
+            border-color: #f59e0b !important;
+            color: #b45309 !important;
+            font-weight: 700 !important;
+        }
+        .flatpickr-day.today:hover {
+            background: #fef3c7 !important;
+        }
+        /* Selected day */
+        .flatpickr-day.selected,
+        .flatpickr-day.selected:hover {
+            background: linear-gradient(135deg, #b45309, #d97706) !important;
+            border-color: transparent !important;
+            color: #fff !important;
+            font-weight: 700 !important;
+            box-shadow: 0 2px 8px rgba(180,83,9,0.3) !important;
+        }
+        /* Disabled / other month days */
+        .flatpickr-day.flatpickr-disabled,
+        .flatpickr-day.prevMonthDay,
+        .flatpickr-day.nextMonthDay {
+            color: #d1d5db !important;
+        }
+        /* Clear / Today buttons at bottom */
+        .flatpickr-calendar .flatpickr-innerContainer {
+            padding: 4px !important;
+        }
 
         /* ── TomSelect inside form-field ── */
         .form-field .ts-control {
@@ -395,180 +496,36 @@
         .plog-flag-delayed  { background: #fee2e2; color: #991b1b; }
         .plog-flag-complete { background: #dcfce7; color: #166534; }
 
-        /* ── Image Lightbox — frosted glass card ── */
-        #adm-lightbox {
-            position: fixed; inset: 0; z-index: 9999;
-            display: flex; align-items: center; justify-content: center;
-            padding: 12px;
-            background: rgba(8, 5, 2, 0.6);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.28s cubic-bezier(.4,0,.2,1);
+        /* ── LightGallery Admin — ZPK amber theme overrides ── */
+        .lg-toolbar .lg-icon { color: #fbbf24 !important; }
+        .lg-toolbar .lg-icon:hover { color: #f59e0b !important; }
+        .lg-actions .lg-next, .lg-actions .lg-prev {
+            background: rgba(20,12,4,0.55) !important;
+            border: 1.5px solid rgba(251,191,36,0.3) !important;
+            border-radius: 50% !important;
+            color: #fbbf24 !important;
         }
-        #adm-lightbox.lb-open { opacity: 1; pointer-events: auto; }
-
-        .adm-lb-card {
-            position: relative;
-            display: flex; flex-direction: column;
-            width: 100%; max-width: 1400px;
-            height: calc(100vh - 24px);
-            background: rgba(20, 12, 4, 0.55);
-            backdrop-filter: blur(28px) saturate(1.6) brightness(0.75);
-            -webkit-backdrop-filter: blur(28px) saturate(1.6) brightness(0.75);
-            border-radius: 18px;
-            border: 1px solid rgba(251,191,36,0.22);
-            box-shadow:
-                0 32px 80px rgba(0,0,0,0.7),
-                0 0 0 1px rgba(255,255,255,0.04) inset,
-                0 1px 0 rgba(251,191,36,0.15) inset;
-            overflow: hidden;
-            transform: scale(0.94) translateY(20px);
-            opacity: 0;
-            transition: transform 0.36s cubic-bezier(.34,1.4,.64,1),
-                        opacity   0.28s cubic-bezier(.4,0,.2,1);
+        .lg-actions .lg-next:hover, .lg-actions .lg-prev:hover {
+            background: rgba(180,83,9,0.75) !important;
+            border-color: #d97706 !important;
         }
-        #adm-lightbox.lb-open .adm-lb-card {
-            transform: scale(1) translateY(0);
-            opacity: 1;
+        .lg-sub-html {
+            background: linear-gradient(to top, rgba(10,5,0,0.82), transparent) !important;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important;
+            font-size: 13px !important;
+            color: rgba(255,255,255,0.85) !important;
+            padding: 20px 60px 12px !important;
         }
-
-        /* topbar */
-        .adm-lb-topbar {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 16px 10px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.38), transparent);
-            flex-shrink: 0; gap: 10px;
+        .lg-sub-html strong { color: #fbbf24 !important; font-weight: 700; }
+        #lg-thumbnail .lg-thumb-item {
+            border-color: rgba(255,255,255,0.15) !important;
+            border-radius: 6px !important; overflow: hidden;
         }
-        .adm-lb-zoom-group {
-            display: flex; align-items: center; gap: 4px;
+        #lg-thumbnail .lg-thumb-item.active,
+        #lg-thumbnail .lg-thumb-item:hover {
+            border-color: #fbbf24 !important;
         }
-        .adm-lb-zoom-btn {
-            width: 32px; height: 32px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.08);
-            border: 1.5px solid rgba(255,255,255,0.13);
-            color: rgba(255,255,255,0.8); cursor: pointer;
-            transition: background 0.18s;
-        }
-        .adm-lb-zoom-btn:hover { background: rgba(180,83,9,0.6); border-color: #d97706; color: #fff; }
-        .adm-lb-zoom-btn svg { width: 15px; height: 15px; }
-        .adm-lb-zoom-level {
-            font-size: 11px; font-weight: 700; font-family: monospace;
-            color: rgba(255,255,255,0.6); min-width: 38px; text-align: center;
-        }
-        .adm-lb-reset-btn {
-            font-size: 11px; font-weight: 700;
-            padding: 4px 10px; border-radius: 6px;
-            background: rgba(255,255,255,0.07);
-            border: 1.5px solid rgba(255,255,255,0.13);
-            color: rgba(255,255,255,0.7); cursor: pointer;
-            transition: background 0.18s;
-        }
-        .adm-lb-reset-btn:hover { background: rgba(255,255,255,0.15); }
-        .adm-lb-counter {
-            font-size: 12px; font-weight: 700;
-            color: rgba(255,255,255,0.55); letter-spacing: 0.05em;
-        }
-        .adm-lb-close {
-            width: 34px; height: 34px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-            border: 1.5px solid rgba(255,255,255,0.15);
-            color: #fff; cursor: pointer;
-            transition: background 0.2s, transform 0.18s;
-        }
-        .adm-lb-close:hover { background: rgba(239,68,68,0.6); transform: scale(1.1) rotate(90deg); }
-        .adm-lb-close svg { width: 16px; height: 16px; }
-
-        /* stage */
-        .adm-lb-stage {
-            flex: 1; min-height: 0;
-            display: flex; align-items: center; justify-content: center;
-            padding: 4px 56px;
-            position: relative; overflow: hidden;
-        }
-        .adm-lb-img-wrap {
-            width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
-        }
-        #adm-lb-img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto; height: auto;
-            object-fit: contain;
-            border-radius: 10px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.55);
-            display: block;
-            transition: transform 0.2s ease;
-            cursor: grab;
-        }
-        #adm-lb-img:active { cursor: grabbing; }
-
-        /* arrows */
-        .adm-lb-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.07);
-            border: 1.5px solid rgba(255,255,255,0.13);
-            border-radius: 50%; color: #fff; cursor: pointer; z-index: 3;
-            transition: background 0.18s, transform 0.18s, border-color 0.18s;
-        }
-        .adm-lb-arrow:hover { background: rgba(180,83,9,0.75); border-color: #d97706; transform: translateY(-50%) scale(1.12); }
-        .adm-lb-arrow:active { transform: translateY(-50%) scale(0.94); }
-        .adm-lb-arrow svg { width: 18px; height: 18px; }
-        .adm-lb-prev { left: 10px; }
-        .adm-lb-next { right: 10px; }
-        .adm-lb-arrow.lb-hidden { opacity: 0; pointer-events: none; }
-
-        /* caption */
-        .adm-lb-caption {
-            padding: 8px 18px 6px;
-            text-align: center; flex-shrink: 0;
-            font-size: 12px; color: rgba(255,255,255,0.65);
-            min-height: 32px;
-        }
-        .adm-lb-type-pill {
-            display: inline-block;
-            font-size: 10px; font-weight: 800; letter-spacing: 0.06em;
-            padding: 2px 10px; border-radius: 9999px;
-            background: rgba(251,191,36,0.18);
-            border: 1px solid rgba(251,191,36,0.3);
-            color: #fbbf24; margin-bottom: 4px;
-        }
-
-        /* thumbnail strip */
-        .adm-lb-strip-wrap {
-            padding: 8px 14px 14px;
-            display: flex; justify-content: center; flex-shrink: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.32), transparent);
-        }
-        .adm-lb-strip {
-            display: flex; gap: 6px;
-            overflow-x: auto; scroll-behavior: smooth;
-            max-width: 100%;
-        }
-        .adm-lb-strip::-webkit-scrollbar { height: 3px; }
-        .adm-lb-strip::-webkit-scrollbar-track { background: transparent; }
-        .adm-lb-strip::-webkit-scrollbar-thumb { background: rgba(251,191,36,0.4); border-radius: 99px; }
-        .adm-lb-thumb {
-            flex-shrink: 0; width: 72px; height: 54px;
-            border-radius: 8px; overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.15);
-            cursor: pointer; opacity: 0.55;
-            transition: opacity 0.18s, border-color 0.18s, transform 0.18s;
-        }
-        .adm-lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .adm-lb-thumb:hover { opacity: 0.85; transform: scale(1.06); }
-        .adm-lb-thumb.active {
-            border-color: #fbbf24; opacity: 1;
-            transform: scale(1.1);
-            box-shadow: 0 0 0 2px rgba(251,191,36,0.35);
-        }
+        .lg-counter { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important; color: rgba(255,255,255,0.65) !important; }
 
         /* Photo Gallery */
         .photo-tab {
@@ -585,6 +542,7 @@
             position: relative; aspect-ratio: 4/3; overflow: hidden;
             border-radius: 0.75rem; cursor: pointer;
             border: 2px solid #fcd34d;
+            display: block; text-decoration: none;
             transition: transform 0.18s, box-shadow 0.18s;
         }
         .photo-thumb:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(180,83,9,0.22); }
@@ -600,6 +558,43 @@
         .ptype-general { background: #f3e8ff; color: #6b21a8; }
 
         /* ── Photo upload section (form modal) ── */
+        /* ── Document upload zone ── */
+        .doc-upload-zone {
+            border: 2px dashed #fcd34d; border-radius: 0.75rem;
+            background: #fffbeb; padding: 1.25rem 1.5rem;
+            text-align: center; cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+        }
+        .doc-upload-zone:hover, .doc-upload-zone.drag-over {
+            border-color: #b45309; background: #fef3c7;
+        }
+        .doc-upload-zone input[type="file"] {
+            position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+        }
+        .doc-file-row {
+            display: flex; align-items: center; gap: 8px;
+            background: #fffbeb; border: 1px solid #fde68a;
+            border-radius: 0.6rem; padding: 7px 10px;
+            font-size: 0.82rem;
+        }
+        .doc-file-row .doc-icon { flex-shrink: 0; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: #fff; }
+        .doc-file-row .doc-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #92400e; font-weight: 600; }
+        .doc-file-row .doc-size { flex-shrink: 0; color: #b45309; font-size: 0.75rem; }
+        .doc-file-row .doc-remove { flex-shrink: 0; background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 2px; }
+        .doc-file-row .doc-remove:hover { color: #b91c1c; }
+        .doc-pending-row { border: 1px solid #fde68a; border-radius: 0.6rem; overflow: hidden; margin-bottom: 0; }
+        .doc-pending-row + .doc-pending-row { margin-top: 0.5rem; }
+        .doc-pending-row .doc-file-row { border: none; border-radius: 0; }
+        .doc-caption-input {
+            display: block; width: 100%; padding: 5px 10px;
+            font-size: 0.8rem; font-family: inherit;
+            background: #fffdf0; border: none; border-top: 1px solid #fde68a;
+            color: #78350f; outline: none;
+        }
+        .doc-caption-input::placeholder { color: #d97706; opacity: 0.6; }
+        .doc-caption-input:focus { background: #fef9c3; }
+
         .photo-upload-zone {
             border: 2px dashed #fcd34d; border-radius: 1rem;
             background: #fffbeb; padding: 2rem 1.5rem;
@@ -726,7 +721,7 @@
             </div>
 
             <!-- Search and Filters -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
                 <div class="md:col-span-1">
                     <label class="block text-sm font-medium text-gray-700 mb-2">অনুসন্ধান</label>
                     <input type="text" id="search-input" placeholder="নাম, আইডি, উপজেলা..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
@@ -750,10 +745,19 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">বর্তমান অবস্থা</label>
                     <select id="status-filter" class="w-full border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white hover:border-amber-400 transition-all font-medium text-sm">
                         <option value="">সকল অবস্থা</option>
-                        <option value="completed">✅ সম্পন্ন</option>
-                        <option value="delayed">⚠️ বিলম্বিত</option>
-                        <option value="ongoing">🔄 চলমান</option>
-                        <option value="pending">⏳ অপেক্ষমান</option>
+                        <option value="completed">সম্পন্ন</option>
+                        <option value="delayed">বিলম্বিত</option>
+                        <option value="ongoing">চলমান</option>
+                        <option value="pending">অপেক্ষমান</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">অগ্রাধিকার</label>
+                    <select id="priority-filter" class="w-full border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white hover:border-amber-400 transition-all font-medium text-sm">
+                        <option value="">সকল অগ্রাধিকার</option>
+                        <option value="general">⚪ সাধারণ</option>
+                        <option value="medium">🟡 মধ্যম</option>
+                        <option value="top_priority">🔴 সর্বোচ্চ অগ্রাধিকার</option>
                     </select>
                 </div>
             </div>
@@ -845,10 +849,16 @@
                     </div>
                 </div>
 
-                <!-- Row 2: Fund Type -->
-                <div>
-                    <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তহবিলের ধরণ</p>
-                    <p id="dm-fund-type" class="font-semibold text-slate-800 text-base"></p>
+                <!-- Row 2: Fund Type · Priority -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তহবিলের ধরণ</p>
+                        <p id="dm-fund-type" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অগ্রাধিকার</p>
+                        <p id="dm-priority" class="font-semibold text-base"></p>
+                    </div>
                 </div>
 
                 <!-- Row 2.5: Approval Date · Memo Number -->
@@ -1007,6 +1017,48 @@
                
             </div>
 
+            <!-- Documents section (inside detail modal) -->
+            <div id="dm-docs-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <div class="flex items-center justify-between mb-3">
+                    <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider">সংযুক্ত ফাইল</p>
+                    <button onclick="openQuickDocUpload()" type="button"
+                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold
+                               bg-gradient-to-r from-[#b45309] to-[#d97706] text-white
+                               shadow hover:shadow-md transition-all active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path d="M12 4v16m8-8H4"/>
+                        </svg>
+                        ফাইল যোগ করুন
+                    </button>
+                </div>
+                <div id="dm-docs-list" class="space-y-1.5"></div>
+            </div>
+
+            <!-- Quick document upload panel (inside detail modal) -->
+            <div id="quick-doc-upload-panel" class="hidden mt-4 pt-4 border-t border-[#fcd34d]">
+                <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">ফাইল আপলোড করুন</p>
+                <div class="doc-upload-zone" id="quick-doc-drop-zone" style="padding:1rem;">
+                    <input type="file" id="quick-doc-file-input"
+                           accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt" multiple>
+                    <p class="text-sm font-semibold text-amber-700">ফাইল টেনে আনুন বা ক্লিক করুন</p>
+                    <p class="text-xs text-gray-400 mt-0.5">PDF, Word, Excel, ছবি, TXT • সর্বোচ্চ ১০ MB প্রতিটি</p>
+                </div>
+                <div id="quick-doc-pending-list" class="mt-2 space-y-1.5"></div>
+                <div class="flex gap-2 mt-3">
+                    <button type="button" onclick="submitQuickDocUpload()"
+                        class="flex-1 py-1.5 px-4 rounded-lg font-bold text-sm
+                               bg-gradient-to-r from-[#b45309] to-[#d97706] text-white
+                               shadow hover:shadow-md transition-all active:scale-95">
+                        আপলোড করুন
+                    </button>
+                    <button type="button" onclick="closeQuickDocUpload()"
+                        class="px-3 py-1.5 rounded-lg border border-gray-300 text-sm text-gray-600 hover:bg-gray-50">
+                        বাতিল
+                    </button>
+                </div>
+                <div id="quick-doc-status" class="hidden mt-2 text-sm font-semibold text-amber-700"></div>
+            </div>
+
             <!-- Quick photo upload panel (inside detail modal) -->
             <div id="quick-upload-panel" class="hidden mt-4 pt-4 border-t border-[#fcd34d]">
                 <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">ছবি আপলোড করুন</p>
@@ -1083,7 +1135,7 @@
             </div>
 
             <form id="project-form" class="space-y-4">
-                <input type="hidden" id="record-id" name="id">
+                <input type="hidden" id="record-id">
 
                 <!-- Section: Basic Info -->
                 <div class="form-section">
@@ -1101,8 +1153,8 @@
 
                         <!-- Row 2: Project ID | Financial Year -->
                         <div class="form-field">
-                            <label>প্রকল্প আইডি</label>
-                            <input type="text" name="id" id="form-id" placeholder="R-25-26-001" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                            <label>প্রকল্প আইডি <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
+                            <input type="text" name="id" id="form-id" placeholder="R-25-26-001" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
                         <div class="form-field">
                             <label>অর্থবছর <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
@@ -1144,7 +1196,8 @@
                         <div class="form-field">
                             <label>অনুমোদনের তারিখ</label>
                             <div class="date-field-wrapper">
-                                <input type="date" name="project_approval_date">
+                                <svg class="fp-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                <input type="text" name="project_approval_date" class="flatpickr-input" placeholder="তারিখ নির্বাচন করুন" readonly>
                             </div>
                         </div>
                         <div class="form-field">
@@ -1166,6 +1219,17 @@
                             <label>তহবিলের ধরন <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
                             <input type="text" name="fund_type" required placeholder="তহবিলের ধরন লিখুন…" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
+
+                        <!-- Row 5.5: Priority -->
+                        <div class="form-field">
+                            <label>অগ্রাধিকার</label>
+                            <select name="priority" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white">
+                                <option value="general">⚪ সাধারণ</option>
+                                <option value="medium">🟡 মধ্যম</option>
+                                <option value="top_priority">🔴 সর্বোচ্চ অগ্রাধিকার</option>
+                            </select>
+                        </div>
+                        <div class="form-field"></div><!-- spacer -->
 
                         <!-- Row 6: Allocation Amount | GPS Location -->
                         <div class="form-field">
@@ -1241,6 +1305,34 @@
                         <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">বিদ্যমান ছবি</p>
                         <div id="existing-photos-tabs" class="flex gap-2 flex-wrap mb-2"></div>
                         <div id="existing-photos-grid" class="upload-preview-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Section: Documents -->
+                <div class="form-section" id="doc-upload-section">
+                    <div class="form-section-title">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        সংযুক্ত ফাইল
+                        <span class="text-gray-400 text-xs font-normal">PDF, Word, Excel, ছবি · প্রতিটি সর্বোচ্চ ১০ MB</span>
+                    </div>
+                    <!-- Drop zone -->
+                    <div class="doc-upload-zone" id="doc-drop-zone">
+                        <input type="file" id="doc-file-input"
+                               accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.txt"
+                               multiple>
+                        <svg class="w-7 h-7 text-amber-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <p class="text-sm font-semibold text-amber-700">ফাইল টেনে আনুন বা ক্লিক করুন</p>
+                        <p class="text-xs text-gray-400 mt-0.5">PDF, Word, Excel, ছবি, TXT</p>
+                    </div>
+                    <!-- Pending file list -->
+                    <div id="doc-pending-list" class="mt-2 space-y-1.5"></div>
+                    <div id="doc-upload-status" class="hidden mt-2 text-sm font-semibold text-amber-700"></div>
+                    <!-- Existing documents -->
+                    <div id="existing-docs-section" class="hidden mt-3">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">আপলোড করা ফাইল</p>
+                        <div id="existing-docs-list" class="space-y-1.5"></div>
                     </div>
                 </div>
 
@@ -1389,7 +1481,7 @@
                                 <div class="w-10 h-5 rounded-full bg-gray-200 peer-checked:bg-emerald-500 transition-colors duration-200"></div>
                                 <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
                             </div>
-                            <span class="text-sm font-semibold text-gray-700">✅ সম্পন্ন</span>
+                            <span class="text-sm font-semibold text-gray-700">সম্পন্ন</span>
                         </label>
                         <label class="flex items-center gap-2.5 cursor-pointer select-none">
                             <div class="relative">
@@ -1397,7 +1489,7 @@
                                 <div class="w-10 h-5 rounded-full bg-gray-200 peer-checked:bg-red-400 transition-colors duration-200"></div>
                                 <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
                             </div>
-                            <span class="text-sm font-semibold text-gray-700">⚠️ বিলম্বিত</span>
+                            <span class="text-sm font-semibold text-gray-700">বিলম্বিত</span>
                         </label>
                     </div>
                 </div>
@@ -1517,56 +1609,6 @@
         </div>
     </div>
 
-    <!-- Image Lightbox — frosted glass card -->
-    <div id="adm-lightbox" onclick="admLbBackdropClick(event)">
-        <div class="adm-lb-card">
-            <!-- Top bar: zoom controls · counter · close -->
-            <div class="adm-lb-topbar">
-                <div class="adm-lb-zoom-group">
-                    <button class="adm-lb-zoom-btn" onclick="lightboxZoomOut()" title="Zoom Out (-)">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"/>
-                        </svg>
-                    </button>
-                    <span class="adm-lb-zoom-level" id="lightbox-zoom-level">100%</span>
-                    <button class="adm-lb-zoom-btn" onclick="lightboxZoomIn()" title="Zoom In (+)">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/>
-                        </svg>
-                    </button>
-                    <button class="adm-lb-reset-btn" onclick="lightboxResetZoom()" title="Reset (0)">Reset</button>
-                </div>
-                <span class="adm-lb-counter" id="lightbox-counter">1 / 1</span>
-                <button class="adm-lb-close" onclick="closeLightbox()" title="বন্ধ করুন (Esc)">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
-                        <path d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Stage -->
-            <div class="adm-lb-stage">
-                <button class="adm-lb-arrow adm-lb-prev" id="lightbox-prev" onclick="lightboxPrevious()" title="পূর্ববর্তী (←)">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M15 19l-7-7 7-7"/></svg>
-                </button>
-                <div class="adm-lb-img-wrap">
-                    <img id="adm-lb-img" src="" alt="">
-                </div>
-                <button class="adm-lb-arrow adm-lb-next" id="lightbox-next" onclick="lightboxNext()" title="পরবর্তী (→)">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M9 5l7 7-7 7"/></svg>
-                </button>
-            </div>
-
-            <!-- Caption -->
-            <div class="adm-lb-caption" id="lightbox-caption"></div>
-
-            <!-- Thumbnail strip -->
-            <div class="adm-lb-strip-wrap">
-                <div class="adm-lb-strip" id="lightbox-thumbnails"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- Full Screen Map Modal -->
     <div id="full-map-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex flex-col">
         <!-- Top Bar -->
@@ -1620,7 +1662,7 @@
                         sortField: false,
                         allowEmptyOption: true,
                         controlInput: null,
-                        onInitialize() { this.control.style.fontFamily = "'Hind Siliguri', sans-serif"; }
+                        onInitialize() { this.control.style.fontFamily = "Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace"; }
                     }));
                 }
             });
@@ -1632,6 +1674,48 @@
                 CRUDManager.openModal = function(id) { orig(id); setTimeout(initTomSelects, 50); };
             }
         });
+
+        // ── Flatpickr date pickers ────────────────────────────────────
+        const _fpInstances = {};
+
+        function initFlatpickrs() {
+            const cfg = {
+                dateFormat:    'Y-m-d',       // value stored as YYYY-MM-DD
+                altInput:      true,           // show human-friendly display
+                altFormat:     'd M, Y',       // e.g. "15 Jan, 2025"
+                allowInput:    false,
+                disableMobile: true,           // always use Flatpickr on mobile too
+                locale: { firstDayOfWeek: 0 },
+            };
+            document.querySelectorAll('.date-field-wrapper input.flatpickr-input').forEach(el => {
+                if (el._flatpickr) return; // already initialised
+                const fp = flatpickr(el, cfg);
+                _fpInstances[el.name || el.id] = fp;
+            });
+        }
+
+        // Sync Flatpickr display when a record is loaded for editing
+        function syncFlatpickrValues() {
+            Object.values(_fpInstances).forEach(fp => {
+                const val = fp.element.value;
+                if (val) fp.setDate(val, false);
+                else fp.clear();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initFlatpickrs();
+            // Re-sync after form opens with data
+            const origEdit = window.editRecord;
+            if (typeof editRecord === 'function') {
+                // Patch editRecord to sync Flatpickr after populateForm
+                const _origEditRecord = editRecord;
+                window.editRecord = async function(id) {
+                    await _origEditRecord(id);
+                    setTimeout(syncFlatpickrValues, 80);
+                };
+            }
+        });
     </script>
     <script>
         DashboardComponents.loadAll('projects', 'প্রকল্প তালিকা পরিচালনা');
@@ -1641,6 +1725,7 @@
         let currentYear = '';
         let currentMethod = '';
         let currentStatus = '';
+        let currentPriority = '';
         let editingId = null;
         let currentDetailId = null;
         let currentDetailRecord = null;
@@ -1683,6 +1768,13 @@
             renderRows();
         });
 
+        // Priority filter (server-side via loadData)
+        document.getElementById('priority-filter').addEventListener('change', (e) => {
+            currentPriority = e.target.value;
+            currentPage = 1;
+            loadData();
+        });
+
         async function loadYears() {
             try {
                 const years = await CRUDManager.fetchList('/projects/years');
@@ -1718,7 +1810,8 @@
 
                 const response = await CRUDManager.fetchList('/projects/list', {
                     page: currentPage, limit: 20,
-                    search: currentSearch, year: currentYear
+                    search: currentSearch, year: currentYear,
+                    priority: currentPriority
                 });
 
                 loading.classList.add('hidden');
@@ -1761,10 +1854,10 @@
         }
 
         function statusBadge(r) {
-            if (r.is_completed) return '<span class="px-3 py-1.5 rounded-full text-sm font-bold badge-completed inline-block">✅ সম্পন্ন</span>';
-            if (r.is_delayed)   return '<span class="px-3 py-1.5 rounded-full text-sm font-bold badge-delayed inline-block">⚠️ বিলম্বিত</span>';
-            if (r.progress_percentage > 0) return '<span class="px-3 py-1.5 rounded-full text-sm font-bold badge-ongoing inline-block">🔄 চলমান</span>';
-            return '<span class="px-3 py-1.5 rounded-full text-sm font-bold badge-pending inline-block">⏳ অপেক্ষমান</span>';
+            if (r.is_completed) return '<span class="px-3 py-1.5 rounded-full text-sm font-bold badge-completed inline-block">সম্পন্ন</span>';
+            if (r.is_delayed)   return '<span class="px-3 py-1.5 rounded-full text-sm font-bold badge-delayed inline-block">বিলম্বিত</span>';
+            if (r.progress_percentage > 0) return '<span class="px-3 py-1.5 rounded-full text-sm font-bold badge-ongoing inline-block">চলমান</span>';
+            return '<span class="px-3 py-1.5 rounded-full text-sm font-bold badge-pending inline-block">অপেক্ষমান</span>';
         }
 
         function progressColor(pct) {
@@ -1863,7 +1956,7 @@
                     <td class="px-4 py-2.5 text-right">
                         <div class="currency-amount inline-flex font-bold text-gray-900 text-base">
                             <span class="currency-symbol">৳</span>
-                            <span>${CRUDManager.toBengaliNumber(parseFloat(record.allocation_amount || 0).toLocaleString('en-IN'))}</span>
+                            <span>${CRUDManager.toBengaliNumber(Math.floor(parseFloat(record.allocation_amount||0)))}</span>
                         </div>
                     </td>
                     <!-- Action buttons -->
@@ -1903,6 +1996,12 @@
             document.getElementById('dm-year').innerText = r.financial_year || '';
             document.getElementById('dm-upazila').innerText = r.upazila || '';
             document.getElementById('dm-fund-type').innerText = r.fund_type || '';
+            const dmPriority = document.getElementById('dm-priority');
+            const priorityMap = { general: 'সাধারণ', medium: 'মধ্যম', top_priority: 'সর্বোচ্চ অগ্রাধিকার' };
+            const priorityColors = { general: '#64748b', medium: '#d97706', top_priority: '#dc2626' };
+            const pVal = r.priority || 'general';
+            dmPriority.innerText = priorityMap[pVal] || pVal;
+            dmPriority.style.color = priorityColors[pVal] || '#64748b';
             // dm-status removed (duplicate of dm-quick-status)
 
             // Approval date (Row 2, right column)
@@ -1936,8 +2035,8 @@
             }
 
             // Amounts
-            document.getElementById('dm-allocation').innerText = '৳ ' + parseFloat(r.allocation_amount || 0).toLocaleString('en-IN') + ' টাকা';
-            document.getElementById('dm-released').innerText = '৳ ' + parseFloat(r.released_amount || 0).toLocaleString('en-IN') + ' টাকা';
+            document.getElementById('dm-allocation').innerText = '৳ ' + CRUDManager.toBengaliNumber(Math.floor(parseFloat(r.allocation_amount||0))) + ' টাকা';
+            document.getElementById('dm-released').innerText = '৳ ' + CRUDManager.toBengaliNumber(Math.floor(parseFloat(r.released_amount||0))) + ' টাকা';
 
             // Progress log — fetch and render
             const logSection = document.getElementById('dm-progress-log-section');
@@ -1985,6 +2084,9 @@
 
             // Photos — fetch and render gallery
             loadProjectPhotos(r.id);
+
+            // Documents — fetch and render list
+            loadProjectDocsForDetail(r.id);
 
             // Open modal FIRST so the container has real pixel dimensions
             document.getElementById('detail-modal').classList.add('open');
@@ -2035,7 +2137,7 @@
             setTimeout(() => {
                 // Shared popup HTML
                 const popupHtml = `
-                    <div style="font-family:'Hind Siliguri',sans-serif;min-width:180px;line-height:1.5">
+                    <div style="font-family:Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;min-width:180px;line-height:1.5">
                         <p style="font-weight:700;font-size:13px;color:#0f172a;margin:0 0 4px">${projectName || ''}</p>
                         <p style="font-size:11px;color:#b45309;font-weight:600;margin:0">📍 ${upazila || ''}</p>
                         <p style="font-size:10px;color:#64748b;margin:4px 0 0;font-family:monospace">${lat.toFixed(5)}, ${lng.toFixed(5)}</p>
@@ -2170,28 +2272,70 @@
             }
         }
 
+        // ── LightGallery: single dynamic instance on body ──────────────
+        // dynamic:true avoids getBoundingClientRect errors when the photo
+        // section is inside a hidden parent element.
+        let _admLgInstance = null;
+
+        function _ensureAdmLgInstance() {
+            if (_admLgInstance) return;
+            _admLgInstance = lightGallery(document.body, {
+                dynamic:        true,
+                dynamicEl:      [],
+                plugins:        [lgZoom, lgFullscreen, lgThumbnail],
+                speed:          400,
+                mode:           'lg-slide',
+                thumbnail:      true,
+                thumbWidth:     100,
+                thumbHeight:    '68px',
+                animateThumb:   true,
+                scale:          1,
+                enableDrag:     true,
+                enableSwipe:    true,
+                fullScreen:     true,
+                download:       true,
+                counter:        true,
+                loop:           true,
+                mobileSettings: { controls: true, showCloseIcon: true, download: true }
+            });
+        }
+
         function renderPhotoGrid(typeFilter) {
             const grid = document.getElementById('dm-photos-grid');
             grid.innerHTML = '';
+
             const filtered = typeFilter === 'all'
                 ? allPhotos
                 : allPhotos.filter(p => p.photo_type === typeFilter);
 
-            filtered.forEach((photo) => {
+            filtered.forEach((photo, idx) => {
                 const typeClass = `ptype-${photo.photo_type}`;
                 const typeLabel = PHOTO_TYPE_LABELS[photo.photo_type] || photo.photo_type;
+                const caption   = photo.caption || '';
+                const imgSrc    = `/uploads/${photo.photo_path}`;
 
                 const thumb = document.createElement('div');
                 thumb.className = 'photo-thumb';
-                thumb.dataset.photoId = photo.id;
+                thumb.style.cursor = 'pointer';
+                thumb.onclick = (e) => {
+                    if (e.target.closest('.photo-delete-btn')) return;
+                    const items = filtered.map(p => {
+                        const tl  = PHOTO_TYPE_LABELS[p.photo_type] || p.photo_type;
+                        const cp  = p.caption || '';
+                        const src = `/uploads/${p.photo_path}`;
+                        return { src, thumb: src, downloadUrl: src,
+                            subHtml: cp ? `<strong>${tl}</strong> &nbsp;${cp}` : `<strong>${tl}</strong>` };
+                    });
+                    _ensureAdmLgInstance();
+                    _admLgInstance.refresh(items);
+                    _admLgInstance.openGallery(idx);
+                };
                 thumb.innerHTML = `
-                    <img src="/uploads/${photo.photo_path}" alt="${photo.caption || 'প্রকল্পের ছবি'}"
-                        onclick="openLightbox('/uploads/${photo.photo_path}')"
-                        style="cursor: pointer;"
+                    <img src="${imgSrc}" alt="${caption || 'প্রকল্পের ছবি'}"
                         onerror="this.parentElement.style.display='none'">
                     <span class="photo-type-badge ${typeClass}">${typeLabel}</span>
                     <button class="photo-delete-btn" title="ছবি মুছুন"
-                        onclick="deleteDetailPhoto(${photo.id}, this); event.stopPropagation();">
+                        onclick="event.stopPropagation();deleteDetailPhoto(${photo.id}, this);">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                             <path d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -2241,6 +2385,13 @@
             document.getElementById('existing-photos-section').classList.add('hidden');
             document.getElementById('existing-photos-grid').innerHTML = '';
             document.getElementById('existing-photos-tabs').innerHTML = '';
+            // Clear document upload state
+            pendingDocs = [];
+            renderPendingDocs();
+            const docStatus2 = document.getElementById('doc-upload-status');
+            if (docStatus2) docStatus2.classList.add('hidden');
+            const existDocSec = document.getElementById('existing-docs-section');
+            if (existDocSec) existDocSec.classList.add('hidden');
             CRUDManager.openModal('form-modal');
         }
 
@@ -2250,6 +2401,8 @@
             pendingFiles = [];
             renderPendingPreviews();
             document.getElementById('upload-status').classList.add('hidden');
+            pendingDocs = [];
+            renderPendingDocs();
         }
 
         // ── Add Progress Log ──────────────────────────────────────────
@@ -2334,12 +2487,12 @@
             const pct      = (_progressRecord && _progressRecord.progress_percentage) || 0;
             const released = parseFloat((_progressRecord && _progressRecord.released_amount) || 0);
             const alloc    = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
-            document.getElementById('prog-current-pct-label').textContent = pct + '%';
+            document.getElementById('prog-current-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
             document.getElementById('prog-current-bar').style.width = pct + '%';
             document.getElementById('prog-current-released').textContent =
-                '৳ ' + released.toLocaleString('en-IN');
+                '৳ ' + CRUDManager.toBengaliNumber(Math.floor(released));
             document.getElementById('prog-current-alloc').textContent =
-                '৳ ' + alloc.toLocaleString('en-IN');
+                '৳ ' + CRUDManager.toBengaliNumber(Math.floor(alloc));
 
             // Populate status options filtered by implementation method
             const method = (_progressRecord && _progressRecord.implementation_method) || '';
@@ -2426,6 +2579,13 @@
                 pendingFiles = [];
                 renderPendingPreviews();
                 document.getElementById('upload-status').classList.add('hidden');
+
+                // Clear pending doc state and load existing docs
+                pendingDocs = [];
+                renderPendingDocs();
+                const docStatus = document.getElementById('doc-upload-status');
+                if (docStatus) docStatus.classList.add('hidden');
+                loadExistingDocsForForm(id);
 
                 // Load existing photos into the form
                 loadExistingPhotosForForm(id);
@@ -2647,6 +2807,146 @@
             });
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // DOCUMENT UPLOAD (add/edit form)
+        // ─────────────────────────────────────────────────────────────
+        let pendingDocs = []; // Array of { file, caption }
+
+        const DOC_ICON_MAP = {
+            'pdf':  { bg: '#ef4444', label: 'PDF' },
+            'doc':  { bg: '#3b82f6', label: 'DOC' },
+            'docx': { bg: '#3b82f6', label: 'DOC' },
+            'xls':  { bg: '#22c55e', label: 'XLS' },
+            'xlsx': { bg: '#22c55e', label: 'XLS' },
+            'jpg':  { bg: '#f59e0b', label: 'IMG' },
+            'jpeg': { bg: '#f59e0b', label: 'IMG' },
+            'png':  { bg: '#f59e0b', label: 'IMG' },
+            'txt':  { bg: '#6b7280', label: 'TXT' },
+        };
+        function getDocIcon(filename) {
+            const ext = (filename.split('.').pop() || '').toLowerCase();
+            return DOC_ICON_MAP[ext] || { bg: '#6b7280', label: ext.toUpperCase().slice(0,4) || 'FILE' };
+        }
+        function fmtSize(bytes) {
+            if (!bytes) return '';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+            return (bytes/1024/1024).toFixed(1) + ' MB';
+        }
+
+        function initDocUpload() {
+            const zone  = document.getElementById('doc-drop-zone');
+            const input = document.getElementById('doc-file-input');
+            if (!zone || !input) return;
+            input.addEventListener('change', () => {
+                addPendingDocs(Array.from(input.files));
+                input.value = '';
+            });
+            zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+            zone.addEventListener('drop', e => {
+                e.preventDefault(); zone.classList.remove('drag-over');
+                addPendingDocs(Array.from(e.dataTransfer.files));
+            });
+        }
+        function addPendingDocs(files) {
+            const remaining = 10 - pendingDocs.length;
+            files.slice(0, remaining).forEach(f => pendingDocs.push({ file: f, caption: '' }));
+            renderPendingDocs();
+        }
+        function renderPendingDocs() {
+            const list = document.getElementById('doc-pending-list');
+            if (!list) return;
+            list.innerHTML = '';
+            pendingDocs.forEach((item, idx) => {
+                const icon = getDocIcon(item.file.name);
+                const row = document.createElement('div');
+                row.className = 'doc-pending-row';
+                row.innerHTML = `
+                    <div class="doc-file-row" style="margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none;">
+                        <span class="doc-icon" style="background:${icon.bg}">${icon.label}</span>
+                        <span class="doc-name" title="${item.file.name}">${item.file.name}</span>
+                        <span class="doc-size">${fmtSize(item.file.size)}</span>
+                        <button type="button" class="doc-remove" title="সরান">✕</button>
+                    </div>
+                    <input type="text" class="doc-caption-input" placeholder="ক্যাপশন লিখুন (ঐচ্ছিক)…" value="${item.caption}">`;
+                row.querySelector('.doc-remove').onclick = () => {
+                    pendingDocs.splice(idx, 1); renderPendingDocs();
+                };
+                row.querySelector('.doc-caption-input').oninput = (e) => {
+                    pendingDocs[idx].caption = e.target.value;
+                };
+                list.appendChild(row);
+            });
+        }
+
+        async function uploadPendingDocs(projectId) {
+            if (pendingDocs.length === 0) return;
+            const statusEl = document.getElementById('doc-upload-status');
+            if (statusEl) { statusEl.classList.remove('hidden'); statusEl.textContent = `${pendingDocs.length}টি ফাইল আপলোড হচ্ছে…`; }
+            const fd = new FormData();
+            pendingDocs.forEach(item => {
+                fd.append('documents', item.file);
+                fd.append('caption', item.caption || '');
+            });
+            const res = await AuthManager.fetch(`${AuthManager.API_URL}/projects/${projectId}/documents`, { method: 'POST', body: fd });
+            if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.error || 'ফাইল আপলোড ব্যর্থ'); }
+            if (statusEl) statusEl.textContent = `${pendingDocs.length}টি ফাইল সফলভাবে আপলোড হয়েছে ✓`;
+            pendingDocs = [];
+            renderPendingDocs();
+        }
+
+        async function loadExistingDocsForForm(projectId) {
+            const section = document.getElementById('existing-docs-section');
+            const list    = document.getElementById('existing-docs-list');
+            if (!section || !list) return;
+            section.classList.add('hidden');
+            list.innerHTML = '';
+            if (!projectId) return;
+            try {
+                const res = await fetch(`${AuthManager.API_URL}/projects/${projectId}/documents`);
+                if (!res.ok) return;
+                const docs = await res.json();
+                if (!docs || !docs.length) return;
+                section.classList.remove('hidden');
+                renderExistingDocs(docs, projectId, list, section);
+            } catch(e) { /* silently skip */ }
+        }
+
+        function renderExistingDocs(docs, projectId, list, section) {
+            list.innerHTML = '';
+            docs.forEach(doc => {
+                const icon = getDocIcon(doc.original_name);
+                const row = document.createElement('div');
+                row.className = doc.caption ? 'doc-file-row doc-has-caption' : 'doc-file-row';
+                row.innerHTML = `
+                    <span class="doc-icon" style="background:${icon.bg};cursor:pointer;" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')">${icon.label}</span>
+                    <span class="doc-name-wrap" style="flex:1;min-width:0;">
+                        <button type="button" class="doc-name" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')"
+                            title="${doc.original_name}">${doc.original_name}</button>
+                        ${doc.caption ? `<span class="doc-caption-text">${doc.caption}</span>` : ''}
+                    </span>
+                    <span class="doc-size">${fmtSize(doc.file_size_bytes)}</span>
+                    <button type="button" class="doc-remove" title="মুছুন" data-id="${doc.id}">✕</button>`;
+                row.querySelector('.doc-remove').addEventListener('click', async () => {
+                    if (!confirm('এই ফাইলটি মুছে ফেলতে চান?')) return;
+                    try {
+                        const r = await AuthManager.fetch(
+                            `${AuthManager.API_URL}/projects/${projectId}/documents/${doc.id}`,
+                            { method: 'DELETE' }
+                        );
+                        if (!r.ok) throw new Error();
+                        const idx = docs.findIndex(d => d.id === doc.id);
+                        if (idx > -1) docs.splice(idx, 1);
+                        renderExistingDocs(docs, projectId, list, section);
+                        if (docs.length === 0) section.classList.add('hidden');
+                        CRUDManager.showSuccess('ফাইলটি মুছে ফেলা হয়েছে');
+                    } catch(e) { CRUDManager.showError('মুছতে ব্যর্থ'); }
+                });
+                list.appendChild(row);
+            });
+        }
+
         // ── Quick Upload (inside detail modal) ─────────────────────
         let quickFiles = [];
 
@@ -2756,8 +3056,133 @@
             }
         }
 
+        // ── Quick Document Upload (inside detail modal) ─────────────
+        let quickDocFiles = [];
+
+        function openQuickDocUpload() {
+            quickDocFiles = [];
+            renderQuickDocPreviews();
+            document.getElementById('quick-doc-upload-panel').classList.remove('hidden');
+            document.getElementById('quick-doc-status').classList.add('hidden');
+        }
+        function closeQuickDocUpload() {
+            document.getElementById('quick-doc-upload-panel').classList.add('hidden');
+            quickDocFiles = [];
+            renderQuickDocPreviews();
+        }
+        function initQuickDocUpload() {
+            const zone  = document.getElementById('quick-doc-drop-zone');
+            const input = document.getElementById('quick-doc-file-input');
+            if (!zone || !input) return;
+            input.addEventListener('change', () => { addQuickDocs(Array.from(input.files)); input.value = ''; });
+            zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+            zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); addQuickDocs(Array.from(e.dataTransfer.files)); });
+        }
+        function addQuickDocs(files) {
+            const remaining = 10 - quickDocFiles.length;
+            files.slice(0, remaining).forEach(f => quickDocFiles.push({ file: f, caption: '' }));
+            renderQuickDocPreviews();
+        }
+        function renderQuickDocPreviews() {
+            const list = document.getElementById('quick-doc-pending-list');
+            if (!list) return;
+            list.innerHTML = '';
+            quickDocFiles.forEach((item, idx) => {
+                const icon = getDocIcon(item.file.name);
+                const row = document.createElement('div');
+                row.className = 'doc-pending-row';
+                row.innerHTML = `
+                    <div class="doc-file-row" style="margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none;">
+                        <span class="doc-icon" style="background:${icon.bg}">${icon.label}</span>
+                        <span class="doc-name" title="${item.file.name}">${item.file.name}</span>
+                        <span class="doc-size">${fmtSize(item.file.size)}</span>
+                        <button type="button" class="doc-remove" title="সরান">✕</button>
+                    </div>
+                    <input type="text" class="doc-caption-input" placeholder="ক্যাপশন লিখুন (ঐচ্ছিক)…" value="${item.caption}">`;
+                row.querySelector('.doc-remove').onclick = () => { quickDocFiles.splice(idx, 1); renderQuickDocPreviews(); };
+                row.querySelector('.doc-caption-input').oninput = (e) => { quickDocFiles[idx].caption = e.target.value; };
+                list.appendChild(row);
+            });
+        }
+        async function submitQuickDocUpload() {
+            if (quickDocFiles.length === 0) { CRUDManager.showError('কোনো ফাইল নির্বাচন করুন'); return; }
+            const status = document.getElementById('quick-doc-status');
+            status.classList.remove('hidden');
+            status.textContent = `${quickDocFiles.length}টি ফাইল আপলোড হচ্ছে…`;
+            try {
+                const fd = new FormData();
+                quickDocFiles.forEach(item => {
+                    fd.append('documents', item.file);
+                    fd.append('caption', item.caption || '');
+                });
+                const res = await AuthManager.fetch(
+                    `${AuthManager.API_URL}/projects/${currentDetailId}/documents`,
+                    { method: 'POST', body: fd }
+                );
+                if (!res.ok) { const e = await res.json().catch(()=>{}); throw new Error(e?.error || 'আপলোড ব্যর্থ'); }
+                status.textContent = `${quickDocFiles.length}টি ফাইল সফলভাবে আপলোড হয়েছে ✓`;
+                quickDocFiles = [];
+                renderQuickDocPreviews();
+                setTimeout(closeQuickDocUpload, 1200);
+                loadProjectDocsForDetail(currentDetailId);
+            } catch(e) {
+                status.textContent = 'ব্যর্থ: ' + e.message;
+            }
+        }
+
+        async function loadProjectDocsForDetail(projectId) {
+            const section = document.getElementById('dm-docs-section');
+            const list    = document.getElementById('dm-docs-list');
+            if (!section || !list) return;
+            section.classList.remove('hidden'); // always show (has upload button)
+            list.innerHTML = '';
+            if (!projectId) return;
+            try {
+                const res = await fetch(`${AuthManager.API_URL}/projects/${projectId}/documents`);
+                if (!res.ok) return;
+                const docs = await res.json();
+                if (!docs || !docs.length) { list.innerHTML = '<p class="text-xs text-gray-400">এখনো কোনো ফাইল নেই</p>'; return; }
+                renderDetailDocs(docs, projectId, list);
+            } catch(e) { list.innerHTML = '<p class="text-xs text-gray-400">লোড ব্যর্থ</p>'; }
+        }
+
+        function renderDetailDocs(docs, projectId, list) {
+            list.innerHTML = '';
+            docs.forEach(doc => {
+                const icon = getDocIcon(doc.original_name);
+                const row = document.createElement('div');
+                row.className = 'doc-file-row';
+                row.innerHTML = `
+                    <span class="doc-icon" style="background:${icon.bg};cursor:pointer;" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')">${icon.label}</span>
+                    <span class="doc-name-wrap" style="flex:1;min-width:0;">
+                        <button type="button" class="doc-name" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')"
+                            title="${doc.original_name}">${doc.original_name}</button>
+                        ${doc.caption ? `<span class="doc-caption-text">${doc.caption}</span>` : ''}
+                    </span>
+                    <span class="doc-size">${fmtSize(doc.file_size_bytes)}</span>
+                    <button type="button" class="doc-remove" title="মুছুন" data-id="${doc.id}">✕</button>`;
+                row.querySelector('.doc-remove').addEventListener('click', async () => {
+                    if (!confirm('এই ফাইলটি মুছে ফেলতে চান?')) return;
+                    try {
+                        const r = await AuthManager.fetch(
+                            `${AuthManager.API_URL}/projects/${projectId}/documents/${doc.id}`,
+                            { method: 'DELETE' }
+                        );
+                        if (!r.ok) throw new Error();
+                        const idx = docs.findIndex(d => d.id === doc.id);
+                        if (idx > -1) docs.splice(idx, 1);
+                        renderDetailDocs(docs, projectId, list);
+                        if (docs.length === 0) list.innerHTML = '<p class="text-xs text-gray-400">এখনো কোনো ফাইল নেই</p>';
+                        CRUDManager.showSuccess('ফাইলটি মুছে ফেলা হয়েছে');
+                    } catch(e) { CRUDManager.showError('মুছতে ব্যর্থ'); }
+                });
+                list.appendChild(row);
+            });
+        }
+
         // Initialise upload zones once DOM ready
-        document.addEventListener('DOMContentLoaded', () => { initPhotoUpload(); initQuickUpload(); });
+        document.addEventListener('DOMContentLoaded', () => { initPhotoUpload(); initQuickUpload(); initDocUpload(); initQuickDocUpload(); });
 
         // Form submit — save project data then upload any pending photos
         document.getElementById('project-form').addEventListener('submit', async (e) => {
@@ -2814,6 +3239,18 @@
                     } catch (uploadErr) {
                         // Project saved OK; photo upload failed — warn but don't rollback
                         CRUDManager.showError('প্রকল্প সংরক্ষিত হয়েছে, কিন্তু কিছু ছবি আপলোড হয়নি: ' + uploadErr.message);
+                        closeFormModal();
+                        await loadData();
+                        return;
+                    }
+                }
+
+                // Upload pending documents (if any)
+                if (pendingDocs.length > 0 && savedId) {
+                    try {
+                        await uploadPendingDocs(savedId);
+                    } catch (uploadErr) {
+                        CRUDManager.showError('প্রকল্প সংরক্ষিত হয়েছে, কিন্তু কিছু ফাইল আপলোড হয়নি: ' + uploadErr.message);
                         closeFormModal();
                         await loadData();
                         return;
@@ -2950,7 +3387,7 @@
             locationPickerMarker = L.marker([lat, lng], { icon: amberIcon })
                 .addTo(locationPickerMap)
                 .bindPopup(`
-                    <div style="font-family: 'Hind Siliguri', sans-serif; min-width: 150px;">
+                    <div style="font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; min-width: 150px;">
                         <p style="font-weight: 700; font-size: 13px; color: #0f172a; margin: 0 0 4px;">${name}</p>
                         <p style="font-size: 10px; color: #64748b; margin: 0; font-family: monospace;">${lat.toFixed(5)}, ${lng.toFixed(5)}</p>
                     </div>
@@ -3128,11 +3565,8 @@
             }
         });
 
-        // Keyboard controls
+        // Keyboard controls (LightGallery handles its own keys; only handle app modals here)
         document.addEventListener('keydown', function(e) {
-            const lightbox = document.getElementById('adm-lightbox');
-            const isLightboxOpen = lightbox.classList.contains('lb-open');
-
             const fullMap = document.getElementById('full-map-modal');
             const isFullMapOpen = fullMap && !fullMap.classList.contains('hidden');
 
@@ -3144,129 +3578,11 @@
                 if (isFullMapOpen) {
                     closeFullMap();
                 }
-                if (isLightboxOpen) {
-                    closeLightbox();
-                }
-            }
-
-            // Lightbox navigation
-            if (isLightboxOpen) {
-                if (e.key === 'ArrowRight') {
-                    e.preventDefault();
-                    lightboxNext();
-                } else if (e.key === 'ArrowLeft') {
-                    e.preventDefault();
-                    lightboxPrevious();
-                } else if (e.key === '+' || e.key === '=') {
-                    e.preventDefault();
-                    lightboxZoomIn();
-                } else if (e.key === '-' || e.key === '_') {
-                    e.preventDefault();
-                    lightboxZoomOut();
-                } else if (e.key === '0') {
-                    e.preventDefault();
-                    lightboxResetZoom();
-                }
+                // LightGallery handles its own Escape key
             }
         });
 
-        // ── Image Lightbox Functions ──────────────────────────────
-        let lightboxImages = [];
-        let lightboxCurrentIndex = 0;
-        let lightboxZoom = 1;
-
-        function openLightbox(imageSrc) {
-            lightboxImages = allPhotos.map(p => ({
-                src: `/uploads/${p.photo_path}`,
-                caption: p.caption || '',
-                type: PHOTO_TYPE_LABELS[p.photo_type] || p.photo_type
-            }));
-            lightboxCurrentIndex = lightboxImages.findIndex(img => img.src === imageSrc);
-            if (lightboxCurrentIndex === -1) lightboxCurrentIndex = 0;
-            document.body.style.overflow = 'hidden';
-            renderLightbox();
-            // Trigger open animation on next frame
-            requestAnimationFrame(() => {
-                document.getElementById('adm-lightbox').classList.add('lb-open');
-            });
-        }
-
-        function closeLightbox() {
-            document.getElementById('adm-lightbox').classList.remove('lb-open');
-            document.body.style.overflow = '';
-            lightboxZoom = 1;
-        }
-
-        function admLbBackdropClick(e) {
-            if (e.target === document.getElementById('adm-lightbox')) closeLightbox();
-        }
-
-        function renderLightbox() {
-            if (lightboxImages.length === 0) return;
-            const img     = document.getElementById('adm-lb-img');
-            const caption = document.getElementById('lightbox-caption');
-            const counter = document.getElementById('lightbox-counter');
-            const current = lightboxImages[lightboxCurrentIndex];
-
-            img.src = current.src;
-            img.style.transform = `scale(${lightboxZoom})`;
-
-            caption.innerHTML = current.caption
-                ? `<span class="adm-lb-type-pill">${current.type}</span><br><span>${current.caption}</span>`
-                : `<span class="adm-lb-type-pill">${current.type}</span>`;
-
-            counter.textContent = `${lightboxCurrentIndex + 1} / ${lightboxImages.length}`;
-            document.getElementById('lightbox-zoom-level').textContent = `${Math.round(lightboxZoom * 100)}%`;
-
-            renderLightboxThumbnails();
-
-            const multi = lightboxImages.length > 1;
-            document.getElementById('lightbox-prev').classList.toggle('lb-hidden', !multi);
-            document.getElementById('lightbox-next').classList.toggle('lb-hidden', !multi);
-        }
-
-        function renderLightboxThumbnails() {
-            const container = document.getElementById('lightbox-thumbnails');
-            container.innerHTML = '';
-            lightboxImages.forEach((image, idx) => {
-                const thumb = document.createElement('div');
-                thumb.className = 'adm-lb-thumb' + (idx === lightboxCurrentIndex ? ' active' : '');
-                thumb.onclick = () => { lightboxCurrentIndex = idx; lightboxZoom = 1; renderLightbox(); };
-                const t = document.createElement('img');
-                t.src = image.src;
-                thumb.appendChild(t);
-                container.appendChild(thumb);
-            });
-        }
-
-        function lightboxNext() {
-            if (lightboxImages.length === 0) return;
-            lightboxCurrentIndex = (lightboxCurrentIndex + 1) % lightboxImages.length;
-            lightboxZoom = 1;
-            renderLightbox();
-        }
-
-        function lightboxPrevious() {
-            if (lightboxImages.length === 0) return;
-            lightboxCurrentIndex = (lightboxCurrentIndex - 1 + lightboxImages.length) % lightboxImages.length;
-            lightboxZoom = 1;
-            renderLightbox();
-        }
-
-        function lightboxZoomIn() {
-            lightboxZoom = Math.min(lightboxZoom + 0.25, 3);
-            renderLightbox();
-        }
-
-        function lightboxZoomOut() {
-            lightboxZoom = Math.max(lightboxZoom - 0.25, 0.5);
-            renderLightbox();
-        }
-
-        function lightboxResetZoom() {
-            lightboxZoom = 1;
-            renderLightbox();
-        }
+        // LightGallery replaces the old image lightbox — no manual functions needed.
 
         // ── Full Screen Map Functions ──────────────────────────────
         let fullMapInstance = null;
@@ -3424,5 +3740,86 @@
             };
         }
     </script>
+
+<!-- ── Document Viewer Popup ─────────────────────────────── -->
+<div id="doc-viewer-backdrop" onclick="if(event.target===this)closeDocViewer()"
+     style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.78);
+            align-items:center;justify-content:center;padding:8px;">
+    <div style="background:#fff;border-radius:12px;width:96vw;height:96vh;
+                display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,0.5);">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;gap:10px;padding:14px 18px;
+                    border-bottom:1.5px solid #fde68a;background:#fffbeb;flex-shrink:0;">
+            <span id="dv-icon" style="flex-shrink:0;width:32px;height:32px;border-radius:7px;
+                display:flex;align-items:center;justify-content:center;
+                font-size:0.72rem;font-weight:700;color:#fff;"></span>
+            <div style="flex:1;min-width:0;">
+                <p id="dv-name" style="font-weight:700;color:#1f2937;font-size:0.95rem;
+                    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0;"></p>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;">
+                <a id="dv-download" href="#" download
+                   style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+                          border-radius:8px;font-size:0.82rem;font-weight:700;
+                          background:linear-gradient(135deg,#b45309,#d97706);color:#fff;
+                          text-decoration:none;">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 3v12"/></svg>
+                    ডাউনলোড
+                </a>
+                <button onclick="closeDocViewer()"
+                    style="width:34px;height:34px;border-radius:8px;border:1.5px solid #e5e7eb;
+                           background:#f9fafb;cursor:pointer;font-size:1.1rem;color:#6b7280;
+                           display:flex;align-items:center;justify-content:center;">✕</button>
+            </div>
+        </div>
+        <!-- Body -->
+        <div id="dv-body" style="flex:1;overflow:auto;min-height:0;background:#f8f8f8;"></div>
+    </div>
+</div>
+<script>
+    function openDocViewer(filePath, originalName, caption, fileType) {
+        const backdrop = document.getElementById('doc-viewer-backdrop');
+        const url = '/uploads/' + filePath;
+        const ext = (originalName.split('.').pop() || '').toLowerCase();
+        const icon = (typeof getDocIcon === 'function' ? getDocIcon : (n => ({ bg:'#6b7280', label:'FILE' })))(originalName);
+
+        document.getElementById('dv-icon').textContent = icon.label;
+        document.getElementById('dv-icon').style.background = icon.bg;
+        document.getElementById('dv-name').textContent = caption ? `${originalName} [${caption}]` : originalName;
+        document.getElementById('dv-download').href = url;
+        document.getElementById('dv-download').download = originalName;
+
+        const body = document.getElementById('dv-body');
+        const imgExts = ['jpg','jpeg','png','webp','gif','bmp','svg'];
+        if (ext === 'pdf') {
+            body.style.overflow = 'hidden';
+            body.innerHTML = `<iframe src="${url}" style="width:100%;height:100%;border:none;display:block;"></iframe>`;
+        } else if (imgExts.includes(ext)) {
+            body.style.overflow = 'auto';
+            body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;padding:1.5rem;min-height:300px;">
+                <img src="${url}" style="max-width:100%;max-height:68vh;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);" alt="${originalName}">
+            </div>`;
+        } else {
+            body.style.overflow = 'auto';
+            body.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;gap:1rem;min-height:200px;">
+                <span style="font-size:3.5rem;">${ext==='doc'||ext==='docx'?'📝':ext==='xls'||ext==='xlsx'?'📊':'📎'}</span>
+                <p style="font-size:1rem;font-weight:600;color:#374151;">${originalName}</p>
+                <p style="font-size:0.85rem;color:#6b7280;">এই ফাইল ব্রাউজারে দেখা যাচ্ছে না। ডাউনলোড করুন।</p>
+                <a href="${url}" download="${originalName}"
+                   style="padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#b45309,#d97706);
+                          color:#fff;font-weight:700;font-size:0.9rem;text-decoration:none;">ডাউনলোড করুন</a>
+            </div>`;
+        }
+        backdrop.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeDocViewer() {
+        const backdrop = document.getElementById('doc-viewer-backdrop');
+        backdrop.style.display = 'none';
+        document.getElementById('dv-body').innerHTML = '';
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDocViewer(); });
+</script>
 </body>
 </html>
