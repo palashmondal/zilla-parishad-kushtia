@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,8 +20,13 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
+          port: 1157
+          script_stop: true
           script: |
-            cd /home/zpkushti/public_html/zpkushtia.org
-            git pull origin main
-            npm install --production
+            cd /home/zpkushti/public_html/zpkushtia.org || exit 1
+            echo "Current directory: $(pwd)"
+            echo "Pulling latest code..."
+            git pull origin main || exit 1
+            echo "Installing dependencies..."
+            npm install --production || exit 1
+            echo "✓ Deployment complete"
