@@ -16,8 +16,8 @@ router.get('/:id/images', projectsController.getImages);
 router.get('/:id', projectsController.getById);
 
 // Protected routes (require authentication + admin role)
-router.post('/', requireAuth, requireAdmin, projectsController.create);
 router.post('/check-duplicates', requireAuth, requireAdmin, projectsController.checkDuplicates);
+router.post('/', requireAuth, requireAdmin, projectsController.create);
 router.put('/:id', requireAuth, requireAdmin, projectsController.update);
 router.put('/:id/update', requireAuth, requireAdmin, projectsController.update);
 router.delete('/:id', requireAuth, requireAdmin, projectsController.delete);
