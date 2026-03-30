@@ -414,6 +414,47 @@ const projectsModel = {
 
         await pool.execute(`DELETE FROM project_images WHERE id = ?`, [imageId]);
         return row.photo_path;
+    },
+
+    async findSimilarProjects(projectName, upazila, financialYear, fundType, allocationAmount) {
+        const stringSimilarity = require('string-similarity');
+
+        // Query for projects with exact match on: upazila, financial_year, fund_type, allocation_amount
+        const [results] = await pool.execute(
+            `SELECT id, project_name, upazila, financial_year, fund_type, allocation_amount
+             FROM projects
+             WHERE upazila = ?
+               AND financial_year = ?
+               AND fund_type = ?
+               AND allocation_amount = ?
+             ORDER BY created_at DESC`,
+            [upazila, financialYear, fundType, allocationAmount || 0]
+        );
+
+        if (!results || results.length === 0) {
+            return [];
+        }
+
+        // Calculate similarity scores for each project name
+        const similarities = results.map(project => {
+            const similarity = stringSimilarity.compareTwoStrings(
+                projectName.toLowerCase().trim(),
+                project.project_name.toLowerCase().trim()
+            );
+            return {
+                ...project,
+                similarity_score: Math.round(similarity * 100),
+                allocation_amount: parseFloat(project.allocation_amount)
+            };
+        });
+
+        // Filter for 70%+ similarity and get top 5
+        const filtered = similarities
+            .filter(p => p.similarity_score >= 70)
+            .sort((a, b) => b.similarity_score - a.similarity_score)
+            .slice(0, 5);
+
+        return filtered;
     }
 };
 

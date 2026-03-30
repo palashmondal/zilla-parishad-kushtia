@@ -329,6 +329,33 @@ const projectsController = {
                 message: isProduction ? 'An internal error occurred' : error.message
             });
         }
+    },
+
+    async checkDuplicates(req, res) {
+        try {
+            const { project_name, upazila, financial_year, fund_type, allocation_amount } = req.body;
+
+            // Validate required fields
+            if (!project_name || !upazila || !financial_year || !fund_type) {
+                return res.status(400).json({ error: 'Missing required fields' });
+            }
+
+            const duplicates = await projectsModel.findSimilarProjects(
+                project_name,
+                upazila,
+                financial_year,
+                fund_type,
+                allocation_amount
+            );
+
+            res.json({ duplicates: duplicates || [] });
+        } catch (error) {
+            console.error('Projects checkDuplicates error:', error);
+            res.status(500).json({
+                error: 'Duplicate check failed',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
     }
 };
 
