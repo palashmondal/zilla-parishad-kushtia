@@ -19,11 +19,12 @@
     <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <style>
-        * { font-family: 'Shurjo', sans-serif; }
+        html { font-size: 18px; }
+        * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
 
         /* Tom Select overrides — green theme, Shurjo */
         .ts-wrapper {
-            font-family: 'Shurjo', sans-serif;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
         }
 
         .ts-control {
@@ -53,7 +54,7 @@
             border: 2px solid #10b981 !important;
             border-radius: 0.75rem !important;
             box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
-            font-family: 'Hind Siliguri', sans-serif !important;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important;
             font-size: 0.95rem !important;
             overflow: hidden !important;
             margin-top: 4px !important;
@@ -600,7 +601,7 @@
                         allowEmptyOption: true,
                         controlInput: null,   // no search input — these are short lists
                         onInitialize() {
-                            this.control.style.fontFamily = "'Hind Siliguri', sans-serif";
+                            this.control.style.fontFamily = "Shurjo, 'Siyam Rupali', Roboto, Arial, Helvetica, Monospace";
                         }
                     }));
                 }
