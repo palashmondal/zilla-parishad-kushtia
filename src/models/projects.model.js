@@ -109,6 +109,14 @@ const projectsModel = {
         return results.map(r => r.financial_year);
     },
 
+    async getUpazilas() {
+        const [results] = await pool.execute(
+            `SELECT DISTINCT upazila FROM projects
+             WHERE upazila IS NOT NULL AND upazila != '' ORDER BY upazila ASC`
+        );
+        return results.map(r => r.upazila);
+    },
+
     async getStats() {
         const [totalResult] = await pool.execute(
             `SELECT COUNT(*) as total_count,

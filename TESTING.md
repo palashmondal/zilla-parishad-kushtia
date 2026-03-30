@@ -16,7 +16,7 @@ All authentication and UI components have been successfully implemented:
 
 **Username:** `admin`
 **Password:** `admin123`
-**Email:** admin@zpkushtia.info
+**Email:** admin@zpkushtia.org
 **Role:** admin
 
 ⚠️ **IMPORTANT:** Change this password after first login in production!

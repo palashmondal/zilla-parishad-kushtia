@@ -733,7 +733,7 @@
             </div>
 
             <!-- Search and Filters -->
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
                 <div class="md:col-span-1">
                     <label class="block text-sm font-medium text-gray-700 mb-2">অনুসন্ধান</label>
                     <input type="text" id="search-input" placeholder="নাম, আইডি, উপজেলা..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
@@ -742,6 +742,18 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">অর্থবছর</label>
                     <select id="year-filter" class="w-full border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white hover:border-amber-400 transition-all font-medium text-sm">
                         <option value="">সকল অর্থবছর</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">উপজেলা</label>
+                    <select id="upazila-filter" class="w-full border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white hover:border-amber-400 transition-all font-medium text-sm">
+                        <option value="">সকল উপজেলা</option>
+                        <option value="কুমারখালী">কুমারখালী</option>
+                        <option value="কুষ্টিয়া সদর">কুষ্টিয়া সদর</option>
+                        <option value="খোকসা">খোকসা</option>
+                        <option value="দৌলতপুর">দৌলতপুর</option>
+                        <option value="ভেড়ামারা">ভেড়ামারা</option>
+                        <option value="মিরপুর">মিরপুর</option>
                     </select>
                 </div>
                 <div>
@@ -1125,6 +1137,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- ── Add/Edit Modal ── -->
     <div id="form-modal" class="hidden fixed inset-0 overflow-y-auto h-full w-full z-50">
@@ -1742,6 +1755,7 @@
         let currentPage = 1;
         let currentSearch = '';
         let currentYear = '';
+        let currentUpazila = '';
         let currentMethod = '';
         let currentStatus = '';
         let currentPriority = '';
@@ -1756,6 +1770,8 @@
         // run auth check in parallel for redirect protection and role-based UI.
         AuthManager.init(); // handles redirect to login if unauthenticated
         loadYears().then(() => loadData());
+        // Load upazilas in background (they're already hardcoded in the dropdown)
+        loadUpazilas().catch(() => {});
 
         // Search debounce
         const searchInput = document.getElementById('search-input');
@@ -1771,6 +1787,13 @@
             currentYear = e.target.value;
             currentPage = 1;
             loadData();
+        });
+
+        // Upazila filter (client-side)
+        document.getElementById('upazila-filter').addEventListener('change', (e) => {
+            currentUpazila = e.target.value;
+            currentPage = 1;
+            renderRows();
         });
 
         // Method filter (client-side)
@@ -1813,6 +1836,33 @@
                 if (ts) ts.refreshOptions(false);
             } catch (err) {
                 console.error('Failed to load years:', err);
+            }
+        }
+
+        async function loadUpazilas() {
+            try {
+                const upazilas = await CRUDManager.fetchList('/projects/upazilas');
+                const select = document.getElementById('upazila-filter');
+                if (!select) return;
+
+                const ts = _tomInstances.get(select);
+                upazilas.forEach(upazila => {
+                    // Check if option already exists to avoid duplicates
+                    if (ts && !ts.options.hasOwnProperty(upazila)) {
+                        ts.addOption({ value: upazila, text: upazila });
+                    } else if (!ts) {
+                        const existingOpt = Array.from(select.options).find(opt => opt.value === upazila);
+                        if (!existingOpt) {
+                            const opt = document.createElement('option');
+                            opt.value = upazila;
+                            opt.textContent = upazila;
+                            select.appendChild(opt);
+                        }
+                    }
+                });
+                if (ts) ts.refreshOptions(false);
+            } catch (err) {
+                console.error('Failed to load upazilas:', err);
             }
         }
 
@@ -1917,6 +1967,11 @@
             const emptyState = document.getElementById('empty-state');
 
             let records = [...allRecords];
+
+            // Client-side upazila filter
+            if (currentUpazila) {
+                records = records.filter(r => r.upazila === currentUpazila);
+            }
 
             // Client-side method filter
             if (currentMethod) {
@@ -2032,22 +2087,36 @@
             // Project name
             document.getElementById('dm-name').innerText = r.project_name || '';
 
-            // Quick Info Row
+            // Header subtitle & detail type
             document.getElementById('dm-quick-type').innerText = r.project_type || '';
             document.getElementById('dm-quick-method').innerText = r.implementation_method || '';
-            document.getElementById('dm-quick-status').innerText = r.current_status || '';
+
+            // Status pill
+            const dmStatus = document.getElementById('dm-quick-status');
+            dmStatus.innerText = r.current_status || '';
+            dmStatus.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold ' +
+                (r.is_completed ? 'bg-green-100 text-green-800 border border-green-200' :
+                 r.is_delayed   ? 'bg-red-100 text-red-800 border border-red-200' :
+                 r.progress_percentage > 0 ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                                             'bg-gray-100 text-gray-700 border border-gray-200');
 
             // Details
             document.getElementById('dm-id').innerText = r.project_id || r.id || '';
             document.getElementById('dm-year').innerText = r.financial_year || '';
             document.getElementById('dm-upazila').innerText = r.upazila || '';
             document.getElementById('dm-fund-type').innerText = r.fund_type || '';
+            const ptDetail = document.getElementById('dm-project-type-detail');
+            if (ptDetail) ptDetail.innerText = r.project_type || '';
+
+            // Priority pill
             const dmPriority = document.getElementById('dm-priority');
             const priorityMap = { general: 'সাধারণ', medium: 'মধ্যম', top_priority: 'সর্বোচ্চ অগ্রাধিকার' };
-            const priorityColors = { general: '#64748b', medium: '#d97706', top_priority: '#dc2626' };
             const pVal = r.priority || 'general';
             dmPriority.innerText = priorityMap[pVal] || pVal;
-            dmPriority.style.color = priorityColors[pVal] || '#64748b';
+            dmPriority.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold ' +
+                (pVal === 'top_priority' ? 'bg-red-100 text-red-700 border border-red-200' :
+                 pVal === 'medium'       ? 'bg-amber-100 text-amber-700 border border-amber-200' :
+                                          'bg-gray-100 text-gray-600 border border-gray-200');
 
             // Reference (who recommended the project)
             document.getElementById('dm-reference').innerText = r.reference || 'N/A';
