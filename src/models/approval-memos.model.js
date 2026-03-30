@@ -2,45 +2,37 @@ const pool = require('../../config/database');
 
 const approvalMemosModel = {
     async getAll(page = 1, limit = 20, search = '', year = '') {
-        const offset = (page - 1) * limit;
-        let query = 'SELECT * FROM approval_memos WHERE 1=1';
+        const pageNum = parseInt(page, 10) || 1;
+        const pageSize = parseInt(limit, 10) || 20;
+        const pageOffset = (pageNum - 1) * pageSize;
+
+        let whereClause = '';
         const params = [];
 
         if (search) {
-            query += ' AND (memo_number LIKE ? OR remarks LIKE ?)';
+            whereClause += ' AND (memo_number LIKE ? OR remarks LIKE ?)';
             params.push(`%${search}%`, `%${search}%`);
         }
 
         if (year) {
-            query += ' AND YEAR(memo_date) = ?';
-            params.push(year);
+            whereClause += ' AND YEAR(memo_date) = ?';
+            params.push(parseInt(year, 10));
         }
 
-        query += ' ORDER BY memo_date DESC LIMIT ? OFFSET ?';
-        params.push(limit, offset);
-
-        const [results] = await pool.execute(query, params);
+        // Build query for data
+        const query = `SELECT * FROM approval_memos WHERE 1=1${whereClause} ORDER BY memo_date DESC LIMIT ${pageSize} OFFSET ${pageOffset}`;
+        const [results] = await pool.query(query, params);
 
         // Get total count
-        let countQuery = 'SELECT COUNT(*) as total FROM approval_memos WHERE 1=1';
-        const countParams = [];
-        if (search) {
-            countQuery += ' AND (memo_number LIKE ? OR remarks LIKE ?)';
-            countParams.push(`%${search}%`, `%${search}%`);
-        }
-        if (year) {
-            countQuery += ' AND YEAR(memo_date) = ?';
-            countParams.push(year);
-        }
-
-        const [[{ total }]] = await pool.execute(countQuery, countParams);
+        const countQuery = `SELECT COUNT(*) as total FROM approval_memos WHERE 1=1${whereClause}`;
+        const [[{ total }]] = await pool.query(countQuery, params);
 
         return {
             data: results,
             total,
-            page,
-            limit,
-            pages: Math.ceil(total / limit)
+            page: pageNum,
+            limit: pageSize,
+            pages: Math.ceil(total / pageSize)
         };
     },
 
