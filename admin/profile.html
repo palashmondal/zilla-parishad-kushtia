@@ -67,7 +67,7 @@
         .modal.active { display: flex; }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 flex flex-col min-h-screen">
     <!-- Header -->
     <div id="header-container"></div>
 
@@ -75,7 +75,7 @@
     <div id="menu-container"></div>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 flex-1">
         <div class="max-w-3xl mx-auto">
 
             <!-- Profile Card -->
@@ -219,7 +219,7 @@
                 currentUser = await response.json();
 
                 document.getElementById('fullName').textContent = currentUser.full_name || currentUser.username;
-                document.getElementById('displayDesignation').textContent = currentUser.designation || (currentUser.role === 'admin' ? 'প্রশাসক' : 'ব্যবহারকারী');
+                document.getElementById('displayDesignation').textContent = currentUser.designation || (currentUser.role === 'admin' ? 'এডমিন ব্যবহারকারী' : 'সাধারণ ব্যবহারকারী');
                 document.getElementById('username').textContent = currentUser.username;
                 document.getElementById('fullNameValue').textContent = currentUser.full_name || '-';
                 document.getElementById('email').textContent = currentUser.email || '-';

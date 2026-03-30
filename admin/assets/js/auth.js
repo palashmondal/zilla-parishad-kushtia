@@ -234,7 +234,7 @@ const AuthManager = {
 
         // Special handling for role badges (now showing designation)
         document.querySelectorAll('[data-user-role-badge]').forEach(el => {
-            el.textContent = user.designation || (user.role === 'admin' ? 'প্রশাসক' : 'ব্যবহারকারী');
+            el.textContent = user.designation || (user.role === 'admin' ? 'এডমিন ব্যবহারকারী' : 'সাধারণ ব্যবহারকারী');
         });
     },
 
