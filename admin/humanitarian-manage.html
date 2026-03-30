@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>মানবিক সহায়তা পরিচালনা - জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
+    <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
@@ -18,11 +19,11 @@
     <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <style>
-        * { font-family: 'Hind Siliguri', sans-serif; }
+        * { font-family: 'Shurjo', sans-serif; }
 
-        /* Tom Select overrides — green theme, Hind Siliguri */
+        /* Tom Select overrides — green theme, Shurjo */
         .ts-wrapper {
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: 'Shurjo', sans-serif;
         }
 
         .ts-control {
@@ -311,8 +312,12 @@
                 <p class="mt-2 text-sm text-gray-500">নতুন রেকর্ড যোগ করতে উপরের বাটনে ক্লিক করুন</p>
             </div>
 
-            <!-- Pagination -->
-            <div id="pagination-container" class="flex justify-center py-6"></div>
+            <!-- Records Per Page Selector & Pagination & Total Count -->
+            <div class="flex items-center justify-between gap-4 py-4 px-4">
+                <div id="records-per-page-selector"></div>
+                <div id="pagination-container" class="flex justify-center flex-1"></div>
+                <div id="total-records" class="text-sm text-gray-600 font-medium"></div>
+            </div>
         </div>
     </main>
 
@@ -622,6 +627,7 @@
         DashboardComponents.loadAll('humanitarian', 'মানবিক সহায়তা পরিচালনা');
 
         let currentPage = 1;
+        let recordsPerPage = 20;
         let currentSearch = '';
         let currentYear = '';
         let editingId = null;
@@ -706,7 +712,7 @@
 
                 const params = {
                     page: currentPage,
-                    limit: 20,
+                    limit: recordsPerPage === 'all' ? 9999 : recordsPerPage,
                     search: currentSearch,
                     year: currentYear
                 };
@@ -726,14 +732,41 @@
                 allRecords = response.data;
                 renderRows();
 
+                // Records per page selector
+                try {
+                    CRUDManager.createRecordsPerPageSelector(
+                        recordsPerPage,
+                        'records-per-page-selector',
+                        'changeRecordsPerPage'
+                    );
+                } catch (selectorError) {
+                    console.error('Selector creation error:', selectorError);
+                }
+
+                // Total records count
+                try {
+                    const totalRecordsEl = document.getElementById('total-records');
+                    if (totalRecordsEl) {
+                        const bengaliNumber = CRUDManager.toBengaliNumber(response.total);
+                        totalRecordsEl.textContent = `মোট সহায়তা সংখ্যাঃ ${bengaliNumber}`;
+                    }
+                } catch (countError) {
+                    console.error('Total count error:', countError);
+                }
+
                 // Pagination
-                CRUDManager.createPagination(
-                    response.total,
-                    currentPage,
-                    20,
-                    'pagination-container',
-                    'changePage'
-                );
+                try {
+                    const perPageForPagination = recordsPerPage === 'all' ? response.total : recordsPerPage;
+                    CRUDManager.createPagination(
+                        response.total,
+                        currentPage,
+                        perPageForPagination,
+                        'pagination-container',
+                        'changePage'
+                    );
+                } catch (paginationError) {
+                    console.error('Pagination creation error:', paginationError);
+                }
 
             } catch (error) {
                 loading.classList.add('hidden');
@@ -890,6 +923,14 @@
             currentPage = page;
             loadData();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Change records per page
+        function changeRecordsPerPage(e) {
+            const value = e.target ? e.target.value : e.value;
+            recordsPerPage = value === 'all' ? allRecords.length : parseInt(value);
+            currentPage = 1;
+            loadData();
         }
 
         // Open add modal

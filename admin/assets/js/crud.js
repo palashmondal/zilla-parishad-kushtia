@@ -164,16 +164,54 @@ const CRUDManager = {
         const end = start + perPage;
         return array.slice(start, end);
     },
+    /**
+     * Create records per page selector
+     */
+    createRecordsPerPageSelector(perPage, containerId, onPerPageChange) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        let html = `<div class="flex items-center gap-2">
+            <label class="text-sm text-gray-700 font-medium">প্রতি পৃষ্ঠায় রেকর্ড:</label>
+            <select id="records-per-page" class="px-3 py-2 border border-gray-300 rounded-lg bg-white hover:border-green-500 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition">
+                <option value="10" ${perPage === 10 ? 'selected' : ''}>১০</option>
+                <option value="20" ${perPage === 20 ? 'selected' : ''}>২০</option>
+                <option value="50" ${perPage === 50 ? 'selected' : ''}>৪০</option>
+            </select>
+        </div>`;
+        container.innerHTML = html;
+
+        // Attach event listener
+        try {
+            const select = container.querySelector('#records-per-page');
+            if (select) {
+                const handler = window[onPerPageChange];
+                if (typeof handler === 'function') {
+                    select.addEventListener('change', handler);
+                }
+            }
+        } catch (e) {
+            console.error('Error attaching records per page listener:', e);
+        }
+    },
 
     /**
      * Create pagination UI
      */
     createPagination(totalItems, currentPage, perPage, containerId, onPageChange) {
         const container = document.getElementById(containerId);
-        if (!container) return;
+        if (!container) {
+            console.log('Pagination container not found:', containerId);
+            return;
+        }
+
+        console.log('Pagination - totalItems:', totalItems, 'currentPage:', currentPage, 'perPage:', perPage);
 
         const totalPages = Math.ceil(totalItems / perPage);
+        console.log('Pagination - totalPages:', totalPages);
+
         if (totalPages <= 1) {
+            console.log('Only 1 page or less, hiding pagination');
             container.innerHTML = '';
             return;
         }
@@ -204,6 +242,8 @@ const CRUDManager = {
         html += '</div>';
         container.innerHTML = html;
     },
+
+
 
     /**
      * Debounce function for search

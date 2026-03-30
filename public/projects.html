@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>প্রকল্প অনুসন্ধান | জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
+    <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
     <!-- Leaflet — lightweight OSM map for project location -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -35,7 +36,7 @@
          * ──────────────────────────────────────────────────────────────── */
 
         * { box-sizing: border-box; }
-        body { font-family: 'Hind Siliguri', sans-serif; }
+        body { font-family: 'Shurjo', sans-serif; }
 
         /* ──── glow spheres ──── */
         .glow-sphere {
@@ -56,7 +57,7 @@
             display: flex; align-items: center; gap: 7px;
             background: #fef3c7; border: none;
             border-radius: 1rem; padding: 11px 15px;
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: 'Shurjo', sans-serif;
             font-size: 13px; font-weight: 700; color: #78350f;
             cursor: pointer; user-select: none;
             transition: background 0.2s, color 0.2s;
@@ -107,7 +108,7 @@
         .search-bar .search-icon { color: #fbbf24; flex-shrink: 0; margin-left: 2px; }
         .search-bar input {
             flex: 1; border: none; background: transparent;
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: 'Shurjo', sans-serif;
             font-size: 16px; color: #1e293b; outline: none;
             padding: 10px 4px; min-width: 0;
         }
@@ -116,7 +117,7 @@
             flex-shrink: 0;
             background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
             color: #fff; border: none; border-radius: 1.2rem;
-            padding: 13px 30px; font-family: 'Hind Siliguri', sans-serif;
+            padding: 13px 30px; font-family: 'Shurjo', sans-serif;
             font-size: 15px; font-weight: 700; cursor: pointer;
             transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
             box-shadow: 0 4px 16px rgba(180,83,9,0.38);
@@ -813,7 +814,7 @@
             border-radius: 0.5rem;
             font-size: 0.875rem;
             background: #f9fafb;
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: 'Shurjo', sans-serif;
             transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
         }
         .zpk-input:focus {
@@ -843,7 +844,7 @@
             color: #4b5563;
             cursor: pointer;
             transition: background 0.15s;
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: 'Shurjo', sans-serif;
         }
         .zpk-btn-cancel:hover { background: #e5e7eb; }
         .zpk-btn-save {
@@ -860,7 +861,7 @@
             gap: 0.4rem;
             box-shadow: 0 4px 12px rgba(180,83,9,0.35);
             transition: filter 0.15s, box-shadow 0.15s, transform 0.1s;
-            font-family: 'Hind Siliguri', sans-serif;
+            font-family: 'Shurjo', sans-serif;
         }
         .zpk-btn-save:hover { filter: brightness(1.08); box-shadow: 0 6px 18px rgba(180,83,9,0.45); }
         .zpk-btn-save:active { transform: scale(0.97); }
@@ -2068,7 +2069,7 @@
         setTimeout(() => {
             // Build popup HTML (shared by both branches)
             const popupHtml = `
-                <div style="font-family:'Hind Siliguri',sans-serif;min-width:180px;line-height:1.5">
+                <div style="font-family:'Shurjo',sans-serif;min-width:180px;line-height:1.5">
                     <p style="font-weight:700;font-size:13px;color:#0f172a;margin:0 0 4px">${projectName || ''}</p>
                     <p style="font-size:11px;color:#b45309;font-weight:600;margin:0">📍 ${upazila || ''}</p>
                     <p style="font-size:10px;color:#64748b;margin:4px 0 0;font-family:monospace">${lat.toFixed(5)}, ${lng.toFixed(5)}</p>
