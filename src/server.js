@@ -79,6 +79,11 @@ if (isProduction) {
     app.use('/api', apiRoutes);
 }
 
+// Redirect root to projects
+app.get('/', (req, res) => {
+    res.redirect('/projects.html');
+});
+
 // 404 handler
 app.use((req, res) => {
     res.status(404).json({ error: 'Endpoint not found' });
