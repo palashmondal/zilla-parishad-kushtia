@@ -1243,7 +1243,12 @@
                         </div>
                         <div class="form-field">
                             <label>তহবিলের ধরন <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
-                            <input type="text" name="fund_type" required placeholder="তহবিলের ধরন লিখুন…" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                            <select name="fund_type" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white">
+                                <option value="">-- তহবিলের ধরন নির্বাচন করুন --</option>
+                                <option value="এডিপি (বার্ষিক উন্নয়ন কর্মসূচি)">এডিপি (বার্ষিক উন্নয়ন কর্মসূচি)</option>
+                                <option value="জেলা পরিষদ উন্নয়ন সহায়তা (সাধারণ বরাদ্দ)">জেলা পরিষদ উন্নয়ন সহায়তা (সাধারণ বরাদ্দ)</option>
+                                <option value="জেলা পরিষদ উন্নয়ন সহায়তা (বিশেষ বরাদ্দ)">জেলা পরিষদ উন্নয়ন সহায়তা (বিশেষ বরাদ্দ)</option>
+                            </select>
                         </div>
 
                         <!-- Row 5.5: Priority | Reference -->
