@@ -317,7 +317,7 @@ mysql -u root -ppassword zpk -e "SELECT id, username, email, full_name, role, is
 +----+----------+----------------------+------------------------+-------+-----------+
 | id | username | email                | full_name              | role  | is_active |
 +----+----------+----------------------+------------------------+-------+-----------+
-|  1 | admin    | admin@zpkushtia.info | System Administrator   | admin |         1 |
+|  1 | admin    | admin@zpkushtia.org | System Administrator   | admin |         1 |
 +----+----------+----------------------+------------------------+-------+-----------+
 ```
 

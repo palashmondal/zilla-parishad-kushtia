@@ -8,7 +8,7 @@
 
 ## Tech Stack & Constraints
 * **Backend:** Node.js / Express.js
-* **Database:** MySQL 9.x (Database name: `zpk`). Use connection pooling from `config/database.js`.
+* **Database:** MySQL 9.x (Database name: `zpkushti_zpk`). Use connection pooling from `config/database.js`.
 * **Frontend:** Vanilla JS, Tailwind CSS (CDN), HTML5. No heavy frameworks.
 * **Encoding:** **Strict UTF-8MB4 support required** for all Bengali text processing.
 * **Style:** Use clean, functional Express controllers. Middleware for rate limiting and error handling is mandatory.

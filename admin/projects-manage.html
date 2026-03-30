@@ -90,20 +90,13 @@
         .sortable-th .sort-icon { opacity: 0.35; transition: all 0.2s ease; display: inline-block; vertical-align: middle; }
         .sortable-th.active .sort-icon { opacity: 1; color: #b45309; }
 
-        /* Currency display — amber theme */
+        /* Currency display — plain text */
         .currency-amount {
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
             font-variant-numeric: tabular-nums;
-            background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
-            padding: 0.4rem 0.75rem;
-            border-radius: 0.5rem;
-            border: 2px solid #fcd34d;
-            box-shadow: 0 2px 4px rgba(245,158,11,0.1);
-            transition: all 0.2s ease;
         }
-        .currency-amount:hover { box-shadow: 0 4px 8px rgba(245,158,11,0.2); transform: translateY(-1px); border-color: #f59e0b; }
         .currency-symbol { font-size: 1rem; font-weight: 700; color: #b45309; }
 
         .action-btn { transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
@@ -733,8 +726,8 @@
             </div>
 
             <!-- Search and Filters -->
-            <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
-                <div class="md:col-span-1">
+            <div class="grid grid-cols-1 md:grid-cols-8 gap-3">
+                <div class="md:col-span-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">অনুসন্ধান</label>
                     <input type="text" id="search-input" placeholder="নাম, আইডি, উপজেলা..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
                 </div>
@@ -804,7 +797,7 @@
                             <th onclick="sortTable('upazila')" data-col="upazila" class="sortable-th w-[9%] px-4 py-2.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">
                                 উপজেলা <svg class="sort-icon w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
                             </th>
-                            <th onclick="sortTable('fund_type')" data-col="fund_type" class="sortable-th w-[13%] px-4 py-2.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                            <th onclick="sortTable('fund_type')" data-col="fund_type" class="sortable-th w-[18%] px-4 py-2.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">
                                 তহবিল উৎস <svg class="sort-icon w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
                             </th>
                             <th onclick="sortTable('financial_year')" data-col="financial_year" class="sortable-th w-[8%] px-4 py-2.5 text-center text-xs font-semibold text-gray-600 uppercase tracking-wide">
@@ -813,7 +806,6 @@
                             <th onclick="sortTable('progress_percentage')" data-col="progress_percentage" class="sortable-th w-[10%] px-4 py-2.5 text-center text-xs font-semibold text-gray-600 uppercase tracking-wide">
                                 অগ্রগতি <svg class="sort-icon w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
                             </th>
-                            <th class="w-[10%] px-4 py-2.5 text-center text-xs font-semibold text-gray-600 uppercase tracking-wide">অবস্থা</th>
                             <th onclick="sortTable('allocation_amount')" data-col="allocation_amount" class="sortable-th w-[13%] px-4 py-2.5 text-right text-xs font-semibold text-amber-600 uppercase tracking-wide">
                                 💰 বরাদ্দ <svg class="sort-icon w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/></svg>
                             </th>
@@ -832,7 +824,12 @@
                 <p class="mt-2 text-sm text-gray-500">নতুন প্রকল্প যোগ করতে উপরের বাটনে ক্লিক করুন</p>
             </div>
 
-            <div id="pagination-container" class="flex justify-center py-6"></div>
+            <!-- Records Per Page Selector & Pagination & Total Count -->
+            <div class="flex items-center justify-between gap-4 py-4 px-4">
+                <div id="records-per-page-selector"></div>
+                <div id="pagination-container" class="flex justify-center flex-1"></div>
+                <div id="total-records" class="text-sm text-gray-600 font-medium"></div>
+            </div>
         </div>
     </main>
 
@@ -1694,7 +1691,7 @@
                         sortField: false,
                         allowEmptyOption: true,
                         controlInput: null,
-                        onInitialize() { this.control.style.fontFamily = "Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace"; }
+                        onInitialize() { this.control.style.fontFamily = 'Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace'; }
                     }));
                 }
             });
@@ -1753,6 +1750,7 @@
         DashboardComponents.loadAll('projects', 'প্রকল্প তালিকা পরিচালনা');
 
         let currentPage = 1;
+        let recordsPerPage = 20;
         let currentSearch = '';
         let currentYear = '';
         let currentUpazila = '';
@@ -1878,7 +1876,7 @@
                 emptyState.classList.add('hidden');
 
                 const response = await CRUDManager.fetchList('/projects/list', {
-                    page: currentPage, limit: 20,
+                    page: currentPage, limit: recordsPerPage === 'all' ? 9999 : recordsPerPage,
                     search: currentSearch, year: currentYear,
                     priority: currentPriority
                 });
@@ -1894,9 +1892,38 @@
                 allRecords = response.data;
                 renderRows();
 
-                CRUDManager.createPagination(response.total, currentPage, 20, 'pagination-container', 'changePage');
+                // Records per page selector
+                try {
+                    CRUDManager.createRecordsPerPageSelector(
+                        recordsPerPage,
+                        'records-per-page-selector',
+                        'changeRecordsPerPage'
+                    );
+                } catch (selectorError) {
+                    console.error('Selector creation error:', selectorError);
+                }
+
+                // Total records count
+                try {
+                    const totalRecordsEl = document.getElementById('total-records');
+                    if (totalRecordsEl) {
+                        const bengaliNumber = CRUDManager.toBengaliNumber(response.total);
+                        totalRecordsEl.textContent = `মোট প্রকল্প সংখ্যাঃ ${bengaliNumber}`;
+                    }
+                } catch (countError) {
+                    console.error('Total count error:', countError);
+                }
+
+                // Pagination
+                try {
+                    const perPageForPagination = recordsPerPage === 'all' ? response.total : recordsPerPage;
+                    CRUDManager.createPagination(response.total, currentPage, perPageForPagination, 'pagination-container', 'changePage');
+                } catch (paginationError) {
+                    console.error('Pagination creation error:', paginationError);
+                }
             } catch (err) {
                 loading.classList.add('hidden');
+                console.error('LoadData error:', err);
                 CRUDManager.showError('ডেটা লোড করতে ব্যর্থ: ' + err.message);
             }
         }
@@ -2039,10 +2066,6 @@
                             </div>
                             <span class="text-xs font-bold text-gray-700 w-8 text-right">${CRUDManager.toBengaliNumber(pct)}%</span>
                         </div>
-                    </td>
-                    <!-- Status badge -->
-                    <td class="px-4 py-2.5 text-center">
-                        ${statusBadge(record)}
                     </td>
                     <!-- Amount -->
                     <td class="px-4 py-2.5 text-right">
@@ -2489,6 +2512,13 @@
             currentPage = page;
             loadData();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function changeRecordsPerPage(e) {
+            const value = e.target ? e.target.value : e.value;
+            recordsPerPage = value === 'all' ? allRecords.length : parseInt(value);
+            currentPage = 1;
+            loadData();
         }
 
         function openAddModal() {

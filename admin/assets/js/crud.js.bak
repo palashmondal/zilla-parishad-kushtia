@@ -164,6 +164,10 @@ const CRUDManager = {
         const end = start + perPage;
         return array.slice(start, end);
     },
+
+    /**
+     * Create pagination UI with records per page selector
+     */
     /**
      * Create records per page selector
      */
@@ -173,26 +177,14 @@ const CRUDManager = {
 
         let html = `<div class="flex items-center gap-2">
             <label class="text-sm text-gray-700 font-medium">প্রতি পৃষ্ঠায় রেকর্ড:</label>
-            <select id="records-per-page" class="px-3 py-2 border border-gray-300 rounded-lg bg-white hover:border-green-500 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition">
-                <option value="10" ${perPage === 10 ? 'selected' : ''}>১০</option>
-                <option value="20" ${perPage === 20 ? 'selected' : ''}>২০</option>
-                <option value="50" ${perPage === 50 ? 'selected' : ''}>৪০</option>
+            <select onchange="${onPerPageChange}" class="px-3 py-2 border border-gray-300 rounded-lg bg-white hover:border-green-500 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition">
+                <option value="10" ${perPage === 10 ? 'selected' : ''}>१०</option>
+                <option value="20" ${perPage === 20 ? 'selected' : ''}>२०</option>
+                <option value="50" ${perPage === 50 ? 'selected' : ''}>५०</option>
+                <option value="all" ${perPage === 'all' ? 'selected' : ''}>সব</option>
             </select>
         </div>`;
         container.innerHTML = html;
-
-        // Attach event listener
-        try {
-            const select = container.querySelector('#records-per-page');
-            if (select) {
-                const handler = window[onPerPageChange];
-                if (typeof handler === 'function') {
-                    select.addEventListener('change', handler);
-                }
-            }
-        } catch (e) {
-            console.error('Error attaching records per page listener:', e);
-        }
     },
 
     /**
@@ -200,50 +192,58 @@ const CRUDManager = {
      */
     createPagination(totalItems, currentPage, perPage, containerId, onPageChange) {
         const container = document.getElementById(containerId);
-        if (!container) {
-            console.log('Pagination container not found:', containerId);
-            return;
-        }
-
-        console.log('Pagination - totalItems:', totalItems, 'currentPage:', currentPage, 'perPage:', perPage);
+        if (!container) return;
 
         const totalPages = Math.ceil(totalItems / perPage);
-        console.log('Pagination - totalPages:', totalPages);
 
-        if (totalPages <= 1) {
-            console.log('Only 1 page or less, hiding pagination');
-            container.innerHTML = '';
-            return;
+        let html = '<div class="flex items-center justify-between gap-4 mt-6">';
+
+        // Records per page selector (left side)
+        if (onPerPageChange) {
+            html += `<div class="flex items-center gap-2">
+                <label class="text-sm text-gray-700 font-medium">প্রতি পৃষ্ঠায় রেকর্ড:</label>
+                <select onchange="${onPerPageChange}" class="px-3 py-2 border border-gray-300 rounded-lg bg-white hover:border-green-500 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition">
+                    <option value="10" ${perPage === 10 ? 'selected' : ''}>১০</option>
+                    <option value="20" ${perPage === 20 ? 'selected' : ''}>২০</option>
+                    <option value="50" ${perPage === 50 ? 'selected' : ''}>৫০</option>
+                    <option value="all" ${perPage === 'all' ? 'selected' : ''}>সব</option>
+                </select>
+            </div>`;
         }
 
-        let html = '<div class="flex items-center justify-center gap-2 mt-6">';
+        // Pagination controls (center/right)
+        if (totalPages > 1) {
+            html += '<div class="flex items-center justify-center gap-2">';
 
-        // Previous button
-        if (currentPage > 1) {
-            html += `<button onclick="${onPageChange}(${currentPage - 1})" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">পূর্ববর্তী</button>`;
-        }
-
-        // Page numbers
-        for (let i = 1; i <= totalPages; i++) {
-            if (i === currentPage) {
-                html += `<button class="px-4 py-2 bg-green-600 text-white rounded-lg font-bold">${this.toBengaliNumber(i)}</button>`;
-            } else if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-                html += `<button onclick="${onPageChange}(${i})" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">${this.toBengaliNumber(i)}</button>`;
-            } else if (i === currentPage - 3 || i === currentPage + 3) {
-                html += `<span class="px-2">...</span>`;
+            // Previous button
+            if (currentPage > 1) {
+                html += `<button onclick="${onPageChange}(${currentPage - 1})" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">পূর্ববর্তী</button>`;
             }
-        }
 
-        // Next button
-        if (currentPage < totalPages) {
-            html += `<button onclick="${onPageChange}(${currentPage + 1})" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">পরবর্তী</button>`;
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    html += `<button class="px-4 py-2 bg-green-600 text-white rounded-lg font-bold">${this.toBengaliNumber(i)}</button>`;
+                } else if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    html += `<button onclick="${onPageChange}(${i})" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">${this.toBengaliNumber(i)}</button>`;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    html += `<span class="px-2">...</span>`;
+                }
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                html += `<button onclick="${onPageChange}(${currentPage + 1})" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">পরবর্তী</button>`;
+            }
+
+            html += '</div>';
+        } else if (onPerPageChange) {
+            html += '<div></div>'; // Empty div for flex spacing
         }
 
         html += '</div>';
         container.innerHTML = html;
     },
-
-
 
     /**
      * Debounce function for search

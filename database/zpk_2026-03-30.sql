@@ -56,7 +56,7 @@ LOCK TABLES `admin_users` WRITE;
 
 INSERT INTO `admin_users` (`id`, `username`, `password_hash`, `email`, `full_name`, `designation`, `office_name`, `photo_path`, `role`, `is_active`, `last_login`, `created_by`, `created_at`, `updated_at`)
 VALUES
-	(1,'admin','$2b$10$DLJcUj/iOhFeHkwS3vP3JORNr0TMZ1X7LQHa6XWPoyqPg7kJFOp/m','admin@zpkushtia.info','পলাশ মণ্ডল','প্রধান নির্বাহী কর্মকর্তা','জেলা পরিষদ, কুষ্টিয়া','/uploads/profiles/1_1771052695414.png','admin',1,'2026-03-30 12:12:17',NULL,'2026-02-12 00:29:17','2026-03-30 12:12:17'),
+	(1,'admin','$2b$10$DLJcUj/iOhFeHkwS3vP3JORNr0TMZ1X7LQHa6XWPoyqPg7kJFOp/m','admin@zpkushtia.org','পলাশ মণ্ডল','প্রধান নির্বাহী কর্মকর্তা','জেলা পরিষদ, কুষ্টিয়া','/uploads/profiles/1_1771052695414.png','admin',1,'2026-03-30 12:12:17',NULL,'2026-02-12 00:29:17','2026-03-30 12:12:17'),
 	(5,'headassistant','$2b$10$L3yCBPnSH7gu0Jq2DlpGbORZrCdM2H0sA9fiFTsPQ.GFXb4r7m0CC','test@gmail.com','মাসুমা ফেরদৌস','প্রধান সহকারী','জেলা পরিষদ, কুষ্টিয়া',NULL,'user',1,'2026-02-21 02:19:40',1,'2026-02-16 23:07:37','2026-02-21 02:19:40');
 
 /*!40000 ALTER TABLE `admin_users` ENABLE KEYS */;

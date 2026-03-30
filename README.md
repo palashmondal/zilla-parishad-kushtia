@@ -132,7 +132,7 @@ The application will be available at `http://localhost:3000`.
 
 ## Database Schema
 
-### Database: `zpk`
+### Database: `zpkushti_zpk`
 
 ### Table: `scholarship`
 
@@ -238,7 +238,7 @@ The production site runs on ServBay with Nginx as a reverse proxy:
 
 - Nginx handles SSL termination on port 443
 - Nginx proxies requests to Node.js on `http://localhost:3000`
-- Domain: `zpkushtia.info`
+- Domain: `zpkushtia.org`
 
 ```bash
 # Start production server

@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ব্যবহারকারী পরিচালনা - জেলা পরিষদ, কুষ্টিয়া</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
+    <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
@@ -16,7 +17,7 @@
     <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <style>
-        * { font-family: 'Hind Siliguri', sans-serif; }
+        * { font-family: 'Shurjo', sans-serif; }
 
         /* User Detail Modal Styles */
         .user-detail-backdrop {
@@ -173,19 +174,19 @@
                             <input type="text" name="username" id="username-input" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                             <p id="username-feedback" class="text-xs mt-1 hidden"></p>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ইমেইল</label>
-                            <input type="email" name="email" id="email-input" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
-                            <p id="email-feedback" class="text-xs mt-1 hidden"></p>
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">পূর্ণ নাম <span class="text-red-500">*</span></label>
-                            <input type="text" name="full_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
-                        </div>
                         <div id="password-field">
                             <label class="block text-sm font-medium text-gray-700 mb-1">পাসওয়ার্ড <span class="text-red-500">*</span></label>
                             <input type="password" name="password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                             <p class="text-xs text-gray-500 mt-1">কমপক্ষে ৬ অক্ষর হতে হবে</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">পূর্ণ নাম <span class="text-red-500">*</span></label>
+                            <input type="text" name="full_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ইমেইল</label>
+                            <input type="email" name="email" id="email-input" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <p id="email-feedback" class="text-xs mt-1 hidden"></p>
                         </div>
                     </div>
                 </div>
@@ -241,7 +242,7 @@
 
     <!-- User Detail Modal -->
     <div id="user-detail-modal" class="user-detail-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-        <div class="user-detail-card bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden">
+        <div class="user-detail-card bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden">
             <!-- Header Section with Avatar -->
             <div class="relative bg-gradient-to-br from-green-500 via-green-600 to-emerald-700 p-8">
                 <button onclick="closeUserDetail()" class="absolute top-4 right-4 text-white/80 hover:text-white transition-colors">
@@ -313,18 +314,6 @@
                 </div>
             </div>
 
-            <!-- Footer Actions -->
-            <div class="bg-gray-50 px-8 py-5 flex gap-3 border-t border-gray-200">
-                <button onclick="editUserFromDetail()" class="detail-action-btn flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                    </svg>
-                    সম্পাদনা করুন
-                </button>
-                <button onclick="closeUserDetail()" class="px-8 py-3 bg-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-400 transition">
-                    বন্ধ করুন
-                </button>
-            </div>
         </div>
     </div>
 
@@ -563,7 +552,7 @@
                 }
 
                 const user = await response.json();
-                const currentUser = AuthManager.getCurrentUser();
+                const currentUser = AuthManager.getUser();
                 const isEditingSelf = currentUser && currentUser.id === user.id;
 
                 document.getElementById('modal-title').textContent = 'ব্যবহারকারী সম্পাদনা';
