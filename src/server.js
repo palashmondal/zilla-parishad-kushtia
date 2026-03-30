@@ -23,7 +23,7 @@ const USE_HTTPS = process.env.USE_HTTPS === 'true';
 // CORS Configuration
 const allowedOrigins = process.env.CORS_ORIGINS
     ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
-    : ['http://localhost:3000', 'http://localhost:3443', 'https://zpkushtia.info'];
+    : ['http://localhost:3000', 'http://localhost:3443', 'https://zpkushtia.org'];
 
 const corsOptions = {
     origin: function (origin, callback) {

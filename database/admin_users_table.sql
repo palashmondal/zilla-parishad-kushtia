@@ -40,7 +40,7 @@ INSERT INTO admin_users (
 ) VALUES (
     'admin',
     '$2b$10$sLogrkzaGivcYxa9VRmHJeOKp6HytwWGK/H5FQLyVRXZO54s/yiu6',  -- Password: admin123
-    'admin@zpkushtia.info',
+    'admin@zpkushtia.org',
     'System Administrator',
     'System Admin',
     'জেলা পরিষদ, কুষ্টিয়া',

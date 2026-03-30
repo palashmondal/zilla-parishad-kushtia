@@ -3,7 +3,7 @@
 
 A web-based toolset for Zilla Parishad, Kushtia to manage and search beneficiary records including **Education Scholarships** and **Humanitarian Financial Aid**.
 
-**Live:** [https://zpkushtia.info](https://zpkushtia.info)
+**Live:** [https://zpkushtia.org](https://zpkushtia.org)
 
 ---
 
@@ -35,7 +35,7 @@ A web-based toolset for Zilla Parishad, Kushtia to manage and search beneficiary
 ## Project Structure
 
 ```
-zpkushtia.info/
+zpkushtia.org/
 ├── config/
 │   └── database.js              # MySQL connection pool
 ├── src/
@@ -80,8 +80,8 @@ zpkushtia.info/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/zpkushtia.info.git
-cd zpkushtia.info
+git clone https://github.com/your-username/zpkushtia.org.git
+cd zpkushtia.org
 ```
 
 ### 2. Install dependencies

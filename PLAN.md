@@ -11,7 +11,7 @@
 ## Target Directory Structure
 
 ```
-zpkushtia.info/
+zpkushtia.org/
 ├── config/
 │   ├── database.js          # MySQL pool (extract from server.js)
 │   ├── auth.js              # JWT config

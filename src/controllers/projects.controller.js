@@ -50,6 +50,19 @@ const projectsController = {
         }
     },
 
+    async getUpazilas(req, res) {
+        try {
+            const upazilas = await projectsModel.getUpazilas();
+            res.json(upazilas);
+        } catch (error) {
+            console.error('Projects upazilas fetch error:', error);
+            res.status(500).json({
+                error: 'Failed to fetch upazilas',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
     async getStats(req, res) {
         try {
             const stats = await projectsModel.getStats();

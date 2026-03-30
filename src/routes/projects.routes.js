@@ -8,6 +8,7 @@ const { uploadProjectImages } = require('../middleware/upload');
 // Public routes
 router.get('/search', searchLimiter, projectsController.search);
 router.get('/years', projectsController.getYears);
+router.get('/upazilas', projectsController.getUpazilas);
 router.get('/stats', projectsController.getStats);
 router.get('/list', projectsController.getAll);
 router.get('/:id/progress', projectsController.getProgressLog);

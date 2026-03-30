@@ -31,7 +31,7 @@ INSERT INTO admin_users (username, password_hash, email, full_name, role, is_act
 VALUES (
     'admin',
     '$2b$10$sJ5rJu5FvGknfZRnrJ6Jeuf3bxFWt3NcgCc5mLlRPC0tp0YjwvRla',
-    'admin@zpkushtia.info',
+    'admin@zpkushtia.org',
     'সিস্টেম প্রশাসক',
     'admin',
     TRUE
