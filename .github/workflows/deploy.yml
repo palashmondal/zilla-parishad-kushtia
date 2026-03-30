@@ -23,7 +23,7 @@ jobs:
           port: 1157
           script_stop: true
           script: |
-            cd /home/zpkushti/public_html/zpkushtia.org || exit 1
+            source /home/zpkushti/nodevenv/public_html/zpkushtia.org/22/bin/activate && cd /home/zpkushti/public_html/zpkushtia.org || exit 1
             echo "Current directory: $(pwd)"
             echo "Pulling latest code..."
             git pull origin main || exit 1
