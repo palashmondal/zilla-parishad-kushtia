@@ -573,7 +573,7 @@ function shortTk(v) {
     if (v >= 1e5) return '৳' + bn(Math.round(v/1e5)) + 'লক্ষ';
     return '৳' + bn(Math.round(v));
 }
-const FONT = { family:'Hind Siliguri', size:11 };
+const FONT = { family:'Shurjo', size:11 };
 
 /* ── Chart factories ─────────────────────────────────────── */
 // Register datalabels globally for donut/pie usage
@@ -617,7 +617,7 @@ function donut(id, labels, data, colors, opts={}) {
                         return bn(p) + '%';
                     },
                     color:'#fff',
-                    font:{ family:'Hind Siliguri', size:11, weight:'700' },
+                    font:{ family:'Shurjo', size:11, weight:'700' },
                     textShadowBlur:4,
                     textShadowColor:'rgba(0,0,0,0.35)',
                     anchor:'center',
@@ -766,7 +766,7 @@ function buildProgressBar() {
                         const v = parseFloat(value);
                         return v > 0 ? bn(Math.round(v)) + '%' : '';
                     },
-                    font: { family: 'Hind Siliguri', size: 10, weight: '700' },
+                    font: { family: 'Shurjo', size: 10, weight: '700' },
                     color(ctx) {
                         return ctx.dataset.borderColor || '#374151';
                     },
@@ -1074,7 +1074,7 @@ async function loadDashboard() {
                                 ticks: { display: false, stepSize: 25 },
                                 grid: { color: '#e2e8f0' },
                                 angleLines: { color: '#e2e8f0' },
-                                pointLabels: { font: { family: 'Hind Siliguri', size: 10 }, color: '#475569' }
+                                pointLabels: { font: { family: 'Shurjo', size: 10 }, color: '#475569' }
                             }
                         }
                     }
