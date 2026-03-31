@@ -3,7 +3,7 @@ const { calcProgress } = require('../utils/progressCalc');
 
 const PROJECT_FIELDS = `
     id, project_id, project_name, allocation_amount, released_amount, fund_type,
-    financial_year, project_approval_date, approval_memo_number, implementation_method,
+    financial_year, approval_memo_id, project_approval_date, approval_memo_number, implementation_method,
     upazila, project_type, current_status, progress_percentage,
     is_completed, is_delayed, performance_score,
     start_date, expected_end_date, actual_end_date, lat_lng, remarks, priority, reference,
@@ -14,6 +14,8 @@ const PROJECT_FIELDS = `
 const DATE_FIELDS = ['project_approval_date', 'start_date', 'expected_end_date', 'actual_end_date'];
 // Nullable text columns — send NULL instead of empty string
 const NULLABLE_TEXT = ['project_id', 'approval_memo_number', 'lat_lng', 'remarks', 'reference', 'performance_score'];
+// Nullable integer columns — send NULL instead of empty/invalid values
+const NULLABLE_INT = ['approval_memo_id'];
 
 function sanitizeProjectData(data) {
     const out = {};
@@ -22,6 +24,9 @@ function sanitizeProjectData(data) {
             out[k] = (v === '' || v === null || v === undefined) ? null : v;
         } else if (NULLABLE_TEXT.includes(k)) {
             out[k] = (v === '' || v === null || v === undefined) ? null : v;
+        } else if (NULLABLE_INT.includes(k)) {
+            const num = parseInt(v, 10);
+            out[k] = (v === '' || v === null || v === undefined || isNaN(num)) ? null : num;
         } else {
             out[k] = v;
         }
@@ -107,6 +112,17 @@ const projectsModel = {
              WHERE financial_year IS NOT NULL ORDER BY financial_year DESC`
         );
         return results.map(r => r.financial_year);
+    },
+
+    async getAvailableMemos(financialYear) {
+        const [results] = await pool.execute(
+            `SELECT id, memo_date, memo_number, total_projects
+             FROM approval_memos
+             WHERE financial_year = ?
+             ORDER BY memo_date DESC`,
+            [financialYear]
+        );
+        return results;
     },
 
     async getUpazilas() {

@@ -9,8 +9,9 @@ const approvalMemosController = {
             const limit = Math.min(parseInt(req.query.limit, 10) || 20, 100);
             const search = req.query.search || '';
             const year = req.query.year || '';
+            const financialYear = req.query.financialYear || '';
 
-            const results = await approvalMemosModel.getAll(page, limit, search, year);
+            const results = await approvalMemosModel.getAll(page, limit, search, year, financialYear);
             res.json(results);
         } catch (error) {
             console.error('Approval memos getAll error:', error);

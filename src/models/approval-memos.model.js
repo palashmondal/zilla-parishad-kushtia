@@ -1,7 +1,7 @@
 const pool = require('../../config/database');
 
 const approvalMemosModel = {
-    async getAll(page = 1, limit = 20, search = '', year = '') {
+    async getAll(page = 1, limit = 20, search = '', year = '', financialYear = '') {
         const pageNum = parseInt(page, 10) || 1;
         const pageSize = parseInt(limit, 10) || 20;
         const pageOffset = (pageNum - 1) * pageSize;
@@ -17,6 +17,11 @@ const approvalMemosModel = {
         if (year) {
             whereClause += ' AND YEAR(memo_date) = ?';
             params.push(parseInt(year, 10));
+        }
+
+        if (financialYear) {
+            whereClause += ' AND financial_year = ?';
+            params.push(financialYear);
         }
 
         // Build query for data
@@ -47,6 +52,7 @@ const approvalMemosModel = {
     async create(data) {
         const {
             memo_date,
+            financial_year,
             memo_number,
             total_projects,
             remarks,
@@ -54,9 +60,9 @@ const approvalMemosModel = {
         } = data;
 
         const [result] = await pool.execute(
-            `INSERT INTO approval_memos (memo_date, memo_number, total_projects, remarks, document_file, created_by)
-             VALUES (?, ?, ?, ?, ?, ?)`,
-            [memo_date, memo_number, total_projects || 0, remarks || null, document_file || null, data.created_by || null]
+            `INSERT INTO approval_memos (memo_date, financial_year, memo_number, total_projects, remarks, document_file, created_by)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [memo_date, financial_year || null, memo_number, total_projects || 0, remarks || null, document_file || null, data.created_by || null]
         );
 
         return result.insertId;
@@ -68,6 +74,7 @@ const approvalMemosModel = {
 
         const {
             memo_date,
+            financial_year,
             memo_number,
             total_projects,
             remarks,
@@ -76,9 +83,9 @@ const approvalMemosModel = {
 
         await pool.execute(
             `UPDATE approval_memos
-             SET memo_date = ?, memo_number = ?, total_projects = ?, remarks = ?, document_file = ?
+             SET memo_date = ?, financial_year = ?, memo_number = ?, total_projects = ?, remarks = ?, document_file = ?
              WHERE id = ?`,
-            [memo_date, memo_number, total_projects || 0, remarks || null, document_file !== undefined ? document_file : record.document_file, id]
+            [memo_date, financial_year || null, memo_number, total_projects || 0, remarks || null, document_file !== undefined ? document_file : record.document_file, id]
         );
 
         return true;
@@ -94,9 +101,9 @@ const approvalMemosModel = {
 
     async getYears() {
         const [results] = await pool.execute(
-            'SELECT DISTINCT YEAR(memo_date) as year FROM approval_memos ORDER BY year DESC'
+            'SELECT DISTINCT financial_year FROM approval_memos WHERE financial_year IS NOT NULL ORDER BY financial_year DESC'
         );
-        return results.map(r => r.year);
+        return results.map(r => r.financial_year).filter(y => y);
     }
 };
 

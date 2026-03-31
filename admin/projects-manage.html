@@ -1193,6 +1193,16 @@
                                 <option value="২০২৬-২৭">২০২৬-২৭</option>
                             </select>
                         </div>
+                        <div class="form-field">
+                            <label>অনুমোদন স্মারক <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
+                            <select name="approval_memo_id" id="approval-memo-select" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white" disabled>
+                                <option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>
+                            </select>
+                        </div>
+
+                        <!-- Hidden fields for approval date and memo number - auto-filled from memo selection -->
+                        <input type="hidden" name="project_approval_date">
+                        <input type="hidden" name="approval_memo_number">
 
                         <!-- Row 3: Upazila | Project Type -->
                         <div class="form-field">
@@ -1218,18 +1228,6 @@
                             </select>
                         </div>
 
-                        <!-- Row 4: Approval Date | Memo Number -->
-                        <div class="form-field">
-                            <label>অনুমোদনের তারিখ</label>
-                            <div class="date-field-wrapper">
-                                <svg class="fp-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                <input type="text" name="project_approval_date" class="flatpickr-input" placeholder="তারিখ নির্বাচন করুন" readonly>
-                            </div>
-                        </div>
-                        <div class="form-field">
-                            <label>স্মারক নংবর</label>
-                            <input type="text" name="approval_memo_number" placeholder="০০.০০.৩৩৪.২৫.২৬.০০১.২৩.৫১৫" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 font-mono">
-                        </div>
 
                         <!-- Row 5: Implementation Method | Fund Type -->
                         <div class="form-field">
@@ -2593,6 +2591,18 @@
             if (docStatus2) docStatus2.classList.add('hidden');
             const existDocSec = document.getElementById('existing-docs-section');
             if (existDocSec) existDocSec.classList.add('hidden');
+
+            // Clear memo dropdown on form reset
+            const memoSelect = document.getElementById('approval-memo-select');
+            if (memoSelect) {
+                memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
+                memoSelect.disabled = true;
+            }
+            const approvalDateInput = document.querySelector('input[name="project_approval_date"]');
+            const memoNumberInput = document.querySelector('input[name="approval_memo_number"]');
+            if (approvalDateInput) approvalDateInput.value = '';
+            if (memoNumberInput) memoNumberInput.value = '';
+
             CRUDManager.openModal('form-modal');
         }
 
@@ -2772,6 +2782,17 @@
 
                 const form = document.getElementById('project-form');
                 CRUDManager.populateForm(form, record);
+
+                // Load approval memos for the financial year
+                await onFinancialYearChange();
+
+                // If the project has an approval_memo_id, select it in the dropdown
+                if (record.approval_memo_id) {
+                    const memoSelect = document.getElementById('approval-memo-select');
+                    memoSelect.value = record.approval_memo_id;
+                    // Trigger the change event to populate the date/number fields
+                    await onApprovalMemoChange();
+                }
 
                 // ID field readonly while editing (ID is the PK)
                 document.getElementById('form-id').setAttribute('readonly', 'readonly');
@@ -3454,6 +3475,167 @@
         // Initialise upload zones once DOM ready
         document.addEventListener('DOMContentLoaded', () => { initPhotoUpload(); initQuickUpload(); initDocUpload(); initQuickDocUpload(); });
 
+        // Bengali to English numeral conversion helper
+        function convertBengaliToEnglishYear(bengaliYear) {
+            const bengaliDigits = ['০', '১', '२', '३', '४', '५', '६', '७', '८', '९'];
+            const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            let result = bengaliYear;
+            // Replace Devanagari numerals
+            bengaliDigits.forEach((bengali, index) => {
+                result = result.replace(new RegExp(bengali, 'g'), englishDigits[index]);
+            });
+
+            // Also handle Bengali numerals (০-९)
+            for (let i = 0; i < 10; i++) {
+                const bengaliDigit = String.fromCharCode(0x09E6 + i);
+                result = result.replace(new RegExp(bengaliDigit, 'g'), englishDigits[i]);
+            }
+
+            return result;
+        }
+
+        // Handle financial year change to populate approval memos dropdown
+        async function onFinancialYearChange() {
+            console.log('🔔 onFinancialYearChange called');
+            const financialYearSelect = document.querySelector('select[name="financial_year"]');
+            const memoSelect = document.getElementById('approval-memo-select');
+
+            let financialYear = financialYearSelect.value;
+            console.log('📅 Selected year (before conversion):', financialYear);
+
+            if (!financialYear) {
+                memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
+                memoSelect.disabled = true;
+                console.log('❌ No year selected, disabling dropdown');
+                return;
+            }
+
+            // Convert Bengali numerals to English
+            financialYear = convertBengaliToEnglishYear(financialYear);
+            console.log('✅ Converted year:', financialYear);
+
+            try {
+                memoSelect.disabled = true;
+                const apiUrl = `/api/projects/available-memos/${encodeURIComponent(financialYear)}`;
+                console.log('🌐 Fetching from:', apiUrl);
+                const response = await fetch(apiUrl);
+
+                console.log('📡 Response status:', response.status, response.ok);
+                if (!response.ok) {
+                    throw new Error('স্মারক লোড করতে ব্যর্থ - Status: ' + response.status);
+                }
+
+                const memos = await response.json();
+                console.log('📦 Received memos:', memos);
+                console.log('📊 Number of memos:', memos ? memos.length : 0);
+
+                // Clear existing options
+                memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
+
+                if (memos && memos.length > 0) {
+                    console.log('✨ Populating dropdown with', memos.length, 'memos');
+
+                    // Add memo options to the select
+                    memos.forEach(memo => {
+                        const option = document.createElement('option');
+                        const dateObj = new Date(memo.memo_date);
+                        const dateStr = dateObj.toLocaleDateString('bn-BD', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        // Format date in YYYY-MM-DD for the project_approval_date field
+                        const isoDateStr = memo.memo_date.split('T')[0];
+                        option.value = memo.id;
+                        option.textContent = `${dateStr} তারিখের ${memo.memo_number} নং স্মারক (মোট প্রকল্প ${memo.total_projects}টি)`;
+                        option.setAttribute('data-memo-date', isoDateStr);
+                        option.setAttribute('data-memo-number', memo.memo_number);
+                        memoSelect.appendChild(option);
+                    });
+
+                    memoSelect.disabled = false;
+
+                    // Handle Tom Select instance - destroy and recreate to ensure options are loaded
+                    if (_tomInstances && _tomInstances.has(memoSelect)) {
+                        const tomSelectInstance = _tomInstances.get(memoSelect);
+                        // Destroy the existing Tom Select instance
+                        tomSelectInstance.destroy();
+                        _tomInstances.delete(memoSelect);
+                        console.log('🗑️ Tom Select instance destroyed');
+                    }
+
+                    // Create a fresh Tom Select instance with the new options
+                    if (typeof TomSelect !== 'undefined') {
+                        setTimeout(() => {
+                            const newInstance = new TomSelect(memoSelect, {
+                                create: false,
+                                placeholder: '-- অনুমোদন স্মারক নির্বাচন করুন --',
+                                maxItems: 1
+                            });
+                            if (_tomInstances) {
+                                _tomInstances.set(memoSelect, newInstance);
+                            }
+                            console.log('✨ New Tom Select instance created with memo options');
+                        }, 50);
+                    }
+
+                    console.log('✅ Dropdown enabled and populated with memo options');
+                } else {
+                    console.log('⚠️ No memos found for this year');
+                    memoSelect.disabled = true;
+                }
+            } catch (error) {
+                console.error('❌ Error loading memos:', error);
+                memoSelect.innerHTML = '<option value="">-- ত্রুটি: স্মারক লোড করতে পারা যায়নি --</option>';
+                memoSelect.disabled = true;
+            }
+        }
+
+        // Handle approval memo selection to populate related fields
+        async function onApprovalMemoChange() {
+            const memoSelect = document.getElementById('approval-memo-select');
+            const memoId = memoSelect.value;
+            const approvalDateInput = document.querySelector('input[name="project_approval_date"]');
+            const memoNumberInput = document.querySelector('input[name="approval_memo_number"]');
+
+            if (!memoId) {
+                approvalDateInput.value = '';
+                memoNumberInput.value = '';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/projects/available-memos`);
+                // Since we don't have a single memo endpoint, we'll store memo data when loading the dropdown
+                // For now, we'll keep the data in the option's dataset
+                const selectedOption = memoSelect.options[memoSelect.selectedIndex];
+                const memoDate = selectedOption.getAttribute('data-memo-date');
+                const memoNumber = selectedOption.getAttribute('data-memo-number');
+
+                if (memoDate && memoNumber) {
+                    approvalDateInput.value = memoDate;
+                    memoNumberInput.value = memoNumber;
+                }
+            } catch (error) {
+                console.error('Error updating approval fields:', error);
+            }
+        }
+
+        // Use event delegation to handle changes on financial_year selects
+        // This works even if the select is in a hidden modal
+        document.addEventListener('change', (e) => {
+            if (e.target && e.target.name === 'financial_year') {
+                console.log('💥 Financial year change event detected on:', e.target);
+                onFinancialYearChange();
+            }
+            if (e.target && e.target.id === 'approval-memo-select') {
+                console.log('💥 Memo select change event detected');
+                onApprovalMemoChange();
+            }
+        });
+
+        console.log('✅ Event delegation listeners attached to document');
+
         // Global state for duplicate warning handling
         let pendingFormData = null;
         let bypassDuplicateCheck = false;
@@ -3471,6 +3653,7 @@
                 formData.allocation_amount   = parseFloat(formData.allocation_amount)   || 0;
                 formData.released_amount     = parseFloat(formData.released_amount)     || 0;
                 formData.progress_percentage = parseInt(formData.progress_percentage)   || 0;
+                formData.approval_memo_id    = formData.approval_memo_id ? parseInt(formData.approval_memo_id, 10) : null;
                 formData.is_completed = formData.is_completed ? 1 : 0;
                 formData.is_delayed   = formData.is_delayed   ? 1 : 0;
 
