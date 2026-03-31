@@ -27,17 +27,17 @@
 
         .table-row {
             transition: all 0.2s ease;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
         }
 
-        .table-row:last-child {
-            border-bottom: none;
+        .table-row:nth-child(even) {
+            background: #f9fafb;
         }
 
         .table-row:hover {
-            background: #f9fafb;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transform: translateY(-1px);
+            background: #eff6ff;
+            box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.1);
+            transform: none;
         }
 
         /* Project Count Badge */
@@ -89,10 +89,20 @@
 
         /* Monospace text for memo numbers */
         .memo-number {
-            font-family: 'Courier New', monospace;
-            letter-spacing: 0.05em;
-            font-weight: 600;
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
+            letter-spacing: 0.02em;
+            font-weight: 700;
             color: #1f2937;
+            font-size: 0.95rem;
+        }
+
+        /* Financial year styling */
+        .financial-year {
+            font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
         }
 
         /* Detail Modal */
@@ -128,18 +138,18 @@
         /* Form modal card */
         #form-modal > div {
             border: none !important;
-            background: linear-gradient(160deg, #fffbf0 0%, #ffffff 60%, #fff8ed 100%) !important;
+            background: linear-gradient(160deg, #f0f9ff 0%, #ffffff 60%, #eff6ff 100%) !important;
             box-shadow:
-                0 32px 80px rgba(120,53,15,0.22),
-                0 0 0 1px rgba(245,158,11,0.18),
+                0 32px 80px rgba(37,99,235,0.15),
+                0 0 0 1px rgba(59,130,246,0.12),
                 0 1px 0 rgba(255,255,255,0.9) inset !important;
         }
 
         /* Modal header gradient bar */
         .form-modal-header {
-            background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
             margin: -1.25rem -1.25rem 1.5rem -1.25rem;
-            padding: 1.25rem 1.5rem;
+            padding: 1rem 1.25rem;
             border-radius: 0.75rem 0.75rem 0 0;
             display: flex;
             align-items: center;
@@ -149,18 +159,18 @@
         /* Section cards inside form */
         .form-section {
             background: #ffffff;
-            border: 1px solid #fde68a;
-            border-left: 4px solid #f59e0b;
+            border: 1px solid #dbeafe;
+            border-left: 4px solid #3b82f6;
             border-radius: 0.75rem;
             padding: 1.25rem 1.25rem 1rem 1.25rem;
-            box-shadow: 0 2px 8px rgba(245,158,11,0.07);
+            box-shadow: 0 2px 8px rgba(59,130,246,0.08);
         }
         .form-section-title {
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: #b45309;
+            color: #1e40af;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
@@ -170,7 +180,7 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: linear-gradient(to right, #fde68a, transparent);
+            background: linear-gradient(to right, #dbeafe, transparent);
         }
 
         /* Input / textarea polish */
@@ -192,16 +202,16 @@
         .form-field input[type="number"]:focus,
         .form-field input[type="date"]:focus,
         .form-field textarea:focus {
-            background: #fffbeb;
-            border-color: #f59e0b;
-            box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+            background: #eff6ff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
         }
         .form-field input[type="text"]:hover,
         .form-field input[type="number"]:hover,
         .form-field input[type="date"]:hover,
         .form-field textarea:hover {
-            border-color: #fcd34d;
-            background: #fffdf5;
+            border-color: #93c5fd;
+            background: #f0f9ff;
         }
         .form-field label {
             display: block;
@@ -229,18 +239,18 @@
         .btn-save {
             padding: 0.6rem 1.75rem;
             border-radius: 0.6rem;
-            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
             color: #fff;
             font-weight: 700;
             font-size: 0.875rem;
             border: none;
-            box-shadow: 0 4px 14px rgba(180,83,9,0.35);
+            box-shadow: 0 4px 14px rgba(37,99,235,0.35);
             transition: all 0.18s;
             cursor: pointer;
         }
         .btn-save:hover {
-            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
-            box-shadow: 0 6px 20px rgba(180,83,9,0.45);
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            box-shadow: 0 6px 20px rgba(30,64,175,0.45);
             transform: translateY(-1px);
         }
         .btn-save:active { transform: translateY(0); }
@@ -300,16 +310,16 @@
         }
 
         .file-input-label:hover {
-            border-color: #f59e0b;
-            background-color: #fffbeb;
-            color: #92400e;
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            color: #1e40af;
         }
 
         .file-input-label.has-file {
             border-style: solid;
-            background-color: #fef3c7;
-            border-color: #fde68a;
-            color: #92400e;
+            background-color: #dbeafe;
+            border-color: #93c5fd;
+            color: #1e40af;
         }
 
         .file-name-display {
@@ -329,13 +339,17 @@
         }
 
         .document-viewer-card {
-            transform: scale(0.97);
+            transform: scale(0.95);
             opacity: 0;
             transition: transform 0.32s cubic-bezier(.34,1.56,.64,1), opacity 0.28s ease;
-            max-height: 95vh;
-            overflow-y: auto;
-            width: 100%;
-            max-width: calc(100% - 2rem);
+            max-height: 90vh;
+            overflow: hidden;
+            width: 85vw;
+            max-width: 85vw;
+            height: 90vh;
+            border-radius: 0.75rem;
+            display: flex;
+            flex-direction: column;
         }
 
         #document-modal.open .document-viewer-card {
@@ -345,15 +359,17 @@
 
         .pdf-viewer {
             width: 100%;
-            height: 80vh;
+            height: 100%;
             border: none;
+            flex: 1;
         }
 
         .image-viewer {
+            width: 100%;
+            height: 100%;
             max-width: 100%;
-            max-height: 80vh;
-            height: auto;
-            width: auto;
+            max-height: 100%;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -381,7 +397,7 @@
                     <h2 class="text-3xl font-bold text-gray-900">প্রকল্প অনুমোদন স্মারক</h2>
                     <p class="text-gray-600 mt-1">প্রকল্প অনুমোদনের স্মারক তালিকা ও পরিচালনা</p>
                 </div>
-                <button data-role="admin" onclick="openFormModal()" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-600 to-amber-500 text-white rounded-lg hover:from-amber-700 hover:to-amber-600 transition shadow-md hover:shadow-lg transform hover:translate-y-0 active:translate-y-0.5">
+                <button data-role="admin" onclick="openFormModal()" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg hover:from-blue-700 hover:to-blue-600 transition shadow-md hover:shadow-lg transform hover:translate-y-0 active:translate-y-0.5">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
@@ -390,15 +406,15 @@
             </div>
 
             <!-- Search and Filter -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">অনুসন্ধান</label>
-                    <input type="text" id="search-input" placeholder="নম্বর, তারিখ, প্রকল্প সংখ্যা..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="md:col-span-3">
+                    <label class="block text-sm font-bold text-gray-700 mb-2.5">অনুসন্ধান</label>
+                    <input type="text" id="search-input" placeholder="স্মারক নম্বর, তারিখ..." class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-400 transition-all text-sm font-medium hover:border-gray-300">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">অর্থবছর</label>
-                    <select id="year-filter" class="w-full border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white hover:border-amber-400 transition-all font-medium text-sm">
-                        <option value="">সকল অর্থবছর</option>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-2.5">আর্থিক বছর</label>
+                    <select id="financial-year-filter" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-400 bg-white hover:border-blue-300 transition-all font-medium text-sm">
+                        <option value="">সকল আর্থিক বছর</option>
                     </select>
                 </div>
             </div>
@@ -416,28 +432,34 @@
             <div id="table-wrapper" class="bg-white rounded-xl shadow-md overflow-hidden">
 
             <!-- Table Header (Column Names) -->
-            <div id="table-header" class="hidden border-b-2 border-gray-200 bg-gradient-to-r from-amber-600 to-amber-700">
-                <div class="grid grid-cols-4 gap-3 px-6 py-4 items-center">
-                    <div class="col-span-1 sortable-header" onclick="sortTable('memo_date')" data-column="memo_date">
-                        <span class="text-xs font-semibold text-white uppercase tracking-wider">স্মারক তারিখ</span>
-                        <svg class="sort-icon w-3 h-3 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div id="table-header" class="hidden border-b-2 border-gray-200 bg-gradient-to-r from-gray-100 to-gray-200">
+                <div class="grid grid-cols-5 gap-3 px-6 py-5 items-center">
+                    <div class="col-span-1 sortable-header group" onclick="sortTable('memo_date')" data-column="memo_date" title="স্মারক তারিখ অনুযায়ী সাজান">
+                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">📅 স্মারক তারিখ</span>
+                        <svg class="sort-icon w-4 h-4 text-gray-400 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                         </svg>
                     </div>
-                    <div class="col-span-1 sortable-header" onclick="sortTable('memo_number')" data-column="memo_number">
-                        <span class="text-xs font-semibold text-white uppercase tracking-wider">স্মারক নম্বর</span>
-                        <svg class="sort-icon w-3 h-3 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="col-span-1 sortable-header group justify-center" onclick="sortTable('financial_year')" data-column="financial_year" title="আর্থিক বছর অনুযায়ী সাজান">
+                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">📊 আর্থিক বছর</span>
+                        <svg class="sort-icon w-4 h-4 text-gray-400 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                         </svg>
                     </div>
-                    <div class="col-span-1 sortable-header justify-center" onclick="sortTable('total_projects')" data-column="total_projects">
-                        <span class="text-xs font-semibold text-amber-50 uppercase tracking-wider">📋 প্রকল্প সংখ্যা</span>
-                        <svg class="sort-icon w-3 h-3 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="col-span-1 sortable-header group" onclick="sortTable('memo_number')" data-column="memo_number" title="স্মারক নম্বর অনুযায়ী সাজান">
+                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">📋 স্মারক নম্বর</span>
+                        <svg class="sort-icon w-4 h-4 text-gray-400 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
+                        </svg>
+                    </div>
+                    <div class="col-span-1 sortable-header group justify-center" onclick="sortTable('total_projects')" data-column="total_projects" title="প্রকল্প সংখ্যা অনুযায়ী সাজান">
+                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">🔢 প্রকল্য সংখ্যা</span>
+                        <svg class="sort-icon w-4 h-4 text-gray-400 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                         </svg>
                     </div>
                     <div class="col-span-1 text-center">
-                        <span class="text-xs font-semibold text-white uppercase tracking-wider">কার্যক্রম</span>
+                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">⚙️ কার্যক্রম</span>
                     </div>
                 </div>
             </div>
@@ -506,6 +528,12 @@
                 </div>
             </div>
             <div class="mt-4 pt-3 border-t border-emerald-100 flex gap-3">
+                <button id="view-pdf-btn" onclick="viewDocumentFromModal()" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow hover:shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 hidden">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    ডকুমেন্ট দেখুন
+                </button>
                 <button onclick="editRecordFromModal()" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow hover:shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -524,21 +552,20 @@
     </div>
 
     <!-- Document Viewer Modal -->
-    <div id="document-modal" class="detail-backdrop fixed inset-0 z-[95] flex items-center justify-center p-2 md:p-4">
-        <div class="document-viewer-card bg-white w-full rounded-xl shadow-2xl p-4 md:p-6 relative">
+    <div id="document-modal" class="detail-backdrop fixed inset-0 z-[95] flex items-center justify-center p-0">
+        <div class="document-viewer-card bg-white shadow-2xl p-0 relative">
             <!-- Header -->
-            <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-green-600 to-green-700 border-b border-green-800">
                 <div class="flex-1 min-w-0">
-                    <h2 id="dv-title" class="text-xl font-extrabold text-slate-900 leading-tight mb-0.5"></h2>
-                    <p id="dv-filename" class="text-sm font-semibold text-blue-600 truncate"></p>
+                    <h2 id="dv-title" class="text-base font-bold text-white leading-tight"></h2>
                 </div>
-                <button onclick="closeDocumentModal()" class="text-slate-300 hover:text-red-500 transition-colors p-1 flex-shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                <button onclick="closeDocumentModal()" class="flex-shrink-0 ml-3 w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition-all duration-200 shadow-md hover:shadow-lg hover:scale-110">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
 
             <!-- Document Container -->
-            <div id="dv-content" class="border-t border-gray-200 pt-4 flex items-center justify-center min-h-[70vh]">
+            <div id="dv-content" class="flex-1 flex items-center justify-center bg-white overflow-auto w-full">
                 <div class="text-gray-500">লোড হচ্ছে...</div>
             </div>
         </div>
@@ -571,6 +598,16 @@
                         <div>
                             <label>স্মারক তারিখ <span class="text-red-500">*</span></label>
                             <input type="date" name="memo_date" required>
+                        </div>
+                        <div>
+                            <label>আর্থিক বছর <span class="text-red-500">*</span></label>
+                            <select name="financial_year" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">আর্থিক বছর নির্বাচন করুন</option>
+                                <option value="2025-26">2025-26</option>
+                                <option value="2024-25">2024-25</option>
+                                <option value="2023-24">2023-24</option>
+                                <option value="2022-23">2022-23</option>
+                            </select>
                         </div>
                         <div>
                             <label>স্মারক নম্বর <span class="text-red-500">*</span></label>
@@ -633,7 +670,9 @@
         document.addEventListener('DOMContentLoaded', async () => {
             await DashboardComponents.loadAll('approval-memos', 'প্রকল্প অনুমোদন স্মারক');
             loadData();
+            loadFinancialYears();
             document.getElementById('search-input').addEventListener('input', filterData);
+            document.getElementById('financial-year-filter').addEventListener('change', filterData);
             document.getElementById('memo-form').addEventListener('submit', handleFormSubmit);
         });
 
@@ -657,11 +696,45 @@
             }
         }
 
+        async function loadFinancialYears() {
+            try {
+                // Fetch all available financial years from database
+                const response = await fetch(`${API_BASE}/years`);
+                if (!response.ok) throw new Error('Failed to load years');
+                const years = await response.json();
+
+                // Populate the dropdown
+                const select = document.getElementById('financial-year-filter');
+
+                // Clear existing options except the first one
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+
+                // Add years from database
+                if (Array.isArray(years) && years.length > 0) {
+                    years.forEach(year => {
+                        const option = document.createElement('option');
+                        option.value = year;
+                        option.textContent = year;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading financial years:', error);
+            }
+        }
+
         function filterData() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
-            filteredData = query === '' ? [...currentData] : currentData.filter(item =>
-                (item.memo_number || '').toLowerCase().includes(query)
-            );
+            const financialYear = document.getElementById('financial-year-filter').value;
+
+            filteredData = currentData.filter(item => {
+                const matchesQuery = query === '' || (item.memo_number || '').toLowerCase().includes(query);
+                const matchesFinancialYear = financialYear === '' || item.financial_year === financialYear;
+                return matchesQuery && matchesFinancialYear;
+            });
+
             currentPage = 1;
             renderTable();
             updatePagination();
@@ -680,22 +753,24 @@
             const endIdx = startIdx + recordsPerPage;
             const pageData = filteredData.slice(startIdx, endIdx);
             container.innerHTML = pageData.map(record => `
-                <div class="table-row grid grid-cols-4 gap-3 px-6 py-2.5 items-center cursor-pointer" onclick="openDetailModal(${record.id})">
-                    <div class="col-span-1 text-sm font-medium text-gray-800">${formatDate(record.memo_date)}</div>
-                    <div class="col-span-1 text-sm font-medium memo-number text-gray-700">${escapeHtml(record.memo_number)}</div>
-                    <div class="col-span-1 flex justify-center"><div class="project-count-badge">${record.total_projects}</div></div>
-                    <div class="col-span-1 flex justify-center gap-2" onclick="event.stopPropagation()">
-                        ${record.document_file ? `<button onclick="viewDocument(${record.id})" class="action-btn p-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600" title="ডকুমেন্ট দেখুন">
+                <div class="table-row grid grid-cols-5 gap-4 px-6 py-4 items-center cursor-pointer" onclick="openDetailModal(${record.id})">
+                    <div class="col-span-1 text-sm font-semibold text-gray-900">${formatDate(record.memo_date)}</div>
+                    <div class="col-span-1 flex justify-center items-center financial-year text-gray-800">${toBengaliNumeral(record.financial_year) || 'N/A'}</div>
+                    <div class="col-span-1 font-bold memo-number text-gray-900">${toBengaliNumeral(escapeHtml(record.memo_number))}</div>
+                    <div class="col-span-1 flex justify-center items-center"><div class="project-count-badge">${toBengaliNumeral(record.total_projects)}</div></div>
+                    <div class="col-span-1 flex justify-center gap-2.5" onclick="event.stopPropagation()">
+                        ${record.document_file ? `<button onclick="viewDocument(${record.id})" class="action-btn px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-md flex items-center gap-1.5 text-xs font-bold" title="ডকুমেন্ট দেখুন">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
+                            দেখুন
                         </button>` : ''}
-                        <button onclick="openFormModal(${record.id})" class="action-btn p-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600" title="সম্পাদনা">
+                        <button onclick="openFormModal(${record.id})" class="action-btn p-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:shadow-lg hover:from-green-600 hover:to-green-700 transition-all shadow-md" title="সম্পাদনা">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                             </svg>
                         </button>
-                        <button data-role="admin" onclick="deleteRecord(${record.id})" class="action-btn p-2 bg-red-500 text-white rounded-lg hover:bg-red-600" title="মুছে ফেলুন">
+                        <button data-role="admin" onclick="deleteRecord(${record.id})" class="action-btn p-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:shadow-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md" title="মুছে ফেলুন">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
@@ -772,7 +847,13 @@
                 const record = currentData.find(r => r.id === recordId);
                 if (record) {
                     document.getElementById('record-id').value = record.id;
-                    document.querySelector('input[name="memo_date"]').value = record.memo_date;
+
+                    // Ensure date is in YYYY-MM-DD format
+                    const dateValue = record.memo_date ? new Date(record.memo_date).toISOString().split('T')[0] : '';
+                    document.querySelector('input[name="memo_date"]').value = dateValue;
+                    console.log('Setting date:', record.memo_date, '→', dateValue);
+
+                    document.querySelector('select[name="financial_year"]').value = record.financial_year || '';
                     document.querySelector('input[name="memo_number"]').value = record.memo_number;
                     document.querySelector('input[name="total_projects"]').value = record.total_projects;
                     document.querySelector('input[name="remarks"]').value = record.remarks || '';
@@ -819,11 +900,14 @@
             // Handle document display
             const docSection = document.getElementById('dm-document-section');
             const docInfo = document.getElementById('dm-document-info');
+            const viewPdfBtn = document.getElementById('view-pdf-btn');
             if (record.document_file) {
-                docInfo.innerHTML = `📄 ${escapeHtml(record.document_file)} <button onclick="event.stopPropagation(); viewDocument(${record.id})" class="ml-3 text-green-600 hover:text-green-800 font-bold underline">দেখুন</button>`;
+                docInfo.innerHTML = `📄 ${escapeHtml(record.document_file)}`;
                 docSection.classList.remove('hidden');
+                viewPdfBtn.classList.remove('hidden');
             } else {
                 docSection.classList.add('hidden');
+                viewPdfBtn.classList.add('hidden');
             }
 
             document.getElementById('detail-modal').classList.add('open');
@@ -832,6 +916,12 @@
         function closeDetailModal() {
             document.getElementById('detail-modal').classList.remove('open');
             selectedRecordId = null;
+        }
+
+        function viewDocumentFromModal() {
+            if (selectedRecordId) {
+                viewDocument(selectedRecordId);
+            }
         }
 
         function editRecordFromModal() {
@@ -854,6 +944,7 @@
             const formData = new FormData();
 
             formData.append('memo_date', document.querySelector('input[name="memo_date"]').value);
+            formData.append('financial_year', document.querySelector('select[name="financial_year"]').value);
             formData.append('memo_number', document.querySelector('input[name="memo_number"]').value);
             formData.append('total_projects', parseInt(document.querySelector('input[name="total_projects"]').value, 10));
             formData.append('remarks', document.querySelector('input[name="remarks"]').value || null);
@@ -933,6 +1024,13 @@
             if (!dateStr) return '';
             const date = new Date(dateStr);
             return date.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function toBengaliNumeral(str) {
+            if (!str) return '';
+            const englishDigits = '0123456789';
+            const bengaliDigits = '০১२३৪৫৬৭৮৯';
+            return String(str); // Font handles numeral display properly
         }
 
         function escapeHtml(text) {
@@ -1021,11 +1119,10 @@
             const dvFilename = document.getElementById('dv-filename');
             const dvContent = document.getElementById('dv-content');
 
-            dvTitle.textContent = record.memo_number;
-            dvFilename.textContent = record.document_file;
+            dvTitle.textContent = `${formatDate(record.memo_date)} তারিখের ${record.memo_number}এর বরাদ্দপত্র (মোট প্রকল্প ${record.total_projects})`;
 
             const fileExtension = record.document_file.split('.').pop().toLowerCase();
-            const filePath = `/uploads/${record.document_file}`;
+            const filePath = record.document_file;
 
             dvContent.innerHTML = '';
 

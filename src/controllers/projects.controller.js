@@ -50,6 +50,23 @@ const projectsController = {
         }
     },
 
+    async getAvailableMemos(req, res) {
+        try {
+            const { financialYear } = req.params;
+            if (!financialYear) {
+                return res.status(400).json({ error: 'আর্থিক বছর প্রয়োজন' });
+            }
+            const memos = await projectsModel.getAvailableMemos(financialYear);
+            res.json(memos);
+        } catch (error) {
+            console.error('Projects memos fetch error:', error);
+            res.status(500).json({
+                error: 'Failed to fetch memos',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
     async getUpazilas(req, res) {
         try {
             const upazilas = await projectsModel.getUpazilas();
