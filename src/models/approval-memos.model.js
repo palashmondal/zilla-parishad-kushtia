@@ -49,13 +49,14 @@ const approvalMemosModel = {
             memo_date,
             memo_number,
             total_projects,
-            remarks
+            remarks,
+            document_file
         } = data;
 
         const [result] = await pool.execute(
-            `INSERT INTO approval_memos (memo_date, memo_number, total_projects, remarks, created_by)
-             VALUES (?, ?, ?, ?, ?)`,
-            [memo_date, memo_number, total_projects || 0, remarks || null, data.created_by || null]
+            `INSERT INTO approval_memos (memo_date, memo_number, total_projects, remarks, document_file, created_by)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [memo_date, memo_number, total_projects || 0, remarks || null, document_file || null, data.created_by || null]
         );
 
         return result.insertId;
@@ -69,14 +70,15 @@ const approvalMemosModel = {
             memo_date,
             memo_number,
             total_projects,
-            remarks
+            remarks,
+            document_file
         } = data;
 
         await pool.execute(
             `UPDATE approval_memos
-             SET memo_date = ?, memo_number = ?, total_projects = ?, remarks = ?
+             SET memo_date = ?, memo_number = ?, total_projects = ?, remarks = ?, document_file = ?
              WHERE id = ?`,
-            [memo_date, memo_number, total_projects || 0, remarks || null, id]
+            [memo_date, memo_number, total_projects || 0, remarks || null, document_file !== undefined ? document_file : record.document_file, id]
         );
 
         return true;

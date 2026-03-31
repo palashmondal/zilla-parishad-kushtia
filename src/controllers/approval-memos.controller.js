@@ -46,6 +46,10 @@ const approvalMemosController = {
         try {
             const { memo_date, memo_number, total_projects } = req.body;
 
+            console.log('Create request body:', req.body);
+            console.log('File:', req.file);
+            console.log('User:', req.user);
+
             if (!memo_date || !memo_number) {
                 return res.status(400).json({ error: 'Missing required fields: memo_date, memo_number' });
             }
@@ -55,6 +59,7 @@ const approvalMemosController = {
                 memo_number,
                 total_projects: parseInt(total_projects, 10) || 0,
                 remarks: req.body.remarks || null,
+                document_file: req.file ? `/uploads/approval-memos/${req.file.filename}` : null,
                 created_by: req.user?.id || null
             });
 
@@ -64,6 +69,16 @@ const approvalMemosController = {
             });
         } catch (error) {
             console.error('Approval memos create error:', error);
+            console.error('Stack:', error.stack);
+
+            // Handle duplicate memo_number
+            if (error.code === 'ER_DUP_ENTRY' && error.message.includes('memo_number')) {
+                return res.status(400).json({
+                    error: 'Duplicate memo number',
+                    message: 'এই স্মারক নম্বরটি ইতিমধ্যে বিদ্যমান। একটি ভিন্ন নম্বর ব্যবহার করুন।'
+                });
+            }
+
             res.status(500).json({
                 error: 'Creation failed',
                 message: isProduction ? 'An internal error occurred' : error.message
@@ -74,6 +89,10 @@ const approvalMemosController = {
     async update(req, res) {
         try {
             const id = req.params.id;
+            console.log('Update request for ID:', id);
+            console.log('Update body:', req.body);
+            console.log('File:', req.file);
+
             if (!id) {
                 return res.status(400).json({ error: 'Invalid memo ID' });
             }
@@ -83,7 +102,12 @@ const approvalMemosController = {
                 return res.status(404).json({ error: 'Memo not found' });
             }
 
-            const updated = await approvalMemosModel.update(id, req.body);
+            const updateData = { ...req.body };
+            if (req.file) {
+                updateData.document_file = `/uploads/approval-memos/${req.file.filename}`;
+            }
+
+            const updated = await approvalMemosModel.update(id, updateData);
             if (!updated) {
                 return res.status(404).json({ error: 'Memo not found' });
             }
@@ -91,6 +115,16 @@ const approvalMemosController = {
             res.json({ message: 'Memo updated successfully' });
         } catch (error) {
             console.error('Approval memos update error:', error);
+            console.error('Stack:', error.stack);
+
+            // Handle duplicate memo_number
+            if (error.code === 'ER_DUP_ENTRY' && error.message.includes('memo_number')) {
+                return res.status(400).json({
+                    error: 'Duplicate memo number',
+                    message: 'এই স্মারক নম্বরটি ইতিমধ্যে বিদ্যমান। একটি ভিন্ন নম্বর ব্যবহার করুন।'
+                });
+            }
+
             res.status(500).json({
                 error: 'Update failed',
                 message: isProduction ? 'An internal error occurred' : error.message

@@ -20,449 +20,1050 @@
         html { font-size: 18px; }
         * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
 
+        /* Beautiful Data Table */
+        #table-wrapper {
+            background: white;
+        }
+
         .table-row {
             transition: all 0.2s ease;
             border-bottom: 1px solid #f3f4f6;
-            background: #ffffff;
         }
-        .table-row:last-child { border-bottom: none; }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
         .table-row:hover {
-            background: #fef9f3;
-            cursor: pointer;
-            box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.1);
+            background: #f9fafb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transform: translateY(-1px);
         }
 
+        /* Project Count Badge */
+        .project-count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%);
+            border: 2px solid #a7f3d0;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #059669;
+            transition: all 0.2s ease;
+        }
+
+        .project-count-badge:hover {
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
+            transform: scale(1.05);
+            border-color: #6ee7b7;
+        }
+
+        /* Sortable Column Headers */
+        .sortable-header {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .sortable-header:hover {
+            color: #ffffff;
+        }
+
+        .sort-icon {
+            opacity: 0.5;
+            transition: all 0.2s ease;
+        }
+
+        .sortable-header.active .sort-icon {
+            opacity: 1;
+        }
+
+        /* Monospace text for memo numbers */
+        .memo-number {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        /* Detail Modal */
         .detail-backdrop {
-            opacity: 0; pointer-events: none;
+            opacity: 0;
+            pointer-events: none;
             background: rgba(180,83,9,0.08);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             transition: opacity 0.3s cubic-bezier(.4,0,.2,1);
         }
-        .detail-backdrop.open { opacity: 1; pointer-events: auto; }
+        .detail-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
         .detail-card {
             transform: translateY(24px) scale(0.97);
             opacity: 0;
             transition: transform 0.32s cubic-bezier(.34,1.56,.64,1), opacity 0.28s ease;
         }
-        .detail-backdrop.open .detail-card { transform: translateY(0) scale(1); opacity: 1; }
+        .detail-backdrop.open .detail-card {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
 
+        /* Form modal backdrop */
         #form-modal {
-            background: rgba(180,83,9,0.08);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+            background: rgba(120,53,15,0.18);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
+        /* Form modal card */
+        #form-modal > div {
+            border: none !important;
+            background: linear-gradient(160deg, #fffbf0 0%, #ffffff 60%, #fff8ed 100%) !important;
+            box-shadow:
+                0 32px 80px rgba(120,53,15,0.22),
+                0 0 0 1px rgba(245,158,11,0.18),
+                0 1px 0 rgba(255,255,255,0.9) inset !important;
+        }
+
+        /* Modal header gradient bar */
         .form-modal-header {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            padding: 1.5rem;
+            background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+            margin: -1.25rem -1.25rem 1.5rem -1.25rem;
+            padding: 1.25rem 1.5rem;
+            border-radius: 0.75rem 0.75rem 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .form-field { display: flex; flex-direction: column; gap: 0.5rem; }
-        .form-field label { font-weight: 600; color: #374151; font-size: 0.95rem; }
-        .form-field input, .form-field select {
-            border: 1px solid #d1d5db; border-radius: 0.5rem;
-            padding: 0.75rem; transition: all 0.2s; background: white;
+        /* Section cards inside form */
+        .form-section {
+            background: #ffffff;
+            border: 1px solid #fde68a;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0.75rem;
+            padding: 1.25rem 1.25rem 1rem 1.25rem;
+            box-shadow: 0 2px 8px rgba(245,158,11,0.07);
         }
-        .form-field input:focus, .form-field select:focus {
-            outline: none; border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.1);
+        .form-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #b45309;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .form-section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, #fde68a, transparent);
         }
 
+        /* Input / textarea polish */
+        .form-field input[type="text"],
+        .form-field input[type="number"],
+        .form-field input[type="date"],
+        .form-field textarea {
+            background: #fafafa;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 0.55rem 0.75rem;
+            font-size: 0.875rem;
+            color: #1f2937;
+            width: 100%;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            outline: none;
+        }
+        .form-field input[type="text"]:focus,
+        .form-field input[type="number"]:focus,
+        .form-field input[type="date"]:focus,
+        .form-field textarea:focus {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+        }
+        .form-field input[type="text"]:hover,
+        .form-field input[type="number"]:hover,
+        .form-field input[type="date"]:hover,
+        .form-field textarea:hover {
+            border-color: #fcd34d;
+            background: #fffdf5;
+        }
+        .form-field label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.35rem;
+        }
+
+        /* Action buttons */
+        .btn-cancel {
+            padding: 0.6rem 1.5rem;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.6rem;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background: #f9fafb;
+            transition: all 0.18s;
+            cursor: pointer;
+        }
+        .btn-cancel:hover { background: #f3f4f6; border-color: #d1d5db; color: #374151; }
         .btn-save {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem;
-            border: none; cursor: pointer; font-weight: 600;
-            transition: all 0.2s; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            padding: 0.6rem 1.75rem;
+            border-radius: 0.6rem;
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.875rem;
+            border: none;
+            box-shadow: 0 4px 14px rgba(180,83,9,0.35);
+            transition: all 0.18s;
+            cursor: pointer;
         }
-        .btn-save:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(16,185,129,0.2); }
-        .btn-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem;
-            border: none; cursor: pointer; font-weight: 600;
-            transition: all 0.2s; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        .btn-save:hover {
+            background: linear-gradient(135deg, #b45309 0%, #92400e 100%);
+            box-shadow: 0 6px 20px rgba(180,83,9,0.45);
+            transform: translateY(-1px);
         }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12); }
+        .btn-save:active { transform: translateY(0); }
 
-        .btn-danger {
-            background: #ef4444; color: white; padding: 0.5rem 1rem;
-            border-radius: 0.4rem; border: none; cursor: pointer; font-weight: 600;
-            font-size: 0.875rem; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        .detail-amount-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%);
+            border: 1.5px solid #6ee7b7;
         }
-        .btn-danger:hover { background: #dc2626; }
+        .detail-close-btn {
+            background: linear-gradient(135deg, #059669, #047857);
+            transition: filter 0.2s;
+        }
+        .detail-close-btn:hover {
+            filter: brightness(1.1);
+        }
 
+        /* Action Button Animations */
         .action-btn {
             transition: all 0.2s ease;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
+
         .action-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
         }
+
+        .action-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* File upload input styling */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            background-color: #f9fafb;
+            border: 2px dashed #d1d5db;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .file-input-label:hover {
+            border-color: #f59e0b;
+            background-color: #fffbeb;
+            color: #92400e;
+        }
+
+        .file-input-label.has-file {
+            border-style: solid;
+            background-color: #fef3c7;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+
+        .file-name-display {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background-color: #f3f4f6;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        /* Document viewer modal */
+        #document-modal {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .document-viewer-card {
+            transform: scale(0.97);
+            opacity: 0;
+            transition: transform 0.32s cubic-bezier(.34,1.56,.64,1), opacity 0.28s ease;
+            max-height: 95vh;
+            overflow-y: auto;
+            width: 100%;
+            max-width: calc(100% - 2rem);
+        }
+
+        #document-modal.open .document-viewer-card {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 80vh;
+            border: none;
+        }
+
+        .image-viewer {
+            max-width: 100%;
+            max-height: 80vh;
+            height: auto;
+            width: auto;
+        }
     </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
-
     <!-- Header -->
     <div id="header-container"></div>
 
-    <!-- Navigation Menu -->
+    <!-- Navigation -->
     <div id="menu-container"></div>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 flex-1">
         <!-- Success/Error Messages -->
-        <div id="success-message" class="hidden mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+        <div id="success-message" class="hidden mb-4 p-4 bg-emerald-100 border border-emerald-400 text-emerald-700 rounded-lg shadow-sm">
             <p id="success-text"></p>
         </div>
-        <div id="error-message" class="hidden mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+        <div id="error-message" class="hidden mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-sm">
             <p id="error-text"></p>
         </div>
 
-        <!-- Page Header -->
+        <!-- Header Section -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-6">
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentcolor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        প্রকল্প অনুমোদন স্মারক
-                    </h2>
-                    <p class="text-gray-600 text-sm mt-1">জেলা পরিষদ, কুষ্টিয়া</p>
+                    <h2 class="text-3xl font-bold text-gray-900">প্রকল্প অনুমোদন স্মারক</h2>
+                    <p class="text-gray-600 mt-1">প্রকল্প অনুমোদনের স্মারক তালিকা ও পরিচালনা</p>
                 </div>
-                <button onclick="openAddModal()" class="btn-primary flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                <button data-role="admin" onclick="openFormModal()" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-600 to-amber-500 text-white rounded-lg hover:from-amber-700 hover:to-amber-600 transition shadow-md hover:shadow-lg transform hover:translate-y-0 active:translate-y-0.5">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
                     নতুন স্মারক যোগ করুন
                 </button>
             </div>
 
             <!-- Search and Filter -->
-            <div class="flex flex-col sm:flex-row gap-3">
-                <input type="text" id="search-input" placeholder="স্মারক নম্বর খুঁজুন..."
-                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-gray-900">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">অনুসন্ধান</label>
+                    <input type="text" id="search-input" placeholder="নম্বর, তারিখ, প্রকল্প সংখ্যা..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">অর্থবছর</label>
+                    <select id="year-filter" class="w-full border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent bg-white hover:border-amber-400 transition-all font-medium text-sm">
+                        <option value="">সকল অর্থবছর</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <!-- Data Table -->
-        <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gradient-to-r from-amber-500 to-amber-600 border-b border-amber-600">
-                        <tr>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-widest">স্মারক তারিখ</th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-widest">স্মারক নম্বর</th>
-                            <th class="px-6 py-4 text-center text-xs font-bold text-white uppercase tracking-widest">প্রকল্প সংখ্যা</th>
-                            <th class="px-6 py-4 text-center text-xs font-bold text-white uppercase tracking-widest">কার্যক্রম</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        <tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">লোড হচ্ছে...</td></tr>
-                    </tbody>
-                </table>
+        <!-- Records List Section -->
+        <div class="space-y-4">
+            <!-- Loading Spinner -->
+            <div id="loading" class="hidden p-12 text-center bg-white rounded-xl shadow-md">
+                <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-amber-600"></div>
+                <p class="mt-4 text-lg text-gray-600 font-medium">লোড হচ্ছে...</p>
             </div>
 
-            <!-- Pagination Footer -->
-            <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="text-sm text-gray-700 font-semibold">মোট স্মারক: <span id="total-count" class="text-gray-900 font-bold">0</span></div>
-                <div id="pagination-container" class="flex gap-1.5"></div>
+            <!-- Table Wrapper: header + rows share the same width -->
+            <div id="table-wrapper" class="bg-white rounded-xl shadow-md overflow-hidden">
+
+            <!-- Table Header (Column Names) -->
+            <div id="table-header" class="hidden border-b-2 border-gray-200 bg-gradient-to-r from-amber-600 to-amber-700">
+                <div class="grid grid-cols-4 gap-3 px-6 py-4 items-center">
+                    <div class="col-span-1 sortable-header" onclick="sortTable('memo_date')" data-column="memo_date">
+                        <span class="text-xs font-semibold text-white uppercase tracking-wider">স্মারক তারিখ</span>
+                        <svg class="sort-icon w-3 h-3 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
+                        </svg>
+                    </div>
+                    <div class="col-span-1 sortable-header" onclick="sortTable('memo_number')" data-column="memo_number">
+                        <span class="text-xs font-semibold text-white uppercase tracking-wider">স্মারক নম্বর</span>
+                        <svg class="sort-icon w-3 h-3 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
+                        </svg>
+                    </div>
+                    <div class="col-span-1 sortable-header justify-center" onclick="sortTable('total_projects')" data-column="total_projects">
+                        <span class="text-xs font-semibold text-amber-50 uppercase tracking-wider">📋 প্রকল্প সংখ্যা</span>
+                        <svg class="sort-icon w-3 h-3 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
+                        </svg>
+                    </div>
+                    <div class="col-span-1 text-center">
+                        <span class="text-xs font-semibold text-white uppercase tracking-wider">কার্যক্রম</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Records Container -->
+            <div id="table-container">
+            </div>
+
+            </div><!-- end table-wrapper -->
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden p-12 text-center bg-white rounded-xl">
+                <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <h3 class="mt-4 text-lg font-semibold text-gray-900">কোনো স্মারক পাওয়া যায়নি</h3>
+                <p class="mt-2 text-sm text-gray-500">নতুন স্মারক যোগ করতে উপরের বাটনে ক্লিক করুন</p>
+            </div>
+
+            <!-- Records Per Page Selector & Pagination & Total Count -->
+            <div class="flex items-center justify-between gap-4 py-4 px-4">
+                <div id="records-per-page-selector"></div>
+                <div id="pagination-container" class="flex justify-center flex-1"></div>
+                <div id="total-records" class="text-sm text-gray-600 font-medium"></div>
             </div>
         </div>
     </main>
 
-    <!-- Detail Modal -->
-    <div id="detail-backdrop" class="detail-backdrop fixed inset-0 z-40 flex items-center justify-center p-4" onclick="if(event.target===this)closeDetailModal()">
-        <div class="detail-card bg-white rounded-2xl shadow-2xl max-w-md w-full">
-            <div class="bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-4 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white">স্মারক বিবরণ</h3>
-                <button onclick="closeDetailModal()" class="text-white/80 hover:text-white transition-colors action-btn">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
+    <!-- ── Detail View Modal ── -->
+    <div id="detail-modal" class="detail-backdrop fixed inset-0 z-[90] flex items-center justify-center p-4">
+        <div class="detail-card bg-white w-full max-w-lg rounded-[1.75rem] shadow-2xl p-6 relative">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1 min-w-0">
+                    <h2 id="dm-memo-number" class="text-xl font-extrabold text-slate-900 leading-tight mb-0.5 memo-number"></h2>
+                    <p id="dm-memo-date" class="text-sm font-semibold text-blue-600 truncate"></p>
+                </div>
+                <button onclick="closeDetailModal()" class="text-slate-300 hover:text-red-500 transition-colors p-1 flex-shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
 
-            <div class="p-6 space-y-4">
+            <div class="space-y-3 border-t border-emerald-100 pt-4">
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">স্মারক তারিখ</label>
-                    <p id="dm-memo-date" class="text-lg text-gray-900 font-medium mt-1"></p>
+                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">স্মারক তারিখ</p>
+                    <p id="dm-date-display" class="font-semibold text-slate-800 text-[14px]"></p>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">স্মারক নম্বর</label>
-                    <p id="dm-memo-number" class="text-base text-gray-900 font-mono mt-1"></p>
+                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">স্মারক নম্বর</p>
+                    <p id="dm-number-display" class="font-semibold text-slate-800 text-[14px] memo-number"></p>
+                </div>
+                <div class="detail-amount-box p-4 rounded-xl flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">মোট প্রকল্প সংখ্যা</p>
+                        <p id="dm-total-projects" class="text-xl font-black text-emerald-700 tracking-tight"></p>
+                    </div>
+                    <div class="project-count-badge" id="dm-badge-display"></div>
                 </div>
                 <div>
-                    <label class="text-sm font-semibold text-gray-600">মোট প্রকল্প সংখ্যা</label>
-                    <p id="dm-total-projects" class="text-lg text-gray-900 font-medium mt-1"></p>
+                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">মন্তব্য</p>
+                    <p id="dm-remarks" class="font-semibold text-slate-800 text-[14px]"></p>
                 </div>
-                <div>
-                    <label class="text-sm font-semibold text-gray-600">মন্তব্য</label>
-                    <p id="dm-remarks" class="text-gray-700 mt-1"></p>
+                <div id="dm-document-section" class="hidden">
+                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">ডকুমেন্ট</p>
+                    <p id="dm-document-info" class="font-semibold text-slate-800 text-[14px]"></p>
                 </div>
             </div>
-
-            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex gap-3">
-                <button onclick="editRecord(currentDetailId)" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold flex items-center justify-center gap-2 action-btn">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            <div class="mt-4 pt-3 border-t border-emerald-100 flex gap-3">
+                <button onclick="editRecordFromModal()" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow hover:shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
-                    সম্পাদনা
+                    সম্পাদনা করুন
                 </button>
-                <button onclick="deleteRecord(currentDetailId)" class="btn-danger action-btn">মুছুন</button>
+                <button data-role="admin" onclick="deleteRecordFromModal()" class="py-2.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-red-500 to-red-600 text-white shadow hover:shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    মুছে ফেলুন
+                </button>
+            </div>
+            <button onclick="closeDetailModal()" class="detail-close-btn w-full mt-3 text-white font-bold py-3 rounded-xl shadow-lg text-[14px]">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <!-- Document Viewer Modal -->
+    <div id="document-modal" class="detail-backdrop fixed inset-0 z-[95] flex items-center justify-center p-2 md:p-4">
+        <div class="document-viewer-card bg-white w-full rounded-xl shadow-2xl p-4 md:p-6 relative">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1 min-w-0">
+                    <h2 id="dv-title" class="text-xl font-extrabold text-slate-900 leading-tight mb-0.5"></h2>
+                    <p id="dv-filename" class="text-sm font-semibold text-blue-600 truncate"></p>
+                </div>
+                <button onclick="closeDocumentModal()" class="text-slate-300 hover:text-red-500 transition-colors p-1 flex-shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Document Container -->
+            <div id="dv-content" class="border-t border-gray-200 pt-4 flex items-center justify-center min-h-[70vh]">
+                <div class="text-gray-500">লোড হচ্ছে...</div>
             </div>
         </div>
     </div>
 
-    <!-- Form Modal -->
+    <!-- Add/Edit Modal -->
     <div id="form-modal" class="hidden fixed inset-0 overflow-y-auto h-full w-full z-50">
-        <div class="relative top-8 mx-auto p-5 w-full max-w-2xl rounded-2xl mb-10">
+        <div class="relative top-20 mx-auto border w-full max-w-2xl rounded-xl">
             <div class="form-modal-header">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-white leading-tight" id="modal-title">নতুন স্মারক যোগ করুন</h3>
-                        <p class="text-amber-200 text-xs font-medium">জেলা পরিষদ, কুষ্টিয়া</p>
-                    </div>
-                </div>
-                <button onclick="closeFormModal()" class="absolute top-6 right-5 w-8 h-8 rounded-lg bg-white/15 hover:bg-white/30 flex items-center justify-center transition-all text-white">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                <h3 class="text-2xl font-bold text-white" id="modal-title">নতুন স্মারক যোগ করুন</h3>
+                <button onclick="closeFormModal()" class="text-amber-100 hover:text-white transition-colors">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
             </div>
 
-            <form id="memo-form" class="bg-white rounded-b-2xl p-6 space-y-4">
-                <input type="hidden" id="record-id">
+            <form id="memo-form" class="p-6 space-y-6">
+                <input type="hidden" id="record-id" name="id">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="form-field md:col-span-1">
-                        <label>স্মারক তারিখ <span class="text-red-400 font-bold">*</span></label>
-                        <input type="date" name="memo_date" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                <!-- স্মারক বিবরণ সেকশন -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        স্মারক বিবরণ
                     </div>
-
-                    <div class="form-field md:col-span-1">
-                        <label>স্মারক নম্বর <span class="text-red-400 font-bold">*</span></label>
-                        <input type="text" name="memo_number" required placeholder="যেমন: ০০.০০.৩৩৪.২৫.२६.০০१" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 font-mono">
-                    </div>
-
-                    <div class="form-field md:col-span-1">
-                        <label>মোট প্রকল্প সংখ্যা <span class="text-red-400 font-bold">*</span></label>
-                        <input type="number" name="total_projects" required min="0" placeholder="০" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
-                    </div>
-
-                    <div class="form-field md:col-span-1">
-                        <label>মন্তব্য</label>
-                        <input type="text" name="remarks" placeholder="যেকোনো অতিরিক্ত তথ্য..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 form-field">
+                        <div>
+                            <label>স্মারক তারিখ <span class="text-red-500">*</span></label>
+                            <input type="date" name="memo_date" required>
+                        </div>
+                        <div>
+                            <label>স্মারক নম্বর <span class="text-red-500">*</span></label>
+                            <input type="text" name="memo_number" required placeholder="যেমন: MEM/2024/001" style="font-family: 'Courier New', monospace;">
+                        </div>
+                        <div>
+                            <label>মোট প্রকল্প সংখ্যা <span class="text-red-500">*</span></label>
+                            <input type="number" name="total_projects" required min="1">
+                        </div>
+                        <div>
+                            <label>মন্তব্য (ঐচ্ছিক)</label>
+                            <input type="text" name="remarks" placeholder="অতিরিক্ত মন্তব্য যুক্ত করুন...">
+                        </div>
                     </div>
                 </div>
 
-                <div class="flex gap-3 pt-4">
-                    <button type="submit" class="btn-save flex-1 flex items-center justify-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        সংরক্ষণ করুন
-                    </button>
-                    <button type="button" onclick="closeFormModal()" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 font-semibold">বাতিল করুন</button>
+                <!-- ডকুমেন্ট সেকশন -->
+                <div class="form-section">
+                    <div class="form-section-title">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                        ডকুমেন্ট
+                    </div>
+                    <div class="form-field">
+                        <label>স্মারক ডকুমেন্ট (PDF/ছবি)</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="document-file" name="document_file" accept=".pdf,.jpg,.jpeg,.png,.webp" class="file-input">
+                            <label for="document-file" class="file-input-label" id="file-label">
+                                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                ফাইল বেছে নিন বা এখানে টেনে আনুন
+                            </label>
+                            <div id="file-name-display" class="hidden file-name-display"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">সমর্থিত: PDF, JPG, PNG, WebP (সর্বোচ্চ ৫ MB)</p>
+                    </div>
+                </div>
+
+                <!-- অ্যাকশন বাটন -->
+                <div class="flex gap-3 justify-end pt-4 border-t border-amber-100">
+                    <button type="button" onclick="closeFormModal()" class="btn-cancel">বাতিল করুন</button>
+                    <button type="submit" class="btn-save">সংরক্ষণ করুন</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Footer -->
-    <div id="footer-container"></div>
-
-    <script src="assets/js/auth.js"></script>
-    <script src="assets/js/components.js"></script>
-    <script src="assets/js/crud.js"></script>
-
     <script>
+        const API_BASE = '/api/approval-memos';
+        let currentData = [];
+        let filteredData = [];
+        let sortColumn = 'memo_date';
+        let sortAscending = false;
         let currentPage = 1;
         let recordsPerPage = 20;
-        let allRecords = [];
-        let editingId = null;
-        let currentDetailId = null;
+        let selectedRecordId = null;
 
-        function formatDate(dateStr) {
-            if (!dateStr) return '-';
-            const d = new Date(dateStr);
-            return d.toLocaleDateString('bn-BD');
-        }
+        document.addEventListener('DOMContentLoaded', async () => {
+            await DashboardComponents.loadAll('approval-memos', 'প্রকল্প অনুমোদন স্মারক');
+            loadData();
+            document.getElementById('search-input').addEventListener('input', filterData);
+            document.getElementById('memo-form').addEventListener('submit', handleFormSubmit);
+        });
 
-        async function loadData(page = 1) {
+        async function loadData() {
+            showLoading(true);
             try {
-                currentPage = page;
-                const res = await AuthManager.fetch(`${AuthManager.API_URL}/approval-memos/list?page=${page}&limit=${recordsPerPage}&search=${document.getElementById('search-input').value || ''}`);
-                const data = await res.json();
-
-                document.getElementById('total-count').innerText = data.total;
-                allRecords = data.data;
-
-                const tbody = document.getElementById('table-body');
-                tbody.innerHTML = '';
-
-                if (data.data.length === 0) {
-                    tbody.innerHTML = '<tr class="text-center py-8"><td colspan="4" class="py-8 text-gray-500">কোনো স্মারক পাওয়া যায়নি</td></tr>';
-                    return;
-                }
-
-                data.data.forEach(record => {
-                    const row = document.createElement('tr');
-                    row.className = 'table-row';
-                    row.onclick = () => showDetailModal(record);
-                    row.innerHTML = `
-                        <td class="px-6 py-4 text-gray-900 font-medium">${formatDate(record.memo_date)}</td>
-                        <td class="px-6 py-4 font-mono text-sm text-gray-700">${CRUDManager.escapeHtml(record.memo_number)}</td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 text-amber-700 font-bold text-sm border border-amber-200">
-                                ${record.total_projects}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="event.stopPropagation(); editRecord('${record.id}')" class="px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors action-btn">সম্পাদনা</button>
-                                <button onclick="event.stopPropagation(); deleteRecord('${record.id}')" class="px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors action-btn">মুছুন</button>
-                            </div>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-
-                updatePagination(data);
-            } catch (err) {
-                console.error('Error loading data:', err);
-                CRUDManager.showError('ডেটা লোড করতে ব্যর্থ: ' + err.message);
+                const response = await fetch(`${API_BASE}/list?page=${currentPage}&limit=${recordsPerPage}`);
+                if (!response.ok) throw new Error('Failed to load data');
+                const result = await response.json();
+                currentData = result.data || [];
+                filteredData = [...currentData];
+                renderTable();
+                updatePagination();
+                updateRecordCount();
+                showTableHeader(currentData.length > 0);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showError('ডেটা লোড করতে ব্যর্থ হয়েছে');
+            } finally {
+                showLoading(false);
             }
         }
 
-        function updatePagination(data) {
+        function filterData() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            filteredData = query === '' ? [...currentData] : currentData.filter(item =>
+                (item.memo_number || '').toLowerCase().includes(query)
+            );
+            currentPage = 1;
+            renderTable();
+            updatePagination();
+            updateRecordCount();
+        }
+
+        function renderTable() {
+            const container = document.getElementById('table-container');
+            if (filteredData.length === 0) {
+                container.innerHTML = '';
+                document.getElementById('empty-state').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('empty-state').classList.add('hidden');
+            const startIdx = (currentPage - 1) * recordsPerPage;
+            const endIdx = startIdx + recordsPerPage;
+            const pageData = filteredData.slice(startIdx, endIdx);
+            container.innerHTML = pageData.map(record => `
+                <div class="table-row grid grid-cols-4 gap-3 px-6 py-2.5 items-center cursor-pointer" onclick="openDetailModal(${record.id})">
+                    <div class="col-span-1 text-sm font-medium text-gray-800">${formatDate(record.memo_date)}</div>
+                    <div class="col-span-1 text-sm font-medium memo-number text-gray-700">${escapeHtml(record.memo_number)}</div>
+                    <div class="col-span-1 flex justify-center"><div class="project-count-badge">${record.total_projects}</div></div>
+                    <div class="col-span-1 flex justify-center gap-2" onclick="event.stopPropagation()">
+                        ${record.document_file ? `<button onclick="viewDocument(${record.id})" class="action-btn p-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600" title="ডকুমেন্ট দেখুন">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </button>` : ''}
+                        <button onclick="openFormModal(${record.id})" class="action-btn p-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600" title="সম্পাদনা">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </button>
+                        <button data-role="admin" onclick="deleteRecord(${record.id})" class="action-btn p-2 bg-red-500 text-white rounded-lg hover:bg-red-600" title="মুছে ফেলুন">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showTableHeader(show) {
+            document.getElementById('table-header').classList.toggle('hidden', !show);
+        }
+
+        function sortTable(column) {
+            if (sortColumn === column) {
+                sortAscending = !sortAscending;
+            } else {
+                sortColumn = column;
+                sortAscending = true;
+            }
+            filteredData.sort((a, b) => {
+                let aVal = a[column];
+                let bVal = b[column];
+                if (typeof aVal === 'string') aVal = aVal.toLowerCase();
+                if (typeof bVal === 'string') bVal = bVal.toLowerCase();
+                if (aVal < bVal) return sortAscending ? -1 : 1;
+                if (aVal > bVal) return sortAscending ? 1 : -1;
+                return 0;
+            });
+            renderTable();
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredData.length / recordsPerPage);
             const container = document.getElementById('pagination-container');
-            container.innerHTML = '';
-
-            if (data.pages <= 1) return;
-
-            const nav = document.createElement('nav');
-            nav.className = 'flex gap-1.5';
-
-            for (let i = 1; i <= data.pages; i++) {
-                const btn = document.createElement('button');
-                btn.className = `px-3.5 py-1.5 rounded-lg font-semibold text-sm transition-all action-btn ${
-                    i === currentPage
-                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:border-amber-400 hover:text-amber-600'
-                }`;
-                btn.textContent = CRUDManager.toBengaliNumber(i);
-                btn.onclick = () => loadData(i);
-                nav.appendChild(btn);
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
             }
-
-            container.appendChild(nav);
+            let html = '';
+            if (currentPage > 1) {
+                html += `<button onclick="goToPage(1)" class="px-2 py-1 rounded hover:bg-amber-100 text-xs">পূর্ব</button>`;
+            }
+            const start = Math.max(1, currentPage - 2);
+            const end = Math.min(totalPages, currentPage + 2);
+            for (let i = start; i <= end; i++) {
+                html += `<button onclick="goToPage(${i})" class="px-3 py-1 rounded text-xs ${i === currentPage ? 'bg-amber-600 text-white' : 'hover:bg-amber-100'}">${i}</button>`;
+            }
+            if (currentPage < totalPages) {
+                html += `<button onclick="goToPage(${totalPages})" class="px-2 py-1 rounded hover:bg-amber-100 text-xs">পরবর্তী</button>`;
+            }
+            container.innerHTML = html;
         }
 
-        function openAddModal() {
-            editingId = null;
-            document.getElementById('record-id').value = '';
-            document.getElementById('memo-form').reset();
-            document.getElementById('modal-title').innerText = 'নতুন স্মারক যোগ করুন';
+        function goToPage(page) {
+            currentPage = page;
+            renderTable();
+            updatePagination();
+        }
+
+        function updateRecordCount() {
+            document.getElementById('total-records').textContent = `মোট: ${filteredData.length} টি`;
+        }
+
+        function openFormModal(recordId = null) {
+            const form = document.getElementById('memo-form');
+            const title = document.getElementById('modal-title');
+            const fileLabel = document.getElementById('file-label');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const fileInput = document.getElementById('document-file');
+
+            if (recordId) {
+                title.textContent = 'স্মারক সম্পাদনা করুন';
+                const record = currentData.find(r => r.id === recordId);
+                if (record) {
+                    document.getElementById('record-id').value = record.id;
+                    document.querySelector('input[name="memo_date"]').value = record.memo_date;
+                    document.querySelector('input[name="memo_number"]').value = record.memo_number;
+                    document.querySelector('input[name="total_projects"]').value = record.total_projects;
+                    document.querySelector('input[name="remarks"]').value = record.remarks || '';
+
+                    // Handle file display
+                    fileInput.value = '';
+                    if (record.document_file) {
+                        fileNameDisplay.textContent = '📄 ' + record.document_file;
+                        fileNameDisplay.classList.remove('hidden');
+                        fileLabel.classList.add('has-file');
+                    } else {
+                        fileNameDisplay.classList.add('hidden');
+                        fileLabel.classList.remove('has-file');
+                    }
+                }
+            } else {
+                title.textContent = 'নতুন স্মারক যোগ করুন';
+                form.reset();
+                document.getElementById('record-id').value = '';
+                fileInput.value = '';
+                fileNameDisplay.classList.add('hidden');
+                fileLabel.classList.remove('has-file');
+            }
             document.getElementById('form-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
         }
 
         function closeFormModal() {
             document.getElementById('form-modal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-            editingId = null;
+            document.getElementById('memo-form').reset();
         }
 
-        function showDetailModal(record) {
-            currentDetailId = record.id;
-            document.getElementById('dm-memo-date').innerText = formatDate(record.memo_date);
-            document.getElementById('dm-memo-number').innerText = CRUDManager.escapeHtml(record.memo_number);
-            document.getElementById('dm-total-projects').innerText = record.total_projects;
-            document.getElementById('dm-remarks').innerText = record.remarks || 'কোনো মন্তব্য নেই';
-            document.getElementById('detail-backdrop').classList.add('open');
-            document.body.style.overflow = 'hidden';
+        function openDetailModal(recordId) {
+            selectedRecordId = recordId;
+            const record = currentData.find(r => r.id === recordId);
+            if (!record) return;
+            document.getElementById('dm-memo-number').textContent = record.memo_number;
+            document.getElementById('dm-memo-date').textContent = formatDate(record.memo_date);
+            document.getElementById('dm-date-display').textContent = formatDate(record.memo_date);
+            document.getElementById('dm-number-display').textContent = record.memo_number;
+            document.getElementById('dm-total-projects').textContent = record.total_projects;
+            document.getElementById('dm-badge-display').textContent = record.total_projects;
+            document.getElementById('dm-remarks').textContent = record.remarks || 'নেই';
+
+            // Handle document display
+            const docSection = document.getElementById('dm-document-section');
+            const docInfo = document.getElementById('dm-document-info');
+            if (record.document_file) {
+                docInfo.innerHTML = `📄 ${escapeHtml(record.document_file)} <button onclick="event.stopPropagation(); viewDocument(${record.id})" class="ml-3 text-green-600 hover:text-green-800 font-bold underline">দেখুন</button>`;
+                docSection.classList.remove('hidden');
+            } else {
+                docSection.classList.add('hidden');
+            }
+
+            document.getElementById('detail-modal').classList.add('open');
         }
 
         function closeDetailModal() {
-            document.getElementById('detail-backdrop').classList.remove('open');
-            document.body.style.overflow = 'auto';
-            currentDetailId = null;
+            document.getElementById('detail-modal').classList.remove('open');
+            selectedRecordId = null;
         }
 
-        async function editRecord(id) {
-            closeDetailModal();
-            const record = allRecords.find(r => r.id == id);
-            if (!record) return;
-
-            editingId = id;
-            document.getElementById('record-id').value = id;
-            document.getElementById('memo-form').elements['memo_date'].value = record.memo_date;
-            document.getElementById('memo-form').elements['memo_number'].value = record.memo_number;
-            document.getElementById('memo-form').elements['total_projects'].value = record.total_projects;
-            document.getElementById('memo-form').elements['remarks'].value = record.remarks || '';
-            document.getElementById('modal-title').innerText = 'স্মারক সম্পাদনা করুন';
-            document.getElementById('form-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        async function deleteRecord(id) {
-            if (!confirm('আপনি কি এই স্মারকটি মুছতে চান?')) return;
-            try {
-                await AuthManager.fetch(`${AuthManager.API_URL}/approval-memos/${id}`, { method: 'DELETE' });
-                CRUDManager.showSuccess('স্মারকটি সফলভাবে মুছে ফেলা হয়েছে');
+        function editRecordFromModal() {
+            if (selectedRecordId) {
+                openFormModal(selectedRecordId);
                 closeDetailModal();
-                loadData(currentPage);
-            } catch (err) {
-                CRUDManager.showError('মুছতে ব্যর্থ: ' + err.message);
             }
         }
 
-        document.getElementById('memo-form').addEventListener('submit', async (e) => {
+        function deleteRecordFromModal() {
+            if (selectedRecordId) {
+                deleteRecord(selectedRecordId);
+                closeDetailModal();
+            }
+        }
+
+        async function handleFormSubmit(e) {
             e.preventDefault();
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            submitBtn.disabled = true;
+            const recordId = document.getElementById('record-id').value;
+            const formData = new FormData();
+
+            formData.append('memo_date', document.querySelector('input[name="memo_date"]').value);
+            formData.append('memo_number', document.querySelector('input[name="memo_number"]').value);
+            formData.append('total_projects', parseInt(document.querySelector('input[name="total_projects"]').value, 10));
+            formData.append('remarks', document.querySelector('input[name="remarks"]').value || null);
+
+            const fileInput = document.getElementById('document-file');
+            if (fileInput.files.length > 0) {
+                formData.append('document_file', fileInput.files[0]);
+            }
 
             try {
-                const formData = CRUDManager.formToJSON(e.target);
-                formData.total_projects = parseInt(formData.total_projects, 10) || 0;
+                const url = recordId ? `${API_BASE}/${recordId}` : API_BASE;
+                const method = recordId ? 'PUT' : 'POST';
+                const token = AuthManager.getToken();
 
-                if (editingId) {
-                    await AuthManager.fetch(`${AuthManager.API_URL}/approval-memos/${editingId}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
-                    });
-                    CRUDManager.showSuccess('স্মারকটি সফলভাবে আপডেট হয়েছে');
-                } else {
-                    await AuthManager.fetch(`${AuthManager.API_URL}/approval-memos`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
-                    });
-                    CRUDManager.showSuccess('নতুন স্মারক সফলভাবে যোগ হয়েছে');
+                console.log('Token:', token ? 'Present' : 'Missing');
+                console.log('User:', AuthManager.getUser());
+
+                if (!token) {
+                    showError('আপনি লগ ইন করা নন। অনুগ্রহ করে লগ ইন করুন।');
+                    return;
                 }
 
+                console.log('Sending request to:', url, 'with method:', method);
+
+                const response = await fetch(url, {
+                    method,
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    const errorMsg = errorData.message || errorData.error || `HTTP ${response.status}`;
+                    throw new Error(errorMsg);
+                }
+                showSuccess(recordId ? 'স্মারক আপডেট হয়েছে' : 'স্মারক তৈরি হয়েছে');
                 closeFormModal();
-                loadData(currentPage);
-            } catch (err) {
-                CRUDManager.showError('সংরক্ষণ করতে ব্যর্থ: ' + err.message);
-            } finally {
-                submitBtn.disabled = false;
+                loadData();
+            } catch (error) {
+                console.error('Error saving record:', error);
+                showError('স্মারক সংরক্ষণ করতে ব্যর্থ হয়েছে: ' + error.message);
+            }
+        }
+
+        async function deleteRecord(recordId) {
+            if (!confirm('আপনি কি এই স্মারক মুছতে চান?')) return;
+            try {
+                const token = AuthManager.getToken();
+                if (!token) {
+                    showError('আপনি লগ ইন করা নন। অনুগ্রহ করে লগ ইন করুন।');
+                    return;
+                }
+
+                const response = await fetch(`${API_BASE}/${recordId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    const errorMsg = errorData.message || errorData.error || `HTTP ${response.status}`;
+                    throw new Error(errorMsg);
+                }
+                showSuccess('স্মারক মুছে ফেলা হয়েছে');
+                loadData();
+            } catch (error) {
+                console.error('Error deleting record:', error);
+                showError('স্মারক মুছতে ব্যর্থ হয়েছে: ' + error.message);
+            }
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return (text || '').replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').classList.toggle('hidden', !show);
+        }
+
+        function showSuccess(message) {
+            document.getElementById('success-text').textContent = message;
+            document.getElementById('success-message').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('success-message').classList.add('hidden');
+            }, 3000);
+        }
+
+        function showError(message) {
+            document.getElementById('error-text').textContent = message;
+            document.getElementById('error-message').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('error-message').classList.add('hidden');
+            }, 5000);
+        }
+
+        // File input change handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('document-file');
+            if (fileInput) {
+                fileInput.addEventListener('change', handleFileSelect);
+                // Drag and drop
+                const fileLabel = document.getElementById('file-label');
+                fileLabel.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    fileLabel.classList.add('has-file');
+                });
+                fileLabel.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    if (fileInput.files.length === 0) {
+                        fileLabel.classList.remove('has-file');
+                    }
+                });
+                fileLabel.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    if (e.dataTransfer.files.length > 0) {
+                        fileInput.files = e.dataTransfer.files;
+                        handleFileSelect();
+                    }
+                });
             }
         });
 
-        document.getElementById('search-input').addEventListener('input', () => loadData(1));
+        function handleFileSelect() {
+            const fileInput = document.getElementById('document-file');
+            const fileLabel = document.getElementById('file-label');
+            const fileNameDisplay = document.getElementById('file-name-display');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadData(1);
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                // Validate file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    showError('ফাইল সাইজ ৫ MB এর চেয়ে বেশি হতে পারে না');
+                    fileInput.value = '';
+                    fileLabel.classList.remove('has-file');
+                    fileNameDisplay.classList.add('hidden');
+                    return;
+                }
+                fileNameDisplay.textContent = '📄 ' + file.name;
+                fileNameDisplay.classList.remove('hidden');
+                fileLabel.classList.add('has-file');
+            } else {
+                fileLabel.classList.remove('has-file');
+                fileNameDisplay.classList.add('hidden');
+            }
+        }
+
+        // View document in fullscreen modal
+        async function viewDocument(recordId) {
+            const record = currentData.find(r => r.id === recordId);
+            if (!record || !record.document_file) return;
+
+            const documentModal = document.getElementById('document-modal');
+            const dvTitle = document.getElementById('dv-title');
+            const dvFilename = document.getElementById('dv-filename');
+            const dvContent = document.getElementById('dv-content');
+
+            dvTitle.textContent = record.memo_number;
+            dvFilename.textContent = record.document_file;
+
+            const fileExtension = record.document_file.split('.').pop().toLowerCase();
+            const filePath = `/uploads/${record.document_file}`;
+
+            dvContent.innerHTML = '';
+
+            if (fileExtension === 'pdf') {
+                dvContent.innerHTML = `
+                    <iframe src="${filePath}" type="application/pdf" class="pdf-viewer w-full h-full rounded-lg"></iframe>
+                `;
+            } else if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
+                dvContent.innerHTML = `
+                    <img src="${filePath}" alt="${escapeHtml(record.document_file)}" class="image-viewer w-full rounded-lg max-h-[70vh]">
+                `;
+            } else {
+                dvContent.innerHTML = '<p class="text-red-600">অসমর্থিত ফাইল ফর্ম্যাট</p>';
+            }
+
+            documentModal.classList.add('open');
+        }
+
+        function closeDocumentModal() {
+            document.getElementById('document-modal').classList.remove('open');
+            document.getElementById('dv-content').innerHTML = '';
+        }
+
+        // Close document modal on backdrop click
+        document.addEventListener('DOMContentLoaded', function() {
+            const documentModal = document.getElementById('document-modal');
+            if (documentModal) {
+                documentModal.addEventListener('click', function(e) {
+                    if (e.target === this) closeDocumentModal();
+                });
+            }
         });
     </script>
+
+    <!-- Footer injected by components.js -->
+    <div id="footer-container"></div>
+
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/components.js"></script>
 </body>
 </html>
