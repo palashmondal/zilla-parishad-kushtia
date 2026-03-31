@@ -32,4 +32,35 @@ const uploadProjectImages = multer({
     }
 });
 
-module.exports = { uploadProjectImages };
+// ── Approval Memos document storage ──────────────────────────────────────
+const approvalMemosStorage = multer.diskStorage({
+    destination(req, file, cb) {
+        cb(null, path.join(__dirname, '../../uploads/approval-memos'));
+    },
+    filename(req, file, cb) {
+        const memoId = (req.params.id || 'new').replace(/[^a-zA-Z0-9\-]/g, '');
+        const ext = path.extname(file.originalname).toLowerCase();
+        const safeName = `memo-${memoId}-${Date.now()}${ext}`;
+        cb(null, safeName);
+    }
+});
+
+const documentFilter = (req, file, cb) => {
+    const allowed = ['application/pdf', 'application/msword',
+                     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('শুধুমাত্র PDF বা Word ডকুমেন্ট আপলোড করা যাবে।'), false);
+    }
+};
+
+const uploadApprovalMemoDocument = multer({
+    storage: approvalMemosStorage,
+    fileFilter: documentFilter,
+    limits: {
+        fileSize: 5 * 1024 * 1024  // 5 MB max
+    }
+});
+
+module.exports = { uploadProjectImages, uploadApprovalMemoDocument };
