@@ -203,6 +203,29 @@ const projectsController = {
         }
     },
 
+    async getDocuments(req, res) {
+        try {
+            const id = req.params.id;
+            if (!id || id.trim().length === 0) {
+                return res.status(400).json({ error: 'Invalid project ID' });
+            }
+
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'Project not found' });
+            }
+
+            const documents = await projectsModel.getDocuments(project.id);
+            res.json(documents);
+        } catch (error) {
+            console.error('Projects getDocuments error:', error);
+            res.status(500).json({
+                error: 'Failed to fetch documents',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
     async getProgressLog(req, res) {
         try {
             const id = req.params.id;

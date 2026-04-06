@@ -24,8 +24,14 @@ const approvalMemosModel = {
             params.push(financialYear);
         }
 
-        // Build query for data
-        const query = `SELECT * FROM approval_memos WHERE 1=1${whereClause} ORDER BY memo_date DESC LIMIT ${pageSize} OFFSET ${pageOffset}`;
+        // Build query for data with actual project count
+        const query = `SELECT am.*, COALESCE(COUNT(p.id), 0) as total_projects
+                       FROM approval_memos am
+                       LEFT JOIN projects p ON am.id = p.approval_memo_id
+                       WHERE 1=1${whereClause}
+                       GROUP BY am.id
+                       ORDER BY am.memo_date DESC
+                       LIMIT ${pageSize} OFFSET ${pageOffset}`;
         const [results] = await pool.query(query, params);
 
         // Get total count
@@ -104,6 +110,18 @@ const approvalMemosModel = {
             'SELECT DISTINCT financial_year FROM approval_memos WHERE financial_year IS NOT NULL ORDER BY financial_year DESC'
         );
         return results.map(r => r.financial_year).filter(y => y);
+    },
+
+    async getProjectsByMemoId(memoId) {
+        const [projects] = await pool.execute(
+            `SELECT id, project_id, project_name, allocation_amount, released_amount,
+                    current_status, upazila, financial_year, project_approval_date, implementation_method
+             FROM projects
+             WHERE approval_memo_id = ?
+             ORDER BY project_name ASC`,
+            [memoId]
+        );
+        return projects || [];
     }
 };
 

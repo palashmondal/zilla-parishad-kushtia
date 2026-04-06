@@ -71,6 +71,12 @@
             overflow: hidden !important;
             margin-top: 4px !important;
         }
+        .ts-dropdown:not([style*="display: block"]) {
+            display: none !important;
+            height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
         .ts-dropdown .option {
             padding: 0.6rem 1rem !important;
             font-weight: 500 !important;
@@ -161,16 +167,21 @@
             border: 1px solid #fde68a;
             border-left: 4px solid #f59e0b;
             border-radius: 0.75rem;
-            padding: 1.25rem 1.25rem 1rem 1.25rem;
+            padding: 1.5rem;
             box-shadow: 0 2px 8px rgba(245,158,11,0.07);
+            display: flex;
+            flex-direction: column;
+        }
+        .grid > .form-section {
+            min-height: 100%;
         }
         .form-section-title {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: #b45309;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -189,8 +200,8 @@
             background: #fafafa;
             border: 1.5px solid #e5e7eb;
             border-radius: 0.5rem;
-            padding: 0.55rem 0.75rem;
-            font-size: 0.875rem;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.95rem;
             color: #1f2937;
             width: 100%;
             transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
@@ -209,14 +220,35 @@
             border-color: #fcd34d;
             background: #fffdf5;
         }
+        .form-field select {
+            background: #fafafa;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.95rem;
+            color: #1f2937;
+            width: 100%;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            outline: none;
+            cursor: pointer;
+        }
+        .form-field select:hover {
+            border-color: #fcd34d;
+            background: #fffdf5;
+        }
+        .form-field select:focus {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+        }
         .form-field label {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 600;
             color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.5rem;
         }
 
         /* ── Flatpickr date input — ZPK amber theme ── */
@@ -566,7 +598,13 @@
         /* ── Document upload zone ── */
         .doc-upload-zone {
             border: 2px dashed #fcd34d; border-radius: 0.75rem;
-            background: #fffbeb; padding: 1.25rem 1.5rem;
+            background: #fffbeb; padding: 1.5rem 1.5rem;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
             text-align: center; cursor: pointer;
             transition: border-color 0.2s, background 0.2s;
             position: relative;
@@ -602,10 +640,16 @@
 
         .photo-upload-zone {
             border: 2px dashed #fcd34d; border-radius: 1rem;
-            background: #fffbeb; padding: 2rem 1.5rem;
+            background: #fffbeb; padding: 1.5rem 1.5rem;
             text-align: center; cursor: pointer;
             transition: border-color 0.2s, background 0.2s;
             position: relative;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
         }
         .photo-upload-zone:hover, .photo-upload-zone.drag-over {
             border-color: #b45309; background: #fef3c7;
@@ -1169,7 +1213,7 @@
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         প্রকল্পের মূল তথ্য
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                         <!-- Row 1: Project name — full width -->
                         <div class="md:col-span-2 form-field">
@@ -1193,7 +1237,8 @@
                                 <option value="২০২৬-২৭">২০২৬-২৭</option>
                             </select>
                         </div>
-                        <div class="form-field">
+                        <!-- Row 4: Approval Memo — full width -->
+                        <div class="md:col-span-2 form-field">
                             <label>অনুমোদন স্মারক <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
                             <select name="approval_memo_id" id="approval-memo-select" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white" disabled>
                                 <option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>
@@ -1204,7 +1249,7 @@
                         <input type="hidden" name="project_approval_date">
                         <input type="hidden" name="approval_memo_number">
 
-                        <!-- Row 3: Upazila | Project Type -->
+                        <!-- Row 5: Allocation Amount | Fund Type -->
                         <div class="form-field">
                             <label>উপজেলা <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
                             <select name="upazila" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white">
@@ -1229,15 +1274,13 @@
                         </div>
 
 
-                        <!-- Row 5: Implementation Method | Fund Type -->
+                        <!-- Row 5: Allocation Amount | Fund Type -->
                         <div class="form-field">
-                            <label>বাস্তবায়ন পদ্ধতি <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
-                            <select name="implementation_method" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white">
-                                <option value="">-- পদ্ধতি নির্বাচন করুন --</option>
-                                <option value="টেন্ডার">📋 টেন্ডার</option>
-                                <option value="সিপিপিসি">🤝 সিপিপিসি</option>
-                                <option value="আরএফকিউ">📩 আরএফকিউ</option>
-                            </select>
+                            <label>মোট বরাদ্দ (টাকা) <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
+                            <div class="flex border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-amber-500 focus-within:border-amber-500">
+                                <div class="bg-gray-100 px-3 py-2.5 border-r border-gray-300 flex items-center font-semibold text-gray-600">৳</div>
+                                <input type="text" name="allocation_amount" id="allocation-amount-input" required placeholder="০" class="flex-1 px-4 py-2.5 outline-none bg-fafafa font-mono text-0.95rem" style="background: #fafafa;">
+                            </div>
                         </div>
                         <div class="form-field">
                             <label>তহবিলের ধরন <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
@@ -1249,7 +1292,16 @@
                             </select>
                         </div>
 
-                        <!-- Row 5.5: Priority | Reference -->
+                        <!-- Row 6: Implementation Method | Priority -->
+                        <div class="form-field">
+                            <label>বাস্তবায়ন পদ্ধতি <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
+                            <select name="implementation_method" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white">
+                                <option value="">-- পদ্ধতি নির্বাচন করুন --</option>
+                                <option value="টেন্ডার">📋 টেন্ডার</option>
+                                <option value="সিপিপিসি">🤝 সিপিপিসি</option>
+                                <option value="আরএফকিউ">📩 আরএফকিউ</option>
+                            </select>
+                        </div>
                         <div class="form-field">
                             <label>অগ্রাধিকার</label>
                             <select name="priority" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white">
@@ -1258,18 +1310,11 @@
                                 <option value="top_priority">🔴 সর্বোচ্চ অগ্রাধিকার</option>
                             </select>
                         </div>
+
+                        <!-- Row 7: সুপারিশকারী | GPS Location -->
                         <div class="form-field">
                             <label>সুপারিশকারী</label>
                             <input type="text" name="reference" placeholder="যে ব্যক্তি/সংস্থা সুপারিশ করেছেন…" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
-                        </div>
-
-                        <!-- Row 6: Allocation Amount | GPS Location -->
-                        <div class="form-field">
-                            <label>মোট বরাদ্দ (টাকা) <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
-                            <div class="relative">
-                                <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-amber-600 font-bold text-sm select-none">৳</span>
-                                <input type="number" name="allocation_amount" required step="0.01" min="0" class="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
-                            </div>
                         </div>
                         <div class="form-field">
                             <label class="flex items-center gap-1">
@@ -1292,6 +1337,8 @@
                     </div>
                 </div>
 
+                <!-- Section: Photo Upload & Files — Side by Side -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Section: Photo Upload -->
                 <div class="form-section" id="photo-upload-section">
                     <div class="form-section-title">
@@ -1307,11 +1354,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        <p class="text-sm font-semibold text-amber-700">ছবি টেনে আনুন বা ক্লিক করুন</p>
-                        <p class="text-xs text-gray-400 mt-1">একসাথে একাধিক ছবি নির্বাচন করতে পারবেন</p>
+                        <p class="text-base font-semibold text-amber-700">ছবি টেনে আনুন বা ক্লিক করুন</p>
+                        <p class="text-sm text-gray-400 mt-2">একসাথে একাধিক ছবি নির্বাচন করতে পারবেন</p>
                     </div>
 
-                    <div id="upload-preview-grid" class="upload-preview-grid"></div>
+                    <div id="upload-preview-grid" class="upload-preview-grid mt-4"></div>
 
                     <div class="flex items-center gap-3 mt-3 flex-wrap" id="upload-global-meta" style="display:none!important">
                         <div>
@@ -1344,8 +1391,8 @@
                 <div class="form-section" id="doc-upload-section">
                     <div class="form-section-title">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        সংযুক্ত ফাইল
-                        <span class="text-gray-400 text-xs font-normal">PDF, Word, Excel, ছবি · প্রতিটি সর্বোচ্চ ১০ MB</span>
+                        ফাইল
+                        <span class="text-gray-400 font-normal" style="font-size: 0.7rem;">PDF, Word, Excel, ছবি · প্রতিটি সর্বোচ্চ ১০ MB</span>
                     </div>
                     <!-- Drop zone -->
                     <div class="doc-upload-zone" id="doc-drop-zone">
@@ -1355,17 +1402,18 @@
                         <svg class="w-7 h-7 text-amber-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        <p class="text-sm font-semibold text-amber-700">ফাইল টেনে আনুন বা ক্লিক করুন</p>
-                        <p class="text-xs text-gray-400 mt-0.5">PDF, Word, Excel, ছবি, TXT</p>
+                        <p class="text-base font-semibold text-amber-700">ফাইল টেনে আনুন বা ক্লিক করুন</p>
+                        <p class="text-sm text-gray-400 mt-2">PDF, Word, Excel, ছবি, TXT</p>
                     </div>
                     <!-- Pending file list -->
-                    <div id="doc-pending-list" class="mt-2 space-y-1.5"></div>
+                    <div id="doc-pending-list" class="mt-4 space-y-1.5"></div>
                     <div id="doc-upload-status" class="hidden mt-2 text-sm font-semibold text-amber-700"></div>
                     <!-- Existing documents -->
                     <div id="existing-docs-section" class="hidden mt-3">
                         <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">আপলোড করা ফাইল</p>
                         <div id="existing-docs-list" class="space-y-1.5"></div>
                     </div>
+                </div>
                 </div>
 
                 <!-- Section: Remarks -->
@@ -3494,6 +3542,60 @@
             return result;
         }
 
+        // Helper function to convert English numbers to Bengali
+        function convertEnglishToBengali(englishNumber) {
+            if (!englishNumber) return '';
+            let result = String(englishNumber);
+            // Convert English digits (0-9) to Bengali numerals
+            for (let i = 0; i < 10; i++) {
+                const bengaliDigit = String.fromCharCode(0x09E6 + i);
+                result = result.replace(new RegExp(i.toString(), 'g'), bengaliDigit);
+            }
+            return result;
+        }
+
+        // Helper function to convert Bengali to English
+        function convertBengaliToEnglish(bengaliNumber) {
+            if (!bengaliNumber) return '';
+            let result = String(bengaliNumber);
+            // Remove taka sign and spaces
+            result = result.replace(/[৳\s]/g, '').trim();
+            // Convert Bengali numerals to English digits
+            for (let i = 0; i < 10; i++) {
+                const bengaliDigit = String.fromCharCode(0x09E6 + i);
+                result = result.replace(new RegExp(bengaliDigit, 'g'), i.toString());
+            }
+            // Also handle any Devanagari numerals that might exist
+            const devanagariDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+            devanagariDigits.forEach((digit, index) => {
+                result = result.replace(new RegExp(digit, 'g'), index.toString());
+            });
+            return result;
+        }
+
+        // Setup allocation amount field to display Bengali numerals
+        document.addEventListener('DOMContentLoaded', () => {
+            const allocationField = document.getElementById('allocation-amount-input');
+            if (allocationField) {
+                // Convert to Bengali on focus out (blur)
+                allocationField.addEventListener('blur', (e) => {
+                    let value = e.target.value.trim();
+                    if (!value) {
+                        e.target.value = '';
+                        return;
+                    }
+                    // Extract only digits and decimal point
+                    let englishValue = value.replace(/[^\d.]/g, '');
+                    if (englishValue) {
+                        // Convert to Bengali for display
+                        let bengaliValue = convertEnglishToBengali(englishValue);
+                        // Update the input with Bengali display (without taka sign - it's in prefix)
+                        e.target.value = bengaliValue;
+                    }
+                });
+            }
+        });
+
         // Handle financial year change to populate approval memos dropdown
         async function onFinancialYearChange() {
             console.log('🔔 onFinancialYearChange called');
@@ -3529,59 +3631,81 @@
                 console.log('📦 Received memos:', memos);
                 console.log('📊 Number of memos:', memos ? memos.length : 0);
 
-                // Clear existing options
-                memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
-
                 if (memos && memos.length > 0) {
                     console.log('✨ Populating dropdown with', memos.length, 'memos');
 
-                    // Add memo options to the select
+                    // Destroy existing TomSelect first
+                    if (_tomInstances && _tomInstances.has(memoSelect)) {
+                        const tomSelectInstance = _tomInstances.get(memoSelect);
+                        tomSelectInstance.destroy();
+                        _tomInstances.delete(memoSelect);
+                        console.log('🗑️ Tom Select destroyed');
+                    }
+
+                    // Clear and rebuild select with simple HTML
+                    memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
+
                     memos.forEach(memo => {
-                        const option = document.createElement('option');
                         const dateObj = new Date(memo.memo_date);
                         const dateStr = dateObj.toLocaleDateString('bn-BD', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
                         });
-                        // Format date in YYYY-MM-DD for the project_approval_date field
                         const isoDateStr = memo.memo_date.split('T')[0];
+                        const optionText = `${dateStr} তারিখের ${memo.memo_number} নং স্মারক (মোট প্রকল্প ${memo.total_projects}টি)`;
+
+                        const option = document.createElement('option');
                         option.value = memo.id;
-                        option.textContent = `${dateStr} তারিখের ${memo.memo_number} নং স্মারক (মোট প্রকল্প ${memo.total_projects}টি)`;
+                        option.textContent = optionText;
                         option.setAttribute('data-memo-date', isoDateStr);
                         option.setAttribute('data-memo-number', memo.memo_number);
                         memoSelect.appendChild(option);
+
+                        console.log('Added option:', memo.id, optionText);
                     });
 
+                    // Enable the select
                     memoSelect.disabled = false;
 
-                    // Handle Tom Select instance - destroy and recreate to ensure options are loaded
-                    if (_tomInstances && _tomInstances.has(memoSelect)) {
-                        const tomSelectInstance = _tomInstances.get(memoSelect);
-                        // Destroy the existing Tom Select instance
-                        tomSelectInstance.destroy();
-                        _tomInstances.delete(memoSelect);
-                        console.log('🗑️ Tom Select instance destroyed');
-                    }
-
-                    // Create a fresh Tom Select instance with the new options
+                    // Recreate Tom Select with new options
                     if (typeof TomSelect !== 'undefined') {
-                        setTimeout(() => {
-                            const newInstance = new TomSelect(memoSelect, {
-                                create: false,
-                                placeholder: '-- অনুমোদন স্মারক নির্বাচন করুন --',
-                                maxItems: 1
-                            });
-                            if (_tomInstances) {
-                                _tomInstances.set(memoSelect, newInstance);
+                        const newInstance = new TomSelect(memoSelect, {
+                            create: false,
+                            placeholder: '-- অনুমোদন স্মারক নির্বাচন করুন --',
+                            maxItems: 1,
+                            searchField: [], // Disable search
+                            onChange: function() {
+                                // Close dropdown after selection
+                                this.close();
                             }
-                            console.log('✨ New Tom Select instance created with memo options');
-                        }, 50);
+                        });
+
+                        // Make the control input readonly to prevent typing
+                        const controlInput = memoSelect.parentElement.querySelector('.ts-control input');
+                        if (controlInput) {
+                            controlInput.readOnly = true;
+                            controlInput.style.pointerEvents = 'none';
+                        }
+
+                        if (_tomInstances) {
+                            _tomInstances.set(memoSelect, newInstance);
+                        }
+                        console.log('✨ Tom Select recreated with options');
                     }
 
-                    console.log('✅ Dropdown enabled and populated with memo options');
+                    console.log('✅ Dropdown populated with', memos.length, 'memo options');
                 } else {
                     console.log('⚠️ No memos found for this year');
+
+                    // Destroy existing TomSelect
+                    if (_tomInstances && _tomInstances.has(memoSelect)) {
+                        const tomSelectInstance = _tomInstances.get(memoSelect);
+                        tomSelectInstance.destroy();
+                        _tomInstances.delete(memoSelect);
+                    }
+
+                    memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
                     memoSelect.disabled = true;
                 }
             } catch (error) {
@@ -3592,7 +3716,7 @@
         }
 
         // Handle approval memo selection to populate related fields
-        async function onApprovalMemoChange() {
+        function onApprovalMemoChange() {
             const memoSelect = document.getElementById('approval-memo-select');
             const memoId = memoSelect.value;
             const approvalDateInput = document.querySelector('input[name="project_approval_date"]');
@@ -3604,20 +3728,15 @@
                 return;
             }
 
-            try {
-                const response = await fetch(`/api/projects/available-memos`);
-                // Since we don't have a single memo endpoint, we'll store memo data when loading the dropdown
-                // For now, we'll keep the data in the option's dataset
-                const selectedOption = memoSelect.options[memoSelect.selectedIndex];
-                const memoDate = selectedOption.getAttribute('data-memo-date');
-                const memoNumber = selectedOption.getAttribute('data-memo-number');
+            // Get data from selected option
+            const selectedOption = memoSelect.options[memoSelect.selectedIndex];
+            const memoDate = selectedOption.getAttribute('data-memo-date');
+            const memoNumber = selectedOption.getAttribute('data-memo-number');
 
-                if (memoDate && memoNumber) {
-                    approvalDateInput.value = memoDate;
-                    memoNumberInput.value = memoNumber;
-                }
-            } catch (error) {
-                console.error('Error updating approval fields:', error);
+            if (memoDate && memoNumber) {
+                approvalDateInput.value = memoDate;
+                memoNumberInput.value = memoNumber;
+                console.log('✅ Filled approval date:', memoDate, 'and memo number:', memoNumber);
             }
         }
 
@@ -3648,6 +3767,13 @@
             submitBtn.textContent = 'সংরক্ষণ হচ্ছে…';
             try {
                 const formData = CRUDManager.formToJSON(e.target);
+
+                // Convert Bengali numerals in allocation_amount to English
+                if (formData.allocation_amount) {
+                    // Remove taka sign, spaces, and convert Bengali to English
+                    let value = String(formData.allocation_amount).replace(/[৳\s]/g, '').trim();
+                    formData.allocation_amount = convertBengaliToEnglish(value);
+                }
 
                 // Coerce numeric & boolean fields
                 formData.allocation_amount   = parseFloat(formData.allocation_amount)   || 0;

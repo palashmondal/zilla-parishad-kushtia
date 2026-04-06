@@ -171,6 +171,36 @@ const approvalMemosController = {
                 message: isProduction ? 'An internal error occurred' : error.message
             });
         }
+    },
+
+    async getProjectsByMemoId(req, res) {
+        try {
+            const memoId = req.params.id;
+            if (!memoId) {
+                return res.status(400).json({ error: 'Invalid memo ID' });
+            }
+
+            const memo = await approvalMemosModel.findById(memoId);
+            if (!memo) {
+                return res.status(404).json({ error: 'Memo not found' });
+            }
+
+            const projects = await approvalMemosModel.getProjectsByMemoId(memoId);
+            res.json({
+                memoId,
+                memoNumber: memo.memo_number,
+                memoDate: memo.memo_date,
+                financial_year: memo.financial_year,
+                projects,
+                total: projects.length
+            });
+        } catch (error) {
+            console.error('Approval memos getProjectsByMemoId error:', error);
+            res.status(500).json({
+                error: 'Failed to fetch projects',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
     }
 };
 
