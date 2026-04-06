@@ -128,6 +128,32 @@
             opacity: 1;
         }
 
+        /* Modal internals - matching projects page */
+        .modal-avatar {
+            background: linear-gradient(135deg, #fef3c7, #fbbf24);
+        }
+        .modal-amount-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 60%, #fef9c3 100%);
+            border: 1px solid #fbbf24;
+            box-shadow: 0 4px 6px rgba(180, 83, 9, 0.1);
+        }
+
+        /* Modal progress bar */
+        .progress-bar-track {
+            background: #e5e7eb; border-radius: 8px; height: 16px; overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .progress-bar-fill {
+            height: 100%; border-radius: 8px; transition: width 0.6s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .progress-bar-green {
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+        }
+        .progress-bar-orange {
+            background: linear-gradient(90deg, #f97316, #ea580c);
+        }
+
         /* Form modal backdrop */
         #form-modal {
             background: rgba(120,53,15,0.18);
@@ -488,69 +514,6 @@
         </div>
     </main>
 
-    <!-- ── Detail View Modal ── -->
-    <div id="detail-modal" class="detail-backdrop fixed inset-0 z-[90] flex items-center justify-center p-4">
-        <div class="detail-card bg-white w-full max-w-lg rounded-[1.75rem] shadow-2xl p-6 relative">
-            <!-- Header -->
-            <div class="flex items-start justify-between mb-4">
-                <div class="flex-1 min-w-0">
-                    <h2 id="dm-memo-number" class="text-xl font-extrabold text-slate-900 leading-tight mb-0.5 memo-number"></h2>
-                    <p id="dm-memo-date" class="text-sm font-semibold text-blue-600 truncate"></p>
-                </div>
-                <button onclick="closeDetailModal()" class="text-slate-300 hover:text-red-500 transition-colors p-1 flex-shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-
-            <div class="space-y-3 border-t border-emerald-100 pt-4">
-                <div>
-                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">স্মারক তারিখ</p>
-                    <p id="dm-date-display" class="font-semibold text-slate-800 text-[14px]"></p>
-                </div>
-                <div>
-                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">স্মারক নম্বর</p>
-                    <p id="dm-number-display" class="font-semibold text-slate-800 text-[14px] memo-number"></p>
-                </div>
-                <div class="detail-amount-box p-4 rounded-xl flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">মোট প্রকল্প সংখ্যা</p>
-                        <p id="dm-total-projects" class="text-xl font-black text-emerald-700 tracking-tight"></p>
-                    </div>
-                    <div class="project-count-badge" id="dm-badge-display"></div>
-                </div>
-                <div>
-                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">মন্তব্য</p>
-                    <p id="dm-remarks" class="font-semibold text-slate-800 text-[14px]"></p>
-                </div>
-                <div id="dm-document-section" class="hidden">
-                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">ডকুমেন্ট</p>
-                    <p id="dm-document-info" class="font-semibold text-slate-800 text-[14px]"></p>
-                </div>
-            </div>
-            <div class="mt-4 pt-3 border-t border-emerald-100 flex gap-3">
-                <button id="view-pdf-btn" onclick="viewDocumentFromModal()" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow hover:shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 hidden">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>
-                    ডকুমেন্ট দেখুন
-                </button>
-                <button onclick="editRecordFromModal()" class="flex-1 py-2.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow hover:shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                    </svg>
-                    সম্পাদনা করুন
-                </button>
-                <button data-role="admin" onclick="deleteRecordFromModal()" class="py-2.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-red-500 to-red-600 text-white shadow hover:shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                    </svg>
-                    মুছে ফেলুন
-                </button>
-            </div>
-            <button onclick="closeDetailModal()" class="detail-close-btn w-full mt-3 text-white font-bold py-3 rounded-xl shadow-lg text-[14px]">বন্ধ করুন</button>
-        </div>
-    </div>
-
     <!-- Document Viewer Modal -->
     <div id="document-modal" class="detail-backdrop fixed inset-0 z-[95] flex items-center justify-center p-0">
         <div class="document-viewer-card bg-white shadow-2xl p-0 relative">
@@ -568,6 +531,239 @@
             <div id="dv-content" class="flex-1 flex items-center justify-center bg-white overflow-auto w-full">
                 <div class="text-gray-500">লোড হচ্ছে...</div>
             </div>
+        </div>
+    </div>
+
+    <!-- Projects Popup Modal -->
+    <div id="projects-modal" class="detail-backdrop fixed inset-0 z-[95] flex items-center justify-center p-4">
+        <div class="detail-card bg-white w-full max-w-4xl rounded-[1.75rem] shadow-2xl p-6 relative max-h-[90vh] flex flex-col">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1 min-w-0">
+                    <h2 class="text-xl font-extrabold text-slate-900 leading-tight">প্রকল্পসমূহ</h2>
+                </div>
+                <button onclick="closeProjectsModal()" class="text-slate-300 hover:text-red-500 transition-colors p-1 flex-shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Memo Details (Compact) -->
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-3 rounded-lg mb-4 border border-blue-200">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                    <div>
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-0.5">স্মারক নম্বর</p>
+                        <p id="pm-memo-number" class="font-semibold text-slate-800 memo-number"></p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-0.5">তারিখ</p>
+                        <p id="pm-memo-date" class="font-semibold text-slate-800"></p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-0.5">আর্থিক বছর</p>
+                        <p id="pm-memo-year" class="font-semibold text-slate-800"></p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-0.5">মোট প্রকল্প</p>
+                        <p id="pm-total-count" class="font-semibold text-slate-800"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Table -->
+            <div class="flex-1 overflow-y-auto">
+                <div class="space-y-2">
+                    <!-- Table Header -->
+                    <div class="grid grid-cols-12 gap-3 px-4 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold text-xs sticky top-0 rounded-lg">
+                        <div class="col-span-9">প্রকল্পের নাম</div>
+                        <div class="col-span-1">অঞ্চল</div>
+                        <div class="col-span-1">পদ্ধতি</div>
+                        <div class="col-span-1 text-right">অর্থ</div>
+                    </div>
+
+                    <!-- Projects List -->
+                    <div id="pm-projects-list" class="space-y-1">
+                        <!-- Projects will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="closeProjectsModal()" class="detail-close-btn w-full mt-4 text-white font-bold py-3 rounded-xl shadow-lg text-[14px]">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <!-- Project Detail Modal (Shared) -->
+    <div id="project-detail-modal" class="detail-backdrop fixed inset-0 z-[96] flex items-center justify-center p-4">
+        <div class="detail-card bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl p-8 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-start justify-between mb-6">
+                <div class="flex items-center gap-4 flex-1">
+                    <div class="modal-avatar w-20 h-20 rounded-2xl flex items-center justify-center text-[#b45309] flex-shrink-0">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h2 id="dm-name" class="text-2xl font-extrabold text-slate-900 leading-tight"></h2>
+                    </div>
+                </div>
+                <button onclick="closeDetailModal()" class="text-slate-300 hover:text-[#d97706] transition-colors p-2 flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <div class="space-y-5 border-t border-[#fcd34d] pt-6">
+                <!-- Row 1: ID · Year · Upazila -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্প আইডি</p>
+                        <p id="dm-id" class="font-semibold text-slate-800 text-base font-mono"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অর্থবছর</p>
+                        <p id="dm-year" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">উপজেলা</p>
+                        <p id="dm-upazila" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2: Fund Type · Priority -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তহবিলের ধরণ</p>
+                        <p id="dm-fund-type" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অগ্রাধিকার</p>
+                        <p id="dm-priority" class="font-semibold text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সুপারিশকারী</p>
+                        <p id="dm-reference" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2.5: Approval Date · Memo Number -->
+                <div class="grid grid-cols-2 gap-4 items-start">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের তারিখ</p>
+                        <p id="dm-approval-date" class="font-bold text-[#b45309] text-lg"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক নংবর</p>
+                        <p id="dm-memo-number" class="font-bold text-[#b45309] text-base font-mono"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2.7: Project Type · Implementation · Status -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্পের ধরন</p>
+                        <p id="dm-quick-type" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">বাস্তবায়ন পদ্ধতি</p>
+                        <p id="dm-quick-method" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">বর্তমান অবস্থা</p>
+                        <p id="dm-quick-status" class="font-semibold text-slate-700 text-base"></p>
+                    </div>
+                </div>
+
+                <!-- Row 3: Start · Expected End · Actual End -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">শুরু তারিখ</p>
+                        <p id="dm-start" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সম্ভাব্য সমাপ্তি</p>
+                        <p id="dm-expected-end" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকৃত সমাপ্তি</p>
+                        <p id="dm-actual-end" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                </div>
+
+                <!-- Remarks -->
+                <div id="dm-remarks-wrap" class="hidden">
+                    <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">মন্তব্য</p>
+                    <p id="dm-remarks" class="font-medium text-slate-600 text-base leading-relaxed"></p>
+                </div>
+
+                <!-- Amount box with progress bars -->
+                <div class="modal-amount-box p-6 rounded-2xl">
+                    <div class="flex justify-between items-start mb-5">
+                        <div>
+                            <p class="text-xs font-bold text-[#92400e] uppercase tracking-wider mb-2">মোট বরাদ্দ</p>
+                            <p id="dm-allocation" class="text-3xl font-black text-[#b45309] tracking-tight"></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-[#92400e] uppercase tracking-wider mb-2">ছাড়কৃত অর্থ</p>
+                            <p id="dm-released" class="text-2xl font-black text-[#d97706] tracking-tight"></p>
+                        </div>
+                    </div>
+                    <!-- Progress bar: project completion -->
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-bold text-green-700 uppercase tracking-wider">কাজের অগ্রগতি</span>
+                            <span id="dm-progress-pct" class="text-sm font-bold text-green-700 px-2.5 py-1 bg-green-50 rounded"></span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill progress-bar-green" id="dm-progress-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <!-- Progress bar: fund release -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-bold text-orange-700 uppercase tracking-wider">তহবিল ছাড়ের হার</span>
+                            <span id="dm-fund-release-pct" class="text-sm font-bold text-orange-700 px-2.5 py-1 bg-orange-50 rounded"></span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill progress-bar-orange" id="dm-fund-release-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location Map Section -->
+            <div id="dm-map-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider mb-4">প্রকল্পের অবস্থান</p>
+                <div id="m-map-container" class="rounded-xl overflow-hidden mb-3" style="height: 250px; background: #f3f4f6;"></div>
+                <div class="flex items-center flex-wrap gap-2">
+                    <span class="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-semibold border border-amber-200">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" class="w-4 h-4">
+                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span id="dm-coord-text">N/A</span>
+                    </span>
+                    <a id="dm-map-link" href="#" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" class="w-4 h-4">
+                            <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                        গুগল ম্যাপে দেখুন
+                    </a>
+                </div>
+            </div>
+
+            <!-- Photo Gallery -->
+            <div id="dm-photos-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider mb-4">প্রকল্পের ছবি</p>
+                <div id="dm-photos-grid" class="grid grid-cols-3 gap-3"></div>
+                <div id="dm-photos-empty" class="text-center text-gray-400 py-8 text-sm">কোনো ছবি নেই</div>
+            </div>
+
+            <!-- Documents section -->
+            <div id="dm-docs-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider mb-4">সংযুক্ত ফাইল</p>
+                <div id="dm-docs-list" class="space-y-2"></div>
+                <div id="dm-docs-empty" class="text-center text-gray-400 py-8 text-sm">কোনো ফাইল নেই</div>
+            </div>
+
+            <button onclick="closeDetailModal()" class="detail-close-btn w-full mt-6 text-white font-bold py-3 rounded-xl shadow-lg text-[14px]">বন্ধ করুন</button>
         </div>
     </div>
 
@@ -753,7 +949,7 @@
             const endIdx = startIdx + recordsPerPage;
             const pageData = filteredData.slice(startIdx, endIdx);
             container.innerHTML = pageData.map(record => `
-                <div class="table-row grid grid-cols-5 gap-4 px-6 py-4 items-center cursor-pointer" onclick="openDetailModal(${record.id})">
+                <div class="table-row grid grid-cols-5 gap-4 px-6 py-4 items-center cursor-pointer" onclick="openProjectsModal(${record.id})">
                     <div class="col-span-1 text-sm font-semibold text-gray-900">${formatDate(record.memo_date)}</div>
                     <div class="col-span-1 flex justify-center items-center financial-year text-gray-800">${toBengaliNumeral(record.financial_year) || 'N/A'}</div>
                     <div class="col-span-1 font-bold memo-number text-gray-900">${toBengaliNumeral(escapeHtml(record.memo_number))}</div>
@@ -910,11 +1106,11 @@
                 viewPdfBtn.classList.add('hidden');
             }
 
-            document.getElementById('detail-modal').classList.add('open');
+            document.getElementById('project-detail-modal').classList.add('open');
         }
 
         function closeDetailModal() {
-            document.getElementById('detail-modal').classList.remove('open');
+            document.getElementById('project-detail-modal').classList.remove('open');
             selectedRecordId = null;
         }
 
@@ -1027,7 +1223,7 @@
         }
 
         function toBengaliNumeral(str) {
-            if (!str) return '';
+            if (str === null || str === undefined || str === '') return '';
             const englishDigits = '0123456789';
             const bengaliDigits = '০১२३৪৫৬৭৮৯';
             return String(str); // Font handles numeral display properly
@@ -1146,12 +1342,336 @@
             document.getElementById('dv-content').innerHTML = '';
         }
 
-        // Close document modal on backdrop click
+        // Projects Modal Functions
+        async function viewProjectsFromModal() {
+            if (selectedRecordId) {
+                await openProjectsModal(selectedRecordId);
+            }
+        }
+
+        async function openProjectsModal(memoId) {
+            try {
+                const response = await fetch(`/api/approval-memos/${memoId}/projects`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch projects');
+                }
+                const data = await response.json();
+                populateProjectsModal(data);
+                document.getElementById('projects-modal').classList.add('open');
+            } catch (error) {
+                console.error('Error fetching projects:', error);
+                alert('প্রকল্প লোড করতে ব্যর্থ। অনুগ্রহ করে পুনরায় চেষ্টা করুন।');
+            }
+        }
+
+        function populateProjectsModal(data) {
+            const { memoNumber, memoDate, financial_year, projects, total } = data;
+
+            // Update memo details
+            document.getElementById('pm-memo-number').textContent = toBengaliNumeral(memoNumber);
+            document.getElementById('pm-memo-date').textContent = formatDate(memoDate);
+            document.getElementById('pm-memo-year').textContent = financial_year || 'N/A';
+            document.getElementById('pm-total-count').textContent = toBengaliNumeral(total.toString());
+
+            // Populate projects list
+            const projectsList = document.getElementById('pm-projects-list');
+            if (projects.length === 0) {
+                projectsList.innerHTML = '<p class="text-center text-gray-500 py-8 col-span-12">কোনো প্রকল্প পাওয়া যায়নি।</p>';
+                return;
+            }
+
+            projectsList.innerHTML = projects.map((project) => `
+                <div class="grid grid-cols-12 gap-3 px-4 py-3 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all" onclick="openProjectDetailModal(${project.id})">
+                    <div class="col-span-9 font-semibold text-slate-900 truncate" title="${escapeHtml(project.project_name)}">
+                        ${escapeHtml(project.project_name)}
+                    </div>
+                    <div class="col-span-1 text-slate-700 text-xs truncate" title="${escapeHtml(project.upazila || 'N/A')}">
+                        ${escapeHtml(project.upazila || 'N/A')}
+                    </div>
+                    <div class="col-span-1 text-slate-700 text-xs truncate" title="${escapeHtml(project.implementation_method || 'N/A')}">
+                        ${escapeHtml(project.implementation_method || 'N/A')}
+                    </div>
+                    <div class="col-span-1 text-right font-semibold text-emerald-700 text-xs">
+                        ${toBengaliNumeral(formatCurrency(project.allocation_amount))}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function openProjectDetailModal(projectId) {
+            try {
+                const response = await fetch(`/api/projects/${projectId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch project details');
+                }
+                const project = await response.json();
+                showDetailModal(project);
+            } catch (error) {
+                console.error('Error fetching project details:', error);
+                alert('প্রকল্পের বিবরণ লোড করতে ব্যর্থ। অনুগ্রহ করে পুনরায় চেষ্টা করুন।');
+            }
+        }
+
+        function showDetailModal(r) {
+            // Project name
+            document.getElementById('dm-name').innerText = r.project_name || '';
+            document.getElementById('dm-quick-type').innerText = r.project_type || '';
+            document.getElementById('dm-quick-method').innerText = r.implementation_method || '';
+
+            // Status pill
+            const dmStatus = document.getElementById('dm-quick-status');
+            dmStatus.innerText = r.current_status || '';
+            dmStatus.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold ' +
+                (r.is_completed ? 'bg-green-100 text-green-800 border border-green-200' :
+                 r.is_delayed   ? 'bg-red-100 text-red-800 border border-red-200' :
+                 r.progress_percentage > 0 ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                                             'bg-gray-100 text-gray-700 border border-gray-200');
+
+            // Details
+            document.getElementById('dm-id').innerText = r.project_id || r.id || '';
+            document.getElementById('dm-year').innerText = r.financial_year || '';
+            document.getElementById('dm-upazila').innerText = r.upazila || '';
+            document.getElementById('dm-fund-type').innerText = r.fund_type || '';
+
+            // Priority pill
+            const dmPriority = document.getElementById('dm-priority');
+            const priorityMap = { general: 'সাধারণ', medium: 'মধ্যম', top_priority: 'সর্বোচ্চ অগ্রাধিকার' };
+            const pVal = r.priority || 'general';
+            dmPriority.innerText = priorityMap[pVal] || pVal;
+            dmPriority.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold ' +
+                (pVal === 'top_priority' ? 'bg-red-100 text-red-700 border border-red-200' :
+                 pVal === 'medium'       ? 'bg-amber-100 text-amber-700 border border-amber-200' :
+                                          'bg-gray-100 text-gray-600 border border-gray-200');
+
+            // Reference
+            document.getElementById('dm-reference').innerText = r.reference || 'N/A';
+
+            // Approval date and memo number
+            document.getElementById('dm-approval-date').innerText = r.project_approval_date ? formatDate(r.project_approval_date) : 'N/A';
+            document.getElementById('dm-memo-number').innerText = r.approval_memo_number || 'N/A';
+
+            // Progress percentage
+            const pct = r.progress_percentage || 0;
+            document.getElementById('dm-progress-pct').innerText = pct + '%';
+            document.getElementById('dm-progress-bar').style.width = pct + '%';
+
+            // Fund release percentage
+            const alloc   = parseFloat(r.allocation_amount) || 0;
+            const released = parseFloat(r.released_amount) || 0;
+            const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
+            document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
+            document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
+
+            // Dates
+            document.getElementById('dm-start').innerText = r.start_date ? formatDate(r.start_date) : 'N/A';
+            document.getElementById('dm-expected-end').innerText = r.expected_end_date ? formatDate(r.expected_end_date) : 'N/A';
+            document.getElementById('dm-actual-end').innerText = r.actual_end_date ? formatDate(r.actual_end_date) : 'N/A';
+
+            // Remarks
+            const remarksWrap = document.getElementById('dm-remarks-wrap');
+            if (r.remarks && r.remarks.trim()) {
+                document.getElementById('dm-remarks').innerText = r.remarks;
+                remarksWrap.classList.remove('hidden');
+            } else {
+                remarksWrap.classList.add('hidden');
+            }
+
+            // Amounts
+            document.getElementById('dm-allocation').innerText = '৳ ' + formatCurrency(r.allocation_amount) + ' টাকা';
+            document.getElementById('dm-released').innerText = '৳ ' + formatCurrency(r.released_amount) + ' টাকা';
+
+            // Load map, photos and documents
+            console.log('Loading project details:', r.id, 'lat_lng:', r.lat_lng);
+            loadProjectMap(r.lat_lng, r.project_name);
+            loadProjectPhotos(r.id);
+            loadProjectDocsForDetail(r.id);
+
+            // Make sure modal opens
+            setTimeout(() => {
+                document.getElementById('project-detail-modal').classList.add('open');
+            }, 100);
+        }
+
+        function closeDetailModal() {
+            document.getElementById('project-detail-modal').classList.remove('open');
+        }
+
+        function closeProjectsModal() {
+            document.getElementById('projects-modal').classList.remove('open');
+        }
+
+        // Load and display project photos
+        async function loadProjectPhotos(projectId) {
+            const section = document.getElementById('dm-photos-section');
+            const grid = document.getElementById('dm-photos-grid');
+            const emptyMsg = document.getElementById('dm-photos-empty');
+
+            if (!section || !grid) return;
+
+            try {
+                section.classList.remove('hidden');
+                grid.innerHTML = '<p class="text-center text-gray-400 col-span-3 py-4">লোড হচ্ছে...</p>';
+
+                const res = await fetch(`/api/projects/${projectId}/images`);
+                if (!res.ok) {
+                    grid.innerHTML = '';
+                    emptyMsg.classList.remove('hidden');
+                    return;
+                }
+                const photos = await res.json();
+
+                if (!photos || photos.length === 0) {
+                    grid.innerHTML = '';
+                    emptyMsg.classList.remove('hidden');
+                    return;
+                }
+
+                emptyMsg.classList.add('hidden');
+                grid.innerHTML = photos.map(photo => `
+                    <div class="relative group rounded-xl overflow-hidden bg-gray-200 aspect-square border-4 border-amber-100 cursor-pointer shadow-sm hover:shadow-md transition-all">
+                        <img src="${escapeHtml(photo.image_path)}" alt="Project photo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <div class="absolute bottom-2 left-2 px-2 py-1 bg-amber-500/90 text-white text-xs font-bold rounded-lg">
+                            সাধারণ
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error('Error loading photos:', e);
+                grid.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+            }
+        }
+
+        // Load and display project location map
+        function loadProjectMap(latLng, projectName) {
+            const section = document.getElementById('dm-map-section');
+            const container = document.getElementById('m-map-container');
+            const coordText = document.getElementById('dm-coord-text');
+            const mapLink = document.getElementById('dm-map-link');
+
+            if (!section || !container) return;
+
+            // Hide if no coordinates
+            if (!latLng || !latLng.trim()) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            const parts = latLng.split(',').map(s => parseFloat(s.trim()));
+            if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            const [lat, lng] = parts;
+            section.classList.remove('hidden');
+            coordText.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            mapLink.href = `https://www.google.com/maps?q=${lat},${lng}`;
+
+            // Use OpenStreetMap static map
+            const zoomLevel = 13;
+            const mapUrl = `https://tile.openstreetmap.org/${zoomLevel}/${Math.floor(Math.pow(2, zoomLevel) * (lng + 180) / 360)}/${Math.floor(Math.pow(2, zoomLevel) * (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2)}.png`;
+
+            // Set background image with fallback
+            container.style.backgroundImage = `url('https://tile.openstreetmap.org/${zoomLevel}/${Math.floor(Math.pow(2, zoomLevel) * (lng + 180) / 360)}/${Math.floor(Math.pow(2, zoomLevel) * (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2)}.png')`;
+            container.style.backgroundSize = 'cover';
+            container.style.backgroundPosition = 'center';
+            container.style.backgroundColor = '#e5e7eb';
+        }
+
+        // Load and display project documents
+        async function loadProjectDocsForDetail(projectId) {
+            const section = document.getElementById('dm-docs-section');
+            const list = document.getElementById('dm-docs-list');
+            const emptyMsg = document.getElementById('dm-docs-empty');
+
+            if (!section || !list) return;
+
+            try {
+                section.classList.remove('hidden');
+                list.innerHTML = '<p class="text-center text-gray-400 py-4">লোড হচ্ছে...</p>';
+
+                const res = await fetch(`/api/projects/${projectId}/documents`);
+                if (!res.ok) {
+                    list.innerHTML = '';
+                    emptyMsg.classList.remove('hidden');
+                    return;
+                }
+                const docs = await res.json();
+
+                if (!docs || docs.length === 0) {
+                    list.innerHTML = '';
+                    emptyMsg.classList.remove('hidden');
+                    return;
+                }
+
+                emptyMsg.classList.add('hidden');
+
+                list.innerHTML = docs.map(doc => {
+                    const fileName = doc.document_path.split('/').pop();
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    const colorMap = {
+                        'PDF': 'from-red-500 to-red-600',
+                        'DOC': 'from-blue-500 to-blue-600',
+                        'DOCX': 'from-blue-500 to-blue-600',
+                        'XLS': 'from-green-500 to-green-600',
+                        'XLSX': 'from-green-500 to-green-600',
+                        'JPG': 'from-purple-500 to-purple-600',
+                        'PNG': 'from-purple-500 to-purple-600',
+                        'TXT': 'from-gray-500 to-gray-600'
+                    };
+                    const colorClass = colorMap[fileExt] || 'from-gray-500 to-gray-600';
+                    return `
+                        <a href="${escapeHtml(doc.document_path)}" target="_blank" rel="noopener" class="block p-4 rounded-xl bg-white hover:bg-blue-50 transition-all border-2 border-amber-100 hover:border-blue-300 shadow-sm hover:shadow-md">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br ${colorClass} text-white flex items-center justify-center font-bold text-xs text-center px-1">
+                                    ${fileExt}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-bold text-slate-800 truncate">${escapeHtml(fileName)}</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">${doc.upload_date ? formatDate(doc.upload_date) : 'N/A'}</p>
+                                </div>
+                                <svg class="w-6 h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+            } catch (e) {
+                console.error('Error loading documents:', e);
+                list.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+            }
+        }
+
+        function formatCurrency(amount) {
+            if (!amount) return '০';
+            const num = Math.floor(parseFloat(amount) || 0);
+            const formatted = num.toLocaleString('en-IN');
+            return toBengaliNumeral(formatted);
+        }
+
+        // Close modals on backdrop click
         document.addEventListener('DOMContentLoaded', function() {
             const documentModal = document.getElementById('document-modal');
             if (documentModal) {
                 documentModal.addEventListener('click', function(e) {
                     if (e.target === this) closeDocumentModal();
+                });
+            }
+
+            const projectsModal = document.getElementById('projects-modal');
+            if (projectsModal) {
+                projectsModal.addEventListener('click', function(e) {
+                    if (e.target === this) closeProjectsModal();
+                });
+            }
+
+            const projectDetailModal = document.getElementById('project-detail-modal');
+            if (projectDetailModal) {
+                projectDetailModal.addEventListener('click', function(e) {
+                    if (e.target === this) closeDetailModal();
                 });
             }
         });

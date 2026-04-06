@@ -14,6 +14,7 @@ router.get('/stats', projectsController.getStats);
 router.get('/list', projectsController.getAll);
 router.get('/:id/progress', projectsController.getProgressLog);
 router.get('/:id/images', projectsController.getImages);
+router.get('/:id/documents', projectsController.getDocuments);
 router.get('/:id', projectsController.getById);
 
 // Protected routes (require authentication + admin role)

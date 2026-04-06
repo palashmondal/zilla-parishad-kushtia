@@ -7,6 +7,7 @@ const { uploadApprovalMemoDocument } = require('../middleware/upload');
 // Public routes
 router.get('/list', approvalMemosController.getAll);
 router.get('/years', approvalMemosController.getYears);
+router.get('/:id/projects', approvalMemosController.getProjectsByMemoId);
 router.get('/:id', approvalMemosController.getById);
 
 // Protected routes (require authentication + admin role)
