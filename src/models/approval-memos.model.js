@@ -24,13 +24,13 @@ const approvalMemosModel = {
             params.push(financialYear);
         }
 
-        // Build query for data with actual project count
-        const query = `SELECT am.*, COALESCE(COUNT(p.id), 0) as total_projects
+        // Build query for data with both approved and actual project count
+        const query = `SELECT am.*, COALESCE(COUNT(p.id), 0) as actual_projects
                        FROM approval_memos am
                        LEFT JOIN projects p ON am.id = p.approval_memo_id
                        WHERE 1=1${whereClause}
                        GROUP BY am.id
-                       ORDER BY am.memo_date DESC
+                       ORDER BY am.memo_date DESC, am.id DESC
                        LIMIT ${pageSize} OFFSET ${pageOffset}`;
         const [results] = await pool.query(query, params);
 
@@ -57,18 +57,21 @@ const approvalMemosModel = {
 
     async create(data) {
         const {
+            memo_type,
             memo_date,
             financial_year,
             memo_number,
             total_projects,
             remarks,
-            document_file
+            document_file,
+            meeting_month,
+            meeting_date
         } = data;
 
         const [result] = await pool.execute(
-            `INSERT INTO approval_memos (memo_date, financial_year, memo_number, total_projects, remarks, document_file, created_by)
-             VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [memo_date, financial_year || null, memo_number, total_projects || 0, remarks || null, document_file || null, data.created_by || null]
+            `INSERT INTO approval_memos (memo_type, memo_date, financial_year, memo_number, total_projects, remarks, document_file, meeting_month, meeting_date, created_by)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [memo_type || 'ministry', memo_date || null, financial_year || null, memo_number || null, total_projects || 0, remarks || null, document_file || null, meeting_month || null, meeting_date || null, data.created_by || null]
         );
 
         return result.insertId;
@@ -79,19 +82,22 @@ const approvalMemosModel = {
         if (!record) return null;
 
         const {
+            memo_type,
             memo_date,
             financial_year,
             memo_number,
             total_projects,
             remarks,
-            document_file
+            document_file,
+            meeting_month,
+            meeting_date
         } = data;
 
         await pool.execute(
             `UPDATE approval_memos
-             SET memo_date = ?, financial_year = ?, memo_number = ?, total_projects = ?, remarks = ?, document_file = ?
+             SET memo_type = ?, memo_date = ?, financial_year = ?, memo_number = ?, total_projects = ?, remarks = ?, document_file = ?, meeting_month = ?, meeting_date = ?
              WHERE id = ?`,
-            [memo_date, financial_year || null, memo_number, total_projects || 0, remarks || null, document_file !== undefined ? document_file : record.document_file, id]
+            [memo_type !== undefined ? memo_type : record.memo_type, memo_date !== undefined ? memo_date : record.memo_date, financial_year !== undefined ? financial_year : record.financial_year, memo_number !== undefined ? memo_number : record.memo_number, total_projects !== undefined ? total_projects : record.total_projects, remarks !== undefined ? remarks : record.remarks, document_file !== undefined ? document_file : record.document_file, meeting_month !== undefined ? meeting_month : record.meeting_month, meeting_date !== undefined ? meeting_date : record.meeting_date, id]
         );
 
         return true;

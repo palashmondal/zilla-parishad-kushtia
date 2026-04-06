@@ -45,24 +45,50 @@ const approvalMemosController = {
 
     async create(req, res) {
         try {
-            const { memo_date, memo_number, total_projects } = req.body;
+            const { memo_type, memo_date, memo_number, total_projects, meeting_month, meeting_date } = req.body;
 
             console.log('Create request body:', req.body);
             console.log('File:', req.file);
             console.log('User:', req.user);
 
-            if (!memo_date || !memo_number) {
-                return res.status(400).json({ error: 'Missing required fields: memo_date, memo_number' });
+            // Validate memo_type
+            if (!memo_type || !['ministry', 'monthly'].includes(memo_type)) {
+                return res.status(400).json({ error: 'Invalid or missing memo type. Must be "ministry" or "monthly"' });
             }
 
-            const id = await approvalMemosModel.create({
-                memo_date,
-                memo_number,
+            // Validate based on memo type
+            if (memo_type === 'ministry') {
+                if (!memo_date || memo_date === '' || !memo_number || memo_number === '') {
+                    return res.status(400).json({ error: 'Missing required fields for ministry memo: memo_date, memo_number' });
+                }
+            } else if (memo_type === 'monthly') {
+                if (!meeting_month || meeting_month === '' || !meeting_date || meeting_date === '') {
+                    return res.status(400).json({ error: 'Missing required fields for monthly memo: meeting_month, meeting_date' });
+                }
+            }
+
+            const createData = {
+                memo_type,
                 total_projects: parseInt(total_projects, 10) || 0,
                 remarks: req.body.remarks || null,
                 document_file: req.file ? `/uploads/approval-memos/${req.file.filename}` : null,
                 created_by: req.user?.id || null
-            });
+            };
+
+            // Add type-specific fields
+            if (memo_type === 'ministry') {
+                createData.memo_date = memo_date;
+                createData.memo_number = memo_number;
+                createData.financial_year = req.body.financial_year || null;
+            } else if (memo_type === 'monthly') {
+                createData.meeting_month = meeting_month;
+                createData.meeting_date = meeting_date;
+                createData.memo_date = null;
+                createData.memo_number = null;
+                createData.financial_year = req.body.financial_year || null;
+            }
+
+            const id = await approvalMemosModel.create(createData);
 
             res.status(201).json({
                 id,
@@ -90,6 +116,8 @@ const approvalMemosController = {
     async update(req, res) {
         try {
             const id = req.params.id;
+            const { memo_type, memo_date, memo_number, meeting_month, meeting_date } = req.body;
+
             console.log('Update request for ID:', id);
             console.log('Update body:', req.body);
             console.log('File:', req.file);
@@ -101,6 +129,25 @@ const approvalMemosController = {
             const memo = await approvalMemosModel.findById(id);
             if (!memo) {
                 return res.status(404).json({ error: 'Memo not found' });
+            }
+
+            // Validate memo_type if provided
+            if (memo_type && !['ministry', 'monthly'].includes(memo_type)) {
+                return res.status(400).json({ error: 'Invalid memo type. Must be "ministry" or "monthly"' });
+            }
+
+            // Determine which type to validate against (provided type or existing type)
+            const typeToValidate = memo_type || memo.memo_type || 'ministry';
+
+            // Validate based on memo type
+            if (typeToValidate === 'ministry') {
+                if (!memo_date || memo_date === '' || !memo_number || memo_number === '') {
+                    return res.status(400).json({ error: 'Missing required fields for ministry memo: memo_date, memo_number' });
+                }
+            } else if (typeToValidate === 'monthly') {
+                if (!meeting_month || meeting_month === '' || !meeting_date || meeting_date === '') {
+                    return res.status(400).json({ error: 'Missing required fields for monthly memo: meeting_month, meeting_date' });
+                }
             }
 
             const updateData = { ...req.body };
@@ -143,6 +190,16 @@ const approvalMemosController = {
             const memo = await approvalMemosModel.findById(id);
             if (!memo) {
                 return res.status(404).json({ error: 'Memo not found' });
+            }
+
+            // Check if memo has linked projects
+            const linkedProjects = await approvalMemosModel.getProjectsByMemoId(id);
+            if (linkedProjects && linkedProjects.length > 0) {
+                return res.status(409).json({
+                    error: 'Cannot delete memo with linked projects',
+                    message: `এই স্মারকটি ${linkedProjects.length}টি প্রকল্পের সাথে সংযুক্ত। প্রথমে প্রকল্পগুলি মুছে ফেলুন বা সংযোগ বিচ্ছিন্ন করুন।`,
+                    linkedProjectCount: linkedProjects.length
+                });
             }
 
             const deleted = await approvalMemosModel.delete(id);
@@ -189,10 +246,13 @@ const approvalMemosController = {
             res.json({
                 memoId,
                 memoNumber: memo.memo_number,
-                memoDate: memo.memo_date,
+                memoDate: memo.memo_type === 'monthly' ? memo.meeting_date : memo.memo_date,
                 financial_year: memo.financial_year,
+                memo_type: memo.memo_type,
+                meeting_month: memo.meeting_month,
                 projects,
-                total: projects.length
+                total: memo.total_projects || 0,
+                actual_projects: projects.length
             });
         } catch (error) {
             console.error('Approval memos getProjectsByMemoId error:', error);
