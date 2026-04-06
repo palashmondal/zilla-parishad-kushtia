@@ -231,14 +231,12 @@ const projectsModel = {
         const safePage = parseInt(page, 10) || 1;
         const offset = (safePage - 1) * safeLimit;
 
-        let sql = `SELECT ${PROJECT_FIELDS}`;
+        let sql = `SELECT ${PROJECT_FIELDS} FROM projects`;
         let countSql = 'SELECT COUNT(*) as total FROM projects';
         const params = [];
         const countParams = [];
         const conditions = [];
         let hasSearch = false;
-
-        console.log('🔍 getAll called:', { page: safePage, limit: safeLimit, search: search.substring(0, 50), year, priority });
 
         // Multi-keyword search with relevance scoring (same as search() method)
         if (search && search.trim().length >= 2) {
@@ -308,16 +306,8 @@ const projectsModel = {
             sql += ` ORDER BY created_at DESC LIMIT ${safeLimit} OFFSET ${offset}`;
         }
 
-        console.log('📊 SQL Query:', sql.substring(0, 200) + '...');
-        console.log('📦 Params count:', params.length, 'Params:', params.slice(0, 5));
-        console.log('🔢 Count SQL:', countSql.substring(0, 150) + '...');
-        console.log('📦 CountParams count:', countParams.length);
-
         const [results] = await pool.execute(sql, params);
-        console.log('✅ Query executed, rows:', results ? results.length : 0);
-
         const [countResult] = await pool.execute(countSql, countParams);
-        console.log('✅ Count query executed, total:', countResult[0]?.total);
 
         return {
             data: results.map(({ relevance_score, ...rest }) => rest),
