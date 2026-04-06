@@ -174,8 +174,8 @@
         /* Modal header gradient bar */
         .form-modal-header {
             background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
-            margin: -1.25rem -1.25rem 1.5rem -1.25rem;
-            padding: 1rem 1.25rem;
+            margin: 0 0 1.5rem 0;
+            padding: 1rem 1.5rem;
             border-radius: 0.75rem 0.75rem 0 0;
             display: flex;
             align-items: center;
@@ -188,16 +188,19 @@
             border: 1px solid #dbeafe;
             border-left: 4px solid #3b82f6;
             border-radius: 0.75rem;
-            padding: 1.25rem 1.25rem 1rem 1.25rem;
+            padding: 1.5rem;
             box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
         }
         .form-section-title {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: #1e40af;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -432,7 +435,7 @@
             </div>
 
             <!-- Search and Filter -->
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <div class="md:col-span-3">
                     <label class="block text-sm font-bold text-gray-700 mb-2.5">অনুসন্ধান</label>
                     <input type="text" id="search-input" placeholder="স্মারক নম্বর, তারিখ..." class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-400 transition-all text-sm font-medium hover:border-gray-300">
@@ -440,7 +443,15 @@
                 <div class="md:col-span-2">
                     <label class="block text-sm font-bold text-gray-700 mb-2.5">আর্থিক বছর</label>
                     <select id="financial-year-filter" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-400 bg-white hover:border-blue-300 transition-all font-medium text-sm">
-                        <option value="">সকল আর্থিক বছর</option>
+                        <option value="">সকল বছর</option>
+                    </select>
+                </div>
+                <div class="md:col-span-1">
+                    <label class="block text-sm font-bold text-gray-700 mb-2.5">অনুমোদন ধরণ</label>
+                    <select id="approval-type-filter" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-400 bg-white hover:border-blue-300 transition-all font-medium text-sm">
+                        <option value="">সকল ধরণ</option>
+                        <option value="ministry">মন্ত্রণালয় স্মারক</option>
+                        <option value="monthly">মাসিক সভা</option>
                     </select>
                 </div>
             </div>
@@ -459,33 +470,36 @@
 
             <!-- Table Header (Column Names) -->
             <div id="table-header" class="hidden border-b-2 border-gray-200 bg-gradient-to-r from-gray-100 to-gray-200">
-                <div class="grid grid-cols-5 gap-3 px-6 py-5 items-center">
-                    <div class="col-span-1 sortable-header group" onclick="sortTable('memo_date')" data-column="memo_date" title="স্মারক তারিখ অনুযায়ী সাজান">
-                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">📅 স্মারক তারিখ</span>
+                <div class="grid grid-cols-6 gap-3 px-6 py-5 items-center">
+                    <div class="col-span-1 sortable-header group justify-center" onclick="sortTable('financial_year')" data-column="financial_year" title="অর্থবছর অনুযায়ী সাজান">
+                        <span class="text-xs font-bold text-gray-800 uppercase tracking-wider">📊 অর্থবছর</span>
                         <svg class="sort-icon w-4 h-4 text-gray-400 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                         </svg>
                     </div>
-                    <div class="col-span-1 sortable-header group justify-center" onclick="sortTable('financial_year')" data-column="financial_year" title="আর্থিক বছর অনুযায়ী সাজান">
-                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">📊 আর্থিক বছর</span>
+                    <div class="col-span-1 sortable-header group" onclick="sortTable('memo_date')" data-column="memo_date" title="স্মারক / সভার তারিখ অনুযায়ী সাজান">
+                        <span class="text-xs font-bold text-gray-800 uppercase tracking-wider">📅 স্মারক / সভার তারিখ</span>
                         <svg class="sort-icon w-4 h-4 text-gray-400 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                         </svg>
                     </div>
-                    <div class="col-span-1 sortable-header group" onclick="sortTable('memo_number')" data-column="memo_number" title="স্মারক নম্বর অনুযায়ী সাজান">
-                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">📋 স্মারক নম্বর</span>
+                    <div class="col-span-1 sortable-header group" onclick="sortTable('memo_number')" data-column="memo_number" title="স্মারক নম্বর / মাসিক সভা অনুযায়ী সাজান">
+                        <span class="text-xs font-bold text-gray-800 uppercase tracking-wider">📋 স্মারক নং / সভা</span>
                         <svg class="sort-icon w-4 h-4 text-gray-400 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                         </svg>
                     </div>
-                    <div class="col-span-1 sortable-header group justify-center" onclick="sortTable('total_projects')" data-column="total_projects" title="প্রকল্প সংখ্যা অনুযায়ী সাজান">
-                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">🔢 প্রকল্য সংখ্যা</span>
+                    <div class="col-span-1 sortable-header group justify-center" onclick="sortTable('total_projects')" data-column="total_projects" title="অনুমোদিত প্রকল্প সংখ্যা অনুযায়ী সাজান">
+                        <span class="text-xs font-bold text-gray-800 uppercase tracking-wider">✅ অনুমোদিত প্রকল্প</span>
                         <svg class="sort-icon w-4 h-4 text-gray-400 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                         </svg>
                     </div>
                     <div class="col-span-1 text-center">
-                        <span class="text-sm font-bold text-gray-800 uppercase tracking-wider">⚙️ কার্যক্রম</span>
+                        <span class="text-xs font-bold text-gray-800 uppercase tracking-wider">🔗এন্ট্রিকৃত প্রকল্প</span>
+                    </div>
+                    <div class="col-span-1 text-center">
+                        <span class="text-xs font-bold text-gray-800 uppercase tracking-wider">⚙️ কার্যক্রম</span>
                     </div>
                 </div>
             </div>
@@ -548,23 +562,31 @@
             </div>
 
             <!-- Memo Details (Compact) -->
-            <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-3 rounded-lg mb-4 border border-blue-200">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                    <div>
-                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-0.5">স্মারক নম্বর</p>
-                        <p id="pm-memo-number" class="font-semibold text-slate-800 memo-number"></p>
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg mb-4 border border-blue-200">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 text-xs">
+                    <div class="min-w-0">
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-1 text-[11px]">আর্থিক বছর</p>
+                        <p id="pm-memo-year" class="font-semibold text-slate-800 truncate" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
-                    <div>
-                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-0.5">তারিখ</p>
-                        <p id="pm-memo-date" class="font-semibold text-slate-800"></p>
+                    <div class="min-w-0">
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-1 text-[11px]">অনুমোদন ধরণ</p>
+                        <p id="pm-memo-type" class="font-semibold text-slate-800 truncate"></p>
                     </div>
-                    <div>
-                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-0.5">আর্থিক বছর</p>
-                        <p id="pm-memo-year" class="font-semibold text-slate-800"></p>
+                    <div class="min-w-0">
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-1 text-[11px]">তারিখ</p>
+                        <p id="pm-memo-date" class="font-semibold text-slate-800 truncate" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
-                    <div>
-                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-0.5">মোট প্রকল্প</p>
-                        <p id="pm-total-count" class="font-semibold text-slate-800"></p>
+                    <div class="min-w-0">
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-1 text-[11px]">স্মারক নম্বর</p>
+                        <p id="pm-memo-number" class="font-semibold text-slate-800 memo-number truncate" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-1 text-[11px]">অনুমোদিত প্রকল্প</p>
+                        <p id="pm-total-count" class="font-semibold text-slate-800 truncate" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="font-bold text-blue-700 uppercase tracking-wider mb-1 text-[11px]">এন্ট্রিকৃত প্রকল্প</p>
+                        <p id="pm-connected-count" class="font-semibold text-slate-800 truncate" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
                 </div>
             </div>
@@ -647,11 +669,11 @@
                 <div class="grid grid-cols-2 gap-4 items-start">
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের তারিখ</p>
-                        <p id="dm-approval-date" class="font-bold text-[#b45309] text-lg"></p>
+                        <p id="dm-approval-date" class="font-bold text-[#b45309] text-lg" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক নংবর</p>
-                        <p id="dm-memo-number" class="font-bold text-[#b45309] text-base font-mono"></p>
+                        <p id="dm-memo-number" class="font-bold text-[#b45309] text-base font-mono" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
                 </div>
 
@@ -675,15 +697,15 @@
                 <div class="grid grid-cols-3 gap-4">
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">শুরু তারিখ</p>
-                        <p id="dm-start" class="font-semibold text-slate-800 text-base"></p>
+                        <p id="dm-start" class="font-semibold text-slate-800 text-base" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সম্ভাব্য সমাপ্তি</p>
-                        <p id="dm-expected-end" class="font-semibold text-slate-800 text-base"></p>
+                        <p id="dm-expected-end" class="font-semibold text-slate-800 text-base" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকৃত সমাপ্তি</p>
-                        <p id="dm-actual-end" class="font-semibold text-slate-800 text-base"></p>
+                        <p id="dm-actual-end" class="font-semibold text-slate-800 text-base" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
                 </div>
 
@@ -698,18 +720,18 @@
                     <div class="flex justify-between items-start mb-5">
                         <div>
                             <p class="text-xs font-bold text-[#92400e] uppercase tracking-wider mb-2">মোট বরাদ্দ</p>
-                            <p id="dm-allocation" class="text-3xl font-black text-[#b45309] tracking-tight"></p>
+                            <p id="dm-allocation" class="text-3xl font-black text-[#b45309] tracking-tight" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                         </div>
                         <div class="text-right">
                             <p class="text-xs font-bold text-[#92400e] uppercase tracking-wider mb-2">ছাড়কৃত অর্থ</p>
-                            <p id="dm-released" class="text-2xl font-black text-[#d97706] tracking-tight"></p>
+                            <p id="dm-released" class="text-2xl font-black text-[#d97706] tracking-tight" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                         </div>
                     </div>
                     <!-- Progress bar: project completion -->
                     <div class="mb-4">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-sm font-bold text-green-700 uppercase tracking-wider">কাজের অগ্রগতি</span>
-                            <span id="dm-progress-pct" class="text-sm font-bold text-green-700 px-2.5 py-1 bg-green-50 rounded"></span>
+                            <span id="dm-progress-pct" class="text-sm font-bold text-green-700 px-2.5 py-1 bg-green-50 rounded" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></span>
                         </div>
                         <div class="progress-bar-track">
                             <div class="progress-bar-fill progress-bar-green" id="dm-progress-bar" style="width:0%"></div>
@@ -719,7 +741,7 @@
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-sm font-bold text-orange-700 uppercase tracking-wider">তহবিল ছাড়ের হার</span>
-                            <span id="dm-fund-release-pct" class="text-sm font-bold text-orange-700 px-2.5 py-1 bg-orange-50 rounded"></span>
+                            <span id="dm-fund-release-pct" class="text-sm font-bold text-orange-700 px-2.5 py-1 bg-orange-50 rounded" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></span>
                         </div>
                         <div class="progress-bar-track">
                             <div class="progress-bar-fill progress-bar-orange" id="dm-fund-release-bar" style="width:0%"></div>
@@ -790,10 +812,16 @@
                         </svg>
                         স্মারক বিবরণ
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 form-field">
+
+                    <!-- Row 1: অনুমোদন ধরণ and আর্থিক বছর -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 form-field mb-4">
                         <div>
-                            <label>স্মারক তারিখ <span class="text-red-500">*</span></label>
-                            <input type="date" name="memo_date" required>
+                            <label>অনুমোদন ধরণ <span class="text-red-500">*</span></label>
+                            <select id="memo-type" name="memo_type" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">অনুমোদন ধরণ নির্বাচন করুন</option>
+                                <option value="ministry">মন্ত্রণালয় স্মারক</option>
+                                <option value="monthly">মাসিক সভা</option>
+                            </select>
                         </div>
                         <div>
                             <label>আর্থিক বছর <span class="text-red-500">*</span></label>
@@ -805,12 +833,48 @@
                                 <option value="2022-23">2022-23</option>
                             </select>
                         </div>
-                        <div>
+                    </div>
+
+                    <!-- Row 2: Ministry type (memo date & number) or Monthly type (meeting month) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 form-field mb-4">
+                        <!-- Ministry Type Fields -->
+                        <div id="memo-date-field" class="hidden">
+                            <label>স্মারক তারিখ <span class="text-red-500">*</span></label>
+                            <input type="date" name="memo_date" required>
+                        </div>
+                        <div id="memo-number-field" class="hidden">
                             <label>স্মারক নম্বর <span class="text-red-500">*</span></label>
                             <input type="text" name="memo_number" required placeholder="যেমন: MEM/2024/001" style="font-family: 'Courier New', monospace;">
                         </div>
+                        <!-- Monthly Type Fields -->
+                        <div id="meeting-month-field" class="hidden">
+                            <label>মাস নির্বাচন করুন <span class="text-red-500">*</span></label>
+                            <select id="meeting-month" name="meeting_month" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">মাস নির্বাচন করুন</option>
+                                <option value="জানুয়ারি">জানুয়ারি</option>
+                                <option value="ফেব্রুয়ারি">ফেব্রুয়ারি</option>
+                                <option value="মার্চ">মার্চ</option>
+                                <option value="এপ্রিল">এপ্রিল</option>
+                                <option value="মে">মে</option>
+                                <option value="জুন">জুন</option>
+                                <option value="জুলাই">জুলাই</option>
+                                <option value="আগস্ট">আগস্ট</option>
+                                <option value="সেপ্টেম্বর">সেপ্টেম্বর</option>
+                                <option value="অক্টোবর">অক্টোবর</option>
+                                <option value="নভেম্বর">নভেম্বর</option>
+                                <option value="ডিসেম্বর">ডিসেম্বর</option>
+                            </select>
+                        </div>
+                        <div id="meeting-date-field" class="hidden">
+                            <label>মাসিক সভার তারিখ <span class="text-red-500">*</span></label>
+                            <input type="date" name="meeting_date" required>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: মোট প্রকল্প সংখ্যা and মন্তব্য -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 form-field">
                         <div>
-                            <label>মোট প্রকল্প সংখ্যা <span class="text-red-500">*</span></label>
+                            <label>অনুমোদিত মোট প্রকল্প সংখ্যা <span class="text-red-500">*</span></label>
                             <input type="number" name="total_projects" required min="1">
                         </div>
                         <div>
@@ -829,7 +893,7 @@
                         ডকুমেন্ট
                     </div>
                     <div class="form-field">
-                        <label>স্মারক ডকুমেন্ট (PDF/ছবি)</label>
+                        <label>স্মারক ডকুমেন্ট / মাসিক সভার কার্যবিবরণী (PDF/ছবি)</label>
                         <div class="file-input-wrapper">
                             <input type="file" id="document-file" name="document_file" accept=".pdf,.jpg,.jpeg,.png,.webp" class="file-input">
                             <label for="document-file" class="file-input-label" id="file-label">
@@ -853,6 +917,45 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="detail-backdrop fixed inset-0 z-[97] flex items-center justify-center p-4">
+        <div class="detail-card bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 relative">
+            <!-- Icon -->
+            <div class="flex justify-center mb-6">
+                <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center">
+                    <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-extrabold text-slate-900 mb-3">স্মারক মুছে ফেলুন?</h2>
+                <p class="text-slate-600 text-base leading-relaxed">
+                    আপনি কি নিশ্চিত যে আপনি এই স্মারকটি মুছতে চান? এই পদক্ষেপটি পূর্বাবস্থায় ফেরানো যাবে না।
+                </p>
+            </div>
+
+            <!-- Memo Info Section -->
+            <div class="form-section mb-6">
+                <div class="form-section-title">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    মুছে ফেলার জন্য
+                </div>
+                <p id="delete-memo-info" class="text-sm font-semibold text-slate-800">স্মারক নম্বর: <span id="delete-memo-number" class="font-mono text-red-600"></span></p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-lg transition-colors">বাতিল করুন</button>
+                <button onclick="confirmDelete()" class="flex-1 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-lg shadow-lg transition-all hover:shadow-xl">মুছে ফেলুন</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API_BASE = '/api/approval-memos';
         let currentData = [];
@@ -862,6 +965,7 @@
         let currentPage = 1;
         let recordsPerPage = 20;
         let selectedRecordId = null;
+        let pendingDeleteId = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
             await DashboardComponents.loadAll('approval-memos', 'প্রকল্প অনুমোদন স্মারক');
@@ -869,7 +973,23 @@
             loadFinancialYears();
             document.getElementById('search-input').addEventListener('input', filterData);
             document.getElementById('financial-year-filter').addEventListener('change', filterData);
+            document.getElementById('approval-type-filter').addEventListener('change', filterData);
             document.getElementById('memo-form').addEventListener('submit', handleFormSubmit);
+            document.getElementById('memo-type').addEventListener('change', handleMemoTypeChange);
+
+            // Close delete modal when clicking outside
+            document.getElementById('delete-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeDeleteModal();
+                }
+            });
+
+            // Close form modal when clicking outside
+            document.getElementById('form-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeFormModal();
+                }
+            });
         });
 
         async function loadData() {
@@ -924,11 +1044,13 @@
         function filterData() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
             const financialYear = document.getElementById('financial-year-filter').value;
+            const approvalType = document.getElementById('approval-type-filter').value;
 
             filteredData = currentData.filter(item => {
                 const matchesQuery = query === '' || (item.memo_number || '').toLowerCase().includes(query);
                 const matchesFinancialYear = financialYear === '' || item.financial_year === financialYear;
-                return matchesQuery && matchesFinancialYear;
+                const matchesApprovalType = approvalType === '' || item.memo_type === approvalType;
+                return matchesQuery && matchesFinancialYear && matchesApprovalType;
             });
 
             currentPage = 1;
@@ -949,11 +1071,12 @@
             const endIdx = startIdx + recordsPerPage;
             const pageData = filteredData.slice(startIdx, endIdx);
             container.innerHTML = pageData.map(record => `
-                <div class="table-row grid grid-cols-5 gap-4 px-6 py-4 items-center cursor-pointer" onclick="openProjectsModal(${record.id})">
-                    <div class="col-span-1 text-sm font-semibold text-gray-900">${formatDate(record.memo_date)}</div>
-                    <div class="col-span-1 flex justify-center items-center financial-year text-gray-800">${toBengaliNumeral(record.financial_year) || 'N/A'}</div>
-                    <div class="col-span-1 font-bold memo-number text-gray-900">${toBengaliNumeral(escapeHtml(record.memo_number))}</div>
-                    <div class="col-span-1 flex justify-center items-center"><div class="project-count-badge">${toBengaliNumeral(record.total_projects)}</div></div>
+                <div class="table-row grid grid-cols-6 gap-4 px-6 py-4 items-center cursor-pointer" onclick="openProjectsModal(${record.id})">
+                    <div class="col-span-1 flex justify-center items-center financial-year text-gray-800 font-bold" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;">${formatFinancialYear(record.financial_year) || 'N/A'}</div>
+                    <div class="col-span-1 text-sm font-semibold text-gray-900" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;">${record.memo_type === 'monthly' ? formatDate(record.meeting_date) : formatDate(record.memo_date)}</div>
+                    <div class="col-span-1 font-bold memo-number text-gray-900 text-xs" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;">${record.memo_type === 'monthly' ? record.meeting_month + ' মাসের মাসিক সভা' : toBengaliNumeral(escapeHtml(record.memo_number))}</div>
+                    <div class="col-span-1 flex justify-center items-center"><div class="project-count-badge" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;">${toBengaliNumeral(record.total_projects)}</div></div>
+                    <div class="col-span-1 flex justify-center items-center"><div class="project-count-badge" style="background: linear-gradient(135deg, #c7d2fe 0%, #e0e7ff 100%); border-color: #a5b4fc; color: #3730a3; font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;">${toBengaliNumeral(record.actual_projects != null ? record.actual_projects : record.total_projects)}</div></div>
                     <div class="col-span-1 flex justify-center gap-2.5" onclick="event.stopPropagation()">
                         ${record.document_file ? `<button onclick="viewDocument(${record.id})" class="action-btn px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-md flex items-center gap-1.5 text-xs font-bold" title="ডকুমেন্ট দেখুন">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1044,15 +1167,37 @@
                 if (record) {
                     document.getElementById('record-id').value = record.id;
 
+                    // Set memo type first
+                    const memoType = record.memo_type || 'ministry';
+                    document.querySelector('select[name="memo_type"]').value = memoType;
+
+                    // Trigger memo type change first to show/hide appropriate fields
+                    handleMemoTypeChange({ target: document.querySelector('select[name="memo_type"]') });
+
                     // Ensure date is in YYYY-MM-DD format
                     const dateValue = record.memo_date ? new Date(record.memo_date).toISOString().split('T')[0] : '';
                     document.querySelector('input[name="memo_date"]').value = dateValue;
                     console.log('Setting date:', record.memo_date, '→', dateValue);
 
                     document.querySelector('select[name="financial_year"]').value = record.financial_year || '';
-                    document.querySelector('input[name="memo_number"]').value = record.memo_number;
-                    document.querySelector('input[name="total_projects"]').value = record.total_projects;
+                    document.querySelector('input[name="memo_number"]').value = record.memo_number || '';
+
+                    // Set total_projects
+                    const totalProjectsInput = document.querySelector('input[name="total_projects"]');
+                    if (totalProjectsInput) {
+                        totalProjectsInput.value = record.total_projects || '';
+                    }
+
                     document.querySelector('input[name="remarks"]').value = record.remarks || '';
+
+                    // Set meeting month and date if present
+                    if (record.meeting_month) {
+                        document.querySelector('select[name="meeting_month"]').value = record.meeting_month;
+                    }
+                    if (record.meeting_date) {
+                        const meetingDateValue = record.meeting_date ? new Date(record.meeting_date).toISOString().split('T')[0] : '';
+                        document.querySelector('input[name="meeting_date"]').value = meetingDateValue;
+                    }
 
                     // Handle file display
                     fileInput.value = '';
@@ -1072,6 +1217,10 @@
                 fileInput.value = '';
                 fileNameDisplay.classList.add('hidden');
                 fileLabel.classList.remove('has-file');
+
+                // Reset memo type and trigger change handler
+                document.getElementById('memo-type').value = '';
+                handleMemoTypeChange({ target: document.getElementById('memo-type') });
             }
             document.getElementById('form-modal').classList.remove('hidden');
         }
@@ -1079,18 +1228,21 @@
         function closeFormModal() {
             document.getElementById('form-modal').classList.add('hidden');
             document.getElementById('memo-form').reset();
+            // Reset memo type selector
+            document.getElementById('memo-type').value = '';
+            handleMemoTypeChange({ target: document.getElementById('memo-type') });
         }
 
         function openDetailModal(recordId) {
             selectedRecordId = recordId;
             const record = currentData.find(r => r.id === recordId);
             if (!record) return;
-            document.getElementById('dm-memo-number').textContent = record.memo_number;
+            document.getElementById('dm-memo-number').textContent = toBengaliNumeral(record.memo_number);
             document.getElementById('dm-memo-date').textContent = formatDate(record.memo_date);
             document.getElementById('dm-date-display').textContent = formatDate(record.memo_date);
-            document.getElementById('dm-number-display').textContent = record.memo_number;
-            document.getElementById('dm-total-projects').textContent = record.total_projects;
-            document.getElementById('dm-badge-display').textContent = record.total_projects;
+            document.getElementById('dm-number-display').textContent = toBengaliNumeral(record.memo_number);
+            document.getElementById('dm-total-projects').textContent = toBengaliNumeral(record.total_projects);
+            document.getElementById('dm-badge-display').textContent = toBengaliNumeral(record.total_projects);
             document.getElementById('dm-remarks').textContent = record.remarks || 'নেই';
 
             // Handle document display
@@ -1134,14 +1286,91 @@
             }
         }
 
+        function handleMemoTypeChange(e) {
+            const memoType = e.target.value;
+            const memoDateField = document.getElementById('memo-date-field');
+            const memoNumberField = document.getElementById('memo-number-field');
+            const meetingMonthField = document.getElementById('meeting-month-field');
+            const meetingDateField = document.getElementById('meeting-date-field');
+            const memoDateInput = document.querySelector('input[name="memo_date"]');
+            const memoNumberInput = document.querySelector('input[name="memo_number"]');
+            const monthInput = document.querySelector('select[name="meeting_month"]');
+            const meetingDateInput = document.querySelector('input[name="meeting_date"]');
+
+            if (memoType === 'ministry') {
+                // Ministry memo - show memo date and number fields
+                memoDateField.classList.remove('hidden');
+                memoNumberField.classList.remove('hidden');
+                meetingMonthField.classList.add('hidden');
+                meetingDateField.classList.add('hidden');
+
+                // Set fields as required
+                memoDateInput.required = true;
+                memoNumberInput.required = true;
+                monthInput.required = false;
+                meetingDateInput.required = false;
+
+                // Clear monthly fields
+                monthInput.value = '';
+                meetingDateInput.value = '';
+            } else if (memoType === 'monthly') {
+                // Monthly meeting - hide memo date and number, show month and date fields
+                memoDateField.classList.add('hidden');
+                memoNumberField.classList.add('hidden');
+                meetingMonthField.classList.remove('hidden');
+                meetingDateField.classList.remove('hidden');
+
+                // Set fields as required/not required
+                memoDateInput.required = false;
+                memoNumberInput.required = false;
+                monthInput.required = true;
+                meetingDateInput.required = true;
+
+                // Clear ministry fields
+                memoDateInput.value = '';
+                memoNumberInput.value = '';
+            } else {
+                // No selection - hide all conditional fields
+                memoDateField.classList.add('hidden');
+                memoNumberField.classList.add('hidden');
+                meetingMonthField.classList.add('hidden');
+                meetingDateField.classList.add('hidden');
+
+                // Set all as not required initially
+                memoDateInput.required = false;
+                memoNumberInput.required = false;
+                monthInput.required = false;
+                meetingDateInput.required = false;
+
+                // Clear all conditional fields
+                monthInput.value = '';
+                meetingDateInput.value = '';
+            }
+        }
+
         async function handleFormSubmit(e) {
             e.preventDefault();
             const recordId = document.getElementById('record-id').value;
             const formData = new FormData();
 
-            formData.append('memo_date', document.querySelector('input[name="memo_date"]').value);
+            const memoType = document.querySelector('select[name="memo_type"]').value;
+            formData.append('memo_type', memoType);
+
+            // Add memo date and number only for ministry memos
+            if (memoType === 'ministry') {
+                formData.append('memo_date', document.querySelector('input[name="memo_date"]').value);
+                formData.append('memo_number', document.querySelector('input[name="memo_number"]').value);
+            } else if (memoType === 'monthly') {
+                // For monthly meetings, use the meeting month and date
+                const meetingMonth = document.querySelector('select[name="meeting_month"]').value;
+                const meetingDate = document.querySelector('input[name="meeting_date"]').value;
+                formData.append('meeting_month', meetingMonth);
+                formData.append('meeting_date', meetingDate);
+                formData.append('memo_date', ''); // Empty date for monthly
+                formData.append('memo_number', ''); // Empty number for monthly
+            }
+
             formData.append('financial_year', document.querySelector('select[name="financial_year"]').value);
-            formData.append('memo_number', document.querySelector('input[name="memo_number"]').value);
             formData.append('total_projects', parseInt(document.querySelector('input[name="total_projects"]').value, 10));
             formData.append('remarks', document.querySelector('input[name="remarks"]').value || null);
 
@@ -1188,8 +1417,26 @@
             }
         }
 
-        async function deleteRecord(recordId) {
-            if (!confirm('আপনি কি এই স্মারক মুছতে চান?')) return;
+        function openDeleteModal(recordId) {
+            const record = currentData.find(r => r.id === recordId);
+            if (!record) return;
+
+            pendingDeleteId = recordId;
+            document.getElementById('delete-memo-number').textContent = record.memo_number || 'N/A';
+            document.getElementById('delete-modal').classList.add('open');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.remove('open');
+            pendingDeleteId = null;
+        }
+
+        async function confirmDelete() {
+            if (!pendingDeleteId) return;
+
+            const recordId = pendingDeleteId;
+            closeDeleteModal();
+
             try {
                 const token = AuthManager.getToken();
                 if (!token) {
@@ -1216,17 +1463,38 @@
             }
         }
 
+        async function deleteRecord(recordId) {
+            openDeleteModal(recordId);
+        }
+
         function formatDate(dateStr) {
             if (!dateStr) return '';
             const date = new Date(dateStr);
-            return date.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+            const formatted = date.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+            return toBengaliNumeral(formatted);
+        }
+
+        function formatFinancialYear(year) {
+            if (!year) return '';
+            return toBengaliNumeral(year);
         }
 
         function toBengaliNumeral(str) {
             if (str === null || str === undefined || str === '') return '';
             const englishDigits = '0123456789';
             const bengaliDigits = '০১२३৪৫৬৭৮৯';
-            return String(str); // Font handles numeral display properly
+            // Just return the string as-is (keep English digits)
+            // Font styling is applied via CSS/inline styles
+            return String(str);
+        }
+
+        function truncateMemoNumber(memoNumber, maxLength = 10) {
+            if (!memoNumber) return '';
+            const str = String(memoNumber);
+            if (str.length > maxLength) {
+                return '...' + str.slice(-maxLength);
+            }
+            return str;
         }
 
         function escapeHtml(text) {
@@ -1315,7 +1583,8 @@
             const dvFilename = document.getElementById('dv-filename');
             const dvContent = document.getElementById('dv-content');
 
-            dvTitle.textContent = `${formatDate(record.memo_date)} তারিখের ${record.memo_number}এর বরাদ্দপত্র (মোট প্রকল্প ${record.total_projects})`;
+            dvTitle.textContent = `${formatDate(record.memo_date)} তারিখের ${toBengaliNumeral(record.memo_number)}এর বরাদ্দপত্র (মোট প্রকল্প ${toBengaliNumeral(record.total_projects)})`;
+            dvTitle.style.fontFamily = "'Hind Siliguri', 'Noto Sans Bengali', sans-serif";
 
             const fileExtension = record.document_file.split('.').pop().toLowerCase();
             const filePath = record.document_file;
@@ -1351,27 +1620,43 @@
 
         async function openProjectsModal(memoId) {
             try {
+                console.log('Fetching projects for memo ID:', memoId);
                 const response = await fetch(`/api/approval-memos/${memoId}/projects`);
                 if (!response.ok) {
-                    throw new Error('Failed to fetch projects');
+                    const errorText = await response.text();
+                    console.error('API Error Response:', response.status, errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
                 }
                 const data = await response.json();
+                console.log('Projects data received:', data);
                 populateProjectsModal(data);
                 document.getElementById('projects-modal').classList.add('open');
             } catch (error) {
                 console.error('Error fetching projects:', error);
-                alert('প্রকল্প লোড করতে ব্যর্থ। অনুগ্রহ করে পুনরায় চেষ্টা করুন।');
+                alert('প্রকল্প লোড করতে ব্যর্থ। অনুগ্রহ করে পুনরায় চেষ্টা করুন।\n\nত্রুটি: ' + error.message);
             }
         }
 
         function populateProjectsModal(data) {
-            const { memoNumber, memoDate, financial_year, projects, total } = data;
+            const { memoNumber, memoDate, financial_year, memo_type, meeting_month, projects, total, actual_projects } = data;
+
+            // Helper function to convert memo_type to Bengali
+            const getMemoTypeLabel = (type) => {
+                if (type === 'ministry') return 'মন্ত্রণালয় স্মারক';
+                if (type === 'monthly') return 'মাসিক সভা';
+                return 'N/A';
+            };
 
             // Update memo details
-            document.getElementById('pm-memo-number').textContent = toBengaliNumeral(memoNumber);
+            // For monthly meetings, show N/A for memo number; for ministry memos, show truncated number (last 10 digits)
+            document.getElementById('pm-memo-number').textContent = memo_type === 'monthly' ? 'N/A' : truncateMemoNumber(memoNumber);
             document.getElementById('pm-memo-date').textContent = formatDate(memoDate);
-            document.getElementById('pm-memo-year').textContent = financial_year || 'N/A';
+            const yearElement = document.getElementById('pm-memo-year');
+            yearElement.textContent = formatFinancialYear(financial_year) || 'N/A';
+            yearElement.style.fontFamily = "'Hind Siliguri', 'Noto Sans Bengali', sans-serif";
+            document.getElementById('pm-memo-type').textContent = getMemoTypeLabel(memo_type);
             document.getElementById('pm-total-count').textContent = toBengaliNumeral(total.toString());
+            document.getElementById('pm-connected-count').textContent = toBengaliNumeral(actual_projects.toString());
 
             // Populate projects list
             const projectsList = document.getElementById('pm-projects-list');
@@ -1391,7 +1676,7 @@
                     <div class="col-span-1 text-slate-700 text-xs truncate" title="${escapeHtml(project.implementation_method || 'N/A')}">
                         ${escapeHtml(project.implementation_method || 'N/A')}
                     </div>
-                    <div class="col-span-1 text-right font-semibold text-emerald-700 text-xs">
+                    <div class="col-span-1 text-right font-semibold text-emerald-700 text-xs" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;">
                         ${toBengaliNumeral(formatCurrency(project.allocation_amount))}
                     </div>
                 </div>
@@ -1429,7 +1714,9 @@
 
             // Details
             document.getElementById('dm-id').innerText = r.project_id || r.id || '';
-            document.getElementById('dm-year').innerText = r.financial_year || '';
+            const yearEl = document.getElementById('dm-year');
+            yearEl.innerText = formatFinancialYear(r.financial_year) || '';
+            yearEl.style.fontFamily = "'Hind Siliguri', 'Noto Sans Bengali', sans-serif";
             document.getElementById('dm-upazila').innerText = r.upazila || '';
             document.getElementById('dm-fund-type').innerText = r.fund_type || '';
 
@@ -1448,18 +1735,18 @@
 
             // Approval date and memo number
             document.getElementById('dm-approval-date').innerText = r.project_approval_date ? formatDate(r.project_approval_date) : 'N/A';
-            document.getElementById('dm-memo-number').innerText = r.approval_memo_number || 'N/A';
+            document.getElementById('dm-memo-number').innerText = r.approval_memo_number ? toBengaliNumeral(r.approval_memo_number) : 'N/A';
 
             // Progress percentage
             const pct = r.progress_percentage || 0;
-            document.getElementById('dm-progress-pct').innerText = pct + '%';
+            document.getElementById('dm-progress-pct').innerText = toBengaliNumeral(pct.toString()) + '%';
             document.getElementById('dm-progress-bar').style.width = pct + '%';
 
             // Fund release percentage
             const alloc   = parseFloat(r.allocation_amount) || 0;
             const released = parseFloat(r.released_amount) || 0;
             const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
-            document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
+            document.getElementById('dm-fund-release-pct').innerText = toBengaliNumeral(fundPct.toString()) + '%';
             document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
 
             // Dates
@@ -1477,8 +1764,8 @@
             }
 
             // Amounts
-            document.getElementById('dm-allocation').innerText = '৳ ' + formatCurrency(r.allocation_amount) + ' টাকা';
-            document.getElementById('dm-released').innerText = '৳ ' + formatCurrency(r.released_amount) + ' টাকা';
+            document.getElementById('dm-allocation').innerText = '৳ ' + toBengaliNumeral(formatCurrency(r.allocation_amount)) + ' টাকা';
+            document.getElementById('dm-released').innerText = '৳ ' + toBengaliNumeral(formatCurrency(r.released_amount)) + ' টাকা';
 
             // Load map, photos and documents
             console.log('Loading project details:', r.id, 'lat_lng:', r.lat_lng);

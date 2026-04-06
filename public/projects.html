@@ -1423,7 +1423,10 @@
                         </div>
                         <div>
                             <label class="zpk-label">স্মারক নম্বর</label>
-                            <input type="text" id="edit-approval-memo" class="zpk-input" placeholder="যেমন: ০৫.০৫.৫৫৫৫.০০০.০০.০০০.২৫-৯৮৯">
+                            <select id="edit-approval-memo" class="zpk-input">
+                                <option value="">স্মারক নির্বাচন করুন</option>
+                            </select>
+                            <input type="text" id="edit-approval-memo-old" class="zpk-input hidden" placeholder="যেমন: ০৫.০৫.৫৫৫৫.০০০.০০.০০০.২৫-৯৮৯">
                         </div>
                     </div>
                 </div>
@@ -1901,7 +1904,6 @@
                         <div class="result-line-2">
                             ${r.financial_year ? '<span class="chip chip-year">' + r.financial_year + '</span><span class="sep">•</span>' : ''}
                             ${r.fund_type ? '<span class="chip chip-fund">' + r.fund_type + '</span><span class="sep">•</span>' : ''}
-                            ${r.upazila ? '<span class="chip chip-area">' + r.upazila + '</span><span class="sep">•</span>' : ''}
                             ${r.implementation_method ? '<span class="chip chip-method">' + r.implementation_method + '</span><span class="sep">•</span>' : ''}
                             ${r.current_status ? '<span class="chip chip-status">' + r.current_status + '</span><span class="sep">•</span>' : ''}
                             <span class="label">${pct}%</span>
@@ -2541,7 +2543,25 @@
         upazilaEl.value = currentRecord.upazila || '';
         // financial_year is now a select
         const fyEl = document.getElementById('edit-financial-year');
-        fyEl.value = currentRecord.financial_year || '';
+        if (currentRecord.financial_year) {
+            fyEl.value = currentRecord.financial_year;
+        }
+
+        // Load memos for the selected financial year
+        if (currentRecord.financial_year && typeof currentRecord.financial_year === 'string') {
+            loadMemosByFinancialYear(currentRecord.financial_year).then(() => {
+                // After memos are loaded, try to select the current memo
+                if (currentRecord.approval_memo_id) {
+                    const memoSelect = document.getElementById('edit-approval-memo');
+                    if (memoSelect) {
+                        memoSelect.value = currentRecord.approval_memo_id;
+                    }
+                }
+            }).catch(err => {
+                console.error('Failed to load memos:', err);
+            });
+        }
+
         document.getElementById('edit-project-type').value = currentRecord.project_type || 'শিক্ষা';
         document.getElementById('edit-implementation-method').value = currentRecord.implementation_method || 'টেন্ডার';
         document.getElementById('edit-allocation').value = currentRecord.allocation_amount || '';
@@ -2549,7 +2569,10 @@
         // approval date stored in project_approval_date
         document.getElementById('edit-start-date').value = currentRecord.project_approval_date
             ? currentRecord.project_approval_date.split('T')[0] : '';
-        document.getElementById('edit-approval-memo').value = currentRecord.approval_memo_number || '';
+        // Keep approval_memo_number for backward compatibility, but prefer memo ID
+        if (!currentRecord.approval_memo_id) {
+            document.getElementById('edit-approval-memo-old').value = currentRecord.approval_memo_number || '';
+        }
         document.getElementById('edit-lat-lng').value = currentRecord.lat_lng || '';
         document.getElementById('edit-remarks').value = currentRecord.remarks || '';
 
@@ -2571,6 +2594,28 @@
     async function handleEditSubmit(e) {
         e.preventDefault();
         const recordId = document.getElementById('edit-id').value;
+        const memoSelect = document.getElementById('edit-approval-memo');
+        if (!memoSelect) {
+            alert('স্মারক নির্বাচন ক্ষেত্র খুঁজে পাওয়া যায়নি');
+            return;
+        }
+
+        const selectedMemoId = memoSelect.value;
+        const selectedOption = memoSelect.options[memoSelect.selectedIndex];
+
+        let memoType = '';
+        let memoNumber = '';
+
+        if (selectedOption && selectedOption.dataset) {
+            memoType = selectedOption.dataset.memoType || '';
+            memoNumber = selectedOption.dataset.memoNumber || '';
+
+            // For monthly memos without memo_number, use meeting_month
+            if (memoType === 'monthly' && !memoNumber) {
+                memoNumber = selectedOption.dataset.meetingMonth || '';
+            }
+        }
+
         const updateData = {
             project_name:          document.getElementById('edit-project-name').value.trim(),
             upazila:               document.getElementById('edit-upazila').value.trim(),
@@ -2580,7 +2625,8 @@
             financial_year:        document.getElementById('edit-financial-year').value.trim(),
             fund_type:             document.getElementById('edit-fund-type').value.trim(),
             project_approval_date: document.getElementById('edit-start-date').value || null,
-            approval_memo_number:  document.getElementById('edit-approval-memo').value.trim() || null,
+            approval_memo_id:      selectedMemoId || null,
+            approval_memo_number:  memoNumber || null,
             lat_lng:               document.getElementById('edit-lat-lng').value.trim() || null,
             remarks:               document.getElementById('edit-remarks').value.trim()
         };
@@ -2623,6 +2669,107 @@
         const deleteModal = document.getElementById('delete-modal');
         deleteModal.querySelector('.modal-card').classList.remove('open');
         setTimeout(() => { deleteModal.classList.remove('open'); deleteModal.classList.add('hidden'); }, 300);
+    }
+
+    function convertBengaliToEnglish(str) {
+        if (!str || typeof str !== 'string') return '';
+        const bengaliDigits = '०१२३४५६७८९';
+        const englishDigits = '0123456789';
+        let result = str;
+        for (let i = 0; i < bengaliDigits.length; i++) {
+            result = result.replace(new RegExp(bengaliDigits[i], 'g'), englishDigits[i]);
+        }
+        return result;
+    }
+
+    function loadMemosByFinancialYear(financialYear) {
+        return new Promise(async (resolve) => {
+            if (!financialYear || typeof financialYear !== 'string') {
+                const memoSelect = document.getElementById('edit-approval-memo');
+                if (memoSelect) {
+                    memoSelect.innerHTML = '<option value="">স্মারক নির্বাচন করুন</option>';
+                }
+                resolve();
+                return;
+            }
+
+            try {
+                // Convert Bengali numerals to English if needed
+                const normalizedYear = convertBengaliToEnglish(financialYear.trim());
+                if (!normalizedYear) {
+                    throw new Error('অবৈধ আর্থিক বছর');
+                }
+
+                const response = await fetch(`/api/approval-memos/list?financialYear=${encodeURIComponent(normalizedYear)}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: Failed to load memos`);
+                }
+                const data = await response.json();
+
+                const memoSelect = document.getElementById('edit-approval-memo');
+                if (!memoSelect) {
+                    console.warn('Memo select element not found');
+                    resolve();
+                    return;
+                }
+
+                memoSelect.innerHTML = '<option value="">স্মারক নির্বাচন করুন</option>';
+
+                if (data.data && Array.isArray(data.data)) {
+                    if (data.data.length === 0) {
+                        const option = document.createElement('option');
+                        option.value = '';
+                        option.textContent = '-- এই বছরের জন্য কোনো স্মারক নেই --';
+                        option.disabled = true;
+                        memoSelect.appendChild(option);
+                    } else {
+                        data.data.forEach(memo => {
+                            try {
+                                // Safely construct label based on memo type
+                                let label = '';
+                                if (memo.memo_type === 'monthly') {
+                                    const month = memo.meeting_month || 'অজানা মাস';
+                                    const date = memo.meeting_date || 'তারিখ নেই';
+                                    label = `${month} মাসের মাসিক সভা (${date})`;
+                                } else {
+                                    label = memo.memo_number || 'নম্বর নেই';
+                                }
+
+                                const option = document.createElement('option');
+                                option.value = memo.id || '';
+                                option.dataset.memoNumber = memo.memo_number || '';
+                                option.dataset.memoType = memo.memo_type || '';
+                                option.dataset.meetingMonth = memo.meeting_month || '';
+                                option.dataset.meetingDate = memo.meeting_date || '';
+                                option.textContent = label;
+                                memoSelect.appendChild(option);
+                            } catch (itemError) {
+                                console.error('Error processing memo item:', memo, itemError);
+                            }
+                        });
+                    }
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = '-- ডেটা লোড করতে পারা যায়নি --';
+                    option.disabled = true;
+                    memoSelect.appendChild(option);
+                }
+                resolve();
+            } catch (error) {
+                console.error('Error loading memos:', error);
+                const memoSelect = document.getElementById('edit-approval-memo');
+                if (memoSelect) {
+                    memoSelect.innerHTML = '<option value="">স্মারক নির্বাচন করুন</option>';
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = `-- ত্রুটি: ${error.message} --`;
+                    option.disabled = true;
+                    memoSelect.appendChild(option);
+                }
+                resolve();
+            }
+        });
     }
 
     async function confirmDelete() {
@@ -3057,6 +3204,21 @@
             const dx = e.changedTouches[0].clientX - tsX;
             if (Math.abs(dx) > 50) lbNav(dx < 0 ? 1 : -1);
         }, { passive: true });
+
+        // Add event listener for financial year change to load memos
+        document.addEventListener('DOMContentLoaded', () => {
+            const fySelect = document.getElementById('edit-financial-year');
+            if (fySelect) {
+                fySelect.addEventListener('change', (e) => {
+                    const selectedValue = e.target.value;
+                    if (selectedValue && typeof selectedValue === 'string') {
+                        loadMemosByFinancialYear(selectedValue).catch(err => {
+                            console.error('Error loading memos on change:', err);
+                        });
+                    }
+                });
+            }
+        });
 
         // Init on DOM ready
         document.addEventListener('DOMContentLoaded', init);

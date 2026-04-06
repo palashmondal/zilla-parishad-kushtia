@@ -116,10 +116,10 @@ const projectsModel = {
 
     async getAvailableMemos(financialYear) {
         const [results] = await pool.execute(
-            `SELECT id, memo_date, memo_number, total_projects
+            `SELECT id, memo_type, memo_date, memo_number, meeting_month, meeting_date, total_projects
              FROM approval_memos
              WHERE financial_year = ?
-             ORDER BY memo_date DESC`,
+             ORDER BY COALESCE(memo_date, meeting_date) DESC`,
             [financialYear]
         );
         return results;
@@ -231,17 +231,53 @@ const projectsModel = {
         const safePage = parseInt(page, 10) || 1;
         const offset = (safePage - 1) * safeLimit;
 
-        let sql = `SELECT ${PROJECT_FIELDS} FROM projects`;
+        let sql = `SELECT ${PROJECT_FIELDS}`;
         let countSql = 'SELECT COUNT(*) as total FROM projects';
         const params = [];
         const countParams = [];
         const conditions = [];
+        let hasSearch = false;
 
+        // Multi-keyword search with relevance scoring (same as search() method)
         if (search && search.trim().length >= 2) {
-            const searchTerm = `%${search.trim()}%`;
-            conditions.push('(project_name LIKE ? OR upazila LIKE ? OR project_type LIKE ? OR current_status LIKE ? OR id LIKE ?)');
-            params.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
-            countParams.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
+            hasSearch = true;
+            const keywords = search.trim().split(/\s+/).filter(k => k.length >= 2);
+
+            if (keywords.length > 0) {
+                const scoreParts = [];
+                const whereParts = [];
+
+                keywords.forEach((keyword) => {
+                    const searchTerm = `%${keyword}%`;
+
+                    // Score calculation parameters (for SELECT clause only)
+                    scoreParts.push(`
+                        (CASE WHEN project_name LIKE ? THEN 10 ELSE 0 END) +
+                        (CASE WHEN id LIKE ? THEN 3 ELSE 0 END) +
+                        (CASE WHEN upazila LIKE ? THEN 5 ELSE 0 END) +
+                        (CASE WHEN project_type LIKE ? THEN 3 ELSE 0 END) +
+                        (CASE WHEN current_status LIKE ? THEN 2 ELSE 0 END) +
+                        (CASE WHEN implementation_method LIKE ? THEN 2 ELSE 0 END) +
+                        (CASE WHEN fund_type LIKE ? THEN 1 ELSE 0 END) +
+                        (CASE WHEN remarks LIKE ? THEN 1 ELSE 0 END)
+                    `);
+                    for (let i = 0; i < 8; i++) params.push(searchTerm);
+
+                    // WHERE clause parameters (for both SELECT and COUNT queries)
+                    whereParts.push(`(
+                        project_name LIKE ? OR id LIKE ? OR upazila LIKE ? OR
+                        project_type LIKE ? OR current_status LIKE ? OR
+                        implementation_method LIKE ? OR fund_type LIKE ? OR remarks LIKE ?
+                    )`);
+                    for (let i = 0; i < 8; i++) {
+                        params.push(searchTerm);
+                        countParams.push(searchTerm);
+                    }
+                });
+
+                sql = `SELECT ${PROJECT_FIELDS}, (${scoreParts.join(' + ')}) AS relevance_score FROM projects`;
+                conditions.push('(' + whereParts.join(' OR ') + ')');
+            }
         }
 
         if (year && year !== 'all') {
@@ -263,13 +299,18 @@ const projectsModel = {
             countSql += whereClause;
         }
 
-        sql += ` ORDER BY created_at DESC LIMIT ${safeLimit} OFFSET ${offset}`;
+        // Order by relevance score if search, otherwise by created_at
+        if (hasSearch) {
+            sql += ` ORDER BY relevance_score DESC, project_name ASC LIMIT ${safeLimit} OFFSET ${offset}`;
+        } else {
+            sql += ` ORDER BY created_at DESC LIMIT ${safeLimit} OFFSET ${offset}`;
+        }
 
         const [results] = await pool.execute(sql, params);
         const [countResult] = await pool.execute(countSql, countParams);
 
         return {
-            data: results,
+            data: results.map(({ relevance_score, ...rest }) => rest),
             total: countResult[0].total,
             page: safePage,
             limit: safeLimit,
