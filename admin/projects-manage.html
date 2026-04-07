@@ -2728,7 +2728,9 @@
             const sel = document.getElementById('prog-progress-step');
 
             const optionsHtml = steps.map(s => {
-                const isDisabledByProgress = s.base_percentage < currentProgress;
+                // Final step (100%) should only be disabled if already added, not by progress
+                // All other steps are disabled if their percentage is below current progress
+                const isDisabledByProgress = s.base_percentage !== 100 && s.base_percentage < currentProgress;
                 const isDisabledByDuplicate = _addedProgressStepIds.has(s.id);
                 const isDisabled = isDisabledByProgress || isDisabledByDuplicate;
                 const disabledAttr = isDisabled ? 'disabled' : '';
