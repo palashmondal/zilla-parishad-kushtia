@@ -229,6 +229,41 @@
         .modal-close-btn:hover { filter: brightness(1.12); }
         .modal-close-btn:active { transform: scale(0.97); }
 
+        /* annotation styling */
+        .modal-annotation {
+            position: relative;
+            background: #f0f9f7;
+            border: 1px solid #c6ede8;
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: center;
+        }
+        .modal-annotation::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #c6ede8;
+        }
+        .modal-annotation-label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #145530;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        .modal-annotation-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a56a0;
+        }
+
         /* logo glow ring */
         .logo-ring {
             background: linear-gradient(135deg, #1a6b3c, #d4a017, #d42b3a, #1a56a0);
@@ -706,40 +741,37 @@
                     <p id="m-year-badge" class="font-semibold text-slate-800 text-[21px]"></p>
                 </div>
 
+                <!-- Annotation Container (Date and Method) -->
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <!-- Distribution Date Annotation -->
+                    <div class="modal-annotation">
+                        <div class="modal-annotation-label">অর্থ বিতরণের তারিখ</div>
+                        <div class="modal-annotation-value" id="m-distribution-date">-</div>
+                    </div>
+
+                    <!-- Disbursement Method Annotation -->
+                    <div class="modal-annotation">
+                        <div class="modal-annotation-label">বিতরণ পদ্ধতি</div>
+                        <div class="modal-annotation-value" id="m-disbursement-method">-</div>
+                    </div>
+                </div>
+
                 <!-- Amount box -->
                 <div class="modal-amount-box p-8 rounded-2xl">
-                    <div class="grid grid-cols-3 gap-8 h-full">
-                        <!-- Left column: Amount and Status -->
-                        <div class="flex flex-col justify-between col-span-1">
-                            <!-- Amount -->
-                            <div>
-                                <p class="text-[14px] font-bold text-[#145530] uppercase tracking-wider mb-3">জেলা পরিষদ কর্তৃক প্রদত্ত অর্থ</p>
-                                <p id="m-amount" class="text-[42px] font-black text-[#1a6b3c] tracking-tight leading-tight"></p>
-                            </div>
-
-                            <!-- Status (bottom left) -->
-                            <div>
-                                <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-3">স্ট্যাটাস</p>
-                                <span class="modal-status-badge inline-flex items-center gap-1.5 px-5 py-2.5 text-white text-[12px] font-bold rounded-full uppercase tracking-tight shadow-md">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-[#d4a017] animate-pulse"></span>
-                                    Delivered
-                                </span>
-                            </div>
+                    <div class="flex flex-col justify-between h-full">
+                        <!-- Amount -->
+                        <div>
+                            <p class="text-[14px] font-bold text-[#145530] uppercase tracking-wider mb-3">জেলা পরিষদ কর্তৃক প্রদত্ত অর্থ</p>
+                            <p id="m-amount" class="text-[42px] font-black text-[#1a6b3c] tracking-tight leading-tight"></p>
                         </div>
 
-                        <!-- Right column: Distribution Info (spans both rows) -->
-                        <div class="col-span-2 space-y-3">
-                            <!-- Distribution Date -->
-                            <div>
-                                <p class="text-[11px] font-bold text-[#145530] uppercase tracking-wider mb-1">অর্থ বিতরণের তারিখ</p>
-                                <p id="m-distribution-date" class="text-[14px] font-semibold text-[#1a56a0]">-</p>
-                            </div>
-
-                            <!-- Disbursement Method -->
-                            <div>
-                                <p class="text-[11px] font-bold text-[#145530] uppercase tracking-wider mb-1">বিতরণ পদ্ধতি</p>
-                                <p id="m-disbursement-method" class="text-[14px] font-semibold text-[#1a56a0]">-</p>
-                            </div>
+                        <!-- Status (bottom) -->
+                        <div>
+                            <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-3">স্ট্যাটাস</p>
+                            <span class="modal-status-badge inline-flex items-center gap-1.5 px-5 py-2.5 text-white text-[12px] font-bold rounded-full uppercase tracking-tight shadow-md">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#d4a017] animate-pulse"></span>
+                                Delivered
+                            </span>
                         </div>
                     </div>
                 </div>
