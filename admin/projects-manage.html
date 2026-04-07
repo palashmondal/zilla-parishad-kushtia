@@ -2728,9 +2728,12 @@
             const sel = document.getElementById('prog-progress-step');
 
             const optionsHtml = steps.map(s => {
-                // Final step (100%) should only be disabled if already added, not by progress
-                // All other steps are disabled if their percentage is below current progress
-                const isDisabledByProgress = s.base_percentage !== 100 && s.base_percentage < currentProgress;
+                // Steps that should NOT be disabled by progress percentage:
+                // - Final step (100%): চূড়ান্ত বিল প্রদান সমাপ্ত
+                // - Running bill (30% dynamic): রানিং বিল প্রদান
+                // These steps should only be disabled if already added (duplicate prevention)
+                const isFinalBillOrRunningBill = s.base_percentage === 100 || (s.base_percentage === 30 && s.is_dynamic_calculation === 1);
+                const isDisabledByProgress = !isFinalBillOrRunningBill && s.base_percentage < currentProgress;
                 const isDisabledByDuplicate = _addedProgressStepIds.has(s.id);
                 const isDisabled = isDisabledByProgress || isDisabledByDuplicate;
                 const disabledAttr = isDisabled ? 'disabled' : '';
