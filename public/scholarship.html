@@ -722,6 +722,18 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Distribution Information -->
+                <div class="mt-6 pt-6 border-t border-[#c8e6d8] grid grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-2">অর্থ বিতরণের তারিখ</p>
+                        <p id="m-distribution-date" class="text-[18px] font-semibold text-[#1a56a0]">-</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-2">বিতরণ পদ্ধতি</p>
+                        <p id="m-disbursement-method" class="text-[18px] font-semibold text-[#1a56a0]">-</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Admin Action Buttons (hidden by default, shown when admin logged in) -->
@@ -857,6 +869,26 @@
                             <option value="pending">Pending</option>
                             <option value="processing">Processing</option>
                             <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+
+                    <!-- Distribution Date -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">অর্থ বিতরণের তারিখ</label>
+                        <input type="date" id="edit-distribution-date"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                    </div>
+
+                    <!-- Disbursement Method -->
+                    <div>
+                        <label class="block text-xs font-bold text-[#1a6b3c] mb-2 uppercase tracking-wide">বিতরণ পদ্ধতি</label>
+                        <select id="edit-disbursement-method"
+                            class="w-full px-4 py-2 border-2 border-[#c8e6d8] rounded-lg focus:outline-none focus:border-[#1a6b3c] focus:ring-2 focus:ring-[#7dd3d0] font-semibold text-gray-800">
+                            <option value="">--- নির্বাচন করুন ---</option>
+                            <option value="বিকাশ">বিকাশ</option>
+                            <option value="নগদ">নগদ</option>
+                            <option value="রকেট">রকেট</option>
+                            <option value="সরাসরি">সরাসরি</option>
                         </select>
                     </div>
                 </div>
@@ -1144,6 +1176,8 @@
         document.getElementById('m-passing-year').innerText = r.passing_year || '';
         document.getElementById('m-amount').innerText  = "৳ " + formatBDMoney(r.amount) + " টাকা";
         document.getElementById('m-year-badge').innerText = r.financial_year || '';
+        document.getElementById('m-distribution-date').innerText = r.distribution_date || '-';
+        document.getElementById('m-disbursement-method').innerText = r.disbursement_method || '-';
         dropdown.classList.add('hidden');
         document.getElementById('modal').classList.add('open');
     }
@@ -1352,6 +1386,8 @@
         document.getElementById('edit-financial-year').value = currentRecord.financial_year || '';
         document.getElementById('edit-reference').value = '';
         document.getElementById('edit-status').value = currentRecord.status || 'delivered';
+        document.getElementById('edit-distribution-date').value = currentRecord.distribution_date || '';
+        document.getElementById('edit-disbursement-method').value = currentRecord.disbursement_method || '';
         document.getElementById('edit-application-details').value = '';
         document.getElementById('edit-remarks').value = '';
 
@@ -1398,6 +1434,8 @@
             amount: parseFloat(document.getElementById('edit-amount').value) || 0,
             financial_year: document.getElementById('edit-financial-year').value.trim(),
             status: document.getElementById('edit-status').value,
+            distribution_date: document.getElementById('edit-distribution-date').value.trim(),
+            disbursement_method: document.getElementById('edit-disbursement-method').value.trim(),
             zila: 'কুষ্টিয়া',
             passing_year: ''
         };

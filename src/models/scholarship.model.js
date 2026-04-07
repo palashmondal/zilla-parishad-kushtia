@@ -5,6 +5,7 @@ const SCHOLARSHIP_FIELDS = `
     sang, post, upazila, zila, phone,
     passing_year, school, gpa, category,
     financial_year, amount, status,
+    distribution_date, disbursement_method,
     created_at, updated_at
 `;
 
