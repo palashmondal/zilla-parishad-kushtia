@@ -2896,13 +2896,14 @@
 
             // Show/hide fund release block based on:
             // 1. CPPC method = always hidden
-            // 2. Other methods = show only when status is "কাজ চলমান" or beyond
+            // 2. Other methods = show when status is "কাজ চলমান" or any status after it
             const isCppc = method === 'সিপিপিসি';
-            const currentStatus = (_progressRecord && _progressRecord.current_status) || '';
+            const currentProgress = (_progressRecord && _progressRecord.progress_percentage) || 0;
 
-            // Fund release is allowed only after "কাজ চলমান" status
-            const fundReleaseStatuses = ['কাজ চলমান', 'বাস্তবায়ন চলমান', 'বাস্তবায়ন সম্পন্ন', 'কাজ সম্পন্ন'];
-            const showFundRelease = !isCppc && fundReleaseStatuses.some(status => currentStatus.includes(status));
+            // Fund release is allowed once "কাজ চলমান" (work in progress) is reached
+            // "কাজ চলমান" corresponds to 55% progress in all methods
+            // Show button for any status at or after this point
+            const showFundRelease = !isCppc && currentProgress >= 55;
 
             document.getElementById('prog-fund-toggle').parentElement.style.display = showFundRelease ? 'block' : 'none';
             document.getElementById('prog-pct-preview').parentElement.parentElement.style.display = isCppc ? 'none' : 'block';
