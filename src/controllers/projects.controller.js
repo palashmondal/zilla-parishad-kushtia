@@ -1,4 +1,5 @@
 const projectsModel = require('../models/projects.model');
+const progressStepsModel = require('../models/progressSteps.model');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -45,6 +46,37 @@ const projectsController = {
             console.error('Projects years fetch error:', error);
             res.status(500).json({
                 error: 'Failed to fetch years',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
+    async getProgressSteps(req, res) {
+        try {
+            const { method } = req.query;
+            if (!method) {
+                return res.status(400).json({ error: 'বাস্তবায়ন পদ্ধতি প্রয়োজন' });
+            }
+
+            const validMethods = ['cppc', 'tender', 'rfq', 'সিপিপিসি', 'টেন্ডার', 'আরএফকিউ'];
+            if (!validMethods.includes(method)) {
+                return res.status(400).json({ error: 'অবৈধ বাস্তবায়ন পদ্ধতি' });
+            }
+
+            // Map Bengali method names to English
+            const methodMap = {
+                'সিপিপিসি': 'cppc',
+                'টেন্ডার': 'tender',
+                'আরএফকিউ': 'rfq'
+            };
+            const normalizedMethod = methodMap[method] || method.toLowerCase();
+
+            const steps = await progressStepsModel.getStepsByMethod(normalizedMethod);
+            res.json(steps);
+        } catch (error) {
+            console.error('Progress steps fetch error:', error);
+            res.status(500).json({
+                error: 'Failed to fetch progress steps',
                 message: isProduction ? 'An internal error occurred' : error.message
             });
         }
@@ -262,22 +294,38 @@ const projectsController = {
                 return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
             }
 
-            const { released_amount, current_status,
-                    is_completed, is_delayed, note } = req.body;
+            const { progress_step_id, released_amount, current_status,
+                    is_completed, is_delayed, note, activity_date } = req.body;
 
-            if (!current_status) {
-                return res.status(400).json({ error: 'বর্তমান অবস্থা আবশ্যক' });
+            // If progress_step_id is provided, validate it and get the step
+            if (progress_step_id) {
+                const step = await progressStepsModel.getStepById(progress_step_id);
+                if (!step) {
+                    return res.status(400).json({ error: 'অবৈধ অগ্রগতি ধাপ' });
+                }
+                // Validate step belongs to the project's implementation method
+                if (step.implementation_method.toLowerCase() !== project.implementation_method.toLowerCase().replace('টেন্ডার', 'tender').replace('সিপিপিসি', 'cppc').replace('আরএফকিউ', 'rfq')) {
+                    return res.status(400).json({ error: 'এই অগ্রগতি ধাপটি প্রকল্পের বাস্তবায়ন পদ্ধতির জন্য উপযুক্ত নয়' });
+                }
+            } else if (!current_status) {
+                return res.status(400).json({ error: 'বর্তমান অবস্থা বা অগ্রগতি ধাপ আবশ্যক' });
             }
 
-            const calculatedPct = await projectsModel.addProgressLog(project.id, {
+            const result = await projectsModel.addProgressLog(project.id, {
+                progress_step_id: progress_step_id ? parseInt(progress_step_id, 10) : null,
                 released_amount: released_amount !== undefined ? parseFloat(released_amount) : null,
-                current_status: current_status.trim(),
+                current_status: current_status ? current_status.trim() : '',
                 is_completed: is_completed ? 1 : 0,
                 is_delayed: is_delayed ? 1 : 0,
-                note: note ? note.trim() : null
+                note: note ? note.trim() : null,
+                activity_date: activity_date || null
             }, req.user.id);
 
-            res.json({ message: 'অগ্রগতি সংরক্ষণ করা হয়েছে', progress_percentage: calculatedPct });
+            res.json({
+                message: 'অগ্রগতি সংরক্ষণ করা হয়েছে',
+                progress_percentage: result.progress_percentage,
+                progress_step_id: result.progress_step_id
+            });
         } catch (error) {
             console.error('Projects addProgress error:', error);
             res.status(500).json({
@@ -367,6 +415,62 @@ const projectsController = {
             console.error('Projects deleteImage error:', error);
             res.status(500).json({
                 error: 'Image delete failed',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
+    async addDocuments(req, res) {
+        try {
+            console.log('=== addDocuments called ===');
+            console.log('req.params.id:', req.params.id);
+            console.log('req.files:', req.files);
+            console.log('req.body:', req.body);
+
+            const id = req.params.id;
+            if (!id || id.trim().length === 0) {
+                return res.status(400).json({ error: 'Invalid project ID' });
+            }
+
+            // First, fetch the project to get its integer id
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
+            }
+
+            console.log('Project found, integer id:', project.id);
+
+            if (!req.files || req.files.length === 0) {
+                console.log('No files in request');
+                return res.status(400).json({ error: 'কোনো ডকুমেন্ট নির্বাচন করা হয়নি' });
+            }
+
+            // Support per-file metadata arrays OR a single value applied to all files.
+            // Frontend sends: caption[] arrays (one per file)
+            const captions = req.body.caption || [];
+
+            const toArr = v => Array.isArray(v) ? v : [v];
+            const captionsArr = toArr(captions);
+
+            const documents = req.files.map((file, i) => ({
+                file_path: `documents/${file.filename}`,
+                original_name: file.originalname,
+                caption: (captionsArr[i] || captionsArr[0] || '').trim() || null,
+                file_type: file.originalname.split('.').pop().toLowerCase(),
+                file_size_bytes: file.size
+            }));
+
+            // Use the integer id for the database insert
+            await projectsModel.addDocuments(project.id, documents, req.user.id);
+
+            res.json({
+                message: 'ডকুমেন্ট আপলোড করা হয়েছে',
+                count: documents.length
+            });
+        } catch (error) {
+            console.error('Projects addDocuments error:', error);
+            res.status(500).json({
+                error: 'Document upload failed',
                 message: isProduction ? 'An internal error occurred' : error.message
             });
         }

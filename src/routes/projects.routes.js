@@ -3,11 +3,12 @@ const router = express.Router();
 const projectsController = require('../controllers/projects.controller');
 const { searchLimiter } = require('../middleware/rateLimiter');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
-const { uploadProjectImages } = require('../middleware/upload');
+const { uploadProjectImages, uploadProjectDocuments } = require('../middleware/upload');
 
 // Public routes
 router.get('/search', searchLimiter, projectsController.search);
 router.get('/years', projectsController.getYears);
+router.get('/progress-steps', projectsController.getProgressSteps);
 router.get('/available-memos/:financialYear', projectsController.getAvailableMemos);
 router.get('/upazilas', projectsController.getUpazilas);
 router.get('/stats', projectsController.getStats);
@@ -25,9 +26,10 @@ router.put('/:id/update', requireAuth, requireAdmin, projectsController.update);
 router.delete('/:id', requireAuth, requireAdmin, projectsController.delete);
 router.delete('/:id/delete', requireAuth, requireAdmin, projectsController.delete);
 
-// Progress & image upload routes
+// Progress & media upload routes
 router.post('/:id/progress', requireAuth, requireAdmin, projectsController.addProgress);
 router.post('/:id/images', requireAuth, requireAdmin, uploadProjectImages.array('images', 10), projectsController.addImages);
 router.delete('/:id/images/:imageId', requireAuth, requireAdmin, projectsController.deleteImage);
+router.post('/:id/documents', requireAuth, requireAdmin, uploadProjectDocuments.array('documents', 10), projectsController.addDocuments);
 
 module.exports = router;

@@ -87,4 +87,51 @@ function calcProgress({ current_status, implementation_method, allocation_amount
     return Math.min(100, Math.max(0, blended));
 }
 
-module.exports = { calcProgress };
+/**
+ * Calculate progress percentage based on a progress step definition
+ * Handles both fixed and dynamic (fund-based) calculations
+ *
+ * @param {object} params
+ * @param {object} params.step - Progress step definition object
+ * @param {number} params.step.base_percentage - Fixed base percentage
+ * @param {number} params.step.is_dynamic_calculation - 1 if dynamic, 0 if fixed
+ * @param {number} params.step.dynamic_min_percentage - Min percentage for dynamic step
+ * @param {number} params.step.dynamic_max_percentage - Max percentage for dynamic step
+ * @param {number} params.allocation_amount - Total budget (for dynamic calc)
+ * @param {number} params.released_amount - Amount released (for dynamic calc)
+ * @param {boolean|number} params.is_completed - If 1, return 100%
+ * @returns {number} Calculated progress percentage (0-100)
+ */
+function calcProgressFromStep({ step, allocation_amount, released_amount, is_completed }) {
+    // Hard override: completed = 100%
+    if (is_completed) return 100;
+
+    // If not a dynamic step, return base percentage
+    if (!step.is_dynamic_calculation) {
+        return step.base_percentage;
+    }
+
+    // Dynamic calculation for "കാज் చోలమान" step
+    // Formula: min_pct + (disbursement_ratio × (max_pct - min_pct))
+    const alloc    = parseFloat(allocation_amount) || 0;
+    const released = parseFloat(released_amount) || 0;
+
+    // If no allocation, return min percentage
+    if (alloc <= 0) {
+        return step.dynamic_min_percentage || 30;
+    }
+
+    // Calculate disbursement ratio (capped at 1.0 to handle over-disbursement)
+    const disbursementRatio = Math.min(released / alloc, 1.0);
+
+    // Calculate progress within dynamic range
+    const minPct = step.dynamic_min_percentage || 30;
+    const maxPct = step.dynamic_max_percentage || 90;
+    const dynamicRange = maxPct - minPct;
+    const calculatedProgress = minPct + (disbursementRatio * dynamicRange);
+
+    // Return as integer between min and max
+    return Math.round(Math.min(calculatedProgress, maxPct));
+}
+
+module.exports = { calcProgress, calcProgressFromStep };

@@ -1594,50 +1594,41 @@
                     </div>
                 </div>
 
-                <!-- Section 2: Status (filtered by method) -->
+                <!-- Section 2: Progress Step (filtered by method) -->
                 <div class="zpk-form-section">
                     <div class="zpk-form-section-title">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        বর্তমান অবস্থা
+                        অগ্রগতি ধাপ
                     </div>
                     <div>
-                        <label class="zpk-label">অবস্থা নির্বাচন করুন <span class="text-red-400">*</span></label>
+                        <label class="zpk-label">অগ্রগতি ধাপ নির্বাচন করুন <span class="text-red-400">*</span></label>
                         <div class="relative">
-                            <select id="pm-status" class="zpk-input" style="appearance:none;padding-right:2rem;">
-                                <option value="">-- অবস্থা নির্বাচন করুন --</option>
+                            <select id="pm-progress-step" class="zpk-input" style="appearance:none;padding-right:2rem;" onchange="handleProgressStepChange()">
+                                <option value="">-- অগ্রগতি ধাপ নির্বাচন করুন --</option>
                             </select>
                             <svg style="pointer-events:none;position:absolute;right:0.625rem;top:50%;transform:translateY(-50%);width:1rem;height:1rem;color:#f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </div>
+                        <!-- Read-only progress percentage display -->
+                        <div id="pm-step-progress-display" style="margin-top:0.75rem;padding:0.75rem;background:#f0fdf4;border-radius:0.75rem;border:1px solid #86efac;display:none;">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs font-semibold text-emerald-800">অগ্রগতি (স্বয়ংক্রিয় গণনা)</span>
+                                <span id="pm-step-progress-pct" class="text-sm font-extrabold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">০%</span>
+                            </div>
+                            <div class="h-2 rounded-full overflow-hidden" style="background:#e5e7eb;">
+                                <div id="pm-step-progress-bar" class="h-2 rounded-full transition-all duration-300"
+                                     style="width:0%;background:linear-gradient(90deg,#86efac,#22c55e);"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Section 3: Mark complete / delayed -->
-                <div class="zpk-form-section" style="border-left-color:#10b981;">
-                    <div class="zpk-form-section-title" style="color:#065f46;">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        প্রকল্পটি চিহ্নিত করুন
-                    </div>
-                    <p class="text-xs text-gray-500 mb-3">প্রকল্পটি সম্পন্ন বা বিলম্বিত হিসেবে চিহ্নিত করতে চাইলে নীচের টগল চালু করুন।</p>
-                    <div class="flex items-center gap-6">
-                        <label class="flex items-center gap-2.5 cursor-pointer select-none">
-                            <div class="relative">
-                                <input type="checkbox" id="pm-completed" class="sr-only peer">
-                                <div class="w-10 h-5 rounded-full bg-gray-200 peer-checked:bg-emerald-500 transition-colors duration-200"></div>
-                                <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
-                            </div>
-                            <span class="text-sm font-semibold text-gray-700">✅ সম্পন্ন</span>
-                        </label>
-                        <label class="flex items-center gap-2.5 cursor-pointer select-none">
-                            <div class="relative">
-                                <input type="checkbox" id="pm-delayed" class="sr-only peer">
-                                <div class="w-10 h-5 rounded-full bg-gray-200 peer-checked:bg-red-400 transition-colors duration-200"></div>
-                                <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
-                            </div>
-                            <span class="text-sm font-semibold text-gray-700">⚠️ বিলম্বিত</span>
-                        </label>
-                    </div>
+                <!-- Hidden section: Legacy status field (kept for backward compatibility, not shown) -->
+                <div style="display:none;">
+                    <select id="pm-status">
+                        <option value="">-- অবস্থা নির্বাচন করুন --</option>
+                    </select>
                 </div>
 
                 <!-- Section 4: Note -->
@@ -2798,7 +2789,34 @@
     // PROGRESS MODAL
     // ─────────────────────────────────────────────────────────────
 
-    // Status options per implementation method
+    // Fetch progress steps from API
+    async function fetchProgressSteps(method) {
+        try {
+            const normalizedMethod = method === 'সিপিপিসি' ? 'cppc' :
+                                   method === 'টেন্ডার' ? 'tender' :
+                                   method === 'আরএফকিউ' ? 'rfq' : method;
+            const res = await fetch(`${API_URL}/projects/progress-steps?method=${normalizedMethod}`);
+            if (!res.ok) {
+                console.error('Failed to fetch progress steps');
+                return [];
+            }
+            return await res.json();
+        } catch (err) {
+            console.error('Error fetching progress steps:', err);
+            return [];
+        }
+    }
+
+    async function populateProgressSteps(method) {
+        const steps = await fetchProgressSteps(method);
+        const sel = document.getElementById('pm-progress-step');
+        sel.innerHTML = '<option value="">-- অগ্রগতি ধাপ নির্বাচন করুন --</option>' +
+            steps.map(s => `<option value="${s.id}" data-percentage="${s.base_percentage}" data-dynamic="${s.is_dynamic_calculation}">${s.bengali_description}</option>`).join('');
+        sel.value = '';
+        document.getElementById('pm-step-progress-display').style.display = 'none';
+    }
+
+    // Legacy status options (kept for backward compatibility, no longer used in UI)
     const PM_STATUS_OPTIONS = {
         'টেন্ডার':  ['টেন্ডার ফ্লোটিং','টেন্ডার মূল্যায়ন','কার্যাদেশ প্রদান','কাজ শুরু হয়নি','কাজ চলমান','আংশিক সম্পন্ন','চূড়ান্ত বিল প্রক্রিয়া','কাজ সম্পন্ন'],
         'সিপিপিসি': ['সিপিপিসি অনুমোদন প্রক্রিয়া','কাজ শুরু হয়নি','কাজ চলমান','আংশিক সম্পন্ন','চূড়ান্ত বিল প্রক্রিয়া','কাজ সম্পন্ন'],
@@ -2810,6 +2828,42 @@
         const opts = PM_STATUS_OPTIONS[method] || ['কাজ শুরু হয়নি','কাজ চলমান','আংশিক সম্পন্ন','চূড়ান্ত বিল প্রক্রিয়া','কাজ সম্পন্ন'];
         sel.innerHTML = '<option value="">-- অবস্থা নির্বাচন করুন --</option>' +
             opts.map(o => `<option value="${o}">${o}</option>`).join('');
+    }
+
+    function handleProgressStepChange() {
+        const sel = document.getElementById('pm-progress-step');
+        const selectedOption = sel.options[sel.selectedIndex];
+        const stepId = sel.value;
+        const displayDiv = document.getElementById('pm-step-progress-display');
+
+        if (!stepId) {
+            displayDiv.style.display = 'none';
+            return;
+        }
+
+        const isDynamic = selectedOption.getAttribute('data-dynamic') === '1';
+        let progressPct = parseInt(selectedOption.getAttribute('data-percentage')) || 0;
+
+        // If dynamic (কাজ চলমান), calculate based on released amount
+        if (isDynamic) {
+            const released = parseFloat(currentRecord.released_amount || 0);
+            const alloc = parseFloat(currentRecord.allocation_amount || 0);
+
+            if (alloc > 0) {
+                const disbursementRatio = Math.min(released / alloc, 1.0);
+                const minPct = 30;
+                const maxPct = 90;
+                const dynamicRange = maxPct - minPct;
+                progressPct = Math.round(minPct + (disbursementRatio * dynamicRange));
+            } else {
+                progressPct = 30; // Default minimum
+            }
+        }
+
+        // Update display
+        displayDiv.style.display = 'block';
+        document.getElementById('pm-step-progress-pct').textContent = progressPct + '%';
+        document.getElementById('pm-step-progress-bar').style.width = progressPct + '%';
     }
 
     function updatePmPreview() { /* progress % input removed */ }
@@ -2829,7 +2883,7 @@
         }
     }
 
-    function openProgressModal() {
+    async function openProgressModal() {
         if (!currentRecord) return;
 
         // Header subtitle
@@ -2845,13 +2899,11 @@
         document.getElementById('pm-current-released').textContent = '৳ ' + released.toLocaleString('en-IN');
         document.getElementById('pm-current-alloc').textContent    = '৳ ' + alloc.toLocaleString('en-IN');
 
-        // Populate status options filtered by implementation method
-        populatePmStatusOptions(currentRecord.implementation_method || '');
+        // Populate progress steps filtered by implementation method
+        await populateProgressSteps(currentRecord.implementation_method || '');
 
         // Reset fields
         document.getElementById('pm-released').value = '';
-        document.getElementById('pm-completed').checked = false;
-        document.getElementById('pm-delayed').checked   = false;
         document.getElementById('pm-note').value        = '';
         document.getElementById('pm-caption').value     = '';
         document.getElementById('pm-photo-type').value  = 'during';
@@ -2890,18 +2942,23 @@
     }
 
     async function handleProgressSubmit() {
-        const status = document.getElementById('pm-status').value;
+        const progressStepId = document.getElementById('pm-progress-step').value;
         const fundOpen = document.getElementById('pm-fund-release-field').classList.contains('open');
 
-        if (!status) {
-            showMsg('pm-progress-msg', 'বর্তমান অবস্থা নির্বাচন করুন', true);
+        if (!progressStepId) {
+            showMsg('pm-progress-msg', 'অগ্রগতি ধাপ নির্বাচন করুন', true);
             return;
         }
 
+        // Determine the current_status from the selected step's bengali description
+        const selectedOption = document.getElementById('pm-progress-step').options[document.getElementById('pm-progress-step').selectedIndex];
+        const statusText = selectedOption.text;
+
         const body = {
-            current_status: status,
-            is_completed: document.getElementById('pm-completed').checked ? 1 : 0,
-            is_delayed:   document.getElementById('pm-delayed').checked   ? 1 : 0,
+            progress_step_id: parseInt(progressStepId, 10),
+            current_status: statusText,
+            is_completed: 0,
+            is_delayed:   0,
             note: document.getElementById('pm-note').value.trim() || null
         };
         if (fundOpen) {

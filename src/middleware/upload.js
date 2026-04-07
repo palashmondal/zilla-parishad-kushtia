@@ -32,6 +32,47 @@ const uploadProjectImages = multer({
     }
 });
 
+// ── Project documents storage ──────────────────────────────────────
+const projectDocumentsStorage = multer.diskStorage({
+    destination(req, file, cb) {
+        cb(null, path.join(__dirname, '../../uploads/documents'));
+    },
+    filename(req, file, cb) {
+        const projectId = (req.params.id || 'unknown').replace(/[^a-zA-Z0-9\-]/g, '');
+        const ext = path.extname(file.originalname).toLowerCase();
+        const safeName = `proj-${projectId}-${Date.now()}${ext}`;
+        cb(null, safeName);
+    }
+});
+
+const projectDocumentFilter = (req, file, cb) => {
+    const allowed = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'text/plain'
+    ];
+    if (allowed.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('শুধুমাত্র PDF, Word, Excel, ছবি বা টেক্সট ফাইল আপলোড করা যাবে।'), false);
+    }
+};
+
+const uploadProjectDocuments = multer({
+    storage: projectDocumentsStorage,
+    fileFilter: projectDocumentFilter,
+    limits: {
+        fileSize: 10 * 1024 * 1024, // 10 MB per file
+        files: 10                    // up to 10 files per request
+    }
+});
+
 // ── Approval Memos document storage ──────────────────────────────────────
 const approvalMemosStorage = multer.diskStorage({
     destination(req, file, cb) {
@@ -63,4 +104,4 @@ const uploadApprovalMemoDocument = multer({
     }
 });
 
-module.exports = { uploadProjectImages, uploadApprovalMemoDocument };
+module.exports = { uploadProjectImages, uploadProjectDocuments, uploadApprovalMemoDocument };
