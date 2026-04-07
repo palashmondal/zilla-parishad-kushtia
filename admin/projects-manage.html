@@ -2728,21 +2728,39 @@
             const sel = document.getElementById('prog-progress-step');
 
             const optionsHtml = steps.map(s => {
-                // Steps that should NOT be disabled by progress percentage:
-                // - Final step (100%): চূড়ান্ত বিল প্রদান সমাপ্ত
-                // - Running bill (30% dynamic): রানিং বিল প্রদান
-                // These steps should only be disabled if already added (duplicate prevention)
-                const isFinalBillOrRunningBill = s.base_percentage === 100 || (s.base_percentage === 30 && s.is_dynamic_calculation === 1);
-                const isDisabledByProgress = !isFinalBillOrRunningBill && s.base_percentage < currentProgress;
-                const isDisabledByDuplicate = _addedProgressStepIds.has(s.id);
-                const isDisabled = isDisabledByProgress || isDisabledByDuplicate;
+                // Check if this is রানিং বিল প্রদান (30% dynamic step)
+                const isRunningBill = s.base_percentage === 30 && s.is_dynamic_calculation === 1;
+
+                // Check if all funds are released (100%)
+                const alloc = parseFloat(_progressRecord?.allocation_amount) || 0;
+                const released = parseFloat(_progressRecord?.released_amount) || 0;
+                const fundReleaseRatio = alloc > 0 ? (released / alloc) : 0;
+                const allFundsReleased = fundReleaseRatio >= 1.0;
+
+                // Disable logic:
+                // 1. Running bill: disabled only if 100% funds released (allow multiple submissions during work)
+                // 2. Final bill (100%): disabled if already added
+                // 3. Other steps: disabled if their percentage < current progress
+                let isDisabled = false;
+                let disableReason = '';
+
+                if (isRunningBill) {
+                    // Running bill disabled only after 100% fund release
+                    isDisabled = allFundsReleased;
+                    if (isDisabled) disableReason = 'সকল তহবিল ছাড় প্রদান সম্পন্ন (100%)';
+                } else if (s.base_percentage === 100) {
+                    // Final bill disabled if already added
+                    isDisabled = _addedProgressStepIds.has(s.id);
+                    if (isDisabled) disableReason = 'এই ধাপ ইতিমধ্যে যোগ করা হয়েছে';
+                } else {
+                    // Other steps disabled if percentage < current progress
+                    isDisabled = s.base_percentage < currentProgress;
+                    if (isDisabled) disableReason = `এই ধাপ আগে সম্পন্ন হয়েছে (${currentProgress}% >= ${s.base_percentage}%)`;
+                }
+
                 const disabledAttr = isDisabled ? 'disabled' : '';
                 const disabledClass = isDisabled ? ' opacity-50' : '';
-                const title = isDisabledByProgress
-                    ? `এই ধাপ আগে সম্পন্ন হয়েছে (${currentProgress}% >= ${s.base_percentage}%)`
-                    : isDisabledByDuplicate
-                    ? 'এই ধাপ ইতিমধ্যে যোগ করা হয়েছে'
-                    : '';
+                const title = disableReason;
                 return `<option value="${s.id}" data-percentage="${s.base_percentage}" data-dynamic="${s.is_dynamic_calculation}" ${disabledAttr} title="${title}" class="${disabledClass}">${s.bengali_description}</option>`;
             }).join('');
 
