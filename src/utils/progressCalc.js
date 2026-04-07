@@ -93,7 +93,7 @@ function calcProgress({ current_status, implementation_method, allocation_amount
  *
  * @param {object} params
  * @param {object} params.step - Progress step definition object
- * @param {number} params.step.base_percentage - Fixed base percentage
+ * @param {number} params.step.base_percentage - Fixed base percentage (also starting point for dynamic)
  * @param {number} params.step.is_dynamic_calculation - 1 if dynamic, 0 if fixed
  * @param {number} params.step.dynamic_min_percentage - Min percentage for dynamic step
  * @param {number} params.step.dynamic_max_percentage - Max percentage for dynamic step
@@ -111,27 +111,28 @@ function calcProgressFromStep({ step, allocation_amount, released_amount, is_com
         return step.base_percentage;
     }
 
-    // Dynamic calculation for "കാज் చోలమान" step
-    // Formula: min_pct + (disbursement_ratio × (max_pct - min_pct))
+    // Dynamic calculation for "কাজ চলমান" step (work in progress)
+    // Formula: base_pct + (100 - base_pct) × (released_amount / allocation_amount)
+    // Example: If base=30% and 50% of funds released: 30 + (100-30) × 0.5 = 30 + 35 = 65%
     const alloc    = parseFloat(allocation_amount) || 0;
     const released = parseFloat(released_amount) || 0;
+    const basePct  = step.base_percentage || 30;
 
-    // If no allocation, return min percentage
+    // If no allocation, return base percentage
     if (alloc <= 0) {
-        return step.dynamic_min_percentage || 30;
+        return basePct;
     }
 
     // Calculate disbursement ratio (capped at 1.0 to handle over-disbursement)
     const disbursementRatio = Math.min(released / alloc, 1.0);
 
-    // Calculate progress within dynamic range
-    const minPct = step.dynamic_min_percentage || 30;
-    const maxPct = step.dynamic_max_percentage || 90;
-    const dynamicRange = maxPct - minPct;
-    const calculatedProgress = minPct + (disbursementRatio * dynamicRange);
+    // Calculate progress: base + (remaining progress) × (fund release ratio)
+    // remainingProgress = 100 - basePct
+    const remainingProgress = 100 - basePct;
+    const calculatedProgress = basePct + (remainingProgress * disbursementRatio);
 
-    // Return as integer between min and max
-    return Math.round(Math.min(calculatedProgress, maxPct));
+    // Cap at 100% but allow it to reach 100% on full disbursement
+    return Math.round(Math.min(calculatedProgress, 100));
 }
 
 module.exports = { calcProgress, calcProgressFromStep };
