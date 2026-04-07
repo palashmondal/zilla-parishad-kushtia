@@ -332,7 +332,7 @@ const projectsModel = {
              ORDER BY logged_at DESC`,
             [projectId]
         );
-        return results;
+        return results || [];
     },
 
     async addProgressLog(projectId, data, loggedBy) {
@@ -393,10 +393,10 @@ const projectsModel = {
 
             // 1. Insert snapshot into progress log
             const logFields = ['project_id', 'progress_percentage', 'released_amount',
-                              'current_status', 'is_completed', 'is_delayed', 'note', 'logged_by'];
+                              'current_status', 'is_completed', 'is_delayed', 'note', 'logged_by', 'progress_step_id'];
             const logValues = [projectId, progress_percentage, effectiveReleased,
                               current_status, is_completed ? 1 : 0, is_delayed ? 1 : 0,
-                              note || null, loggedBy || null];
+                              note || null, loggedBy || null, progress_step_id || null];
 
             if (activity_date) {
                 logFields.push('logged_at');
