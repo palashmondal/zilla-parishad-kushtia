@@ -914,8 +914,8 @@
                     </div>
                 </div>
 
-                <!-- Row 2: Fund Type · Priority -->
-                <div class="grid grid-cols-2 gap-4">
+                <!-- Row 2: Fund Type · Priority · Recommender -->
+                <div class="grid grid-cols-3 gap-4">
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তহবিলের ধরণ</p>
                         <p id="dm-fund-type" class="font-semibold text-slate-800 text-base"></p>
@@ -1014,24 +1014,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Progress Log Timeline -->
-            <div id="dm-progress-log-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
-                <div class="flex items-center justify-between mb-4">
-                    <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider">অগ্রগতির ইতিহাস</p>
-                    <button onclick="openAddProgressModal(currentDetailRecord||currentDetailId)"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold
-                               bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow
-                               hover:from-amber-600 hover:to-amber-800 active:scale-95 transition-all">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        অগ্রগতি যোগ করুন
-                    </button>
-                </div>
-                <div id="dm-progress-log-list" class="space-y-2"></div>
-            </div>
-
             <!-- Location Map -->
             <div id="dm-map-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider mb-4">প্রকল্পের অবস্থান</p>
@@ -1063,6 +1045,23 @@
                         গুগল ম্যাপে দেখুন
                     </a>
                 </div>
+            </div>
+
+            <!-- Progress Log Timeline -->
+            <div id="dm-progress-log-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider">অগ্রগতির ইতিহাস</p>
+                    <button onclick="openAddProgressModal(currentDetailRecord||currentDetailId)"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold
+                               bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow
+                               hover:from-amber-600 hover:to-amber-800 active:scale-95 transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        অগ্রগতি যোগ করুন
+                    </button>
+                </div>
+                <div id="dm-progress-log-list" class="space-y-2"></div>
             </div>
 
             <!-- Photo Gallery -->
@@ -1487,6 +1486,12 @@
                     </div>
                 </div>
 
+                <!-- Latest Update Status -->
+                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                    <p class="text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">সর্বশেষ আপডেট</p>
+                    <p id="prog-latest-status-text" class="text-sm font-semibold text-gray-900 text-center">সভাপতি বরাবর পত্র প্রেরণ সমাপ্ত</p>
+                </div>
+
                 <!-- Section 1: Progress amount -->
                 <div class="form-section">
                     <!-- Live new preview bar -->
@@ -1529,49 +1534,44 @@
                 <div class="form-section">
                     <div class="form-section-title">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        বর্তমান অবস্থা
+                        অগ্রগতি ধাপ
                     </div>
-                    <!-- Status dropdown -->
+                    <!-- Progress step dropdown -->
                     <div>
                         <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
-                            অবস্থা নির্বাচন করুন <span class="text-red-400">*</span>
+                            অগ্রগতি ধাপ নির্বাচন করুন <span class="text-red-400">*</span>
                         </label>
                         <div class="relative">
-                            <select id="prog-status" name="current_status" required data-no-tomselect
+                            <select id="prog-progress-step" data-no-tomselect
+                                    onchange="handleProgStepChange()"
                                     class="w-full px-3 py-2 pr-9 border border-gray-300 rounded-lg text-sm bg-gray-50 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 focus:bg-amber-50 hover:border-amber-300 transition-all">
-                                <option value="">-- অবস্থা নির্বাচন করুন --</option>
+                                <option value="">-- অগ্রগতি ধাপ নির্বাচন করুন --</option>
                             </select>
                             <svg class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Section 3: Mark complete / delayed (before note) -->
-                <div class="form-section" style="border-left-color:#10b981;">
-                    <div class="form-section-title" style="color:#065f46;">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        প্রকল্পটি চিহ্নিত করুন
-                    </div>
-                    <p class="text-xs text-gray-500 mb-3">প্রকল্পটি সম্পন্ন বা বিলম্বিত হিসেবে চিহ্নিত করতে চাইলে নীচের টগল চালু করুন।</p>
-                    <div class="flex items-center gap-6">
-                        <label class="flex items-center gap-2.5 cursor-pointer select-none">
-                            <div class="relative">
-                                <input type="checkbox" id="prog-completed" name="is_completed" value="1" class="sr-only peer">
-                                <div class="w-10 h-5 rounded-full bg-gray-200 peer-checked:bg-emerald-500 transition-colors duration-200"></div>
-                                <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+                        <!-- Read-only progress percentage display -->
+                        <div id="prog-step-progress-display" class="hidden mt-2 px-3 py-2 rounded-lg border border-green-300 bg-green-50">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs font-semibold text-green-800">অগ্রগতি (স্বয়ংক্রিয় গণনা)</span>
+                                <span id="prog-step-pct-label" class="text-sm font-extrabold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">০%</span>
                             </div>
-                            <span class="text-sm font-semibold text-gray-700">সম্পন্ন</span>
-                        </label>
-                        <label class="flex items-center gap-2.5 cursor-pointer select-none">
-                            <div class="relative">
-                                <input type="checkbox" id="prog-delayed" name="is_delayed" value="1" class="sr-only peer">
-                                <div class="w-10 h-5 rounded-full bg-gray-200 peer-checked:bg-red-400 transition-colors duration-200"></div>
-                                <div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 peer-checked:translate-x-5"></div>
+                            <div class="h-2 rounded-full overflow-hidden bg-gray-200">
+                                <div id="prog-step-pct-bar" class="h-2 rounded-full transition-all duration-300"
+                                     style="width:0%;background:linear-gradient(90deg,#86efac,#22c55e);"></div>
                             </div>
-                            <span class="text-sm font-semibold text-gray-700">বিলম্বিত</span>
-                        </label>
+                        </div>
+                        <!-- Activity Date -->
+                        <div class="mt-3">
+                            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                                কার্যক্রম তারিখ
+                            </label>
+                            <input type="date" id="prog-activity-date" name="activity_date"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 focus:bg-amber-50 hover:border-amber-300 transition-all">
+                        </div>
+                        <!-- Hidden legacy field for backward compat -->
+                        <input type="hidden" id="prog-status" name="current_status">
                     </div>
                 </div>
 
@@ -1593,6 +1593,12 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                         আপডেট সংরক্ষণ করুন
                     </button>
+                </div>
+
+                <!-- Progress Log History -->
+                <div id="prog-modal-log-section" class="hidden pt-3 border-t border-amber-200">
+                    <p class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2">অগ্রগতির ইতিহাস</p>
+                    <div id="prog-modal-log-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
                 </div>
             </form>
         </div>
@@ -2286,13 +2292,15 @@
             logList.innerHTML = '<p class="text-xs text-[#b45309] opacity-60 text-center py-2">লোড হচ্ছে…</p>';
 
             fetch(`${AuthManager.API_URL}/projects/${r.id}/progress`)
-                .then(res => res.ok ? res.json() : Promise.reject())
+                .then(res => res.ok ? res.json() : Promise.resolve([]))
                 .then(logs => {
+                    console.log('Progress logs fetched:', logs);
+                    logSection.classList.remove('hidden');
                     if (!logs || logs.length === 0) {
-                        logSection.classList.add('hidden');
+                        logList.innerHTML = '';
                         return;
                     }
-                    logList.innerHTML = logs.map(log => {
+                    const html = logs.map(log => {
                         const dotClass = log.is_completed
                             ? 'plog-dot-complete'
                             : log.is_delayed ? 'plog-dot-delayed' : 'plog-dot-normal';
@@ -2319,9 +2327,13 @@
                             </div>
                         </div>`;
                     }).join('');
-                    logSection.classList.remove('hidden');
+                    console.log('Rendered HTML:', html);
+                    logList.innerHTML = html;
                 })
-                .catch(() => { logSection.classList.add('hidden'); });
+                .catch(err => {
+                    console.error('Progress log fetch error:', err);
+                    logSection.classList.remove('hidden');
+                });
 
             // Photos — fetch and render gallery
             loadProjectPhotos(r.id);
@@ -2692,45 +2704,126 @@
         // ── Add Progress Log ──────────────────────────────────────────
         let _progressProjectId = null;
         let _progressRecord    = null;
+        let _lastProgressStepId = null;
+        let _allProgressLogs = [];
+        let _addedProgressStepIds = new Set();
 
-        // Status options by implementation method
-        const STATUS_OPTIONS = {
-            'টেন্ডার': [
-                'টেন্ডার ফ্লোটিং',
-                'টেন্ডার মূল্যায়ন',
-                'কার্যাদেশ প্রদান',
-                'কাজ শুরু হয়নি',
-                'কাজ চলমান',
-                'আংশিক সম্পন্ন',
-                'চূড়ান্ত বিল প্রক্রিয়া',
-                'কাজ সম্পন্ন'
-            ],
-            'সিপিপিসি': [
-                'সিপিপিসি অনুমোদন প্রক্রিয়া',
-                'কাজ শুরু হয়নি',
-                'কাজ চলমান',
-                'আংশিক সম্পন্ন',
-                'চূড়ান্ত বিল প্রক্রিয়া',
-                'কাজ সম্পন্ন'
-            ],
-            'আরএফকিউ': [
-                'আরএফকিউ প্রক্রিয়া',
-                'কাজ শুরু হয়নি',
-                'কাজ চলমান',
-                'আংশিক সম্পন্ন',
-                'চূড়ান্ত বিল প্রক্রিয়া',
-                'কাজ সম্পন্ন'
-            ]
-        };
+        async function fetchProgressSteps(method) {
+            try {
+                const normalizedMethod = method === 'সিপিপিসি' ? 'cppc' :
+                                       method === 'টেন্ডার' ? 'tender' :
+                                       method === 'আরএফকিউ' ? 'rfq' : method;
+                const res = await fetch(`${AuthManager.API_URL}/projects/progress-steps?method=${normalizedMethod}`);
+                if (!res.ok) return [];
+                return await res.json();
+            } catch (err) {
+                console.error('Error fetching progress steps:', err);
+                return [];
+            }
+        }
 
-        function populateProgressStatusOptions(method) {
-            const sel = document.getElementById('prog-status');
-            const options = STATUS_OPTIONS[method] || [
-                'কাজ শুরু হয়নি', 'কাজ চলমান', 'আংশিক সম্পন্ন',
-                'চূড়ান্ত বিল প্রক্রিয়া', 'কাজ সম্পন্ন'
-            ];
-            sel.innerHTML = '<option value="">-- অবস্থা নির্বাচন করুন --</option>' +
-                options.map(o => `<option value="${o}">${o}</option>`).join('');
+        async function populateProgressSteps(method) {
+            const steps = await fetchProgressSteps(method);
+            const currentProgress = (_progressRecord && _progressRecord.progress_percentage) || 0;
+            const sel = document.getElementById('prog-progress-step');
+
+            const optionsHtml = steps.map(s => {
+                const isDisabledByProgress = s.base_percentage < currentProgress;
+                const isDisabledByDuplicate = _addedProgressStepIds.has(s.id);
+                const isDisabled = isDisabledByProgress || isDisabledByDuplicate;
+                const disabledAttr = isDisabled ? 'disabled' : '';
+                const disabledClass = isDisabled ? ' opacity-50' : '';
+                const title = isDisabledByProgress
+                    ? `এই ধাপ আগে সম্পন্ন হয়েছে (${currentProgress}% >= ${s.base_percentage}%)`
+                    : isDisabledByDuplicate
+                    ? 'এই ধাপ ইতিমধ্যে যোগ করা হয়েছে'
+                    : '';
+                return `<option value="${s.id}" data-percentage="${s.base_percentage}" data-dynamic="${s.is_dynamic_calculation}" ${disabledAttr} title="${title}" class="${disabledClass}">${s.bengali_description}</option>`;
+            }).join('');
+
+            sel.innerHTML = '<option value="">-- অগ্রগতি ধাপ নির্বাচন করুন --</option>' + optionsHtml;
+            sel.value = '';
+            document.getElementById('prog-step-progress-display').classList.add('hidden');
+        }
+
+        function handleProgStepChange() {
+            const sel = document.getElementById('prog-progress-step');
+            const opt = sel.options[sel.selectedIndex];
+            const stepId = sel.value;
+            const display = document.getElementById('prog-step-progress-display');
+
+            if (!stepId) { display.classList.add('hidden'); return; }
+
+            const isDynamic = opt.getAttribute('data-dynamic') === '1';
+            const basePct   = parseInt(opt.getAttribute('data-percentage')) || 0;
+            let pct = basePct;
+
+            if (isDynamic) {
+                const released = parseFloat((_progressRecord && _progressRecord.released_amount) || 0);
+                const alloc    = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
+                if (alloc > 0) {
+                    const ratio = Math.min(released / alloc, 1.0);
+                    pct = Math.round(30 + (ratio * 60));
+                } else {
+                    pct = 30;
+                }
+            }
+
+            // Auto-fill 50% fund release for "১ম কিস্তি বিতরণ সম্পন্ন" (base 50%, non-dynamic)
+            if (basePct === 50 && !isDynamic) {
+                const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
+                if (alloc > 0) {
+                    const half = (alloc * 0.5).toFixed(2);
+                    const field = document.getElementById('prog-fund-release-field');
+                    const btn   = document.getElementById('prog-fund-toggle');
+                    field.classList.remove('hidden');
+                    btn.innerHTML = `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg> তহবিল ছাড় বাতিল করুন`;
+                    document.getElementById('prog-released').value = half;
+                }
+            }
+
+            // Update hidden legacy status field
+            document.getElementById('prog-status').value = opt.text;
+
+            display.classList.remove('hidden');
+            document.getElementById('prog-step-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
+            document.getElementById('prog-step-pct-bar').style.width = pct + '%';
+        }
+
+        async function loadProgressModalLog(projectId) {
+            const method  = (_progressRecord && _progressRecord.implementation_method) || '';
+            const section = document.getElementById('prog-modal-log-section');
+            const list    = document.getElementById('prog-modal-log-list');
+            // History section hidden for all methods
+            section.classList.add('hidden');
+
+            try {
+                const res = await fetch(`${AuthManager.API_URL}/projects/${projectId}/progress`);
+                if (!res.ok) return;
+                const logs = await res.json();
+                _allProgressLogs = logs || [];
+
+                // Extract all progress step IDs to disable already-added steps
+                _addedProgressStepIds = new Set();
+                if (logs && logs.length > 0) {
+                    const lastLog = logs[logs.length - 1];
+                    _lastProgressStepId = lastLog.progress_step_id || null;
+
+                    // Collect all step IDs from the progress history
+                    logs.forEach(log => {
+                        if (log.progress_step_id) {
+                            _addedProgressStepIds.add(log.progress_step_id);
+                        }
+                    });
+                }
+
+                // Note: History section display is hidden for all methods
+                // but we still fetch logs to prevent duplicate/lower steps
+            } catch (e) {
+                _allProgressLogs = [];
+                _lastProgressStepId = null;
+                _addedProgressStepIds = new Set();
+            }
         }
 
         function toggleFundRelease() {
@@ -2750,7 +2843,7 @@
             }
         }
 
-        function openAddProgressModal(record) {
+        async function openAddProgressModal(record) {
             // Support passing either a full record object or just an ID string (fallback)
             if (typeof record === 'object' && record !== null) {
                 _progressRecord   = record;
@@ -2778,15 +2871,32 @@
             document.getElementById('prog-current-alloc').textContent =
                 '৳ ' + fmtAmt(alloc);
 
-            // Populate status options filtered by implementation method
+            // Load progress log history FIRST (to set _lastProgressStepId before populating steps)
+            await loadProgressModalLog(_progressProjectId);
+
+            // Populate latest status text
+            if (_allProgressLogs && _allProgressLogs.length > 0) {
+                const lastLog = _allProgressLogs[_allProgressLogs.length - 1];
+                document.getElementById('prog-latest-status-text').textContent = lastLog.current_status || 'সভাপতি বরাবর পত্র প্রেরণ সমাপ্ত';
+            }
+
+            // Populate progress steps filtered by implementation method
             const method = (_progressRecord && _progressRecord.implementation_method) || '';
-            populateProgressStatusOptions(method);
+            await populateProgressSteps(method);
 
             // Reset form & fund release section
             document.getElementById('progress-form').reset();
+            // Set activity_date to today by default
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('prog-activity-date').value = today;
             document.getElementById('prog-fund-release-field').classList.add('hidden');
             document.getElementById('prog-fund-toggle').innerHTML =
                 `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg> তহবিল ছাড় যোগ করুন`;
+
+            // Show/hide fund release block and preview bar based on method (CPPC = hidden)
+            const isCppc = method === 'সিপিপিসি';
+            document.getElementById('prog-fund-toggle').parentElement.style.display = isCppc ? 'none' : 'block';
+            document.getElementById('prog-pct-preview').parentElement.parentElement.style.display = isCppc ? 'none' : 'block';
 
             updateProgressPreview();
 
@@ -2800,6 +2910,8 @@
             document.body.style.overflow = '';
             _progressProjectId = null;
             _progressRecord    = null;
+            _lastProgressStepId = null;
+            _allProgressLogs = [];
         }
 
         function updateProgressPreview() { /* progress % input removed */ }
@@ -2812,13 +2924,41 @@
             btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> সংরক্ষণ হচ্ছে…';
             try {
                 const fundOpen = !document.getElementById('prog-fund-release-field').classList.contains('hidden');
+                const stepSel = document.getElementById('prog-progress-step');
+                const stepOpt = stepSel.options[stepSel.selectedIndex];
                 const payload = {
+                    progress_step_id:    parseInt(stepSel.value, 10) || null,
+                    current_status:      stepOpt && stepSel.value ? stepOpt.text : '',
                     released_amount:     fundOpen ? (parseFloat(document.getElementById('prog-released').value) || 0) : null,
-                    current_status:      document.getElementById('prog-status').value,
-                    is_completed:        document.getElementById('prog-completed').checked ? 1 : 0,
-                    is_delayed:          document.getElementById('prog-delayed').checked ? 1 : 0,
-                    note:                document.getElementById('prog-note').value.trim()
+                    is_completed:        0,
+                    is_delayed:          0,
+                    note:                document.getElementById('prog-note').value.trim(),
+                    activity_date:       document.getElementById('prog-activity-date').value || null
                 };
+                if (!payload.progress_step_id) {
+                    alert('অগ্রগতি ধাপ নির্বাচন করুন');
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
+                    return;
+                }
+
+                // Validate progress step selection
+                const stepPercentage = parseInt(stepOpt.getAttribute('data-percentage')) || 0;
+                const currentProgress = (_progressRecord && _progressRecord.progress_percentage) || 0;
+
+                if (stepPercentage < currentProgress) {
+                    alert(`এই ধাপ ইতিমধ্যে সম্পন্ন হয়েছে। আপনি কম অগ্রগতি নির্বাচন করতে পারবেন না।\n\nবর্তমান অগ্রগতি: ${currentProgress}%`);
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
+                    return;
+                }
+
+                if (_addedProgressStepIds.has(payload.progress_step_id)) {
+                    alert('এই ধাপ ইতিমধ্যে যোগ করা হয়েছে। অন্য ধাপ নির্বাচন করুন।');
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
+                    return;
+                }
                 if (payload.released_amount === null) delete payload.released_amount;
                 const res = await AuthManager.fetch(
                     `${AuthManager.API_URL}/projects/${_progressProjectId}/progress`,
@@ -2830,14 +2970,17 @@
                 }
                 CRUDManager.showSuccess('অগ্রগতি সফলভাবে সংরক্ষিত হয়েছে');
                 const savedProjectId = _progressProjectId;
-                closeProgressModal();
-                // Refresh detail popup log if it's the same project
+
+                // Refresh detail popup if open
                 if (currentDetailId && (currentDetailId === savedProjectId || currentDetailId === String(savedProjectId))) {
                     const record = await CRUDManager.fetchList(`/projects/${currentDetailId}`);
                     if (record) { currentDetailRecord = record; showDetailModal(record); }
                 }
                 // Refresh table list in background
                 loadData();
+
+                // Close modal after successful save
+                closeProgressModal();
             } catch (err) {
                 CRUDManager.showError('ত্রুটি: ' + err.message);
             } finally {
@@ -3437,7 +3580,7 @@
                 const res = await fetch(`${AuthManager.API_URL}/projects/${projectId}/documents`);
                 if (!res.ok) return;
                 const docs = await res.json();
-                if (!docs || !docs.length) { list.innerHTML = '<p class="text-xs text-gray-400">এখনো কোনো ফাইল নেই</p>'; return; }
+                if (!docs || !docs.length) { return; }
                 renderDetailDocs(docs, projectId, list);
             } catch(e) { list.innerHTML = '<p class="text-xs text-gray-400">লোড ব্যর্থ</p>'; }
         }
@@ -3468,7 +3611,6 @@
                         const idx = docs.findIndex(d => d.id === doc.id);
                         if (idx > -1) docs.splice(idx, 1);
                         renderDetailDocs(docs, projectId, list);
-                        if (docs.length === 0) list.innerHTML = '<p class="text-xs text-gray-400">এখনো কোনো ফাইল নেই</p>';
                         CRUDManager.showSuccess('ফাইলটি মুছে ফেলা হয়েছে');
                     } catch(e) { CRUDManager.showError('মুছতে ব্যর্থ'); }
                 });
