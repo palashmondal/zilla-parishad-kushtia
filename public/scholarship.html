@@ -707,35 +707,42 @@
                 </div>
 
                 <!-- Amount box -->
-                <div class="modal-amount-box p-6 rounded-2xl">
-                    <div class="flex justify-between items-start gap-8">
-                        <!-- Left side: Amount -->
-                        <div>
-                            <p class="text-[16px] font-bold text-[#145530] uppercase tracking-wider mb-2">জেলা পরিষদ কর্তৃক প্রদত্ত অর্থ</p>
-                            <p id="m-amount" class="text-[39px] font-black text-[#1a6b3c] tracking-tight"></p>
-                        </div>
+                <div class="modal-amount-box p-8 rounded-2xl">
+                    <div class="grid grid-cols-3 gap-8 h-full">
+                        <!-- Left column: Amount and Status -->
+                        <div class="flex flex-col justify-between col-span-1">
+                            <!-- Amount -->
+                            <div>
+                                <p class="text-[14px] font-bold text-[#145530] uppercase tracking-wider mb-3">জেলা পরিষদ কর্তৃক প্রদত্ত অর্থ</p>
+                                <p id="m-amount" class="text-[42px] font-black text-[#1a6b3c] tracking-tight leading-tight"></p>
+                            </div>
 
-                        <!-- Right side: Status and Distribution Info -->
-                        <div class="flex-1 space-y-4">
-                            <!-- Status -->
-                            <div class="text-right">
-                                <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-2">স্ট্যাটাস</p>
-                                <span class="modal-status-badge inline-flex items-center gap-1.5 px-4 py-2 text-white text-[12px] font-bold rounded-full uppercase tracking-tight">
-                                    <span class="w-2 h-2 rounded-full bg-[#d4a017] animate-pulse"></span>
+                            <!-- Status (bottom left) -->
+                            <div>
+                                <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-3">স্ট্যাটাস</p>
+                                <span class="modal-status-badge inline-flex items-center gap-1.5 px-5 py-2.5 text-white text-[12px] font-bold rounded-full uppercase tracking-tight shadow-md">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#d4a017] animate-pulse"></span>
                                     Delivered
                                 </span>
                             </div>
+                        </div>
 
+                        <!-- Right column: Distribution Info (spans both rows) -->
+                        <div class="col-span-2 flex flex-col justify-between space-y-8">
                             <!-- Distribution Date -->
-                            <div class="text-right">
-                                <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-1">অর্থ বিতরণের তারিখ</p>
-                                <p id="m-distribution-date" class="text-[16px] font-semibold text-[#1a56a0]">-</p>
+                            <div class="flex items-start gap-4 p-4 bg-white bg-opacity-50 rounded-xl">
+                                <div class="flex-1">
+                                    <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-2">অর্থ বিতরণের তারিখ</p>
+                                    <p id="m-distribution-date" class="text-[20px] font-bold text-[#1a56a0]">-</p>
+                                </div>
                             </div>
 
                             <!-- Disbursement Method -->
-                            <div class="text-right">
-                                <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-1">বিতরণ পদ্ধতি</p>
-                                <p id="m-disbursement-method" class="text-[16px] font-semibold text-[#1a56a0]">-</p>
+                            <div class="flex items-start gap-4 p-4 bg-white bg-opacity-50 rounded-xl">
+                                <div class="flex-1">
+                                    <p class="text-xs font-bold text-[#145530] uppercase tracking-wider mb-2">বিতরণ পদ্ধতি</p>
+                                    <p id="m-disbursement-method" class="text-[20px] font-bold text-[#1a56a0]">-</p>
+                                </div>
                             </div>
                         </div>
                     </div>
