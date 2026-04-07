@@ -2894,9 +2894,14 @@
             document.getElementById('prog-fund-toggle').innerHTML =
                 `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg> তহবিল ছাড় যোগ করুন`;
 
-            // Show/hide fund release block and preview bar based on method (CPPC = hidden)
+            // Show/hide fund release block based on:
+            // 1. CPPC method = always hidden
+            // 2. Other methods = show only after "কাজ চলমান" (work in progress) is reached (>= 30% progress)
             const isCppc = method === 'সিপিপিসি';
-            document.getElementById('prog-fund-toggle').parentElement.style.display = isCppc ? 'none' : 'block';
+            const currentProgress = (_progressRecord && _progressRecord.progress_percentage) || 0;
+            const showFundRelease = !isCppc && currentProgress >= 30;
+
+            document.getElementById('prog-fund-toggle').parentElement.style.display = showFundRelease ? 'block' : 'none';
             document.getElementById('prog-pct-preview').parentElement.parentElement.style.display = isCppc ? 'none' : 'block';
 
             updateProgressPreview();
