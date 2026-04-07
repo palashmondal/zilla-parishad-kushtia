@@ -229,40 +229,6 @@
         .modal-close-btn:hover { filter: brightness(1.12); }
         .modal-close-btn:active { transform: scale(0.97); }
 
-        /* annotation styling */
-        .modal-annotation {
-            position: relative;
-            background: #f0f9f7;
-            border: 1px solid #c6ede8;
-            border-radius: 1rem;
-            padding: 1rem;
-            text-align: center;
-        }
-        .modal-annotation::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 10px solid #c6ede8;
-        }
-        .modal-annotation-label {
-            font-size: 11px;
-            font-weight: bold;
-            color: #145530;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-        }
-        .modal-annotation-value {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1a56a0;
-        }
 
         /* logo glow ring */
         .logo-ring {
@@ -741,18 +707,15 @@
                     <p id="m-year-badge" class="font-semibold text-slate-800 text-[21px]"></p>
                 </div>
 
-                <!-- Annotation Container (Date and Method) -->
-                <div class="grid grid-cols-2 gap-6 mb-6">
-                    <!-- Distribution Date Annotation -->
-                    <div class="modal-annotation">
-                        <div class="modal-annotation-label">অর্থ বিতরণের তারিখ</div>
-                        <div class="modal-annotation-value" id="m-distribution-date">-</div>
+                <!-- Distribution Info -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-[16px] font-bold text-[#8fb8a8] uppercase tracking-wider mb-2">অর্থ বিতরণের তারিখ</p>
+                        <p id="m-distribution-date" class="font-semibold text-slate-800 text-[21px]">-</p>
                     </div>
-
-                    <!-- Disbursement Method Annotation -->
-                    <div class="modal-annotation">
-                        <div class="modal-annotation-label">বিতরণ পদ্ধতি</div>
-                        <div class="modal-annotation-value" id="m-disbursement-method">-</div>
+                    <div>
+                        <p class="text-[16px] font-bold text-[#8fb8a8] uppercase tracking-wider mb-2">বিতরণ পদ্ধতি</p>
+                        <p id="m-disbursement-method" class="font-semibold text-slate-800 text-[21px]">-</p>
                     </div>
                 </div>
 
