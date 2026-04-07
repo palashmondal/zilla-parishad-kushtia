@@ -2806,7 +2806,8 @@
                 // Extract all progress step IDs to disable already-added steps
                 _addedProgressStepIds = new Set();
                 if (logs && logs.length > 0) {
-                    const lastLog = logs[logs.length - 1];
+                    // logs[0] is most recent (ordered by logged_at DESC)
+                    const lastLog = logs[0];
                     _lastProgressStepId = lastLog.progress_step_id || null;
 
                     // Collect all step IDs from the progress history
@@ -2874,10 +2875,10 @@
             // Load progress log history FIRST (to set _lastProgressStepId before populating steps)
             await loadProgressModalLog(_progressProjectId);
 
-            // Populate latest status text
+            // Populate latest status text (index 0 is most recent due to DESC order)
             if (_allProgressLogs && _allProgressLogs.length > 0) {
-                const lastLog = _allProgressLogs[_allProgressLogs.length - 1];
-                document.getElementById('prog-latest-status-text').textContent = lastLog.current_status || 'সভাপতি বরাবর পত্র প্রেরণ সমাপ্ত';
+                const lastLog = _allProgressLogs[0];
+                document.getElementById('prog-latest-status-text').textContent = lastLog.current_status || 'কোনো আপডেট নেই';
             }
 
             // Populate progress steps filtered by implementation method
