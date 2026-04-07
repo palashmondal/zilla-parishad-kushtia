@@ -117,10 +117,13 @@ const projectsModel = {
 
     async getAvailableMemos(financialYear) {
         const [results] = await pool.execute(
-            `SELECT id, memo_type, memo_date, memo_number, meeting_month, meeting_date, total_projects
-             FROM approval_memos
-             WHERE financial_year = ?
-             ORDER BY COALESCE(memo_date, meeting_date) DESC`,
+            `SELECT am.id, am.memo_type, am.memo_date, am.memo_number, am.meeting_month, am.meeting_date, am.total_projects,
+                    COALESCE(COUNT(p.id), 0) AS actual_projects
+             FROM approval_memos am
+             LEFT JOIN projects p ON am.id = p.approval_memo_id
+             WHERE am.financial_year = ?
+             GROUP BY am.id, am.memo_type, am.memo_date, am.memo_number, am.meeting_month, am.meeting_date, am.total_projects
+             ORDER BY COALESCE(am.memo_date, am.meeting_date) DESC`,
             [financialYear]
         );
         return results;
