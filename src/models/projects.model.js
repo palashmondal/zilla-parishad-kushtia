@@ -326,7 +326,7 @@ const projectsModel = {
     async getProgressLog(projectId) {
         const [results] = await pool.execute(
             `SELECT id, progress_percentage, released_amount, current_status,
-                    is_completed, is_delayed, note, logged_at
+                    is_completed, is_delayed, note, progress_step_id, logged_at
              FROM project_progress_log
              WHERE project_id = ?
              ORDER BY logged_at DESC`,
