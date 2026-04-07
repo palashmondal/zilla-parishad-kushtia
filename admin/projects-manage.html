@@ -3818,6 +3818,9 @@
                             let isoDateStr = '';
                             let memoNumber = '';
 
+                            // Check if memo is full (actual_projects >= total_projects)
+                            const isFull = memo.actual_projects >= memo.total_projects;
+
                             // Handle ministry memos vs monthly meeting memos
                             if (memo.memo_type === 'monthly') {
                                 // For monthly meeting memos
@@ -3830,7 +3833,8 @@
                                 });
                                 isoDateStr = meetingDate ? meetingDate.split('T')[0] : '';
                                 memoNumber = memo.meeting_month || '';
-                                optionText = `${memo.meeting_month} মাসের মাসিক সভা (${dateStr}) - মোট প্রকল্প ${memo.total_projects}টি`;
+                                optionText = `${memo.meeting_month} মাসের মাসিক সভা (${dateStr}) - ${memo.actual_projects}/${memo.total_projects} প্রকল্প`;
+                                if (isFull) optionText += ' (সম্পূর্ণ)';
                             } else {
                                 // For ministry memos
                                 const dateObj = new Date(memo.memo_date);
@@ -3841,7 +3845,8 @@
                                 });
                                 isoDateStr = memo.memo_date ? memo.memo_date.split('T')[0] : '';
                                 memoNumber = memo.memo_number || '';
-                                optionText = `${dateStr} তারিখের ${memo.memo_number} নং স্মারক (মোট প্রকল্প ${memo.total_projects}টি)`;
+                                optionText = `${dateStr} তারিখের ${memo.memo_number} নং স্মারক (${memo.actual_projects}/${memo.total_projects} প্রকল্প)`;
+                                if (isFull) optionText += ' (সম্পূর্ণ)';
                             }
 
                             const option = document.createElement('option');
@@ -3850,9 +3855,18 @@
                             option.setAttribute('data-memo-date', isoDateStr);
                             option.setAttribute('data-memo-number', memoNumber);
                             option.setAttribute('data-memo-type', memo.memo_type || 'ministry');
+                            option.setAttribute('data-actual-projects', memo.actual_projects);
+                            option.setAttribute('data-total-projects', memo.total_projects);
+
+                            // Disable if memo is full
+                            if (isFull) {
+                                option.disabled = true;
+                                option.title = 'এই স্মারকটি সম্পূর্ণ হয়েছে, অন্য স্মারক নির্বাচন করুন';
+                            }
+
                             memoSelect.appendChild(option);
 
-                            console.log('Added option:', memo.id, optionText);
+                            console.log('Added option:', memo.id, optionText, '(Full:', isFull, ')');
                         } catch (itemError) {
                             console.error('Error processing memo:', memo, itemError);
                         }
