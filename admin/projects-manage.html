@@ -2805,6 +2805,17 @@
                 }
             }
 
+            // Ensure fund release button is visible for রানিং বিল প্রদান (30% dynamic)
+            if (basePct === 30 && isDynamic) {
+                const field = document.getElementById('prog-fund-release-field');
+                const toggleBtn = document.getElementById('prog-fund-toggle');
+                // Show the fund release section if it's hidden
+                if (field && field.classList.contains('hidden')) {
+                    field.classList.remove('hidden');
+                    toggleBtn.innerHTML = `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg> তহবিল ছাড় বাতিল করুন`;
+                }
+            }
+
             // Update hidden legacy status field
             document.getElementById('prog-status').value = opt.text;
 
