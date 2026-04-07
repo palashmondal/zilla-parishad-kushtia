@@ -2728,6 +2728,10 @@
             const sel = document.getElementById('prog-progress-step');
 
             const optionsHtml = steps.map(s => {
+                // Check if this step matches the current status
+                const currentStatus = (_progressRecord && _progressRecord.current_status) || '';
+                const isCurrentStatus = s.bengali_description === currentStatus;
+
                 // Check if this is রানিং বিল প্রদান (30% dynamic step)
                 const isRunningBill = s.base_percentage === 30 && s.is_dynamic_calculation === 1;
 
@@ -2738,13 +2742,18 @@
                 const allFundsReleased = fundReleaseRatio >= 1.0;
 
                 // Disable logic:
-                // 1. Running bill: disabled only if 100% funds released (allow multiple submissions during work)
-                // 2. Final bill (100%): disabled if already added
-                // 3. Other steps: disabled if their percentage < current progress
+                // 1. Current status: always disabled (already active)
+                // 2. Running bill: disabled only if 100% funds released (allow multiple submissions during work)
+                // 3. Final bill (100%): disabled if already added
+                // 4. Other steps: disabled if their percentage < current progress
                 let isDisabled = false;
                 let disableReason = '';
 
-                if (isRunningBill) {
+                if (isCurrentStatus) {
+                    // Current status always disabled
+                    isDisabled = true;
+                    disableReason = 'বর্তমান অবস্থা';
+                } else if (isRunningBill) {
                     // Running bill disabled only after 100% fund release
                     isDisabled = allFundsReleased;
                     if (isDisabled) disableReason = 'সকল তহবিল ছাড় প্রদান সম্পন্ন (100%)';
