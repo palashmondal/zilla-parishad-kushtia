@@ -702,13 +702,12 @@
                         <p id="m-passing-year" class="font-semibold text-slate-800 text-[21px]"></p>
                     </div>
                 </div>
-                <div>
-                    <p class="text-[16px] font-bold text-[#8fb8a8] uppercase tracking-wider mb-2">অর্থবছর</p>
-                    <p id="m-year-badge" class="font-semibold text-slate-800 text-[21px]"></p>
-                </div>
-
-                <!-- Distribution Info -->
-                <div class="grid grid-cols-2 gap-4">
+                <!-- Financial Year, Date, and Method in one row -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-[16px] font-bold text-[#8fb8a8] uppercase tracking-wider mb-2">অর্থবছর</p>
+                        <p id="m-year-badge" class="font-semibold text-slate-800 text-[21px]"></p>
+                    </div>
                     <div>
                         <p class="text-[16px] font-bold text-[#8fb8a8] uppercase tracking-wider mb-2">অর্থ বিতরণের তারিখ</p>
                         <p id="m-distribution-date" class="font-semibold text-slate-800 text-[21px]">-</p>
@@ -995,6 +994,16 @@
         return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
     }
 
+    function formatDate(dateString) {
+        if (!dateString) return '-';
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return '-';
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
     let selectedYear = "all";
     let searchTimeout;
     let availableYears = [];
@@ -1180,7 +1189,7 @@
         document.getElementById('m-passing-year').innerText = r.passing_year || '';
         document.getElementById('m-amount').innerText  = "৳ " + formatBDMoney(r.amount) + " টাকা";
         document.getElementById('m-year-badge').innerText = r.financial_year || '';
-        document.getElementById('m-distribution-date').innerText = r.distribution_date || '-';
+        document.getElementById('m-distribution-date').innerText = formatDate(r.distribution_date);
         document.getElementById('m-disbursement-method').innerText = r.disbursement_method || '-';
         dropdown.classList.add('hidden');
         document.getElementById('modal').classList.add('open');
