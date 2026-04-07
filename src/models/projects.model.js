@@ -1,10 +1,11 @@
 const pool = require('../../config/database');
-const { calcProgress } = require('../utils/progressCalc');
+const { calcProgress, calcProgressFromStep } = require('../utils/progressCalc');
+const progressStepsModel = require('./progressSteps.model');
 
 const PROJECT_FIELDS = `
     id, project_id, project_name, allocation_amount, released_amount, fund_type,
     financial_year, approval_memo_id, project_approval_date, approval_memo_number, implementation_method,
-    upazila, project_type, current_status, progress_percentage,
+    upazila, project_type, current_status, progress_percentage, progress_step_id,
     is_completed, is_delayed, performance_score,
     start_date, expected_end_date, actual_end_date, lat_lng, remarks, priority, reference,
     created_at, updated_at
@@ -15,7 +16,7 @@ const DATE_FIELDS = ['project_approval_date', 'start_date', 'expected_end_date',
 // Nullable text columns — send NULL instead of empty string
 const NULLABLE_TEXT = ['project_id', 'approval_memo_number', 'lat_lng', 'remarks', 'reference', 'performance_score'];
 // Nullable integer columns — send NULL instead of empty/invalid values
-const NULLABLE_INT = ['approval_memo_id'];
+const NULLABLE_INT = ['approval_memo_id', 'progress_step_id'];
 
 function sanitizeProjectData(data) {
     const out = {};
@@ -325,7 +326,7 @@ const projectsModel = {
                     is_completed, is_delayed, note, logged_at
              FROM project_progress_log
              WHERE project_id = ?
-             ORDER BY logged_at ASC`,
+             ORDER BY logged_at DESC`,
             [projectId]
         );
         return results;
@@ -333,11 +334,13 @@ const projectsModel = {
 
     async addProgressLog(projectId, data, loggedBy) {
         const {
+            progress_step_id = null,
             released_amount,
             current_status,
             is_completed = 0,
             is_delayed   = 0,
-            note         = null
+            note         = null,
+            activity_date = null
         } = data;
 
         const conn = await pool.getConnection();
@@ -359,38 +362,80 @@ const projectsModel = {
                 : parseFloat(project.released_amount || 0);
 
             // Auto-calculate progress using the formula
-            const progress_percentage = calcProgress({
-                current_status,
-                implementation_method: project.implementation_method,
-                allocation_amount:     project.allocation_amount,
-                released_amount:       effectiveReleased,
-                is_completed,
-                is_delayed
-            });
+            let progress_percentage;
+            let finalProgressStepId = progress_step_id;
+
+            if (progress_step_id) {
+                // If progress_step_id is provided, use the step-based calculation
+                const step = await progressStepsModel.getStepById(progress_step_id);
+                if (!step) throw new Error('Invalid progress step: ' + progress_step_id);
+
+                progress_percentage = calcProgressFromStep({
+                    step,
+                    allocation_amount: project.allocation_amount,
+                    released_amount: effectiveReleased,
+                    is_completed
+                });
+            } else {
+                // Fall back to legacy calculation if no step provided
+                progress_percentage = calcProgress({
+                    current_status,
+                    implementation_method: project.implementation_method,
+                    allocation_amount:     project.allocation_amount,
+                    released_amount:       effectiveReleased,
+                    is_completed,
+                    is_delayed
+                });
+            }
 
             // 1. Insert snapshot into progress log
+            const logFields = ['project_id', 'progress_percentage', 'released_amount',
+                              'current_status', 'is_completed', 'is_delayed', 'note', 'logged_by'];
+            const logValues = [projectId, progress_percentage, effectiveReleased,
+                              current_status, is_completed ? 1 : 0, is_delayed ? 1 : 0,
+                              note || null, loggedBy || null];
+
+            if (activity_date) {
+                logFields.push('logged_at');
+                logValues.push(activity_date);
+            }
+
             await conn.execute(
-                `INSERT INTO project_progress_log
-                    (project_id, progress_percentage, released_amount,
-                     current_status, is_completed, is_delayed, note, logged_by)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [projectId, progress_percentage, effectiveReleased,
-                 current_status, is_completed ? 1 : 0, is_delayed ? 1 : 0,
-                 note || null, loggedBy || null]
+                `INSERT INTO project_progress_log (${logFields.join(', ')})
+                 VALUES (${logFields.map(() => '?').join(', ')})`,
+                logValues
             );
 
             // 2. Update the live project row
+            const updateFields = [
+                `progress_percentage = ?`,
+                `released_amount = ?`,
+                `current_status = ?`,
+                `is_completed = ?`,
+                `is_delayed = ?`
+            ];
+            const updateParams = [
+                progress_percentage,
+                effectiveReleased,
+                current_status,
+                is_completed ? 1 : 0,
+                is_delayed ? 1 : 0
+            ];
+
+            if (finalProgressStepId) {
+                updateFields.push(`progress_step_id = ?`);
+                updateParams.push(finalProgressStepId);
+            }
+
+            updateParams.push(projectId);
+
             await conn.execute(
-                `UPDATE projects SET
-                    progress_percentage = ?, released_amount = ?,
-                    current_status = ?, is_completed = ?, is_delayed = ?
-                 WHERE id = ?`,
-                [progress_percentage, effectiveReleased, current_status,
-                 is_completed ? 1 : 0, is_delayed ? 1 : 0, projectId]
+                `UPDATE projects SET ${updateFields.join(', ')} WHERE id = ?`,
+                updateParams
             );
 
             await conn.commit();
-            return progress_percentage;
+            return { progress_percentage, progress_step_id: finalProgressStepId };
         } catch (err) {
             await conn.rollback();
             throw err;
