@@ -47,10 +47,6 @@ const approvalMemosController = {
         try {
             const { memo_type, memo_date, memo_number, total_projects, meeting_month, meeting_date } = req.body;
 
-            console.log('Create request body:', req.body);
-            console.log('File:', req.file);
-            console.log('User:', req.user);
-
             // Validate memo_type
             if (!memo_type || !['ministry', 'monthly'].includes(memo_type)) {
                 return res.status(400).json({ error: 'Invalid or missing memo type. Must be "ministry" or "monthly"' });
@@ -118,10 +114,6 @@ const approvalMemosController = {
             const id = req.params.id;
             const { memo_type, memo_date, memo_number, meeting_month, meeting_date } = req.body;
 
-            console.log('Update request for ID:', id);
-            console.log('Update body:', req.body);
-            console.log('File:', req.file);
-
             if (!id) {
                 return res.status(400).json({ error: 'Invalid memo ID' });
             }
@@ -173,7 +165,6 @@ const approvalMemosController = {
             res.json({ message: 'Memo updated successfully' });
         } catch (error) {
             console.error('Approval memos update error:', error);
-            console.error('Stack:', error.stack);
 
             // Handle duplicate memo_number
             if (error.code === 'ER_DUP_ENTRY' && error.message.includes('memo_number')) {
