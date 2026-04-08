@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+    <!-- PDF.js — Mozilla PDF viewer library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
     <!-- LightGallery — image viewer with zoom, fullscreen, thumbnails (download is built-in) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lightgallery-bundle.min.css">
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/lightgallery.min.js"></script>
@@ -5049,22 +5052,78 @@
         const body = document.getElementById('dv-body');
         const imgExts = ['jpg','jpeg','png','webp','gif','bmp','svg'];
         if (ext === 'pdf') {
-            body.style.overflow = 'hidden';
-            const iframe = document.createElement('iframe');
-            iframe.src = url;
-            iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;';
-            iframe.onerror = () => {
-                console.error('PDF iframe failed to load:', url);
+            body.style.overflow = 'auto';
+            body.innerHTML = '<div id="pdf-viewer" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;"></div>';
+
+            // Use PDF.js to render the PDF
+            if (typeof pdfjsLib !== 'undefined') {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+                pdfjsLib.getDocument(url).promise
+                    .then(pdf => {
+                        const viewer = document.getElementById('pdf-viewer');
+                        viewer.innerHTML = '';
+
+                        // Render first page only (for quick display)
+                        pdf.getPage(1).then(page => {
+                            const scale = 1.5;
+                            const viewport = page.getViewport({scale});
+
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+                            canvas.style.maxWidth = '100%';
+                            canvas.style.height = 'auto';
+                            canvas.style.borderRadius = '8px';
+                            canvas.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+
+                            const renderContext = {
+                                canvasContext: ctx,
+                                viewport: viewport
+                            };
+
+                            page.render(renderContext).promise.then(() => {
+                                viewer.innerHTML = `
+                                    <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.5rem;width:100%;">
+                                        <div style="max-width:100%;overflow-x:auto;"></div>
+                                    </div>
+                                `;
+                                viewer.querySelector('div div').appendChild(canvas);
+                                viewer.innerHTML += `
+                                    <p style="font-size:0.85rem;color:#6b7280;margin-top:1rem;">সম্পূর্ণ PDF দেখতে ডাউনলোড করুন</p>
+                                    <a href="${url}" download="${originalName}"
+                                       style="padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#b45309,#d97706);
+                                              color:#fff;font-weight:700;font-size:0.9rem;text-decoration:none;">সম্পূর্ণ PDF ডাউনলোড করুন</a>
+                                `;
+                            }).catch(err => {
+                                console.error('PDF rendering error:', err);
+                                showPdfError();
+                            });
+                        });
+                    })
+                    .catch(err => {
+                        console.error('PDF loading error:', err);
+                        const viewer = document.getElementById('pdf-viewer');
+                        viewer.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;gap:1rem;">
+                            <span style="font-size:3.5rem;">📄</span>
+                            <p style="font-size:1rem;font-weight:600;color:#374151;">PDF লোড করতে ব্যর্থ</p>
+                            <p style="font-size:0.85rem;color:#6b7280;">ডাউনলোড করুন এবং আপনার কম্পিউটারে খুলুন।</p>
+                            <a href="${url}" download="${originalName}"
+                               style="padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#b45309,#d97706);
+                                      color:#fff;font-weight:700;font-size:0.9rem;text-decoration:none;">ডাউনলোড করুন</a>
+                        </div>`;
+                    });
+            } else {
+                // Fallback if PDF.js isn't loaded
                 body.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;gap:1rem;min-height:200px;">
                     <span style="font-size:3.5rem;">📄</span>
-                    <p style="font-size:1rem;font-weight:600;color:#374151;">PDF লোড করতে ব্যর্থ</p>
-                    <p style="font-size:0.85rem;color:#6b7280;">ডাউনলোড করুন এবং আপনার কম্পিউটারে খুলুন।</p>
+                    <p style="font-size:1rem;font-weight:600;color:#374151;">PDF ভিউয়ার লোড হচ্ছে...</p>
                     <a href="${url}" download="${originalName}"
                        style="padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#b45309,#d97706);
                               color:#fff;font-weight:700;font-size:0.9rem;text-decoration:none;">ডাউনলোড করুন</a>
                 </div>`;
-            };
-            body.appendChild(iframe);
+            }
         } else if (imgExts.includes(ext)) {
             body.style.overflow = 'auto';
             body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;padding:1.5rem;min-height:300px;">
