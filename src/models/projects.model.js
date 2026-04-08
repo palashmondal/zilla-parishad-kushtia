@@ -247,10 +247,13 @@ const projectsModel = {
                         // Insert the approval memo document into project_documents
                         const memoType = memo.memo_type === 'monthly' ? 'মাসিক সভা' : 'মন্ত্রণালয়ের স্মারক';
                         const docName = `অনুমোদন স্মারক (${memoType})`;
+                        // Detect file type from file extension
+                        const fileExt = memo.document_file.substring(memo.document_file.lastIndexOf('.') + 1).toLowerCase();
+                        const fileType = ['doc', 'docx'].includes(fileExt) ? fileExt : 'pdf';
                         await conn.execute(
                             `INSERT INTO project_documents (project_id, file_path, original_name, file_type, uploaded_by)
                              VALUES (?, ?, ?, ?, ?)`,
-                            [projectId, memo.document_file, docName, 'pdf', null]
+                            [projectId, memo.document_file, docName, fileType, null]
                         );
                     }
                 }
@@ -297,10 +300,13 @@ const projectsModel = {
                         if (!existing || existing.length === 0) {
                             const memoType = memo.memo_type === 'monthly' ? 'মাসিক সভা' : 'মন্ত্রণালয়ের স্মারক';
                             const docName = `অনুমোদন স্মারক (${memoType})`;
+                            // Detect file type from file extension
+                            const fileExt = memo.document_file.substring(memo.document_file.lastIndexOf('.') + 1).toLowerCase();
+                            const fileType = ['doc', 'docx'].includes(fileExt) ? fileExt : 'pdf';
                             await conn.execute(
                                 `INSERT INTO project_documents (project_id, file_path, original_name, file_type, uploaded_by)
                                  VALUES (?, ?, ?, ?, ?)`,
-                                [id, memo.document_file, docName, 'pdf', null]
+                                [id, memo.document_file, docName, fileType, null]
                             );
                         }
                     }
