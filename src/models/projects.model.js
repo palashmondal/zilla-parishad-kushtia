@@ -104,7 +104,22 @@ const projectsModel = {
             `SELECT ${PROJECT_FIELDS} FROM projects WHERE ${column} = ?`,
             [id]
         );
-        return results[0] || null;
+
+        const result = results[0] || null;
+
+        // If project has approval_memo_id, fetch the memo_type from approval_memos table
+        if (result && result.approval_memo_id) {
+            const [memoRows] = await pool.execute(
+                `SELECT memo_type FROM approval_memos am WHERE am.id = ?`,
+                [result.approval_memo_id]
+            );
+
+            if (memoRows && memoRows.length > 0 && memoRows[0].memo_type) {
+                result.memo_type = memoRows[0].memo_type;
+            }
+        }
+
+        return result;
     },
 
     async getYears() {
@@ -206,23 +221,96 @@ const projectsModel = {
     },
 
     async create(data) {
-        // Remove 'id' — it is AUTO_INCREMENT and must not be sent by the client
-        const { id: _id, created_at, updated_at, ...insertData } = data;
-        const sanitized = sanitizeProjectData(insertData);
-        const fields = Object.keys(sanitized);
-        if (fields.length === 0) throw new Error('No data provided for insert');
-        const placeholders = fields.map(() => '?').join(', ');
-        const sql = `INSERT INTO projects (${fields.join(', ')}) VALUES (${placeholders})`;
-        const [result] = await pool.execute(sql, Object.values(sanitized));
-        return result.insertId;
+        const conn = await pool.getConnection();
+        try {
+            await conn.beginTransaction();
+
+            // Remove 'id' — it is AUTO_INCREMENT and must not be sent by the client
+            const { id: _id, created_at, updated_at, approval_memo_id, ...insertData } = data;
+            const sanitized = sanitizeProjectData({ approval_memo_id, ...insertData });
+            const fields = Object.keys(sanitized);
+            if (fields.length === 0) throw new Error('No data provided for insert');
+            const placeholders = fields.map(() => '?').join(', ');
+            const sql = `INSERT INTO projects (${fields.join(', ')}) VALUES (${placeholders})`;
+            const [result] = await conn.execute(sql, Object.values(sanitized));
+            const projectId = result.insertId;
+
+            // If an approval memo is selected, automatically attach its document to the project
+            if (approval_memo_id) {
+                const [memoRows] = await conn.execute(
+                    `SELECT id, document_file, memo_type FROM approval_memos WHERE id = ?`,
+                    [approval_memo_id]
+                );
+                if (memoRows && memoRows.length > 0) {
+                    const memo = memoRows[0];
+                    if (memo.document_file && memo.document_file.trim()) {
+                        // Insert the approval memo document into project_documents
+                        const memoType = memo.memo_type === 'monthly' ? 'মাসিক সভা' : 'মন্ত্রণালয়ের স্মারক';
+                        const docName = `অনুমোদন স্মারক (${memoType})`;
+                        await conn.execute(
+                            `INSERT INTO project_documents (project_id, file_path, original_name, file_type, uploaded_by)
+                             VALUES (?, ?, ?, ?, ?)`,
+                            [projectId, memo.document_file, docName, 'pdf', null]
+                        );
+                    }
+                }
+            }
+
+            await conn.commit();
+            return projectId;
+        } catch (err) {
+            await conn.rollback();
+            throw err;
+        } finally {
+            conn.release();
+        }
     },
 
     async update(id, data) {
-        const sanitized = sanitizeProjectData(data);
-        const setClauses = Object.keys(sanitized).map(key => `${key} = ?`).join(', ');
-        const sql = `UPDATE projects SET ${setClauses} WHERE id = ?`;
-        const [result] = await pool.execute(sql, [...Object.values(sanitized), id]);
-        return result.affectedRows > 0;
+        const conn = await pool.getConnection();
+        try {
+            const sanitized = sanitizeProjectData(data);
+            const setClauses = Object.keys(sanitized).map(key => `${key} = ?`).join(', ');
+            const sql = `UPDATE projects SET ${setClauses} WHERE id = ?`;
+            const [result] = await conn.execute(sql, [...Object.values(sanitized), id]);
+
+            if (result.affectedRows === 0) {
+                return false;
+            }
+
+            // If approval_memo_id is being updated, handle approval memo document
+            if (data.approval_memo_id) {
+                const [memoRows] = await conn.execute(
+                    `SELECT id, document_file, memo_type FROM approval_memos WHERE id = ?`,
+                    [data.approval_memo_id]
+                );
+                if (memoRows && memoRows.length > 0) {
+                    const memo = memoRows[0];
+                    if (memo.document_file && memo.document_file.trim()) {
+                        // Check if approval memo document is already attached
+                        const [existing] = await conn.execute(
+                            `SELECT id FROM project_documents WHERE project_id = ? AND file_path = ?`,
+                            [id, memo.document_file]
+                        );
+
+                        // Only add if not already attached
+                        if (!existing || existing.length === 0) {
+                            const memoType = memo.memo_type === 'monthly' ? 'মাসিক সভা' : 'মন্ত্রণালয়ের স্মারক';
+                            const docName = `অনুমোদন স্মারক (${memoType})`;
+                            await conn.execute(
+                                `INSERT INTO project_documents (project_id, file_path, original_name, file_type, uploaded_by)
+                                 VALUES (?, ?, ?, ?, ?)`,
+                                [id, memo.document_file, docName, 'pdf', null]
+                            );
+                        }
+                    }
+                }
+            }
+
+            return true;
+        } finally {
+            conn.release();
+        }
     },
 
     async delete(id) {
@@ -368,13 +456,14 @@ const projectsModel = {
             let progress_percentage;
             let finalProgressStepId = progress_step_id;
 
+            let currentStep = null;
             if (progress_step_id) {
                 // If progress_step_id is provided, use the step-based calculation
-                const step = await progressStepsModel.getStepById(progress_step_id);
-                if (!step) throw new Error('Invalid progress step: ' + progress_step_id);
+                currentStep = await progressStepsModel.getStepById(progress_step_id);
+                if (!currentStep) throw new Error('Invalid progress step: ' + progress_step_id);
 
                 progress_percentage = calcProgressFromStep({
-                    step,
+                    step: currentStep,
                     allocation_amount: project.allocation_amount,
                     released_amount: effectiveReleased,
                     is_completed
@@ -424,6 +513,11 @@ const projectsModel = {
                 is_completed ? 1 : 0,
                 is_delayed ? 1 : 0
             ];
+
+            // Auto-set actual_end_date when final bill (100%) is marked
+            if (currentStep && currentStep.base_percentage === 100) {
+                updateFields.push(`actual_end_date = CURDATE()`);
+            }
 
             if (finalProgressStepId) {
                 updateFields.push(`progress_step_id = ?`);
@@ -495,6 +589,81 @@ const projectsModel = {
                 [projectId, doc.file_path, doc.original_name, doc.caption || null,
                  doc.file_type || null, doc.file_size_bytes || null, uploadedBy || null]
             );
+        }
+    },
+
+    async deleteProgressLog(logId, projectId) {
+        const conn = await pool.getConnection();
+        try {
+            await conn.beginTransaction();
+
+            // Verify the log belongs to this project before deleting
+            const [[row]] = await conn.execute(
+                `SELECT id FROM project_progress_log WHERE id = ? AND project_id = ?`,
+                [logId, projectId]
+            );
+            if (!row) return null;
+
+            // Check if this is the latest log - only the latest can be deleted
+            const [[latestLogRow]] = await conn.execute(
+                `SELECT id FROM project_progress_log
+                 WHERE project_id = ?
+                 ORDER BY logged_at DESC
+                 LIMIT 1`,
+                [projectId]
+            );
+            if (latestLogRow && latestLogRow.id !== logId) {
+                throw new Error('শুধুমাত্র সর্বশেষ অগ্রগতি লগ মুছে ফেলা যায়। পুরানো লগগুলি সংরক্ষিত থাকে।');
+            }
+
+            // Delete the progress log entry
+            await conn.execute(`DELETE FROM project_progress_log WHERE id = ?`, [logId]);
+
+            // Get the most recent remaining log for this project
+            const [[latestLog]] = await conn.execute(
+                `SELECT progress_percentage, released_amount, current_status, is_completed, is_delayed, progress_step_id
+                 FROM project_progress_log
+                 WHERE project_id = ?
+                 ORDER BY logged_at DESC
+                 LIMIT 1`,
+                [projectId]
+            );
+
+            // Get current project allocation and method
+            const [[project]] = await conn.execute(
+                `SELECT allocation_amount, implementation_method FROM projects WHERE id = ?`,
+                [projectId]
+            );
+
+            if (!project) throw new Error('Project not found: ' + projectId);
+
+            // Update project with the most recent log's progress, or reset to defaults
+            const updateData = latestLog ? {
+                progress_percentage: latestLog.progress_percentage,
+                released_amount: latestLog.released_amount,
+                current_status: latestLog.current_status,
+                is_completed: latestLog.is_completed,
+                is_delayed: latestLog.is_delayed
+            } : {
+                progress_percentage: 0,
+                released_amount: 0,
+                current_status: null,
+                is_completed: 0,
+                is_delayed: 0
+            };
+
+            await conn.execute(
+                `UPDATE projects SET progress_percentage = ?, released_amount = ?, current_status = ?, is_completed = ?, is_delayed = ? WHERE id = ?`,
+                [updateData.progress_percentage, updateData.released_amount, updateData.current_status, updateData.is_completed, updateData.is_delayed, projectId]
+            );
+
+            await conn.commit();
+            return true;
+        } catch (error) {
+            await conn.rollback();
+            throw error;
+        } finally {
+            conn.release();
         }
     },
 
