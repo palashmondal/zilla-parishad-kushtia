@@ -139,20 +139,30 @@ const approvalMemosController = {
             // Determine which type to validate against (provided type or existing type)
             const typeToValidate = memo_type || memo.memo_type || 'ministry';
 
-            // Validate based on memo type
+            // Validate based on memo type — only validate if fields are being updated (not just file upload)
             if (typeToValidate === 'ministry') {
-                if (!memo_date || memo_date === '' || !memo_number || memo_number === '') {
-                    return res.status(400).json({ error: 'Missing required fields for ministry memo: memo_date, memo_number' });
+                if (memo_date !== undefined || memo_number !== undefined) {
+                    if (!memo_date || memo_date === '' || !memo_number || memo_number === '') {
+                        return res.status(400).json({ error: 'Missing required fields for ministry memo: memo_date, memo_number' });
+                    }
                 }
             } else if (typeToValidate === 'monthly') {
-                if (!meeting_month || meeting_month === '' || !meeting_date || meeting_date === '') {
-                    return res.status(400).json({ error: 'Missing required fields for monthly memo: meeting_month, meeting_date' });
+                if (meeting_month !== undefined || meeting_date !== undefined) {
+                    if (!meeting_month || meeting_month === '' || !meeting_date || meeting_date === '') {
+                        return res.status(400).json({ error: 'Missing required fields for monthly memo: meeting_month, meeting_date' });
+                    }
                 }
             }
 
             const updateData = { ...req.body };
             if (req.file) {
                 updateData.document_file = `/uploads/approval-memos/${req.file.filename}`;
+            }
+
+            // For monthly memos, ensure memo_date and memo_number are NULL, not empty strings
+            if (typeToValidate === 'monthly') {
+                updateData.memo_date = null;
+                updateData.memo_number = null;
             }
 
             const updated = await approvalMemosModel.update(id, updateData);
