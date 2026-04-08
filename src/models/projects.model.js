@@ -250,10 +250,12 @@ const projectsModel = {
                         // Detect file type from file extension
                         const fileExt = memo.document_file.substring(memo.document_file.lastIndexOf('.') + 1).toLowerCase();
                         const fileType = ['doc', 'docx'].includes(fileExt) ? fileExt : 'pdf';
+                        // Remove /uploads/ prefix to store relative path (like other documents)
+                        const relativePath = memo.document_file.replace(/^\/uploads\//, '');
                         await conn.execute(
                             `INSERT INTO project_documents (project_id, file_path, original_name, file_type, uploaded_by)
                              VALUES (?, ?, ?, ?, ?)`,
-                            [projectId, memo.document_file, docName, fileType, null]
+                            [projectId, relativePath, docName, fileType, null]
                         );
                     }
                 }
