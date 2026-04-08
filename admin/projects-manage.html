@@ -530,6 +530,19 @@
         .plog-flag {
             font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 5px; flex-shrink: 0; margin-top: 2px;
         }
+        .plog-delete-btn {
+            width: 1.5rem; height: 1.5rem; border-radius: 50%;
+            background: #ef4444; color: white;
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all 0.2s;
+            font-size: 0.9rem; line-height: 1;
+        }
+        .plog-delete-btn:hover {
+            background: #dc2626; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+            transform: scale(1.05);
+        }
+        .plog-delete-btn:active { transform: scale(0.95); }
         .plog-flag-delayed  { background: #fee2e2; color: #991b1b; }
         .plog-flag-complete { background: #dcfce7; color: #166534; }
 
@@ -930,15 +943,19 @@
                     </div>
                 </div>
 
-                <!-- Row 2.5: Approval Date · Memo Number -->
-                <div class="grid grid-cols-2 gap-4 items-start">
+                <!-- Row 2.5: Approval Type · Approval Date · Memo Number -->
+                <div class="grid grid-cols-3 gap-4 items-start">
                     <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের তারিখ</p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের ধরণ</p>
+                        <p id="dm-approval-method" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তারিখ</p>
                         <p id="dm-approval-date" class="font-bold text-[#b45309] text-lg"></p>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক নংবর</p>
-                        <p id="dm-memo-number" class="font-bold text-[#b45309] text-base font-mono"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক/মাসের নাম</p>
+                        <p id="dm-memo-number" class="font-bold text-[#b45309] text-sm font-mono break-words leading-relaxed"></p>
                     </div>
                 </div>
 
@@ -1334,6 +1351,28 @@
                             </div>
                         </div>
 
+                        <!-- Row 8: Start Date | Expected End Date -->
+                        <div class="form-field">
+                            <label class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                শুরু তারিখ
+                            </label>
+                            <div class="date-field-wrapper">
+                                <svg class="fp-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <input type="text" name="start_date" id="start-date-input" class="flatpickr-input" placeholder="তারিখ নির্বাচন করুন">
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                সম্ভাব্য সমাপ্তি
+                            </label>
+                            <div class="date-field-wrapper">
+                                <svg class="fp-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <input type="text" name="expected_end_date" id="expected-end-date-input" class="flatpickr-input" placeholder="তারিখ নির্বাচন করুন">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -1453,9 +1492,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                         </svg>
                     </div>
-                    <div>
-                        <h3 style="font-size:1.05rem;font-weight:700;color:white;line-height:1.3;margin:0;">অগ্রগতি আপডেট</h3>
-                        <p style="font-size:0.7rem;color:#fde68a;font-weight:500;margin:0;" id="progress-modal-project-id"></p>
+                    <div style="flex:1;min-w:0;">
+                        <h3 style="font-size:1.2rem;font-weight:700;color:white;line-height:1.4;margin:0;word-wrap:break-word;overflow-wrap:break-word;" id="progress-modal-project-id">প্রকল্প নাম</h3>
+                        <p style="font-size:0.75rem;color:#fde68a;font-weight:500;margin:0.4rem 0 0 0;">অগ্রগতি আপডেট</p>
                     </div>
                 </div>
                 <button onclick="closeProgressModal()"
@@ -1601,6 +1640,84 @@
                     <div id="prog-modal-log-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
+         style="background:rgba(120,53,15,0.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);"
+         onclick="if(event.target===this)closeErrorModal()">
+        <div class="w-full max-w-sm rounded-2xl overflow-hidden flex-shrink-0"
+             style="background:linear-gradient(160deg,#fffbf0 0%,#ffffff 60%,#fff8ed 100%);
+                    box-shadow:0 32px 80px rgba(120,53,15,0.28),0 0 0 1px rgba(245,158,11,0.2);">
+
+            <!-- Header with Icon -->
+            <div style="background:linear-gradient(135deg,#dc2626 0%,#ef4444 50%,#f87171 100%);padding:1.5rem 1.25rem;display:flex;align-items:flex-start;gap:1rem;">
+                <div style="width:2.5rem;height:2.5rem;border-radius:0.5rem;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg style="width:1.3rem;height:1.3rem;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div style="flex:1;">
+                    <h3 style="font-size:1.1rem;font-weight:700;color:white;line-height:1.3;margin:0;">সতর্কতা</h3>
+                    <p style="font-size:0.75rem;color:#fee2e2;font-weight:500;margin:0.5rem 0 0 0;" id="error-modal-subtitle">ত্রুটি বার্তা</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div style="padding:1.5rem 1.25rem;display:flex;flex-direction:column;gap:1.25rem;">
+                <p style="font-size:0.95rem;color:#4b5563;line-height:1.6;margin:0;" id="error-modal-message">ত্রুটি বার্তা এখানে প্রদর্শিত হবে</p>
+
+                <!-- Action Button -->
+                <div style="display:flex;justify-content:flex-end;">
+                    <button onclick="closeErrorModal()"
+                            style="padding:0.6rem 1.5rem;background:linear-gradient(135deg,#dc2626,#ef4444);color:white;border:none;border-radius:0.625rem;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(220,38,38,0.3);">
+                        ঠিক আছে
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-confirmation-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
+         style="background:rgba(120,53,15,0.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);"
+         onclick="if(event.target===this)cancelDelete()">
+        <div class="w-full max-w-sm rounded-2xl overflow-hidden flex-shrink-0"
+             style="background:linear-gradient(160deg,#fffbf0 0%,#ffffff 60%,#fff8ed 100%);
+                    box-shadow:0 32px 80px rgba(120,53,15,0.28),0 0 0 1px rgba(245,158,11,0.2);">
+
+            <!-- Header with Icon -->
+            <div style="background:linear-gradient(135deg,#dc2626 0%,#ef4444 50%,#f87171 100%);padding:1.5rem 1.25rem;display:flex;align-items:flex-start;gap:1rem;">
+                <div style="width:2.5rem;height:2.5rem;border-radius:0.5rem;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg style="width:1.3rem;height:1.3rem;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </div>
+                <div style="flex:1;">
+                    <h3 style="font-size:1.1rem;font-weight:700;color:white;line-height:1.3;margin:0;">নিশ্চিত করুন</h3>
+                    <p style="font-size:0.75rem;color:#fee2e2;font-weight:500;margin:0.5rem 0 0 0;">এই অগ্রগতি লগ স্থায়ীভাবে মুছে ফেলা হবে</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div style="padding:1.5rem 1.25rem;display:flex;flex-direction:column;gap:1.25rem;">
+                <p style="font-size:0.95rem;color:#4b5563;line-height:1.6;margin:0;">
+                    আপনি কি এই অগ্রগতি লগ মুছে ফেলতে চান? এই পদক্ষেপ পূর্বাবস্থায় যাওয়া যাবে না এবং প্রকল্পের অগ্রগতি পুনঃগণনা করা হবে।
+                </p>
+
+                <!-- Action Buttons -->
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+                    <button onclick="cancelDelete()"
+                            style="padding:0.6rem 1.25rem;background:#f3f4f6;color:#374151;border:1px solid #d1d5db;border-radius:0.625rem;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;flex:1;">
+                        বাতিল করুন
+                    </button>
+                    <button onclick="confirmDelete()"
+                            style="padding:0.6rem 1.25rem;background:linear-gradient(135deg,#dc2626,#ef4444);color:white;border:none;border-radius:0.625rem;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;flex:1;box-shadow:0 4px 12px rgba(220,38,38,0.3);">
+                        মুছুন
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1939,7 +2056,6 @@
                 });
                 if (ts) ts.refreshOptions(false);
             } catch (err) {
-                console.error('Failed to load years:', err);
             }
         }
 
@@ -1966,7 +2082,6 @@
                 });
                 if (ts) ts.refreshOptions(false);
             } catch (err) {
-                console.error('Failed to load upazilas:', err);
             }
         }
 
@@ -2006,7 +2121,6 @@
                         'changeRecordsPerPage'
                     );
                 } catch (selectorError) {
-                    console.error('Selector creation error:', selectorError);
                 }
 
                 // Total records count
@@ -2017,7 +2131,6 @@
                         totalRecordsEl.textContent = `মোট প্রকল্প সংখ্যাঃ ${bengaliNumber}`;
                     }
                 } catch (countError) {
-                    console.error('Total count error:', countError);
                 }
 
                 // Pagination
@@ -2025,11 +2138,9 @@
                     const perPageForPagination = recordsPerPage === 'all' ? response.total : recordsPerPage;
                     CRUDManager.createPagination(response.total, currentPage, perPageForPagination, 'pagination-container', 'changePage');
                 } catch (paginationError) {
-                    console.error('Pagination creation error:', paginationError);
                 }
             } catch (err) {
                 loading.classList.add('hidden');
-                console.error('LoadData error:', err);
                 CRUDManager.showError('ডেটা লোড করতে ব্যর্থ: ' + err.message);
             }
         }
@@ -2209,10 +2320,23 @@
         }
 
         function showDetailModal(r) {
-            console.log('showDetailModal called with record:', r);
             currentDetailId = r.id;
-            currentDetailRecord = r;
 
+            // Fetch fresh data from API to ensure we get all fields including memo_type
+            fetch(`${AuthManager.API_URL}/projects/${r.id}`)
+                .then(res => res.ok ? res.json() : Promise.reject('Failed to fetch'))
+                .then(freshData => {
+                    currentDetailRecord = freshData;
+                    displayProjectDetails(freshData);
+                })
+                .catch(err => {
+                    // Fallback to cached record if API fails
+                    currentDetailRecord = r;
+                    displayProjectDetails(r);
+                });
+        }
+
+        function displayProjectDetails(r) {
             // Project name
             document.getElementById('dm-name').innerText = r.project_name || '';
 
@@ -2251,7 +2375,13 @@
             document.getElementById('dm-reference').innerText = r.reference || 'N/A';
             // dm-status removed (duplicate of dm-quick-status)
 
-            // Approval date (Row 2, right column)
+            // Approval info (Row 2.5: Type · Date · Memo)
+            const approvalType = r.memo_type === 'monthly'
+                ? 'মাসিক সভার সিদ্ধান্ত'
+                : r.memo_type === 'ministry'
+                ? 'মন্ত্রণালয়ের স্মারক'
+                : 'N/A';
+            document.getElementById('dm-approval-method').innerText = approvalType;
             document.getElementById('dm-approval-date').innerText = r.project_approval_date ? CRUDManager.formatDate(r.project_approval_date) : 'N/A';
             document.getElementById('dm-memo-number').innerText = r.approval_memo_number || 'N/A';
 
@@ -2294,13 +2424,13 @@
             fetch(`${AuthManager.API_URL}/projects/${r.id}/progress`)
                 .then(res => res.ok ? res.json() : Promise.resolve([]))
                 .then(logs => {
-                    console.log('Progress logs fetched:', logs);
                     logSection.classList.remove('hidden');
                     if (!logs || logs.length === 0) {
                         logList.innerHTML = '';
                         return;
                     }
-                    const html = logs.map(log => {
+                    const html = logs.map((log, index) => {
+                        const isLatestLog = (index === 0); // First log is the latest (ordered DESC)
                         const dotClass = log.is_completed
                             ? 'plog-dot-complete'
                             : log.is_delayed ? 'plog-dot-delayed' : 'plog-dot-normal';
@@ -2309,29 +2439,41 @@
                             : log.is_delayed
                                 ? '<span class="plog-flag plog-flag-delayed">বিলম্ব</span>'
                                 : '';
-                        const note = log.note
-                            ? `<p class="plog-note">${log.note}</p>` : '';
+
+                        // Format status with percentage
+                        const statusWithPct = `${log.current_status} (${CRUDManager.toBengaliNumber(log.progress_percentage)}% সম্পন্ন)`;
+
+                        // Special formatting for running bill
+                        let detailMessage = log.note ? `<p class="plog-note">${log.note}</p>` : '';
+
+                        if (log.current_status === 'রানিং বিল প্রদান') {
+                            const billDate = CRUDManager.formatDate(log.logged_at);
+                            const billAmount = fmtAmt(log.released_amount || 0);
+                            const billMessage = `${billDate} তারিখে ৳ ${billAmount} রানিং বিল প্রদান করা হয়েছে।`;
+                            detailMessage = `<p class="plog-note" style="color:#059669;font-weight:500;margin-top:0.5rem;">${billMessage}</p>` + (log.note ? `<p class="plog-note">${log.note}</p>` : '');
+                        }
+
+                        // Only show delete button for admin AND if it's the latest log
+                        const deleteBtn = (AuthManager.isAdmin() && isLatestLog) ? `<button onclick="showDeleteConfirmation(${currentDetailId}, ${log.id})" class="plog-delete-btn" title="মুছুন">×</button>` : '';
+
                         return `
-                        <div class="progress-log-row">
+                        <div class="progress-log-row" id="plog-row-${log.id}">
                             <span class="plog-dot ${dotClass}"></span>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start gap-2 flex-wrap">
-                                    <span class="plog-status">${log.current_status}</span>
+                                    <span class="plog-status">${statusWithPct}</span>
                                     ${flag}
                                 </div>
-                                ${note}
+                                ${detailMessage}
                             </div>
-                            <div class="flex flex-col items-end gap-1 flex-shrink-0">
-                                <span class="plog-pct">${log.progress_percentage}%</span>
-                                <span class="plog-date">${CRUDManager.formatDate(log.logged_at)}</span>
+                            <div class="flex items-start gap-2 flex-shrink-0">
+                                ${deleteBtn}
                             </div>
                         </div>`;
                     }).join('');
-                    console.log('Rendered HTML:', html);
                     logList.innerHTML = html;
                 })
                 .catch(err => {
-                    console.error('Progress log fetch error:', err);
                     logSection.classList.remove('hidden');
                 });
 
@@ -2688,6 +2830,10 @@
             if (approvalDateInput) approvalDateInput.value = '';
             if (memoNumberInput) memoNumberInput.value = '';
 
+            // Clear date fields
+            if (_fpInstances['start_date']) _fpInstances['start_date'].clear();
+            if (_fpInstances['expected_end_date']) _fpInstances['expected_end_date'].clear();
+
             CRUDManager.openModal('form-modal');
         }
 
@@ -2717,19 +2863,20 @@
                 if (!res.ok) return [];
                 return await res.json();
             } catch (err) {
-                console.error('Error fetching progress steps:', err);
                 return [];
             }
         }
 
         async function populateProgressSteps(method) {
             const steps = await fetchProgressSteps(method);
-            const currentProgress = (_progressRecord && _progressRecord.progress_percentage) || 0;
+            const currentStatus = (_progressRecord && _progressRecord.current_status) || '';
             const sel = document.getElementById('prog-progress-step');
+
+            // Use the current progress percentage directly from the record (more reliable than matching descriptions)
+            let currentStatusPercentage = (_progressRecord && _progressRecord.progress_percentage) || 0;
 
             const optionsHtml = steps.map(s => {
                 // Check if this step matches the current status
-                const currentStatus = (_progressRecord && _progressRecord.current_status) || '';
                 const isCurrentStatus = s.bengali_description === currentStatus;
 
                 // Check if this is রানিং বিল প্রদান (30% dynamic step)
@@ -2741,30 +2888,30 @@
                 const fundReleaseRatio = alloc > 0 ? (released / alloc) : 0;
                 const allFundsReleased = fundReleaseRatio >= 1.0;
 
-                // Disable logic:
-                // 1. Current status: always disabled (already active)
-                // 2. Running bill: disabled only if 100% funds released (allow multiple submissions during work)
-                // 3. Final bill (100%): disabled if already added
-                // 4. Other steps: disabled if their percentage < current progress
+                // Disable logic (in priority order):
+                // 1. Running bill: special case - disabled only if 100% funds released (allow multiple submissions)
+                // 2. Current status: disabled (already active) - UNLESS it's running bill
+                // 3. Previous steps: disabled if step percentage < current status percentage
+                // 4. Already added steps: disabled if step appears in history (prevents duplicates) - EXCEPT running bill
                 let isDisabled = false;
                 let disableReason = '';
 
-                if (isCurrentStatus) {
-                    // Current status always disabled
-                    isDisabled = true;
-                    disableReason = 'বর্তমান অবস্থা';
-                } else if (isRunningBill) {
-                    // Running bill disabled only after 100% fund release
+                if (isRunningBill) {
+                    // Running bill is special: can be added multiple times, disabled only when 100% funds released
                     isDisabled = allFundsReleased;
                     if (isDisabled) disableReason = 'সকল তহবিল ছাড় প্রদান সম্পন্ন (100%)';
-                } else if (s.base_percentage === 100) {
-                    // Final bill disabled if already added
-                    isDisabled = _addedProgressStepIds.has(s.id);
-                    if (isDisabled) disableReason = 'এই ধাপ ইতিমধ্যে যোগ করা হয়েছে';
-                } else {
-                    // Other steps disabled if percentage < current progress
-                    isDisabled = s.base_percentage < currentProgress;
-                    if (isDisabled) disableReason = `এই ধাপ আগে সম্পন্ন হয়েছে (${currentProgress}% >= ${s.base_percentage}%)`;
+                } else if (isCurrentStatus) {
+                    // Current status disabled (can't re-select same status) - except running bill
+                    isDisabled = true;
+                    disableReason = 'বর্তমান অবস্থা';
+                } else if (s.base_percentage < currentStatusPercentage) {
+                    // Previous steps disabled (if their percentage is lower than current status)
+                    isDisabled = true;
+                    disableReason = 'এই ধাপ ইতিমধ্যে সম্পন্ন হয়েছে';
+                } else if (_addedProgressStepIds.has(s.id)) {
+                    // Already added steps disabled to prevent duplicates (except running bill and previous steps)
+                    isDisabled = true;
+                    disableReason = 'এই ধাপ ইতিমধ্যে যোগ করা হয়েছে';
                 }
 
                 const disabledAttr = isDisabled ? 'disabled' : '';
@@ -2893,16 +3040,25 @@
                 _progressRecord   = record;
                 _progressProjectId = record.id;
             } else {
-                _progressRecord   = null;
                 _progressProjectId = record;
+                // Fetch the project record if not provided
+                try {
+                    const res = await fetch(`${AuthManager.API_URL}/projects/${_progressProjectId}`);
+                    if (res.ok) {
+                        _progressRecord = await res.json();
+                    } else {
+                        _progressRecord = null;
+                    }
+                } catch (err) {
+                    _progressRecord = null;
+                }
             }
 
-            // Header subtitle
+            // Header title
             const name = (_progressRecord && _progressRecord.project_name)
                 ? _progressRecord.project_name
                 : ('প্রকল্প #' + _progressProjectId);
-            document.getElementById('progress-modal-project-id').textContent = name.length > 55
-                ? name.substring(0, 52) + '…' : name;
+            document.getElementById('progress-modal-project-id').textContent = name;
 
             // Populate current progress display
             const pct      = (_progressRecord && _progressRecord.progress_percentage) || 0;
@@ -2939,14 +3095,15 @@
 
             // Show/hide fund release block based on:
             // 1. CPPC method = always hidden
-            // 2. Other methods = show when status is "কাজ চলমান" or any status after it
+            // 2. Other methods = show when status is "কাজ চলমান" or "রানিং বিল প্রদান"
             const isCppc = method === 'সিপিপিসি';
-            const currentProgress = (_progressRecord && _progressRecord.progress_percentage) || 0;
+            const currentStatus = (_progressRecord && _progressRecord.current_status) || '';
 
-            // Fund release is allowed once "কাজ চলমান" (work in progress) is reached
-            // "কাজ চলমান" corresponds to 55% progress in all methods
-            // Show button for any status at or after this point
-            const showFundRelease = !isCppc && currentProgress >= 55;
+            // Fund release is allowed for specific statuses
+            const showFundRelease = !isCppc && (
+                currentStatus === 'কাজ চলমান' ||
+                currentStatus === 'রানিং বিল প্রদান'
+            );
 
             document.getElementById('prog-fund-toggle').parentElement.style.display = showFundRelease ? 'block' : 'none';
             document.getElementById('prog-pct-preview').parentElement.parentElement.style.display = isCppc ? 'none' : 'block';
@@ -2965,6 +3122,202 @@
             _progressRecord    = null;
             _lastProgressStepId = null;
             _allProgressLogs = [];
+        }
+
+        // Error modal functions
+        function showErrorModal(message, subtitle = 'ত্রুটি') {
+            document.getElementById('error-modal-message').textContent = message;
+            document.getElementById('error-modal-subtitle').textContent = subtitle;
+            document.getElementById('error-modal').classList.remove('hidden');
+        }
+
+        function closeErrorModal() {
+            document.getElementById('error-modal').classList.add('hidden');
+        }
+
+        // Global variables for delete confirmation
+        let _deleteConfirmationData = { projectId: null, logId: null };
+
+        // Re-render progress logs in detail modal to show/hide delete buttons correctly
+        function rerenderProgressLogsInModal() {
+            if (!_allProgressLogs || _allProgressLogs.length === 0) return;
+
+            const logList = document.getElementById('dm-progress-log-list');
+            const html = _allProgressLogs.map((log, index) => {
+                const isLatestLog = (index === 0); // First log is the latest (ordered DESC)
+                const dotClass = log.is_completed
+                    ? 'plog-dot-complete'
+                    : log.is_delayed ? 'plog-dot-delayed' : 'plog-dot-normal';
+                const flag = log.is_completed
+                    ? '<span class="plog-flag plog-flag-complete">সম্পন্ন</span>'
+                    : log.is_delayed
+                        ? '<span class="plog-flag plog-flag-delayed">বিলম্ব</span>'
+                        : '';
+
+                const statusWithPct = `${log.current_status} (${CRUDManager.toBengaliNumber(log.progress_percentage)}% সম্পন্ন)`;
+                let detailMessage = log.note ? `<p class="plog-note">${log.note}</p>` : '';
+
+                if (log.current_status === 'রানিং বিল প্রদান') {
+                    const billDate = CRUDManager.formatDate(log.logged_at);
+                    const billAmount = fmtAmt(log.released_amount || 0);
+                    const billMessage = `${billDate} তারিখে ৳ ${billAmount} রানিং বিল প্রদান করা হয়েছে।`;
+                    detailMessage = `<p class="plog-note" style="color:#059669;font-weight:500;margin-top:0.5rem;">${billMessage}</p>` + (log.note ? `<p class="plog-note">${log.note}</p>` : '');
+                }
+
+                // Only show delete button for admin AND if it's the latest log
+                const deleteBtn = (AuthManager.isAdmin() && isLatestLog) ? `<button onclick="showDeleteConfirmation(${currentDetailId}, ${log.id})" class="plog-delete-btn" title="মুছুন">×</button>` : '';
+
+                return `
+                <div class="progress-log-row" id="plog-row-${log.id}">
+                    <span class="plog-dot ${dotClass}"></span>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start gap-2 flex-wrap">
+                            <span class="plog-status">${statusWithPct}</span>
+                            ${flag}
+                        </div>
+                        ${detailMessage}
+                    </div>
+                    <div class="flex items-start gap-2 flex-shrink-0">
+                        ${deleteBtn}
+                    </div>
+                </div>`;
+            }).join('');
+
+            logList.innerHTML = html;
+        }
+
+        function showDeleteConfirmation(projectId, logId) {
+            if (!AuthManager.isAdmin()) {
+                CRUDManager.showError('আপনার এই অনুমতি নেই');
+                return;
+            }
+
+            _deleteConfirmationData = { projectId, logId };
+            document.getElementById('delete-confirmation-modal').classList.remove('hidden');
+        }
+
+        function cancelDelete() {
+            document.getElementById('delete-confirmation-modal').classList.add('hidden');
+            _deleteConfirmationData = { projectId: null, logId: null };
+        }
+
+        async function confirmDelete() {
+            const { projectId, logId } = _deleteConfirmationData;
+
+            try {
+                const res = await AuthManager.fetch(
+                    `${AuthManager.API_URL}/projects/${projectId}/progress/${logId}`,
+                    { method: 'DELETE' }
+                );
+
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.message || 'মুছতে ব্যর্থ');
+                }
+
+                // Close confirmation modal
+                document.getElementById('delete-confirmation-modal').classList.add('hidden');
+
+                // Remove from DOM
+                const logElement = document.getElementById(`plog-row-${logId}`);
+                if (logElement) {
+                    logElement.remove();
+                }
+
+                // Remove from _allProgressLogs array
+                _allProgressLogs = _allProgressLogs.filter(log => log.id !== logId);
+
+                // Only update modal if it's still open
+                if (!_progressRecord || !_progressProjectId) {
+                    CRUDManager.showSuccess('অগ্রগতি লগ মুছে ফেলা হয়েছে');
+                    return;
+                }
+
+                // If we deleted the most recent log, update modal to show new latest
+                if (_allProgressLogs.length > 0) {
+                    const newLatest = _allProgressLogs[0];
+                    // Update _progressRecord to reflect new latest status
+                    _progressRecord.progress_percentage = newLatest.progress_percentage;
+                    _progressRecord.released_amount = newLatest.released_amount;
+                    _progressRecord.current_status = newLatest.current_status;
+                    _progressRecord.is_completed = newLatest.is_completed;
+                    _progressRecord.is_delayed = newLatest.is_delayed;
+
+                    // Update modal display
+                    document.getElementById('prog-current-pct-label').textContent = CRUDManager.toBengaliNumber(newLatest.progress_percentage) + '%';
+                    document.getElementById('prog-current-bar').style.width = newLatest.progress_percentage + '%';
+                    const released = parseFloat(newLatest.released_amount || 0);
+                    const alloc = parseFloat(_progressRecord.allocation_amount || 0);
+                    document.getElementById('prog-current-released').textContent = '৳ ' + fmtAmt(released);
+                    const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
+                    document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
+                    document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
+
+                    // Update progress step dropdown and fund release visibility
+                    await loadProgressModalLog(_progressProjectId);
+                    populateProgressSteps(_progressRecord.implementation_method);
+
+                    // Re-render progress logs to show delete button on new latest log ✅
+                    rerenderProgressLogsInModal();
+
+                    // Rebuild _addedProgressStepIds
+                    _addedProgressStepIds = new Set();
+                    _allProgressLogs.forEach(log => {
+                        if (log.progress_step_id) {
+                            _addedProgressStepIds.add(log.progress_step_id);
+                        }
+                    });
+                    if (_allProgressLogs.length > 0) {
+                        _lastProgressStepId = _allProgressLogs[0].progress_step_id || null;
+                    }
+                } else {
+                    // No logs remaining, reset to empty state
+                    _progressRecord.progress_percentage = 0;
+                    _progressRecord.released_amount = 0;
+                    _progressRecord.current_status = null;
+                    _progressRecord.is_completed = 0;
+                    _progressRecord.is_delayed = 0;
+
+                    document.getElementById('prog-current-pct-label').textContent = '0%';
+                    document.getElementById('prog-current-bar').style.width = '0%';
+                    document.getElementById('prog-current-released').textContent = '৳ 0';
+                    document.getElementById('dm-fund-release-pct').innerText = '0%';
+                    document.getElementById('dm-fund-release-bar').style.width = '0%';
+
+                    _addedProgressStepIds = new Set();
+                    _lastProgressStepId = null;
+                    await loadProgressModalLog(_progressProjectId);
+                    populateProgressSteps(_progressRecord.implementation_method);
+
+                    // Clear progress logs display when no logs remain
+                    document.getElementById('dm-progress-log-list').innerHTML = '';
+                }
+
+                // Update the project in allRecords with the new progress percentage from backend ✅
+                try {
+                    const projectRes = await fetch(`${AuthManager.API_URL}/projects/${projectId}`);
+                    if (projectRes.ok) {
+                        const updatedProject = await projectRes.json();
+                        // Find and update the project in allRecords
+                        const projectIndex = allRecords.findIndex(p => p.id === projectId);
+                        if (projectIndex !== -1) {
+                            allRecords[projectIndex].progress_percentage = updatedProject.progress_percentage;
+                            allRecords[projectIndex].released_amount = updatedProject.released_amount;
+                            allRecords[projectIndex].current_status = updatedProject.current_status;
+                            allRecords[projectIndex].is_completed = updatedProject.is_completed;
+                            allRecords[projectIndex].is_delayed = updatedProject.is_delayed;
+                            // Re-render the table to show updated progress bar
+                            renderRows();
+                        }
+                    }
+                } catch (err) {
+                }
+
+                CRUDManager.showSuccess('অগ্রগতি লগ মুছে ফেলা হয়েছে');
+                _deleteConfirmationData = { projectId: null, logId: null };
+            } catch (error) {
+                CRUDManager.showError('ত্রুটি: ' + error.message);
+            }
         }
 
         function updateProgressPreview() { /* progress % input removed */ }
@@ -2989,7 +3342,7 @@
                     activity_date:       document.getElementById('prog-activity-date').value || null
                 };
                 if (!payload.progress_step_id) {
-                    alert('অগ্রগতি ধাপ নির্বাচন করুন');
+                    showErrorModal('অনুগ্রহ করে একটি অগ্রগতি ধাপ নির্বাচন করুন', 'ধাপ নির্বাচন করুন');
                     btn.disabled = false;
                     btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
                     return;
@@ -3000,14 +3353,14 @@
                 const currentProgress = (_progressRecord && _progressRecord.progress_percentage) || 0;
 
                 if (stepPercentage < currentProgress) {
-                    alert(`এই ধাপ ইতিমধ্যে সম্পন্ন হয়েছে। আপনি কম অগ্রগতি নির্বাচন করতে পারবেন না।\n\nবর্তমান অগ্রগতি: ${currentProgress}%`);
+                    showErrorModal(`এই ধাপ ইতিমধ্যে সম্পন্ন হয়েছে এবং আপনি পূর্ববর্তী ধাপে ফিরে যেতে পারবেন না।\n\nবর্তমান অগ্রগতি: ${CRUDManager.toBengaliNumber(currentProgress)}%\nনির্বাচিত ধাপের অগ্রগতি: ${CRUDManager.toBengaliNumber(stepPercentage)}%`, 'পূর্ববর্তী ধাপ');
                     btn.disabled = false;
                     btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
                     return;
                 }
 
                 if (_addedProgressStepIds.has(payload.progress_step_id)) {
-                    alert('এই ধাপ ইতিমধ্যে যোগ করা হয়েছে। অন্য ধাপ নির্বাচন করুন।');
+                    showErrorModal('এই অগ্রগতি ধাপ ইতিমধ্যে এই প্রকল্পে যোগ করা হয়েছে। অন্য একটি ধাপ নির্বাচন করুন।', 'ধাপ ইতিমধ্যে যোগ করা হয়েছে');
                     btn.disabled = false;
                     btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
                     return;
@@ -3021,7 +3374,13 @@
                     const err = await res.json().catch(() => ({}));
                     throw new Error(err.message || 'সংরক্ষণ ব্যর্থ');
                 }
-                CRUDManager.showSuccess('অগ্রগতি সফলভাবে সংরক্ষিত হয়েছে');
+
+                // Show appropriate success message
+                let successMsg = 'অগ্রগতি সফলভাবে সংরক্ষিত হয়েছে';
+                if (stepPercentage === 100) {
+                    successMsg = 'অগ্রগতি সংরক্ষিত হয়েছে • প্রকৃত সমাপ্তি তারিখ স্বয়ংক্রিয়ভাবে সেট করা হয়েছে';
+                }
+                CRUDManager.showSuccess(successMsg);
                 const savedProjectId = _progressProjectId;
 
                 // Refresh detail popup if open
@@ -3408,13 +3767,15 @@
             list.innerHTML = '';
             docs.forEach(doc => {
                 const icon = getDocIcon(doc.original_name);
+                // Extract clean filename from file_path (e.g., "documents/proj-123-1234567890.pdf" → "proj-123-1234567890.pdf")
+                const cleanFileName = doc.file_path ? doc.file_path.split('/').pop() : doc.original_name;
                 const row = document.createElement('div');
                 row.className = doc.caption ? 'doc-file-row doc-has-caption' : 'doc-file-row';
                 row.innerHTML = `
                     <span class="doc-icon" style="background:${icon.bg};cursor:pointer;" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')">${icon.label}</span>
                     <span class="doc-name-wrap" style="flex:1;min-width:0;">
                         <button type="button" class="doc-name" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')"
-                            title="${doc.original_name}">${doc.original_name}</button>
+                            title="${doc.original_name}">${cleanFileName}</button>
                         ${doc.caption ? `<span class="doc-caption-text">${doc.caption}</span>` : ''}
                     </span>
                     <span class="doc-size">${fmtSize(doc.file_size_bytes)}</span>
@@ -3642,13 +4003,15 @@
             list.innerHTML = '';
             docs.forEach(doc => {
                 const icon = getDocIcon(doc.original_name);
+                // Extract clean filename from file_path (e.g., "documents/proj-123-1234567890.pdf" → "proj-123-1234567890.pdf")
+                const cleanFileName = doc.file_path ? doc.file_path.split('/').pop() : doc.original_name;
                 const row = document.createElement('div');
                 row.className = 'doc-file-row';
                 row.innerHTML = `
                     <span class="doc-icon" style="background:${icon.bg};cursor:pointer;" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')">${icon.label}</span>
                     <span class="doc-name-wrap" style="flex:1;min-width:0;">
                         <button type="button" class="doc-name" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')"
-                            title="${doc.original_name}">${doc.original_name}</button>
+                            title="${doc.original_name}">${cleanFileName}</button>
                         ${doc.caption ? `<span class="doc-caption-text">${doc.caption}</span>` : ''}
                     </span>
                     <span class="doc-size">${fmtSize(doc.file_size_bytes)}</span>
@@ -3816,50 +4179,80 @@
             }
         });
 
-        // Handle financial year change to populate approval memos dropdown
+        // Calculate the last date of the financial year (June 30 of the second year)
+        function calculateFinancialYearEndDate(financialYearStr) {
+            // E.g., "২০২৫-२६" or "2025-26"
+            // Convert to English if needed
+            let englishYear = convertBengaliToEnglishYear(financialYearStr);
+
+            if (!englishYear) return null;
+
+            // Extract the second year from "2025-26"
+            const parts = englishYear.split('-');
+            if (parts.length !== 2) return null;
+
+            const endYear = parseInt(parts[1], 10);
+            // Financial year ends on June 30 (month 5 in 0-indexed)
+            const endDate = new Date(2000 + endYear, 5, 30); // 5 = June (0-indexed)
+
+            return endDate;
+        }
+
+        // Handle financial year change to populate approval memos dropdown and set expected end date
         async function onFinancialYearChange() {
-            console.log('🔔 onFinancialYearChange called');
             const financialYearSelect = document.querySelector('select[name="financial_year"]');
             const memoSelect = document.getElementById('approval-memo-select');
+            const expectedEndDateInput = document.getElementById('expected-end-date-input');
 
             let financialYear = financialYearSelect.value;
-            console.log('📅 Selected year (before conversion):', financialYear);
 
             if (!financialYear) {
                 memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
                 memoSelect.disabled = true;
-                console.log('❌ No year selected, disabling dropdown');
+                // Clear expected end date when no financial year is selected
+                if (expectedEndDateInput) {
+                    if (_fpInstances['expected_end_date']) {
+                        _fpInstances['expected_end_date'].clear();
+                    } else {
+                        expectedEndDateInput.value = '';
+                    }
+                }
                 return;
+            }
+
+            // Auto-calculate and set the expected end date to last date of financial year
+            const endDate = calculateFinancialYearEndDate(financialYear);
+            if (endDate && expectedEndDateInput) {
+                if (_fpInstances['expected_end_date']) {
+                    _fpInstances['expected_end_date'].setDate(endDate, true); // true = trigger onChange
+                } else {
+                    // Fallback if Flatpickr not yet initialized
+                    const dateStr = endDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                    expectedEndDateInput.value = dateStr;
+                }
             }
 
             // Convert Bengali numerals to English
             financialYear = convertBengaliToEnglishYear(financialYear);
-            console.log('✅ Converted year:', financialYear);
 
             try {
                 memoSelect.disabled = true;
                 const apiUrl = `/api/projects/available-memos/${encodeURIComponent(financialYear)}`;
-                console.log('🌐 Fetching from:', apiUrl);
                 const response = await fetch(apiUrl);
 
-                console.log('📡 Response status:', response.status, response.ok);
                 if (!response.ok) {
                     throw new Error('স্মারক লোড করতে ব্যর্থ - Status: ' + response.status);
                 }
 
                 const memos = await response.json();
-                console.log('📦 Received memos:', memos);
-                console.log('📊 Number of memos:', memos ? memos.length : 0);
 
                 if (memos && memos.length > 0) {
-                    console.log('✨ Populating dropdown with', memos.length, 'memos');
 
                     // Destroy existing TomSelect first
                     if (_tomInstances && _tomInstances.has(memoSelect)) {
                         const tomSelectInstance = _tomInstances.get(memoSelect);
                         tomSelectInstance.destroy();
                         _tomInstances.delete(memoSelect);
-                        console.log('🗑️ Tom Select destroyed');
                     }
 
                     // Clear and rebuild select with simple HTML
@@ -3919,9 +4312,7 @@
 
                             memoSelect.appendChild(option);
 
-                            console.log('Added option:', memo.id, optionText, '(Full:', isFull, ')');
                         } catch (itemError) {
-                            console.error('Error processing memo:', memo, itemError);
                         }
                     });
 
@@ -3951,12 +4342,9 @@
                         if (_tomInstances) {
                             _tomInstances.set(memoSelect, newInstance);
                         }
-                        console.log('✨ Tom Select recreated with options');
                     }
 
-                    console.log('✅ Dropdown populated with', memos.length, 'memo options');
                 } else {
-                    console.log('⚠️ No memos found for this year');
 
                     // Destroy existing TomSelect
                     if (_tomInstances && _tomInstances.has(memoSelect)) {
@@ -3969,7 +4357,6 @@
                     memoSelect.disabled = true;
                 }
             } catch (error) {
-                console.error('❌ Error loading memos:', error);
                 memoSelect.innerHTML = '<option value="">-- ত্রুটি: স্মারক লোড করতে পারা যায়নি --</option>';
                 memoSelect.disabled = true;
             }
@@ -3996,7 +4383,6 @@
             if (memoDate && memoNumber) {
                 approvalDateInput.value = memoDate;
                 memoNumberInput.value = memoNumber;
-                console.log('✅ Filled approval date:', memoDate, 'and memo number:', memoNumber);
             }
         }
 
@@ -4004,16 +4390,13 @@
         // This works even if the select is in a hidden modal
         document.addEventListener('change', (e) => {
             if (e.target && e.target.name === 'financial_year') {
-                console.log('💥 Financial year change event detected on:', e.target);
                 onFinancialYearChange();
             }
             if (e.target && e.target.id === 'approval-memo-select') {
-                console.log('💥 Memo select change event detected');
                 onApprovalMemoChange();
             }
         });
 
-        console.log('✅ Event delegation listeners attached to document');
 
         // Global state for duplicate warning handling
         let pendingFormData = null;
@@ -4359,7 +4742,6 @@
                     const results = await response.json();
                     displaySearchResults(results);
                 } catch (error) {
-                    console.error('Search error:', error);
                 }
             }, 500);
         });
@@ -4412,7 +4794,6 @@
                     updateSelectedDisplay();
                 }
             } catch (error) {
-                console.error('Reverse geocode error:', error);
             }
         }
 
@@ -4611,7 +4992,6 @@
                     window.applySelectedLocation = originalApply;
 
                 } catch (error) {
-                    console.error('Location update error:', error);
                     alert('অবস্থান আপডেট করতে সমস্যা হয়েছে: ' + error.message);
                 }
             };
@@ -4670,7 +5050,21 @@
         const imgExts = ['jpg','jpeg','png','webp','gif','bmp','svg'];
         if (ext === 'pdf') {
             body.style.overflow = 'hidden';
-            body.innerHTML = `<iframe src="${url}" style="width:100%;height:100%;border:none;display:block;"></iframe>`;
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;';
+            iframe.onerror = () => {
+                console.error('PDF iframe failed to load:', url);
+                body.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;gap:1rem;min-height:200px;">
+                    <span style="font-size:3.5rem;">📄</span>
+                    <p style="font-size:1rem;font-weight:600;color:#374151;">PDF লোড করতে ব্যর্থ</p>
+                    <p style="font-size:0.85rem;color:#6b7280;">ডাউনলোড করুন এবং আপনার কম্পিউটারে খুলুন।</p>
+                    <a href="${url}" download="${originalName}"
+                       style="padding:10px 24px;border-radius:10px;background:linear-gradient(135deg,#b45309,#d97706);
+                              color:#fff;font-weight:700;font-size:0.9rem;text-decoration:none;">ডাউনলোড করুন</a>
+                </div>`;
+            };
+            body.appendChild(iframe);
         } else if (imgExts.includes(ext)) {
             body.style.overflow = 'auto';
             body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;padding:1.5rem;min-height:300px;">
