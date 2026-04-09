@@ -576,6 +576,7 @@ const projectsModel = {
             );
         }
         // Update project's updated_at to move it to the top of the list
+        console.log('Updating project timestamp after image upload, projectId:', projectId);
         await pool.execute(
             `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
             [projectId]
@@ -605,6 +606,7 @@ const projectsModel = {
             );
         }
         // Update project's updated_at to move it to the top of the list
+        console.log('Updating project timestamp after document upload, projectId:', projectId);
         await pool.execute(
             `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
             [projectId]
