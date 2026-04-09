@@ -2516,7 +2516,7 @@
             document.getElementById('dm-approval-date').innerText = r.project_approval_date ? CRUDManager.formatDate(r.project_approval_date) : 'N/A';
             // Convert English digits to Bengali digits for memo number
             const memoNumber = r.approval_memo_number || 'N/A';
-            const bengaliMemoNumber = memoNumber.replace(/\d/g, d => '০১২३४৫৬৭৮৯'[d]);
+            const bengaliMemoNumber = memoNumber.replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
             document.getElementById('dm-memo-number').innerText = bengaliMemoNumber;
 
             // Progress percentage for the progress bars
