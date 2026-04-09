@@ -574,6 +574,11 @@ const projectsModel = {
                  uploadedBy || null]
             );
         }
+        // Update project's updated_at to move it to the top of the list
+        await pool.execute(
+            `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+            [projectId]
+        );
     },
 
     // ── Document records ───────────────────────────────────────
@@ -598,6 +603,11 @@ const projectsModel = {
                  doc.file_type || null, doc.file_size_bytes || null, uploadedBy || null]
             );
         }
+        // Update project's updated_at to move it to the top of the list
+        await pool.execute(
+            `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+            [projectId]
+        );
     },
 
     async deleteProgressLog(logId, projectId) {
