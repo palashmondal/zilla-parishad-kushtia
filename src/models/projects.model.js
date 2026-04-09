@@ -706,6 +706,11 @@ const projectsModel = {
         );
         if (!row) return null;
         await pool.execute(`DELETE FROM project_documents WHERE id = ?`, [docId]);
+        // Update project's updated_at to move it to the top of the list
+        await pool.execute(
+            `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+            [projectId]
+        );
         return row.file_path;
     },
 
@@ -719,6 +724,11 @@ const projectsModel = {
         if (!row) return null;
 
         await pool.execute(`DELETE FROM project_images WHERE id = ?`, [imageId]);
+        // Update project's updated_at to move it to the top of the list
+        await pool.execute(
+            `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+            [projectId]
+        );
         return row.photo_path;
     },
 
