@@ -3990,12 +3990,14 @@
                 status.textContent = `${quickFiles.length}টি ছবি সফলভাবে আপলোড হয়েছে ✓`;
                 quickFiles = [];
                 renderQuickPreviews();
-                setTimeout(closeQuickUpload, 1200);
                 // Reload photo gallery in detail modal
                 await loadProjectPhotos(currentDetailId);
                 document.getElementById('dm-photos-section').classList.remove('hidden');
-                // Reload project list to reflect updated timestamp
-                await loadData();
+                // Close modal and reload project list
+                setTimeout(() => {
+                    closeQuickUpload();
+                    loadData();
+                }, 1200);
             } catch(e) {
                 status.textContent = 'ব্যর্থ: ' + e.message;
             } finally {
@@ -4073,10 +4075,12 @@
                 status.textContent = `${quickDocFiles.length}টি ফাইল সফলভাবে আপলোড হয়েছে ✓`;
                 quickDocFiles = [];
                 renderQuickDocPreviews();
-                setTimeout(closeQuickDocUpload, 1200);
                 loadProjectDocsForDetail(currentDetailId);
-                // Reload project list to reflect updated timestamp
-                await loadData();
+                // Close modal and reload project list
+                setTimeout(() => {
+                    closeQuickDocUpload();
+                    loadData();
+                }, 1200);
             } catch(e) {
                 status.textContent = 'ব্যর্থ: ' + e.message;
             }
