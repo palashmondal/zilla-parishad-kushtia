@@ -1,6 +1,7 @@
 const pool = require('../../config/database');
 const { calcProgress, calcProgressFromStep } = require('../utils/progressCalc');
 const progressStepsModel = require('./progressSteps.model');
+const { autoPopulateLatLng } = require('../utils/locationHelper');
 
 const PROJECT_FIELDS = `
     id, project_id, project_name, allocation_amount, released_amount, fund_type,
@@ -228,6 +229,12 @@ const projectsModel = {
             // Remove 'id' — it is AUTO_INCREMENT and must not be sent by the client
             const { id: _id, created_at, updated_at, approval_memo_id, ...insertData } = data;
             const sanitized = sanitizeProjectData({ approval_memo_id, ...insertData });
+
+            // Auto-populate lat_lng from upazila if not provided
+            if (sanitized.upazila && (!sanitized.lat_lng || sanitized.lat_lng === null)) {
+                sanitized.lat_lng = autoPopulateLatLng(sanitized.upazila, sanitized.lat_lng);
+            }
+
             const fields = Object.keys(sanitized);
             if (fields.length === 0) throw new Error('No data provided for insert');
             const placeholders = fields.map(() => '?').join(', ');
@@ -275,6 +282,12 @@ const projectsModel = {
         const conn = await pool.getConnection();
         try {
             const sanitized = sanitizeProjectData(data);
+
+            // Auto-populate lat_lng from upazila if not provided
+            if (sanitized.upazila && (!sanitized.lat_lng || sanitized.lat_lng === null)) {
+                sanitized.lat_lng = autoPopulateLatLng(sanitized.upazila, sanitized.lat_lng);
+            }
+
             const setClauses = Object.keys(sanitized).map(key => `${key} = ?`).join(', ');
             const sql = `UPDATE projects SET ${setClauses} WHERE id = ?`;
             const [result] = await conn.execute(sql, [...Object.values(sanitized), id]);
