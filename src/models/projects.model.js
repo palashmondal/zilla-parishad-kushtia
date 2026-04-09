@@ -512,7 +512,8 @@ const projectsModel = {
                 `released_amount = ?`,
                 `current_status = ?`,
                 `is_completed = ?`,
-                `is_delayed = ?`
+                `is_delayed = ?`,
+                `updated_at = CURRENT_TIMESTAMP`
             ];
             const updateParams = [
                 progress_percentage,
