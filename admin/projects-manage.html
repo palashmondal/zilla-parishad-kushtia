@@ -5049,9 +5049,11 @@
 
         document.getElementById('dv-icon').textContent = icon.label;
         document.getElementById('dv-icon').style.background = icon.bg;
-        document.getElementById('dv-name').textContent = caption ? `${originalName} [${caption}]` : originalName;
+        // Extract clean filename from file path instead of using original_name (which may have encoding issues)
+        const cleanFileName = filePath ? filePath.split('/').pop() : originalName;
+        document.getElementById('dv-name').textContent = caption ? `${cleanFileName} [${caption}]` : cleanFileName;
         document.getElementById('dv-download').href = url;
-        document.getElementById('dv-download').download = originalName;
+        document.getElementById('dv-download').download = cleanFileName;
 
         const body = document.getElementById('dv-body');
         const imgExts = ['jpg','jpeg','png','webp','gif','bmp','svg'];
