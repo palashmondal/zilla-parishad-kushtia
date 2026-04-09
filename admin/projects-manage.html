@@ -4007,8 +4007,8 @@
             docs.forEach(doc => {
                 console.log('Rendering doc:', doc.original_name, 'Path:', doc.file_path);
                 const icon = getDocIcon(doc.original_name);
-                // Extract clean filename from file_path (e.g., "documents/proj-123-1234567890.pdf" → "proj-123-1234567890.pdf")
-                const cleanFileName = doc.file_path ? doc.file_path.split('/').pop() : doc.original_name;
+                // For approval memos, show the nice Bengali label; for others, show clean filename
+                const cleanFileName = doc.file_path && doc.file_path.includes('approval-memos') ? doc.original_name : (doc.file_path ? doc.file_path.split('/').pop() : doc.original_name);
                 const row = document.createElement('div');
                 row.className = 'doc-file-row';
                 row.innerHTML = `
