@@ -4098,15 +4098,18 @@
                 console.log('Rendering doc:', doc.original_name, 'Path:', doc.file_path);
                 const icon = getDocIcon(doc.original_name);
                 // For approval memos, show the nice Bengali label; for others, show clean filename
-                const cleanFileName = doc.file_path && doc.file_path.includes('approval-memos') ? doc.original_name : (doc.file_path ? doc.file_path.split('/').pop() : doc.original_name);
+                const isApprovalMemo = doc.file_path && doc.file_path.includes('approval-memos');
+                const cleanFileName = isApprovalMemo ? doc.original_name : (doc.file_path ? doc.file_path.split('/').pop() : doc.original_name);
+                // If caption exists, use it as the display name; otherwise use cleanFileName
+                const displayName = doc.caption || cleanFileName;
                 const row = document.createElement('div');
                 row.className = 'doc-file-row';
                 row.innerHTML = `
                     <span class="doc-icon" style="background:${icon.bg};cursor:pointer;" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')">${icon.label}</span>
                     <span class="doc-name-wrap" style="flex:1;min-width:0;">
                         <button type="button" class="doc-name" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')"
-                            title="${doc.original_name}">${cleanFileName}</button>
-                        ${doc.caption ? `<span class="doc-caption-text">${doc.caption}</span>` : ''}
+                            title="${doc.caption ? cleanFileName : doc.original_name}">${displayName}</button>
+                        ${doc.caption && !isApprovalMemo ? `<span class="doc-caption-text">${cleanFileName}</span>` : ''}
                     </span>
                     <span class="doc-size">${fmtSize(doc.file_size_bytes)}</span>
                     <button type="button" class="doc-remove" title="${doc.file_path && doc.file_path.includes('approval-memos') ? 'এই ফাইল স্বয়ংক্রিয়ভাবে পরিচালিত - মুছা যায় না' : 'মুছুন'}" data-id="${doc.id}"${doc.file_path && doc.file_path.includes('approval-memos') ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>✕</button>`;
