@@ -1592,12 +1592,14 @@
             dvContent.innerHTML = '';
 
             if (fileExtension === 'pdf') {
+                const pdfUrl = filePath.startsWith('/uploads/') ? filePath : '/uploads/' + filePath;
                 dvContent.innerHTML = `
-                    <iframe src="${filePath}" type="application/pdf" class="pdf-viewer w-full h-full rounded-lg"></iframe>
+                    <iframe src="${pdfUrl}" type="application/pdf" class="pdf-viewer w-full h-full rounded-lg"></iframe>
                 `;
             } else if (['jpg', 'jpeg', 'png', 'webp'].includes(fileExtension)) {
+                const imgUrl = filePath.startsWith('/uploads/') ? filePath : '/uploads/' + filePath;
                 dvContent.innerHTML = `
-                    <img src="${filePath}" alt="${escapeHtml(record.document_file)}" class="image-viewer w-full rounded-lg max-h-[70vh]">
+                    <img src="${imgUrl}" alt="${escapeHtml(record.document_file)}" class="image-viewer w-full rounded-lg max-h-[70vh]">
                 `;
             } else {
                 dvContent.innerHTML = '<p class="text-red-600">অসমর্থিত ফাইল ফর্ম্যাট</p>';
