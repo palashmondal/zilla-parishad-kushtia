@@ -3997,8 +3997,21 @@
                 // Close modal and reload project list
                 setTimeout(() => {
                     closeQuickUpload();
-                    console.log('Reloading project list after photo upload');
-                    loadData();
+                    console.log('Reloading project list after photo upload, currentDetailId:', currentDetailId);
+                    // Update the local record's timestamp to current time
+                    const projectIndex = allRecords.findIndex(p => p.id === parseInt(currentDetailId));
+                    if (projectIndex !== -1) {
+                        console.log('Found project at index:', projectIndex);
+                        allRecords[projectIndex].updated_at = new Date().toISOString();
+                        console.log('Updated project timestamp to:', allRecords[projectIndex].updated_at);
+                        // Re-sort and re-render
+                        allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                        renderRows();
+                        console.log('Project list re-sorted and rendered');
+                    } else {
+                        console.log('Project not found in allRecords, refreshing from server');
+                        loadData();
+                    }
                 }, 1200);
             } catch(e) {
                 status.textContent = 'ব্যর্থ: ' + e.message;
@@ -4081,8 +4094,21 @@
                 // Close modal and reload project list
                 setTimeout(() => {
                     closeQuickDocUpload();
-                    console.log('Reloading project list after document upload');
-                    loadData();
+                    console.log('Reloading project list after document upload, currentDetailId:', currentDetailId);
+                    // Update the local record's timestamp to current time
+                    const projectIndex = allRecords.findIndex(p => p.id === parseInt(currentDetailId));
+                    if (projectIndex !== -1) {
+                        console.log('Found project at index:', projectIndex);
+                        allRecords[projectIndex].updated_at = new Date().toISOString();
+                        console.log('Updated project timestamp to:', allRecords[projectIndex].updated_at);
+                        // Re-sort and re-render
+                        allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                        renderRows();
+                        console.log('Project list re-sorted and rendered');
+                    } else {
+                        console.log('Project not found in allRecords, refreshing from server');
+                        loadData();
+                    }
                 }, 1200);
             } catch(e) {
                 status.textContent = 'ব্যর্থ: ' + e.message;

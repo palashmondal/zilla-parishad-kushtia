@@ -507,6 +507,7 @@ const projectsModel = {
             );
 
             // 2. Update the live project row
+            console.log('Updating project progress and timestamp for projectId:', projectId);
             const updateFields = [
                 `progress_percentage = ?`,
                 `released_amount = ?`,
@@ -576,11 +577,16 @@ const projectsModel = {
             );
         }
         // Update project's updated_at to move it to the top of the list
-        console.log('Updating project timestamp after image upload, projectId:', projectId);
-        await pool.execute(
-            `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-            [projectId]
-        );
+        try {
+            console.log('Updating project timestamp after image upload, projectId:', projectId);
+            const result = await pool.execute(
+                `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+                [projectId]
+            );
+            console.log('Timestamp update result:', result);
+        } catch (err) {
+            console.error('Error updating project timestamp after image upload:', err);
+        }
     },
 
     // ── Document records ───────────────────────────────────────
@@ -606,11 +612,16 @@ const projectsModel = {
             );
         }
         // Update project's updated_at to move it to the top of the list
-        console.log('Updating project timestamp after document upload, projectId:', projectId);
-        await pool.execute(
-            `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-            [projectId]
-        );
+        try {
+            console.log('Updating project timestamp after document upload, projectId:', projectId);
+            const result = await pool.execute(
+                `UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+                [projectId]
+            );
+            console.log('Timestamp update result:', result);
+        } catch (err) {
+            console.error('Error updating project timestamp after document upload:', err);
+        }
     },
 
     async deleteProgressLog(logId, projectId) {
