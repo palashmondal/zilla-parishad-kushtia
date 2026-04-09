@@ -2806,6 +2806,15 @@
                     tabsEl.querySelector('[data-type="all"]').textContent = `সব (${allPhotos.length})`
                 );
                 if (allPhotos.length === 0) document.getElementById('dm-photos-section').classList.add('hidden');
+
+                // Update project list to reflect deletion
+                const projectIdx = allRecords.findIndex(p => p.id === currentDetailId);
+                if (projectIdx !== -1) {
+                    allRecords[projectIdx].updated_at = new Date().toISOString();
+                    allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                    renderRows();
+                }
+
                 CRUDManager.showSuccess('ছবিটি মুছে ফেলা হয়েছে');
             } catch (e) {
                 btn.disabled = false;
@@ -3406,6 +3415,15 @@
                 }
 
                 CRUDManager.showSuccess('ফাইলটি মুছে ফেলা হয়েছে');
+
+                // Update project list to reflect deletion
+                const projectIdx = allRecords.findIndex(p => p.id === projectId);
+                if (projectIdx !== -1) {
+                    allRecords[projectIdx].updated_at = new Date().toISOString();
+                    allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                    renderRows();
+                }
+
                 window._currentDetailProjectId = null;
                 window._currentDetailDocs = null;
                 window._currentDetailList = null;
