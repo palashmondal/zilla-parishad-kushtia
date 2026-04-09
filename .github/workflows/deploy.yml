@@ -29,4 +29,8 @@ jobs:
             git pull origin main || exit 1
             echo "Installing dependencies..."
             npm install --production || exit 1
+            echo "Running database migrations..."
+            node database/migrate.js || exit 1
+            echo "Restarting application..."
+            pm2 restart zpkushtia || exit 1
             echo "✓ Deployment complete"
