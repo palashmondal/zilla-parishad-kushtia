@@ -35,6 +35,33 @@ function getUpazilaCordinates(upazilName) {
 }
 
 /**
+ * Apply random variation to coordinates (±10%)
+ * Adds small random offsets to latitude and longitude to prevent
+ * multiple projects from the same upazila appearing at exact same location
+ * @param {number} lat - Latitude
+ * @param {number} lng - Longitude
+ * @returns {Object} Object with varied { lat, lng }
+ */
+function applyCoordinateVariation(lat, lng) {
+  if (typeof lat !== 'number' || typeof lng !== 'number') {
+    return { lat, lng };
+  }
+
+  // Calculate 10% variation range
+  const latVariation = Math.abs(lat) * 0.1;
+  const lngVariation = Math.abs(lng) * 0.1;
+
+  // Generate random variation between -10% and +10%
+  const latOffset = (Math.random() - 0.5) * 2 * latVariation;
+  const lngOffset = (Math.random() - 0.5) * 2 * lngVariation;
+
+  return {
+    lat: lat + latOffset,
+    lng: lng + lngOffset,
+  };
+}
+
+/**
  * Format coordinates as a string (lat,lng) for database storage
  * @param {number} lat - Latitude
  * @param {number} lng - Longitude
@@ -44,12 +71,15 @@ function formatCoordinates(lat, lng) {
   if (typeof lat !== 'number' || typeof lng !== 'number') {
     return null;
   }
-  return `${lat},${lng}`;
+  // Round to 4 decimal places for consistency
+  return `${lat.toFixed(4)},${lng.toFixed(4)}`;
 }
 
 /**
  * Auto-populate lat/lng based on upazila name
  * Returns formatted coordinates string if upazila is found and lat_lng is not provided
+ * Applies ±10% random variation to prevent all projects from same upazila
+ * appearing at exact same location on maps
  * @param {string} upazila - The upazila name
  * @param {string} lat_lng - Existing lat_lng value (if any)
  * @returns {string|null} Formatted coordinates or original lat_lng if provided
@@ -69,7 +99,9 @@ function autoPopulateLatLng(upazila, lat_lng) {
   const coordinates = getUpazilaCordinates(upazila);
 
   if (coordinates) {
-    return formatCoordinates(coordinates.lat, coordinates.lng);
+    // Apply ±10% random variation to coordinates
+    const varied = applyCoordinateVariation(coordinates.lat, coordinates.lng);
+    return formatCoordinates(varied.lat, varied.lng);
   }
 
   return null;
@@ -77,6 +109,7 @@ function autoPopulateLatLng(upazila, lat_lng) {
 
 module.exports = {
   getUpazilaCordinates,
+  applyCoordinateVariation,
   formatCoordinates,
   autoPopulateLatLng,
 };
