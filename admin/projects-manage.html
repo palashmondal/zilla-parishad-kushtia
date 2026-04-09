@@ -5049,11 +5049,14 @@
 
         document.getElementById('dv-icon').textContent = icon.label;
         document.getElementById('dv-icon').style.background = icon.bg;
-        // Extract clean filename from file path instead of using original_name (which may have encoding issues)
-        const cleanFileName = filePath ? filePath.split('/').pop() : originalName;
-        document.getElementById('dv-name').textContent = caption ? `${cleanFileName} [${caption}]` : cleanFileName;
+        // For approval memo files, use the nice Bengali label (original_name)
+        // For regular files, use extracted filename from path to avoid encoding issues
+        let displayName = filePath && filePath.includes('approval-memos') ? originalName : (filePath ? filePath.split('/').pop() : originalName);
+        document.getElementById('dv-name').textContent = caption ? `${displayName} [${caption}]` : displayName;
+        // For download, always use a clean filename
+        const downloadFileName = filePath ? filePath.split('/').pop() : originalName;
         document.getElementById('dv-download').href = url;
-        document.getElementById('dv-download').download = cleanFileName;
+        document.getElementById('dv-download').download = downloadFileName;
 
         const body = document.getElementById('dv-body');
         const imgExts = ['jpg','jpeg','png','webp','gif','bmp','svg'];
