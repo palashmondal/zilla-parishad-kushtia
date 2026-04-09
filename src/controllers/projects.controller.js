@@ -378,7 +378,9 @@ const projectsController = {
             }));
 
             // Use the integer id for the database insert
+            console.log('Adding images for project ID:', project.id);
             await projectsModel.addImages(project.id, images, req.user.id);
+            console.log('Images added successfully');
 
             res.json({
                 message: 'ছবি আপলোড করা হয়েছে',
@@ -516,7 +518,9 @@ const projectsController = {
             }));
 
             // Use the integer id for the database insert
+            console.log('Adding documents for project ID:', project.id);
             await projectsModel.addDocuments(project.id, documents, req.user.id);
+            console.log('Documents added successfully');
 
             res.json({
                 message: 'ডকুমেন্ট আপলোড করা হয়েছে',
