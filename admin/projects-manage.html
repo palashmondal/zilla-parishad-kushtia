@@ -2161,6 +2161,7 @@
                 allRecords = response.data;
                 // Sort by updated_at descending (latest first)
                 allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                console.log('Projects loaded and sorted:', allRecords.map(p => ({ id: p.id, name: p.project_name, updated_at: p.updated_at })).slice(0, 5));
                 renderRows();
 
                 // Records per page selector
@@ -3996,6 +3997,7 @@
                 // Close modal and reload project list
                 setTimeout(() => {
                     closeQuickUpload();
+                    console.log('Reloading project list after photo upload');
                     loadData();
                 }, 1200);
             } catch(e) {
@@ -4079,6 +4081,7 @@
                 // Close modal and reload project list
                 setTimeout(() => {
                     closeQuickDocUpload();
+                    console.log('Reloading project list after document upload');
                     loadData();
                 }, 1200);
             } catch(e) {
