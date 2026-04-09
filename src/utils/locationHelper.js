@@ -6,9 +6,9 @@
 const upazilasCoordinates = require('../data/upazila-coordinates');
 
 /**
- * Get latitude and longitude for a given upazila name
+ * Get coordinates data (center + bounds) for a given upazila name
  * @param {string} upazilName - The upazila name (Bengali or English)
- * @returns {Object|null} Object with { lat, lng } or null if not found
+ * @returns {Object|null} Object with { center, bounds } or null if not found
  */
 function getUpazilaCordinates(upazilName) {
   if (!upazilName || typeof upazilName !== 'string') {
@@ -18,7 +18,7 @@ function getUpazilaCordinates(upazilName) {
   // Trim and normalize the input
   const normalizedName = upazilName.trim();
 
-  // Try exact match first (case-insensitive for English names)
+  // Try exact match first
   if (upazilasCoordinates[normalizedName]) {
     return upazilasCoordinates[normalizedName];
   }
@@ -35,29 +35,27 @@ function getUpazilaCordinates(upazilName) {
 }
 
 /**
- * Apply random variation to coordinates (±10%)
- * Adds small random offsets to latitude and longitude to prevent
- * multiple projects from the same upazila appearing at exact same location
- * @param {number} lat - Latitude
- * @param {number} lng - Longitude
- * @returns {Object} Object with varied { lat, lng }
+ * Generate random coordinates within upazila's geographical bounds
+ * Prevents multiple projects from same upazila appearing at exact same location
+ * by distributing them across the upazila's actual geographical range
+ * @param {Object} coordinateData - Object with { center, bounds }
+ * @returns {Object} Object with random { lat, lng } within bounds
  */
-function applyCoordinateVariation(lat, lng) {
-  if (typeof lat !== 'number' || typeof lng !== 'number') {
-    return { lat, lng };
+function generateRandomCoordinateWithinBounds(coordinateData) {
+  if (!coordinateData || !coordinateData.bounds) {
+    return null;
   }
 
-  // Calculate 10% variation range
-  const latVariation = Math.abs(lat) * 0.1;
-  const lngVariation = Math.abs(lng) * 0.1;
+  const { bounds } = coordinateData;
+  const { minLat, maxLat, minLng, maxLng } = bounds;
 
-  // Generate random variation between -10% and +10%
-  const latOffset = (Math.random() - 0.5) * 2 * latVariation;
-  const lngOffset = (Math.random() - 0.5) * 2 * lngVariation;
+  // Generate random lat/lng within the geographical bounds
+  const randomLat = minLat + Math.random() * (maxLat - minLat);
+  const randomLng = minLng + Math.random() * (maxLng - minLng);
 
   return {
-    lat: lat + latOffset,
-    lng: lng + lngOffset,
+    lat: randomLat,
+    lng: randomLng,
   };
 }
 
@@ -78,8 +76,8 @@ function formatCoordinates(lat, lng) {
 /**
  * Auto-populate lat/lng based on upazila name
  * Returns formatted coordinates string if upazila is found and lat_lng is not provided
- * Applies ±10% random variation to prevent all projects from same upazila
- * appearing at exact same location on maps
+ * Generates random coordinates within the upazila's geographical bounds
+ * to prevent all projects from same upazila appearing at exact same location
  * @param {string} upazila - The upazila name
  * @param {string} lat_lng - Existing lat_lng value (if any)
  * @returns {string|null} Formatted coordinates or original lat_lng if provided
@@ -95,13 +93,15 @@ function autoPopulateLatLng(upazila, lat_lng) {
     return null;
   }
 
-  // Try to get coordinates for the upazila
-  const coordinates = getUpazilaCordinates(upazila);
+  // Try to get coordinates data for the upazila
+  const coordinateData = getUpazilaCordinates(upazila);
 
-  if (coordinates) {
-    // Apply ±10% random variation to coordinates
-    const varied = applyCoordinateVariation(coordinates.lat, coordinates.lng);
-    return formatCoordinates(varied.lat, varied.lng);
+  if (coordinateData) {
+    // Generate random coordinates within the upazila's geographical bounds
+    const randomCoords = generateRandomCoordinateWithinBounds(coordinateData);
+    if (randomCoords) {
+      return formatCoordinates(randomCoords.lat, randomCoords.lng);
+    }
   }
 
   return null;
@@ -109,7 +109,7 @@ function autoPopulateLatLng(upazila, lat_lng) {
 
 module.exports = {
   getUpazilaCordinates,
-  applyCoordinateVariation,
+  generateRandomCoordinateWithinBounds,
   formatCoordinates,
   autoPopulateLatLng,
 };
