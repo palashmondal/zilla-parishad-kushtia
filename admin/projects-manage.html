@@ -4035,18 +4035,20 @@
             list.innerHTML = '';
             quickDocFiles.forEach((item, idx) => {
                 const icon = getDocIcon(item.file.name);
+                // Show caption if provided, otherwise show filename
+                const displayName = item.caption || item.file.name;
                 const row = document.createElement('div');
                 row.className = 'doc-pending-row';
                 row.innerHTML = `
                     <div class="doc-file-row" style="margin-bottom:0;border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none;">
                         <span class="doc-icon" style="background:${icon.bg}">${icon.label}</span>
-                        <span class="doc-name" title="${item.file.name}">${item.file.name}</span>
+                        <span class="doc-name" title="${item.caption || item.file.name}">${displayName}</span>
                         <span class="doc-size">${fmtSize(item.file.size)}</span>
                         <button type="button" class="doc-remove" title="সরান">✕</button>
                     </div>
                     <input type="text" class="doc-caption-input" placeholder="ক্যাপশন লিখুন (ঐচ্ছিক)…" value="${item.caption}">`;
                 row.querySelector('.doc-remove').onclick = () => { quickDocFiles.splice(idx, 1); renderQuickDocPreviews(); };
-                row.querySelector('.doc-caption-input').oninput = (e) => { quickDocFiles[idx].caption = e.target.value; };
+                row.querySelector('.doc-caption-input').oninput = (e) => { quickDocFiles[idx].caption = e.target.value; renderQuickDocPreviews(); };
                 list.appendChild(row);
             });
         }
