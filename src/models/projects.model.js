@@ -15,7 +15,7 @@ const PROJECT_FIELDS = `
 // DATE columns — empty string must become NULL (MySQL strict mode rejects '')
 const DATE_FIELDS = ['project_approval_date', 'start_date', 'expected_end_date', 'actual_end_date'];
 // Nullable text columns — send NULL instead of empty string
-const NULLABLE_TEXT = ['project_id', 'approval_memo_number', 'lat_lng', 'remarks', 'reference', 'performance_score'];
+const NULLABLE_TEXT = ['project_id', 'approval_memo_number', 'lat_lng', 'remarks', 'reference', 'performance_score', 'priority'];
 // Nullable integer columns — send NULL instead of empty/invalid values
 const NULLABLE_INT = ['approval_memo_id', 'progress_step_id'];
 
