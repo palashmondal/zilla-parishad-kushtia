@@ -32,5 +32,6 @@ router.delete('/:id/progress/:logId', requireAuth, requireAdmin, projectsControl
 router.post('/:id/images', requireAuth, requireAdmin, uploadProjectImages.array('images', 10), projectsController.addImages);
 router.delete('/:id/images/:imageId', requireAuth, requireAdmin, projectsController.deleteImage);
 router.post('/:id/documents', requireAuth, requireAdmin, uploadProjectDocuments.array('documents', 10), projectsController.addDocuments);
+router.delete('/:id/documents/:docId', requireAuth, requireAdmin, projectsController.deleteDocument);
 
 module.exports = router;

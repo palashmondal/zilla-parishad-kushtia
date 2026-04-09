@@ -448,6 +448,33 @@ const projectsController = {
         }
     },
 
+    async deleteDocument(req, res) {
+        try {
+            const { id, docId } = req.params;
+            if (!id || !docId) {
+                return res.status(400).json({ error: 'Invalid project or document ID' });
+            }
+
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
+            }
+
+            const deleted = await projectsModel.deleteDocument(parseInt(docId, 10), project.id);
+            if (!deleted) {
+                return res.status(404).json({ error: 'ডকুমেন্টটি পাওয়া যায়নি' });
+            }
+
+            res.json({ message: 'ডকুমেন্টটি মুছে ফেলা হয়েছে' });
+        } catch (error) {
+            console.error('Projects deleteDocument error:', error);
+            res.status(500).json({
+                error: 'Document delete failed',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
     async addDocuments(req, res) {
         try {
             console.log('=== addDocuments called ===');
