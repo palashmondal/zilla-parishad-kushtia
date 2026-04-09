@@ -4110,8 +4110,7 @@
                     <span class="doc-icon" style="background:${icon.bg};cursor:pointer;" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')">${icon.label}</span>
                     <span class="doc-name-wrap" style="flex:1;min-width:0;">
                         <button type="button" class="doc-name" onclick="openDocViewer('${doc.file_path}','${doc.original_name.replace(/'/g,"\\'")}','${(doc.caption||'').replace(/'/g,"\\'")}','${doc.file_type||''}')"
-                            title="${doc.caption ? cleanFileName : doc.original_name}">${displayName}</button>
-                        ${doc.caption && !isApprovalMemo ? `<span class="doc-caption-text">${cleanFileName}</span>` : ''}
+                            title="${doc.original_name}">${displayName}</button>
                     </span>
                     <span class="doc-size">${fmtSize(doc.file_size_bytes)}</span>
                     <button type="button" class="doc-remove" title="${doc.file_path && doc.file_path.includes('approval-memos') ? 'এই ফাইল স্বয়ংক্রিয়ভাবে পরিচালিত - মুছা যায় না' : 'মুছুন'}" data-id="${doc.id}"${doc.file_path && doc.file_path.includes('approval-memos') ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>✕</button>`;
