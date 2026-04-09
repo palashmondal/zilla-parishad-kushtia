@@ -1724,6 +1724,51 @@
         </div>
     </div>
 
+    <!-- Document Delete Confirmation Modal -->
+    <div id="doc-delete-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
+         style="background:rgba(120,53,15,0.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);"
+         onclick="if(event.target===this)cancelDocDelete()">
+        <div class="w-full max-w-sm rounded-2xl overflow-hidden flex-shrink-0"
+             style="background:linear-gradient(160deg,#fffbf0 0%,#ffffff 60%,#fff8ed 100%);
+                    box-shadow:0 32px 80px rgba(120,53,15,0.28),0 0 0 1px rgba(245,158,11,0.2);">
+
+            <!-- Header with Icon -->
+            <div style="background:linear-gradient(135deg,#dc2626 0%,#ef4444 50%,#f87171 100%);padding:1.5rem 1.25rem;display:flex;align-items:flex-start;gap:1rem;">
+                <div style="width:2.5rem;height:2.5rem;border-radius:0.5rem;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg style="width:1.3rem;height:1.3rem;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </div>
+                <div style="flex:1;">
+                    <h3 style="font-size:1.1rem;font-weight:700;color:white;line-height:1.3;margin:0;">ফাইলটি মুছুন?</h3>
+                    <p style="font-size:0.75rem;color:#fee2e2;font-weight:500;margin:0.5rem 0 0 0;">এই পদক্ষেপ পূর্বাবস্থায় যাওয়া যাবে না</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div style="padding:1.5rem 1.25rem;display:flex;flex-direction:column;gap:1.25rem;">
+                <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:0.75rem;padding:1rem;">
+                    <p style="font-size:0.9rem;color:#92400e;margin:0;font-weight:500;" id="doc-delete-filename">ফাইল নাম</p>
+                </div>
+                <p style="font-size:0.95rem;color:#4b5563;line-height:1.6;margin:0;">
+                    আপনি কি নিশ্চিত যে এই ফাইলটি মুছে ফেলতে চান?
+                </p>
+
+                <!-- Action Buttons -->
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+                    <button onclick="cancelDocDelete()"
+                            style="padding:0.6rem 1.25rem;background:#f3f4f6;color:#374151;border:1px solid #d1d5db;border-radius:0.625rem;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;flex:1;">
+                        বাতিল করুন
+                    </button>
+                    <button onclick="confirmDocDelete()"
+                            style="padding:0.6rem 1.25rem;background:linear-gradient(135deg,#dc2626,#ef4444);color:white;border:none;border-radius:0.625rem;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;flex:1;box-shadow:0 4px 12px rgba(220,38,38,0.3);">
+                        মুছুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Location Picker Modal -->
     <div id="location-picker-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60">
         <div class="bg-white w-full max-w-5xl rounded-2xl shadow-2xl overflow-hidden" style="max-height: 90vh;">
@@ -3140,6 +3185,7 @@
 
         // Global variables for delete confirmation
         let _deleteConfirmationData = { projectId: null, logId: null };
+        let _docDeleteData = { projectId: null, docId: null, filename: null };
 
         // Re-render progress logs in detail modal to show/hide delete buttons correctly
         function rerenderProgressLogsInModal() {
@@ -3320,6 +3366,48 @@
                 _deleteConfirmationData = { projectId: null, logId: null };
             } catch (error) {
                 CRUDManager.showError('ত্রুটি: ' + error.message);
+            }
+        }
+
+        function showDocDeleteModal(projectId, docId, filename) {
+            _docDeleteData = { projectId, docId, filename };
+            document.getElementById('doc-delete-filename').textContent = filename;
+            document.getElementById('doc-delete-modal').classList.remove('hidden');
+        }
+
+        function cancelDocDelete() {
+            document.getElementById('doc-delete-modal').classList.add('hidden');
+            _docDeleteData = { projectId: null, docId: null, filename: null };
+        }
+
+        async function confirmDocDelete() {
+            const { projectId, docId } = _docDeleteData;
+
+            try {
+                const r = await AuthManager.fetch(
+                    `${AuthManager.API_URL}/projects/${projectId}/documents/${docId}`,
+                    { method: 'DELETE' }
+                );
+                if (!r.ok) throw new Error();
+
+                document.getElementById('doc-delete-modal').classList.add('hidden');
+                _docDeleteData = { projectId: null, docId: null, filename: null };
+
+                // Remove from docs array and re-render
+                const docs = window._currentDetailDocs;
+                const list = window._currentDetailList;
+                if (docs && list) {
+                    const idx = docs.findIndex(d => d.id === docId);
+                    if (idx > -1) docs.splice(idx, 1);
+                    renderDetailDocs(docs, projectId, list);
+                }
+
+                CRUDManager.showSuccess('ফাইলটি মুছে ফেলা হয়েছে');
+                window._currentDetailProjectId = null;
+                window._currentDetailDocs = null;
+                window._currentDetailList = null;
+            } catch(e) {
+                CRUDManager.showError('মুছতে ব্যর্থ');
             }
         }
 
@@ -4020,19 +4108,11 @@
                     </span>
                     <span class="doc-size">${fmtSize(doc.file_size_bytes)}</span>
                     <button type="button" class="doc-remove" title="মুছুন" data-id="${doc.id}">✕</button>`;
-                row.querySelector('.doc-remove').addEventListener('click', async () => {
-                    if (!confirm('এই ফাইলটি মুছে ফেলতে চান?')) return;
-                    try {
-                        const r = await AuthManager.fetch(
-                            `${AuthManager.API_URL}/projects/${projectId}/documents/${doc.id}`,
-                            { method: 'DELETE' }
-                        );
-                        if (!r.ok) throw new Error();
-                        const idx = docs.findIndex(d => d.id === doc.id);
-                        if (idx > -1) docs.splice(idx, 1);
-                        renderDetailDocs(docs, projectId, list);
-                        CRUDManager.showSuccess('ফাইলটি মুছে ফেলা হয়েছে');
-                    } catch(e) { CRUDManager.showError('মুছতে ব্যর্থ'); }
+                row.querySelector('.doc-remove').addEventListener('click', () => {
+                    window._currentDetailProjectId = projectId;
+                    window._currentDetailDocs = docs;
+                    window._currentDetailList = list;
+                    showDocDeleteModal(projectId, doc.id, cleanFileName);
                 });
                 list.appendChild(row);
             });
