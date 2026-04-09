@@ -191,7 +191,6 @@ const CRUDManager = {
                 }
             }
         } catch (e) {
-            console.error('Error attaching records per page listener:', e);
         }
     },
 
@@ -201,17 +200,13 @@ const CRUDManager = {
     createPagination(totalItems, currentPage, perPage, containerId, onPageChange) {
         const container = document.getElementById(containerId);
         if (!container) {
-            console.log('Pagination container not found:', containerId);
             return;
         }
 
-        console.log('Pagination - totalItems:', totalItems, 'currentPage:', currentPage, 'perPage:', perPage);
 
         const totalPages = Math.ceil(totalItems / perPage);
-        console.log('Pagination - totalPages:', totalPages);
 
         if (totalPages <= 1) {
-            console.log('Only 1 page or less, hiding pagination');
             container.innerHTML = '';
             return;
         }
@@ -274,7 +269,6 @@ const CRUDManager = {
 
             return await response.json();
         } catch (error) {
-            console.error('Fetch error:', error);
             throw error;
         }
     },

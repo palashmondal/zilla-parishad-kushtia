@@ -28,6 +28,7 @@ router.delete('/:id/delete', requireAuth, requireAdmin, projectsController.delet
 
 // Progress & media upload routes
 router.post('/:id/progress', requireAuth, requireAdmin, projectsController.addProgress);
+router.delete('/:id/progress/:logId', requireAuth, requireAdmin, projectsController.deleteProgressLog);
 router.post('/:id/images', requireAuth, requireAdmin, uploadProjectImages.array('images', 10), projectsController.addImages);
 router.delete('/:id/images/:imageId', requireAuth, requireAdmin, projectsController.deleteImage);
 router.post('/:id/documents', requireAuth, requireAdmin, uploadProjectDocuments.array('documents', 10), projectsController.addDocuments);

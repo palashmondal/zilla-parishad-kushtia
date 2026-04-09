@@ -393,6 +393,34 @@ const projectsController = {
         }
     },
 
+    async deleteProgressLog(req, res) {
+        try {
+            const { id, logId } = req.params;
+            if (!id || !logId) {
+                return res.status(400).json({ error: 'Invalid project or log ID' });
+            }
+
+            const project = await projectsModel.findById(id.trim());
+            if (!project) {
+                return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
+            }
+
+            // Delete the progress log entry
+            const deleted = await projectsModel.deleteProgressLog(parseInt(logId, 10), project.id);
+            if (!deleted) {
+                return res.status(404).json({ error: 'অগ্রগতি লগটি পাওয়া যায়নি' });
+            }
+
+            res.json({ message: 'অগ্রগতি লগ মুছে ফেলা হয়েছে' });
+        } catch (error) {
+            console.error('Projects deleteProgressLog error:', error);
+            res.status(500).json({
+                error: 'Delete failed',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
     async deleteImage(req, res) {
         try {
             const { id, imageId } = req.params;
