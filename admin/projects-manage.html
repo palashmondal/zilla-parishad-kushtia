@@ -4005,6 +4005,7 @@
         function renderDetailDocs(docs, projectId, list) {
             list.innerHTML = '';
             docs.forEach(doc => {
+                console.log('Rendering doc:', doc.original_name, 'Path:', doc.file_path);
                 const icon = getDocIcon(doc.original_name);
                 // Extract clean filename from file_path (e.g., "documents/proj-123-1234567890.pdf" → "proj-123-1234567890.pdf")
                 const cleanFileName = doc.file_path ? doc.file_path.split('/').pop() : doc.original_name;
@@ -5038,9 +5039,12 @@
 </div>
 <script>
     function openDocViewer(filePath, originalName, caption, fileType) {
+        console.log('openDocViewer called:', {filePath, originalName, caption, fileType});
         const backdrop = document.getElementById('doc-viewer-backdrop');
         const url = '/uploads/' + filePath;
-        const ext = (originalName.split('.').pop() || '').toLowerCase();
+        console.log('Constructed URL:', url);
+        // Use fileType from database instead of extracting from originalName (which may be a label)
+        const ext = fileType ? fileType.toLowerCase() : (originalName.split('.').pop() || '').toLowerCase();
         const icon = (typeof getDocIcon === 'function' ? getDocIcon : (n => ({ bg:'#6b7280', label:'FILE' })))(originalName);
 
         document.getElementById('dv-icon').textContent = icon.label;
@@ -5053,7 +5057,11 @@
         const imgExts = ['jpg','jpeg','png','webp','gif','bmp','svg'];
         if (ext === 'pdf') {
             body.style.overflow = 'hidden';
-            body.innerHTML = `<iframe src="${url}" type="application/pdf" style="width:100%;height:100%;border:none;display:block;border-radius:8px;"></iframe>`;
+            console.log('Setting up PDF iframe for URL:', url);
+            const iframeHtml = `<iframe src="${url}" type="application/pdf" style="width:100%;height:100%;border:none;display:block;border-radius:8px;"></iframe>`;
+            console.log('Iframe HTML:', iframeHtml);
+            body.innerHTML = iframeHtml;
+            console.log('Iframe added to DOM:', body.innerHTML);
         } else if (imgExts.includes(ext)) {
             body.style.overflow = 'auto';
             body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;padding:1.5rem;min-height:300px;">
