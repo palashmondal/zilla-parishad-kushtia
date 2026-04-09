@@ -3994,6 +3994,8 @@
                 // Reload photo gallery in detail modal
                 await loadProjectPhotos(currentDetailId);
                 document.getElementById('dm-photos-section').classList.remove('hidden');
+                // Reload project list to reflect updated timestamp
+                await loadData();
             } catch(e) {
                 status.textContent = 'ব্যর্থ: ' + e.message;
             } finally {
@@ -4073,6 +4075,8 @@
                 renderQuickDocPreviews();
                 setTimeout(closeQuickDocUpload, 1200);
                 loadProjectDocsForDetail(currentDetailId);
+                // Reload project list to reflect updated timestamp
+                await loadData();
             } catch(e) {
                 status.textContent = 'ব্যর্থ: ' + e.message;
             }
