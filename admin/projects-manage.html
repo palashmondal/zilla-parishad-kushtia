@@ -4107,8 +4107,13 @@
                         ${doc.caption ? `<span class="doc-caption-text">${doc.caption}</span>` : ''}
                     </span>
                     <span class="doc-size">${fmtSize(doc.file_size_bytes)}</span>
-                    <button type="button" class="doc-remove" title="মুছুন" data-id="${doc.id}">✕</button>`;
+                    <button type="button" class="doc-remove" title="${doc.file_path && doc.file_path.includes('approval-memos') ? 'এই ফাইল স্বয়ংক্রিয়ভাবে পরিচালিত - মুছা যায় না' : 'মুছুন'}" data-id="${doc.id}"${doc.file_path && doc.file_path.includes('approval-memos') ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>✕</button>`;
                 row.querySelector('.doc-remove').addEventListener('click', () => {
+                    // Don't allow deletion of approval memo documents
+                    if (doc.file_path && doc.file_path.includes('approval-memos')) {
+                        CRUDManager.showError('অনুমোদন স্মারক ফাইল স্বয়ংক্রিয়ভাবে পরিচালিত এবং মুছা যায় না');
+                        return;
+                    }
                     window._currentDetailProjectId = projectId;
                     window._currentDetailDocs = docs;
                     window._currentDetailList = list;
