@@ -230,6 +230,11 @@ const projectsModel = {
             const { id: _id, created_at, updated_at, approval_memo_id, ...insertData } = data;
             const sanitized = sanitizeProjectData({ approval_memo_id, ...insertData });
 
+            // Set default priority to 'general' if not provided
+            if (!sanitized.priority || sanitized.priority === null) {
+                sanitized.priority = 'general';
+            }
+
             // Auto-populate lat_lng from upazila if not provided
             if (sanitized.upazila && (!sanitized.lat_lng || sanitized.lat_lng === null)) {
                 sanitized.lat_lng = autoPopulateLatLng(sanitized.upazila, sanitized.lat_lng);
