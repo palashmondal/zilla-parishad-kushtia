@@ -1681,7 +1681,60 @@
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
+    <!-- Project Delete Modal -->
+    <div id="project-delete-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
+         style="background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn 0.2s ease-out;"
+         onclick="if(event.target===this)cancelProjectDelete()">
+        <div class="w-full max-w-sm rounded-xl overflow-hidden flex-shrink-0"
+             style="background:white;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);animation:slideUp 0.3s ease-out;">
+
+            <!-- Warning Icon Section -->
+            <div style="padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;border-bottom:1px solid #f3f4f6;">
+                <div style="width:3.5rem;height:3.5rem;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:1.75rem;height:1.75rem;color:#dc2626;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                </div>
+                <div style="text-align:center;">
+                    <h3 style="font-size:1.25rem;font-weight:700;color:#1f2937;margin:0;line-height:1.4;">প্রকল্প মুছুন?</h3>
+                    <p style="font-size:0.875rem;color:#6b7280;margin:0.5rem 0 0 0;line-height:1.5;">এই পদক্ষেপ চিরস্থায়ী এবং পূর্বাবস্থায় যাওয়া যাবে না</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div style="padding:1.5rem;">
+                <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:0.75rem;padding:1rem;margin-bottom:1rem;">
+                    <p style="font-size:0.9rem;color:#92400e;margin:0;font-weight:600;word-break:break-word;display:flex;align-items:center;gap:0.5rem;" id="project-delete-id">
+                        <svg style="width:1.2rem;height:1.2rem;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span style="flex:1;">প্রকল্প আইডি</span>
+                    </p>
+                </div>
+                <p style="font-size:0.9rem;color:#6b7280;line-height:1.6;margin:0;">
+                    এই প্রকল্পটি এবং এর সমস্ত ডেটা চিরস্থায়ীভাবে মুছে ফেলা হবে। আপনি কি নিশ্চিত?
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="padding:0 1.5rem 1.5rem 1.5rem;display:flex;gap:0.75rem;flex-direction:column-reverse;">
+                <button onclick="confirmProjectDelete()"
+                        style="padding:0.75rem 1.5rem;background:linear-gradient(135deg,#dc2626,#ef4444);color:white;border:none;border-radius:0.75rem;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(220,38,38,0.25);width:100%;"
+                        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(220,38,38,0.35)';"
+                        onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(220,38,38,0.25)';">
+                    প্রকল্প মুছুন
+                </button>
+                <button onclick="cancelProjectDelete()"
+                        style="padding:0.75rem 1.5rem;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:0.75rem;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s;width:100%;"
+                        onmouseover="this.style.background='#e5e7eb';"
+                        onmouseout="this.style.background='#f3f4f6';">
+                    বাতিল করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal (Progress Log) -->
     <div id="delete-confirmation-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
          style="background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn 0.2s ease-out;"
          onclick="if(event.target===this)cancelDelete()">
@@ -3588,17 +3641,37 @@
             }
         }
 
-        async function deleteRecord(id) {
+        let _projectDeleteData = { id: null };
+
+        function showProjectDeleteModal(id) {
+            _projectDeleteData = { id };
+            document.getElementById('project-delete-id').textContent = id;
+            document.getElementById('project-delete-modal').classList.remove('hidden');
+        }
+
+        function cancelProjectDelete() {
+            document.getElementById('project-delete-modal').classList.add('hidden');
+            _projectDeleteData = { id: null };
+        }
+
+        async function confirmProjectDelete() {
+            const { id } = _projectDeleteData;
+            if (!id) return;
+
             try {
-                const confirmed = await CRUDManager.confirm(`"${id}" প্রকল্পটি মুছে ফেলতে চান?`);
-                if (!confirmed) return;
                 const url = `${AuthManager.API_URL}/projects/${id}`;
                 await AuthManager.fetch(url, { method: 'DELETE' });
+                document.getElementById('project-delete-modal').classList.add('hidden');
                 CRUDManager.showSuccess('প্রকল্পটি সফলভাবে মুছে ফেলা হয়েছে');
+                closeDetailModal();
                 await loadData();
             } catch (err) {
                 CRUDManager.showError('মুছতে ব্যর্থ: ' + err.message);
             }
+        }
+
+        async function deleteRecord(id) {
+            showProjectDeleteModal(id);
         }
 
         // ── Photo upload state ──────────────────────────────────────
