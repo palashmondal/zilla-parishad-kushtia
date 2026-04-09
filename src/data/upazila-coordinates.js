@@ -6,20 +6,20 @@
 
 const upazilasCoordinates = {
   // Bengali names
-  'কুষ্টিয়া সদর': { lat: 23.9012, lng: 89.1234 },
-  'দৌলতপুর': { lat: 23.8890, lng: 89.2145 },
-  'মিরপুর': { lat: 24.0567, lng: 89.0123 },
-  'ভেড়ামারা': { lat: 23.7834, lng: 88.9456 },
-  'কুমারখালী': { lat: 24.1234, lng: 88.8567 },
-  'খোকসা': { lat: 23.8901, lng: 89.3456 },
+  'কুষ্টিয়া সদর': { lat: 23.9000, lng: 89.1333 },
+  'দৌলতপুর': { lat: 24.0014, lng: 88.8750 },
+  'মিরপুর': { lat: 23.9333, lng: 89.0000 },
+  'ভেড়ামারা': { lat: 24.0167, lng: 88.9917 },
+  'কুমারখালী': { lat: 23.8542, lng: 89.2417 },
+  'খোকসা': { lat: 23.8000, lng: 89.2833 },
 
   // English names
-  'Kushtia Sadar': { lat: 23.9012, lng: 89.1234 },
-  'Daulatpur': { lat: 23.8890, lng: 89.2145 },
-  'Mirpur': { lat: 24.0567, lng: 89.0123 },
-  'Bheramara': { lat: 23.7834, lng: 88.9456 },
-  'Kumarkhali': { lat: 24.1234, lng: 88.8567 },
-  'Khoksa': { lat: 23.8901, lng: 89.3456 },
+  'Kushtia Sadar': { lat: 23.9000, lng: 89.1333 },
+  'Daulatpur': { lat: 24.0014, lng: 88.8750 },
+  'Mirpur': { lat: 23.9333, lng: 89.0000 },
+  'Bheramara': { lat: 24.0167, lng: 88.9917 },
+  'Kumarkhali': { lat: 23.8542, lng: 89.2417 },
+  'Khoksa': { lat: 23.8000, lng: 89.2833 },
 };
 
 module.exports = upazilasCoordinates;
