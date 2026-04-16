@@ -466,7 +466,7 @@ const projectsModel = {
 
             // Fetch current project fields needed for the formula (single query)
             const [rows] = await conn.execute(
-                `SELECT allocation_amount, released_amount, implementation_method FROM projects WHERE id = ?`,
+                `SELECT allocation_amount, released_amount, implementation_method, start_date FROM projects WHERE id = ?`,
                 [projectId]
             );
             if (!rows || rows.length === 0) throw new Error('Project not found: ' + projectId);
@@ -550,6 +550,16 @@ const projectsModel = {
             if (finalProgressStepId) {
                 updateFields.push(`progress_step_id = ?`);
                 updateParams.push(finalProgressStepId);
+            }
+
+            // Auto-set start_date if not already set (first progress log)
+            if (!project.start_date) {
+                if (activity_date) {
+                    updateFields.push(`start_date = ?`);
+                    updateParams.push(activity_date);
+                } else {
+                    updateFields.push(`start_date = CURDATE()`);
+                }
             }
 
             updateParams.push(projectId);
