@@ -3771,11 +3771,7 @@
             btn.disabled = true;
             btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> সংরক্ষণ হচ্ছে…';
             try {
-                const releasedInput = document.getElementById('prog-released');
                 const fundOpen = !document.getElementById('prog-fund-release-field').classList.contains('hidden');
-                const releasedValue = releasedInput?.value;
-                console.log('Progress form submit:', { fundOpen, releasedValue, inputValid: releasedInput?.checkValidity?.(), releasedInput });
-
                 const stepSel = document.getElementById('prog-progress-step');
                 const stepOpt = stepSel.options[stepSel.selectedIndex];
 
@@ -3814,14 +3810,6 @@
                 if (stepBasePct === 100 && !isDynamic) {
                     // Amount is pre-calculated and stored in input, just use it
                     const inputReleased = parseFloat(document.getElementById('prog-released').value) || 0;
-                    console.log('Final bill calculation:', {
-                        stepBasePct,
-                        isDynamic,
-                        inputElement: !!document.getElementById('prog-released'),
-                        inputValue: document.getElementById('prog-released')?.value,
-                        inputReleased,
-                        condition: inputReleased > 0
-                    });
                     if (inputReleased > 0) {
                         finalBillCumulativeAmount = inputReleased;
                     }
@@ -3845,18 +3833,6 @@
 
                 // Add calculated progress percentage to payload
                 payload.progress_percentage = stepPercentage;
-
-                console.log('Progress form payload:', {
-                    progress_step_id: payload.progress_step_id,
-                    current_status: payload.current_status,
-                    released_amount: payload.released_amount,
-                    isDynamic,
-                    isFinalBill: stepBasePct === 100,
-                    stepBasePct,
-                    cumulativeReleasedAmount,
-                    finalBillCumulativeAmount,
-                    fundOpen
-                });
 
                 if (stepPercentage < currentProgress) {
                     showErrorModal(`এই ধাপ ইতিমধ্যে সম্পন্ন হয়েছে এবং আপনি পূর্ববর্তী ধাপে ফিরে যেতে পারবেন না।\n\nবর্তমান অগ্রগতি: ${CRUDManager.toBengaliNumber(currentProgress)}%\nনির্বাচিত ধাপের অগ্রগতি: ${CRUDManager.toBengaliNumber(stepPercentage)}%`, 'পূর্ববর্তী ধাপ');
