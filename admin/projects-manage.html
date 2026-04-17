@@ -2421,7 +2421,8 @@
         function getStatusKey(r) {
             if (r.is_completed) return 'completed';
             if (r.is_delayed)   return 'delayed';
-            if (parseInt(r.progress_percentage) > 0) return 'ongoing';
+            const pct = parseInt(r.progress_percentage) || 0;
+            if (pct > 0 && pct < 100) return 'ongoing';
             return 'pending';
         }
 
@@ -2694,7 +2695,7 @@
                             const previousAmount = (index < logs.length - 1) ? parseFloat(logs[index + 1]?.released_amount || 0) : 0;
                             const incrementalAmount = currentAmount - previousAmount;
                             const billAmount = fmtAmt(incrementalAmount);
-                            const billMessage = `${billDate} তারিখে ৳ ${billAmount} রানিং বিল প্রদান করা হয়েছে।`;
+                            const billMessage = `${billDate} তারিখে ৳ ${billAmount} টাকা রানিং বিল প্রদান করা হয়েছে।`;
                             detailMessage = `<p class="plog-note" style="color:#059669;font-weight:500;margin-top:0.5rem;">${billMessage}</p>` + (log.note ? `<p class="plog-note">${log.note}</p>` : '');
                         }
 
@@ -3587,7 +3588,7 @@
                     const previousAmount = (index < _allProgressLogs.length - 1) ? parseFloat(_allProgressLogs[index + 1]?.released_amount || 0) : 0;
                     const incrementalAmount = currentAmount - previousAmount;
                     const billAmount = fmtAmt(incrementalAmount);
-                    const billMessage = `${billDate} তারিখে ৳ ${billAmount} রানিং বিল প্রদান করা হয়েছে।`;
+                    const billMessage = `${billDate} তারিখে ৳ ${billAmount} টাকা রানিং বিল প্রদান করা হয়েছে।`;
                     detailMessage = `<p class="plog-note" style="color:#059669;font-weight:500;margin-top:0.5rem;">${billMessage}</p>` + (log.note ? `<p class="plog-note">${log.note}</p>` : '');
                 }
 
