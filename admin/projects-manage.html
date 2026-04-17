@@ -3450,9 +3450,29 @@
 
         // Error modal functions
         function showErrorModal(message, subtitle = 'ত্রুটি') {
-            document.getElementById('error-modal-message').textContent = message;
-            document.getElementById('error-modal-subtitle').textContent = subtitle;
-            document.getElementById('error-modal').classList.remove('hidden');
+            try {
+                const msgEl = document.getElementById('error-modal-message');
+                const subtitleEl = document.getElementById('error-modal-subtitle');
+                const modalEl = document.getElementById('error-modal');
+
+                if (!msgEl || !subtitleEl || !modalEl) {
+                    console.error('Error modal elements missing:', { msgEl: !!msgEl, subtitleEl: !!subtitleEl, modalEl: !!modalEl });
+                    alert(message); // Fallback
+                    return;
+                }
+
+                msgEl.textContent = message;
+                subtitleEl.textContent = subtitle;
+                modalEl.classList.remove('hidden');
+
+                // Force a reflow to ensure the change is processed
+                modalEl.offsetHeight;
+
+                console.log('Error modal shown:', { hidden: modalEl.classList.contains('hidden'), message, subtitle });
+            } catch (err) {
+                console.error('Error showing modal:', err);
+                alert(message); // Fallback
+            }
         }
 
         function closeErrorModal() {
