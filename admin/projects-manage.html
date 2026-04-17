@@ -3270,7 +3270,8 @@
                     if (isCPPC || (method !== 'সিপিপিসি' && method.toLowerCase() !== 'cppc')) {
                         // Hide the input field for all projects on final bill - amount is auto-calculated
                         field.classList.add('hidden');
-                        input.value = expectedFinalBill.toFixed(2);
+                        // For final bill: released_amount should be the TOTAL ALLOCATION (100% fund release)
+                        input.value = alloc.toFixed(2);
                         // Show a message instead
                         const msgDiv = document.createElement('div');
                         msgDiv.id = 'final-bill-auto-msg';
