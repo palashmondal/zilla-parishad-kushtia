@@ -3839,16 +3839,25 @@
                     console.log('Final bill released amount:', { inputValue, inputReleased, finalBillCumulativeAmount, allocation: _progressRecord?.allocation_amount });
                 }
 
+                // For final bills: ensure we have the allocation amount
+                let finalReleaseAmount = null;
+                if (stepBasePct === 100 && !isDynamic) {
+                    // For final bill, use the total allocation as released_amount
+                    const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
+                    if (alloc > 0) {
+                        finalReleaseAmount = alloc;
+                    }
+                }
+
                 const payload = {
                     progress_step_id:    parseInt(stepSel.value, 10),
                     current_status:      stepOpt ? stepOpt.text : '',
+                    // For final bills: always send total allocation as released_amount (100% fund release)
                     // For dynamic steps: send cumulative amount
-                    // For final bills: send calculated amount
-                    // For CPPC installments: send input amount as-is
-                    // For others: send input/step amount
-                    released_amount:     (isDynamic && cumulativeReleasedAmount !== null) ? cumulativeReleasedAmount :
-                                        (finalBillCumulativeAmount !== null ? finalBillCumulativeAmount :
-                                        (fundOpen ? (parseFloat(document.getElementById('prog-released').value) || 0) : null)),
+                    // For others: send input amount if available
+                    released_amount:     (stepBasePct === 100 && !isDynamic && finalReleaseAmount !== null) ? finalReleaseAmount :
+                                        (isDynamic && cumulativeReleasedAmount !== null) ? cumulativeReleasedAmount :
+                                        (fundOpen ? (parseFloat(document.getElementById('prog-released').value) || 0) : null),
                     is_completed:        0,
                     is_delayed:          0,
                     note:                document.getElementById('prog-note').value.trim(),
