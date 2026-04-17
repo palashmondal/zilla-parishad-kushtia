@@ -3255,11 +3255,36 @@
                     const totalRunningBills = runningBillLogs.reduce((sum, log) => sum + parseFloat(log.released_amount || 0), 0);
                     const expectedFinalBill = alloc - totalRunningBills;
 
+                    const method = (_progressRecord?.implementation_method || '').trim();
+                    const isCPPC = method === 'সিপিপিসি' || method.toLowerCase() === 'cppc';
+
                     const field = document.getElementById('prog-fund-release-field');
                     const btn   = document.getElementById('prog-fund-toggle');
-                    field.classList.remove('hidden');
-                    btn.innerHTML = `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg> তহবিল ছাড় বাতিল করুন`;
-                    document.getElementById('prog-released').value = expectedFinalBill.toFixed(2);
+                    const input = document.getElementById('prog-released');
+
+                    // For CPPC and Tender/RFQ: Auto-calculate and hide input, show confirmation message
+                    if (isCPPC || (method !== 'সিপিপিসি' && method.toLowerCase() !== 'cppc')) {
+                        // Hide the input field for all projects on final bill - amount is auto-calculated
+                        field.classList.add('hidden');
+                        input.value = expectedFinalBill.toFixed(2);
+                        // Show a message instead
+                        const msgDiv = document.createElement('div');
+                        msgDiv.id = 'final-bill-auto-msg';
+                        msgDiv.style.cssText = 'background:#d1fae5;border:1px solid #6ee7b7;padding:0.75rem 1rem;border-radius:0.5rem;font-size:0.875rem;color:#065f46;margin-bottom:0.5rem;';
+                        msgDiv.innerHTML = `✓ চূড়ান্ত বিল স্বয়ংক্রিয়ভাবে গণনা করা হয়েছে: <strong>৳ ${fmtAmt(expectedFinalBill)} টাকা</strong><br><span style="font-size:0.8rem;color:#0b7a5f;">মোট বরাদ্দ ৳ ${fmtAmt(alloc)} - চলমান বিল ৳ ${fmtAmt(totalRunningBills)} = চূড়ান্ত বিল</span>`;
+
+                        // Remove existing message if any
+                        const existing = document.getElementById('final-bill-auto-msg');
+                        if (existing) existing.remove();
+
+                        // Insert message before the field
+                        field.parentNode.insertBefore(msgDiv, field);
+                    } else {
+                        // Fallback (shouldn't reach here)
+                        field.classList.remove('hidden');
+                        btn.innerHTML = `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg> তহবিল ছাড় বাতিল করুন`;
+                        input.value = expectedFinalBill.toFixed(2);
+                    }
                 }
             }
 
@@ -3776,15 +3801,18 @@
                     }
                 }
 
-                // For final bill (100% completion), calculate cumulative amount only for non-CPPC
+                // For final bill (100% completion), use auto-calculated amount
                 const method = (_progressRecord?.implementation_method || '').trim();
                 const isCPPCProject = method === 'সিপিপিসি' || method.toLowerCase() === 'cppc';
 
                 let finalBillCumulativeAmount = null;
-                if (stepBasePct === 100 && !isDynamic && !isCPPCProject && fundOpen) {
-                    const previousReleased = parseFloat((_progressRecord && _progressRecord.released_amount) || 0);
+                // For final bills: always send the calculated amount (even if field is hidden)
+                if (stepBasePct === 100 && !isDynamic) {
+                    // Amount is pre-calculated and stored in input, just use it
                     const inputReleased = parseFloat(document.getElementById('prog-released').value) || 0;
-                    finalBillCumulativeAmount = previousReleased + inputReleased;
+                    if (inputReleased > 0) {
+                        finalBillCumulativeAmount = inputReleased;
+                    }
                 }
 
                 const payload = {
@@ -3856,33 +3884,8 @@
                     }
                 }
 
-                // Validate: Final Bill amount = (allocation - sum of all running bills)
-                // For CPPC: skip warning, just accept the auto-filled amount
-                // For Tender/RFQ: show warning if amount doesn't match expected
-                const isFinalBill = payload.current_status === 'চূড়ান্ত বিল প্রদান সমাপ্ত';
-
-                if (isFinalBill && !isCPPCProject) {
-                    // Only show warning for Tender/RFQ, not for CPPC
-                    const allocation = parseFloat(_progressRecord?.allocation_amount) || 0;
-                    const runningBillLogs = _allProgressLogs.filter(log =>
-                        log.current_status === 'রানিং বিল প্রদান' || log.current_status === 'কাজ চলমান'
-                    );
-                    const totalRunningBills = runningBillLogs.reduce((sum, log) => sum + parseFloat(log.released_amount || 0), 0);
-                    const expectedFinalBill = allocation - totalRunningBills;
-                    const userEnteredAmount = parseFloat(payload.released_amount) || 0;
-
-                    // Show warning if user entered different amount than expected (use rounding for precision)
-                    const userRounded = Math.round(userEnteredAmount);
-                    const expectedRounded = Math.round(expectedFinalBill);
-                    if (userRounded !== expectedRounded) {
-                        const confirmed = await showFinalBillWarning(allocation, totalRunningBills, expectedFinalBill, userEnteredAmount);
-                        if (!confirmed) {
-                            btn.disabled = false;
-                            btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
-                            return;
-                        }
-                    }
-                }
+                // Final Bill is now auto-calculated and non-editable, so no warning needed
+                // The amount is always correct since it's calculated as (allocation - sum of running bills)
 
                 if (payload.released_amount === null) delete payload.released_amount;
                 const res = await AuthManager.fetch(
