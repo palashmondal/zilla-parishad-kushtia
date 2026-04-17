@@ -3810,6 +3810,14 @@
                 if (stepBasePct === 100 && !isDynamic) {
                     // Amount is pre-calculated and stored in input, just use it
                     const inputReleased = parseFloat(document.getElementById('prog-released').value) || 0;
+                    console.log('Final bill calculation:', {
+                        stepBasePct,
+                        isDynamic,
+                        inputElement: !!document.getElementById('prog-released'),
+                        inputValue: document.getElementById('prog-released')?.value,
+                        inputReleased,
+                        condition: inputReleased > 0
+                    });
                     if (inputReleased > 0) {
                         finalBillCumulativeAmount = inputReleased;
                     }
@@ -3819,7 +3827,7 @@
                     progress_step_id:    parseInt(stepSel.value, 10),
                     current_status:      stepOpt ? stepOpt.text : '',
                     // For dynamic steps: send cumulative amount
-                    // For final bills (non-CPPC): send cumulative amount
+                    // For final bills: send calculated amount
                     // For CPPC installments: send input amount as-is
                     // For others: send input/step amount
                     released_amount:     (isDynamic && cumulativeReleasedAmount !== null) ? cumulativeReleasedAmount :
@@ -3833,6 +3841,18 @@
 
                 // Add calculated progress percentage to payload
                 payload.progress_percentage = stepPercentage;
+
+                console.log('Progress form payload:', {
+                    progress_step_id: payload.progress_step_id,
+                    current_status: payload.current_status,
+                    released_amount: payload.released_amount,
+                    isDynamic,
+                    isFinalBill: stepBasePct === 100,
+                    stepBasePct,
+                    cumulativeReleasedAmount,
+                    finalBillCumulativeAmount,
+                    fundOpen
+                });
 
                 if (stepPercentage < currentProgress) {
                     showErrorModal(`এই ধাপ ইতিমধ্যে সম্পন্ন হয়েছে এবং আপনি পূর্ববর্তী ধাপে ফিরে যেতে পারবেন না।\n\nবর্তমান অগ্রগতি: ${CRUDManager.toBengaliNumber(currentProgress)}%\nনির্বাচিত ধাপের অগ্রগতি: ${CRUDManager.toBengaliNumber(stepPercentage)}%`, 'পূর্ববর্তী ধাপ');
