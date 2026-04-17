@@ -2422,8 +2422,9 @@
             if (r.is_completed) return 'completed';
             if (r.is_delayed)   return 'delayed';
             const pct = parseInt(r.progress_percentage) || 0;
-            if (pct > 0 && pct < 100) return 'ongoing';
-            return 'pending';
+            if (pct >= 100) return 'completed';  // 100% progress = completed
+            if (pct > 0) return 'ongoing';       // 0 < progress < 100 = ongoing
+            return 'pending';                    // 0% = pending (not started)
         }
 
         function renderRows() {
