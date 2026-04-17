@@ -1536,7 +1536,7 @@
             </div>
 
             <!-- Form body -->
-            <form id="progress-form" style="padding:1.25rem;display:flex;flex-direction:column;gap:1rem;">
+            <form id="progress-form" novalidate style="padding:1.25rem;display:flex;flex-direction:column;gap:1rem;">
 
                 <!-- Current progress display (read-only) -->
                 <div id="prog-current-display" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:0.75rem;padding:0.85rem 1rem;">
@@ -3742,7 +3742,11 @@
             btn.disabled = true;
             btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg> সংরক্ষণ হচ্ছে…';
             try {
+                const releasedInput = document.getElementById('prog-released');
                 const fundOpen = !document.getElementById('prog-fund-release-field').classList.contains('hidden');
+                const releasedValue = releasedInput?.value;
+                console.log('Progress form submit:', { fundOpen, releasedValue, inputValid: releasedInput?.checkValidity?.(), releasedInput });
+
                 const stepSel = document.getElementById('prog-progress-step');
                 const stepOpt = stepSel.options[stepSel.selectedIndex];
 
