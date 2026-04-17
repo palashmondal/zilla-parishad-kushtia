@@ -3248,11 +3248,15 @@
             if (basePct === 100 && !isDynamic) {
                 const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
                 if (alloc > 0) {
-                    // Calculate expected final bill: allocation - sum of all running bills
+                    // Calculate expected final bill: allocation - latest running bill amount
+                    // Note: Progress logs store cumulative amounts, so use the LATEST running bill amount, not sum
                     const runningBillLogs = _allProgressLogs.filter(log =>
                         log.current_status === 'রানিং বিল প্রদান' || log.current_status === 'কাজ চলমান'
                     );
-                    const totalRunningBills = runningBillLogs.reduce((sum, log) => sum + parseFloat(log.released_amount || 0), 0);
+                    // Use the LATEST running bill's released_amount (it's already cumulative)
+                    const totalRunningBills = runningBillLogs.length > 0
+                        ? parseFloat(runningBillLogs[runningBillLogs.length - 1].released_amount || 0)
+                        : 0;
                     const expectedFinalBill = alloc - totalRunningBills;
 
                     const method = (_progressRecord?.implementation_method || '').trim();
