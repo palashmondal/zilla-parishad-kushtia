@@ -294,7 +294,7 @@ const projectsController = {
                 return res.status(404).json({ error: 'প্রকল্পটি পাওয়া যায়নি' });
             }
 
-            const { progress_step_id, released_amount, current_status,
+            const { progress_step_id, released_amount, current_status, progress_percentage,
                     is_completed, is_delayed, note, activity_date } = req.body;
 
             // If progress_step_id is provided, validate it and get the step
@@ -314,6 +314,7 @@ const projectsController = {
             const result = await projectsModel.addProgressLog(project.id, {
                 progress_step_id: progress_step_id ? parseInt(progress_step_id, 10) : null,
                 released_amount: released_amount !== undefined ? parseFloat(released_amount) : null,
+                progress_percentage: progress_percentage !== undefined ? parseInt(progress_percentage, 10) : null,
                 current_status: current_status ? current_status.trim() : '',
                 is_completed: is_completed ? 1 : 0,
                 is_delayed: is_delayed ? 1 : 0,
@@ -321,10 +322,17 @@ const projectsController = {
                 activity_date: activity_date || null
             }, req.user.id);
 
+            // Fetch updated project to return released_amount for frontend fund release percentage update
+            const updatedProject = await projectsModel.findById(project.id);
+
             res.json({
                 message: 'অগ্রগতি সংরক্ষণ করা হয়েছে',
                 progress_percentage: result.progress_percentage,
-                progress_step_id: result.progress_step_id
+                progress_step_id: result.progress_step_id,
+                released_amount: updatedProject.released_amount,
+                current_status: updatedProject.current_status,
+                is_completed: updatedProject.is_completed,
+                allocation_amount: updatedProject.allocation_amount
             });
         } catch (error) {
             console.error('Projects addProgress error:', error);
