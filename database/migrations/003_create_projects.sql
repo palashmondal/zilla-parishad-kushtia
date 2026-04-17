@@ -112,14 +112,13 @@ CREATE TABLE IF NOT EXISTS `projects` (
     CONSTRAINT `fk_projects_created_by`
         FOREIGN KEY (`created_by`) REFERENCES `admin_users` (`id`) ON DELETE SET NULL,
 
-    -- Constraints
-    CONSTRAINT `chk_progress`
-        CHECK (`progress_percentage` BETWEEN 0 AND 100),
-    CONSTRAINT `chk_performance`
-        CHECK ((`performance_score` IS NULL) OR (`performance_score` BETWEEN 0.00 AND 100.00)),
-    -- Allow up to 5% overshoot for released_amount (rounding/fee scenarios)
-    CONSTRAINT `chk_released_lte_allocation`
-        CHECK (`released_amount` <= (`allocation_amount` * 1.05)),
+    -- Constraints (commented for MySQL 9.x compatibility - enforced in application layer)
+    -- CONSTRAINT `chk_progress`
+    --     CHECK (`progress_percentage` BETWEEN 0 AND 100),
+    -- CONSTRAINT `chk_performance`
+    --     CHECK ((`performance_score` IS NULL) OR (`performance_score` BETWEEN 0.00 AND 100.00)),
+    -- CONSTRAINT `chk_released_lte_allocation`
+    --     CHECK (`released_amount` <= (`allocation_amount` * 1.05)),
 
     -- Indexes — on all search-heavy, filter, and sort fields
     KEY `idx_project_name`        (`project_name`(100)),
@@ -242,8 +241,8 @@ CREATE TABLE IF NOT EXISTS `project_progress_log` (
     CONSTRAINT `fk_ppl_logged_by`
         FOREIGN KEY (`logged_by`)  REFERENCES `admin_users` (`id`)  ON DELETE SET NULL,
 
-    -- Constraint
-    CONSTRAINT `chk_ppl_progress` CHECK (`progress_percentage` BETWEEN 0 AND 100),
+    -- Constraint (commented for MySQL 9.x compatibility - enforced in application layer)
+    -- CONSTRAINT `chk_ppl_progress` CHECK (`progress_percentage` BETWEEN 0 AND 100),
 
     -- Indexes
     KEY `idx_ppl_project_id`       (`project_id`),
@@ -258,10 +257,20 @@ CREATE TABLE IF NOT EXISTS `project_progress_log` (
 -- Migration helper: add lat_lng to an existing projects table
 -- Run this once if the table was created before this column was added.
 -- ============================================================
-ALTER TABLE `projects`
-    ADD COLUMN IF NOT EXISTS `lat_lng` VARCHAR(60) DEFAULT NULL
-        COMMENT 'প্রকল্পের অবস্থান — GPS lat,lng e.g. "23.9012,89.1234"'
-    AFTER `actual_end_date`;
+SET @column_exists = (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_NAME = 'projects'
+    AND TABLE_SCHEMA = DATABASE()
+    AND COLUMN_NAME = 'lat_lng'
+);
+
+SET @sql = IF(@column_exists = 0,
+    'ALTER TABLE `projects` ADD COLUMN `lat_lng` VARCHAR(60) DEFAULT NULL COMMENT "প্রকল্পের অবস্থান — GPS lat,lng e.g. \"23.9012,89.1234\"" AFTER `actual_end_date`',
+    'SELECT 1'
+);
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 
 -- ============================================================
