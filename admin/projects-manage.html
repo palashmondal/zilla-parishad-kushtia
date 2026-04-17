@@ -3829,10 +3829,14 @@
                 // For final bills: always send the calculated amount (even if field is hidden)
                 if (stepBasePct === 100 && !isDynamic) {
                     // Amount is pre-calculated and stored in input, just use it
-                    const inputReleased = parseFloat(document.getElementById('prog-released').value) || 0;
-                    if (inputReleased > 0) {
+                    const inputElement = document.getElementById('prog-released');
+                    const inputValue = inputElement ? inputElement.value : '';
+                    const inputReleased = parseFloat(inputValue) || 0;
+                    // For final bill: always use the input value (should be total allocation)
+                    if (inputReleased >= 0) {
                         finalBillCumulativeAmount = inputReleased;
                     }
+                    console.log('Final bill released amount:', { inputValue, inputReleased, finalBillCumulativeAmount, allocation: _progressRecord?.allocation_amount });
                 }
 
                 const payload = {
@@ -3907,7 +3911,14 @@
                 // Final Bill is now auto-calculated and non-editable, so no warning needed
                 // The amount is always correct since it's calculated as (allocation - sum of running bills)
 
-                if (payload.released_amount === null) delete payload.released_amount;
+                // For final bills: ensure released_amount is always included (don't delete it)
+                const isFinalBill = (stepOpt?.getAttribute('data-percentage') === '100');
+                if (payload.released_amount === null && !isFinalBill) {
+                    delete payload.released_amount;
+                }
+
+                console.log('Sending progress payload:', { ...payload, is_final_bill: isFinalBill });
+
                 const res = await AuthManager.fetch(
                     `${AuthManager.API_URL}/projects/${_progressProjectId}/progress`,
                     { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }
