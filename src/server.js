@@ -98,7 +98,7 @@ async function syncProjectProgressOnStartup() {
         const pool = require('../config/database');
         const conn = await pool.getConnection();
         const [projects] = await conn.execute(`
-            SELECT DISTINCT p.id, p.project_name, p.progress_percentage
+            SELECT DISTINCT p.id, p.project_name, p.progress_percentage, p.allocation_amount
             FROM projects p
             INNER JOIN project_progress_log ppl ON p.id = ppl.project_id
             WHERE p.progress_percentage != ppl.progress_percentage
@@ -118,11 +118,19 @@ async function syncProjectProgressOnStartup() {
                 `, [proj.id]);
 
                 if (latestLog) {
+                    // Validate released_amount doesn't exceed constraint (allocation * 1.05)
+                    let releasedAmount = parseFloat(latestLog.released_amount);
+                    const maxAllowed = parseFloat(proj.allocation_amount) * 1.05;
+                    if (releasedAmount > maxAllowed) {
+                        console.log(`[STARTUP]   ! Project ${proj.id}: Released amount ${releasedAmount} exceeds max ${maxAllowed}, capping...`);
+                        releasedAmount = parseFloat(proj.allocation_amount);
+                    }
+
                     await conn.execute(`
                         UPDATE projects
                         SET progress_percentage = ?, released_amount = ?, updated_at = CURRENT_TIMESTAMP
                         WHERE id = ?
-                    `, [latestLog.progress_percentage, latestLog.released_amount, proj.id]);
+                    `, [latestLog.progress_percentage, releasedAmount, proj.id]);
                     console.log(`[STARTUP]   ✓ Synced project ${proj.id}: ${proj.project_name}`);
                 }
             }
