@@ -1556,7 +1556,7 @@
                 <!-- Latest Update Status -->
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                     <p class="text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">সর্বশেষ আপডেট</p>
-                    <p id="prog-latest-status-text" class="text-sm font-semibold text-gray-900 text-center">সভাপতি বরাবর পত্র প্রেরণ সমাপ্ত</p>
+                    <p id="prog-latest-status-text" class="text-sm font-semibold text-gray-900 text-center">কার্যক্রম শুরু হয় নাই</p>
                 </div>
 
                 <!-- Section 1: Progress amount -->
@@ -3246,6 +3246,9 @@
             if (_allProgressLogs && _allProgressLogs.length > 0) {
                 const lastLog = _allProgressLogs[0];
                 document.getElementById('prog-latest-status-text').textContent = lastLog.current_status || 'কোনো আপডেট নেই';
+            } else {
+                // For new projects with no progress logs, show default initial status
+                document.getElementById('prog-latest-status-text').textContent = 'কার্যক্রম শুরু হয় নাই';
             }
 
             // Populate progress steps filtered by implementation method
