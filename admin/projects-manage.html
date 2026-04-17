@@ -2449,6 +2449,16 @@
                 records = records.filter(r => getStatusKey(r) === currentStatus);
             }
 
+            // Update total records count to reflect client-side filters
+            try {
+                const totalRecordsEl = document.getElementById('total-records');
+                if (totalRecordsEl) {
+                    const bengaliNumber = CRUDManager.toBengaliNumber(records.length);
+                    totalRecordsEl.textContent = `মোট প্রকল্প সংখ্যাঃ ${bengaliNumber}`;
+                }
+            } catch (countError) {
+            }
+
             // Show/hide table based on filtered result
             if (records.length === 0) {
                 tableContainer.classList.add('hidden');
