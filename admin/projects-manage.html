@@ -3142,6 +3142,18 @@
                 }
             }
 
+            // Auto-fill 100% fund release for চূড়ান্ত বিল প্রদান সমাপ্ত (final bill, base 100%)
+            if (basePct === 100 && !isDynamic) {
+                const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
+                if (alloc > 0) {
+                    const field = document.getElementById('prog-fund-release-field');
+                    const btn   = document.getElementById('prog-fund-toggle');
+                    field.classList.remove('hidden');
+                    btn.innerHTML = `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg> তহবিল ছাড় বাতিল করুন`;
+                    document.getElementById('prog-released').value = alloc.toFixed(2);
+                }
+            }
+
             // Update hidden legacy status field
             document.getElementById('prog-status').value = opt.text;
 
