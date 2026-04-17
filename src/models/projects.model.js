@@ -584,6 +584,31 @@ const projectsModel = {
                 updateParams
             );
 
+            // Fetch the latest progress log to ensure project record matches it exactly
+            const [latestLogResult] = await conn.execute(
+                `SELECT progress_percentage, released_amount FROM project_progress_log
+                 WHERE project_id = ? ORDER BY logged_at DESC LIMIT 1`,
+                [projectId]
+            );
+
+            // If latest log differs from what we just saved, re-update to match it
+            if (latestLogResult && latestLogResult.length > 0) {
+                const latestLog = latestLogResult[0];
+                const savedProgressPct = parseInt(progress_percentage, 10);
+                const savedReleasedAmt = parseFloat(effectiveReleased);
+                const logProgressPct = parseInt(latestLog.progress_percentage, 10);
+                const logReleasedAmt = parseFloat(latestLog.released_amount || 0);
+
+                // Only update if there's a mismatch
+                if (savedProgressPct !== logProgressPct || savedReleasedAmt !== logReleasedAmt) {
+                    console.log(`Progress mismatch detected. Project: ${savedProgressPct}%, ${savedReleasedAmt}. Latest log: ${logProgressPct}%, ${logReleasedAmt}. Syncing...`);
+                    await conn.execute(
+                        `UPDATE projects SET progress_percentage = ?, released_amount = ? WHERE id = ?`,
+                        [latestLog.progress_percentage, latestLog.released_amount, projectId]
+                    );
+                }
+            }
+
             await conn.commit();
             return { progress_percentage, progress_step_id: finalProgressStepId };
         } catch (err) {
