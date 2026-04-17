@@ -2660,13 +2660,15 @@
                         document.getElementById('dm-progress-pct').innerText = pct + '%';
                         document.getElementById('dm-progress-bar').style.width = pct + '%';
 
-                        // Also update fund release percentage if needed
+                        // Also update fund release percentage and amounts if needed
                         if (r.released_amount === 0 && latestLog.released_amount) {
                             const alloc = parseFloat(r.allocation_amount) || 0;
                             const released = parseFloat(latestLog.released_amount) || 0;
                             const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
                             document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
                             document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
+                            // Also update the displayed released amount
+                            document.getElementById('dm-released').innerText = '৳ ' + fmtAmt(released) + ' টাকা';
                         }
                     }
                     const html = logs.map((log, index) => {
