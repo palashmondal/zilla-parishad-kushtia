@@ -2653,23 +2653,21 @@
                         return;
                     }
 
-                    // If project record shows 0% progress but progress logs exist, update display from latest log
-                    if ((r.progress_percentage === 0 || r.released_amount === 0) && logs.length > 0) {
+                    // Always use latest log as source of truth for progress and released amounts
+                    if (logs.length > 0) {
                         const latestLog = logs[0]; // First log is latest (ordered DESC)
                         const pct = latestLog.progress_percentage || 0;
                         document.getElementById('dm-progress-pct').innerText = pct + '%';
                         document.getElementById('dm-progress-bar').style.width = pct + '%';
 
-                        // Also update fund release percentage and amounts if needed
-                        if (r.released_amount === 0 && latestLog.released_amount) {
-                            const alloc = parseFloat(r.allocation_amount) || 0;
-                            const released = parseFloat(latestLog.released_amount) || 0;
-                            const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
-                            document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
-                            document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
-                            // Also update the displayed released amount
-                            document.getElementById('dm-released').innerText = '৳ ' + fmtAmt(released) + ' টাকা';
-                        }
+                        // Update fund release percentage from latest log's released_amount
+                        const alloc = parseFloat(r.allocation_amount) || 0;
+                        const released = parseFloat(latestLog.released_amount) || 0;
+                        const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
+                        document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
+                        document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
+                        // Update the displayed released amount
+                        document.getElementById('dm-released').innerText = '৳ ' + fmtAmt(released) + ' টাকা';
                     }
                     const html = logs.map((log, index) => {
                         const isLatestLog = (index === 0); // First log is the latest (ordered DESC)
