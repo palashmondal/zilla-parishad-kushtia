@@ -92,14 +92,68 @@ app.use((req, res) => {
 // Error handler
 app.use(errorHandler);
 
+// Sync projects with their latest progress logs on startup
+async function syncProjectProgressOnStartup() {
+    try {
+        const pool = require('../config/database');
+        const conn = await pool.getConnection();
+        const [projects] = await conn.execute(`
+            SELECT DISTINCT p.id, p.project_name, p.progress_percentage
+            FROM projects p
+            INNER JOIN project_progress_log ppl ON p.id = ppl.project_id
+            WHERE p.progress_percentage != ppl.progress_percentage
+            OR p.released_amount != ppl.released_amount
+            LIMIT 100
+        `);
+
+        if (projects.length > 0) {
+            console.log(`[STARTUP] Syncing ${projects.length} projects with out-of-sync progress data...`);
+            for (const proj of projects) {
+                const [[latestLog]] = await conn.execute(`
+                    SELECT progress_percentage, released_amount
+                    FROM project_progress_log
+                    WHERE project_id = ?
+                    ORDER BY logged_at DESC
+                    LIMIT 1
+                `, [proj.id]);
+
+                if (latestLog) {
+                    await conn.execute(`
+                        UPDATE projects
+                        SET progress_percentage = ?, released_amount = ?, updated_at = CURRENT_TIMESTAMP
+                        WHERE id = ?
+                    `, [latestLog.progress_percentage, latestLog.released_amount, proj.id]);
+                    console.log(`[STARTUP]   ✓ Synced project ${proj.id}: ${proj.project_name}`);
+                }
+            }
+            console.log(`[STARTUP] Project sync complete`);
+        }
+        conn.release();
+    } catch (error) {
+        console.error('[STARTUP] Error syncing projects:', error.message);
+    }
+}
+
 // Start HTTP server
 const httpServer = http.createServer(app);
-httpServer.listen(PORT, () => {
-    console.log('='.repeat(60));
-    console.log(`✓ HTTP Server running on port ${PORT}`);
-    console.log(`✓ API endpoint: http://localhost:${PORT}/api`);
-    console.log(`✓ Health check: http://localhost:${PORT}/api/health`);
-    console.log('='.repeat(60));
+
+// Sync projects on startup, then start server
+syncProjectProgressOnStartup().then(() => {
+    httpServer.listen(PORT, () => {
+        console.log('='.repeat(60));
+        console.log(`✓ HTTP Server running on port ${PORT}`);
+        console.log(`✓ API endpoint: http://localhost:${PORT}/api`);
+        console.log(`✓ Health check: http://localhost:${PORT}/api/health`);
+        console.log('='.repeat(60));
+    });
+}).catch(error => {
+    console.error('[STARTUP] Critical error during sync:', error);
+    httpServer.listen(PORT, () => {
+        console.log('='.repeat(60));
+        console.log(`✓ HTTP Server running on port ${PORT} (sync failed but server started)`);
+        console.log(`✓ API endpoint: http://localhost:${PORT}/api`);
+        console.log('='.repeat(60));
+    });
 });
 
 // Start HTTPS server if enabled
