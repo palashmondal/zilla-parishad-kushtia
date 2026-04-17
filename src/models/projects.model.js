@@ -738,7 +738,7 @@ const projectsModel = {
             if (!project) throw new Error('Project not found: ' + projectId);
 
             // Update project with the most recent log's progress, or reset to defaults
-            const updateData = latestLog ? {
+            let updateData = latestLog ? {
                 progress_percentage: latestLog.progress_percentage,
                 released_amount: latestLog.released_amount,
                 current_status: latestLog.current_status,
@@ -751,6 +751,13 @@ const projectsModel = {
                 is_completed: 0,
                 is_delayed: 0
             };
+
+            // Validate released_amount doesn't exceed constraint (allocation * 1.05)
+            const maxAllowed = parseFloat(project.allocation_amount) * 1.05;
+            if (updateData.released_amount > maxAllowed) {
+                console.warn(`Released amount ${updateData.released_amount} exceeds max ${maxAllowed}, capping...`);
+                updateData.released_amount = parseFloat(project.allocation_amount);
+            }
 
             await conn.execute(
                 `UPDATE projects SET progress_percentage = ?, released_amount = ?, current_status = ?, is_completed = ?, is_delayed = ? WHERE id = ?`,
