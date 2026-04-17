@@ -310,10 +310,13 @@ const projectsModel = {
                 if (memoRows && memoRows.length > 0) {
                     const memo = memoRows[0];
                     if (memo.document_file && memo.document_file.trim()) {
+                        // Remove /uploads/ prefix to store relative path (like other documents)
+                        const relativePath = memo.document_file.replace(/^\/uploads\//, '');
+
                         // Check if approval memo document is already attached
                         const [existing] = await conn.execute(
                             `SELECT id FROM project_documents WHERE project_id = ? AND file_path = ?`,
-                            [id, memo.document_file]
+                            [id, relativePath]
                         );
 
                         // Only add if not already attached
@@ -326,7 +329,7 @@ const projectsModel = {
                             await conn.execute(
                                 `INSERT INTO project_documents (project_id, file_path, original_name, file_type, uploaded_by)
                                  VALUES (?, ?, ?, ?, ?)`,
-                                [id, memo.document_file, docName, fileType, null]
+                                [id, relativePath, docName, fileType, null]
                             );
                         }
                     }
@@ -453,12 +456,18 @@ const projectsModel = {
         const {
             progress_step_id = null,
             released_amount,
+            progress_percentage: providedProgressPercentage,
             current_status,
             is_completed = 0,
             is_delayed   = 0,
             note         = null,
             activity_date = null
         } = data;
+
+        // Validate required fields
+        if (!current_status || !current_status.trim()) {
+            throw new Error('current_status is required');
+        }
 
         const conn = await pool.getConnection();
         try {
@@ -478,16 +487,22 @@ const projectsModel = {
                 ? parseFloat(released_amount)
                 : parseFloat(project.released_amount || 0);
 
-            // Auto-calculate progress using the formula
+            // Use frontend-calculated progress percentage if provided, otherwise calculate it
             let progress_percentage;
             let finalProgressStepId = progress_step_id;
-
             let currentStep = null;
+
+            // Fetch step info if provided (needed for final bill check later)
             if (progress_step_id) {
-                // If progress_step_id is provided, use the step-based calculation
                 currentStep = await progressStepsModel.getStepById(progress_step_id);
                 if (!currentStep) throw new Error('Invalid progress step: ' + progress_step_id);
+            }
 
+            if (providedProgressPercentage !== null && providedProgressPercentage !== undefined) {
+                // Use the progress percentage provided by the frontend
+                progress_percentage = parseInt(providedProgressPercentage, 10);
+            } else if (currentStep) {
+                // If progress_step_id is provided, use the step-based calculation
                 progress_percentage = calcProgressFromStep({
                     step: currentStep,
                     allocation_amount: project.allocation_amount,
@@ -707,7 +722,7 @@ const projectsModel = {
             } : {
                 progress_percentage: 0,
                 released_amount: 0,
-                current_status: null,
+                current_status: 'কাজ শুরু হয়নি',
                 is_completed: 0,
                 is_delayed: 0
             };

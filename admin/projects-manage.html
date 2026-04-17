@@ -1096,7 +1096,7 @@
             <div id="dm-progress-log-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <div class="flex items-center justify-between mb-4">
                     <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider">অগ্রগতির ইতিহাস</p>
-                    <button onclick="openAddProgressModal(currentDetailRecord||currentDetailId)"
+                    <button id="dm-add-progress-btn" onclick="openAddProgressModal(currentDetailRecord||currentDetailId)"
                         class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold
                                bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow
                                hover:from-amber-600 hover:to-amber-800 active:scale-95 transition-all">
@@ -1586,7 +1586,7 @@
                         </button>
                         <div id="prog-fund-release-field" class="hidden mt-2.5">
                             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
-                                ছাড়কৃত অর্থ (টাকা)
+                                ছাড়কৃত অর্থ (টাকা) <span id="prog-fund-required-indicator" class="hidden text-red-400">*</span>
                             </label>
                             <div class="relative">
                                 <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-amber-600 font-bold text-sm pointer-events-none">৳</span>
@@ -1694,7 +1694,7 @@
 
             <!-- Content -->
             <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem;">
-                <p style="font-size:0.95rem;color:#4b5563;line-height:1.6;margin:0;text-align:center;" id="error-modal-message">ত্রুটি বার্তা এখানে প্রদর্শিত হবে</p>
+                <p style="font-size:0.95rem;color:#4b5563;line-height:1.6;margin:0;text-align:center;white-space:pre-wrap;word-wrap:break-word;" id="error-modal-message">ত্রুটি বার্তা এখানে প্রদর্শিত হবে</p>
 
                 <!-- Action Button -->
                 <button onclick="closeErrorModal()"
@@ -1703,6 +1703,69 @@
                         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(220,38,38,0.25)';">
                     ঠিক আছে
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Bill Amount Warning Modal -->
+    <div id="final-bill-warning-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
+         style="background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn 0.2s ease-out;"
+         onclick="if(event.target===this)cancelFinalBillWarning()">
+        <div class="w-full max-w-sm rounded-xl overflow-hidden flex-shrink-0"
+             style="background:white;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);animation:slideUp 0.3s ease-out;">
+
+            <!-- Warning Icon Section -->
+            <div style="padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;border-bottom:1px solid #f3f4f6;">
+                <div style="width:3.5rem;height:3.5rem;border-radius:50%;background:#fef3c7;display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:1.75rem;height:1.75rem;color:#f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4v2m0 4v2M7.08 6.47a9 9 0 1114.84 0M9 9h6v6H9V9z"/>
+                    </svg>
+                </div>
+                <div style="text-align:center;">
+                    <h3 style="font-size:1.25rem;font-weight:700;color:#1f2937;margin:0;line-height:1.4;">চূড়ান্ত বিল অর্থ যাচাই</h3>
+                    <p style="font-size:0.875rem;color:#6b7280;margin:0.5rem 0 0 0;line-height:1.5;">প্রবেশকৃত পরিমাণ প্রত্যাশিত মূল্যের সাথে মিলে না</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem;">
+                <!-- Amount Breakdown -->
+                <div style="background:#f9fafb;border-left:4px solid #f59e0b;padding:1rem;border-radius:0.5rem;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;font-size:0.9rem;">
+                        <div>
+                            <p style="color:#6b7280;margin:0 0 0.25rem 0;font-weight:500;">মোট বরাদ্দ</p>
+                            <p style="color:#1f2937;margin:0;font-weight:700;font-size:1rem;" id="fbw-total-allocation">৳ 0</p>
+                        </div>
+                        <div>
+                            <p style="color:#6b7280;margin:0 0 0.25rem 0;font-weight:500;">রানিং বিল মোট</p>
+                            <p style="color:#1f2937;margin:0;font-weight:700;font-size:1rem;" id="fbw-running-total">৳ 0</p>
+                        </div>
+                        <div style="grid-column:1/-1;border-top:1px solid #e5e7eb;padding-top:0.75rem;">
+                            <p style="color:#6b7280;margin:0 0 0.25rem 0;font-weight:500;">প্রত্যাশিত চূড়ান্ত বিল</p>
+                            <p style="color:#059669;margin:0;font-weight:700;font-size:1.1rem;" id="fbw-expected-amount">৳ 0</p>
+                        </div>
+                        <div style="grid-column:1/-1;border-top:1px solid #e5e7eb;padding-top:0.75rem;">
+                            <p style="color:#6b7280;margin:0 0 0.25rem 0;font-weight:500;">আপনি প্রবেশ করেছেন</p>
+                            <p style="color:#dc2626;margin:0;font-weight:700;font-size:1.1rem;" id="fbw-entered-amount">৳ 0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+                    <button onclick="cancelFinalBillWarning()"
+                            style="padding:0.75rem 1.5rem;background:#e5e7eb;color:#374151;border:none;border-radius:0.75rem;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s;"
+                            onmouseover="this.style.background='#d1d5db';this.style.transform='translateY(-2px)';"
+                            onmouseout="this.style.background='#e5e7eb';this.style.transform='translateY(0)';">
+                        বাতিল করুন
+                    </button>
+                    <button onclick="confirmFinalBillWarning()"
+                            style="padding:0.75rem 1.5rem;background:linear-gradient(135deg,#f59e0b,#f97316);color:white;border:none;border-radius:0.75rem;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(245,158,11,0.25);"
+                            onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(245,158,11,0.35)';"
+                            onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(245,158,11,0.25)';">
+                        নিশ্চিত করুন
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -2609,7 +2672,11 @@
 
                         if (log.current_status === 'রানিং বিল প্রদান') {
                             const billDate = CRUDManager.formatDate(log.logged_at);
-                            const billAmount = fmtAmt(log.released_amount || 0);
+                            // Calculate incremental amount: current - previous log's released amount
+                            const currentAmount = parseFloat(log.released_amount || 0);
+                            const previousAmount = (index < logs.length - 1) ? parseFloat(logs[index + 1]?.released_amount || 0) : 0;
+                            const incrementalAmount = currentAmount - previousAmount;
+                            const billAmount = fmtAmt(incrementalAmount);
                             const billMessage = `${billDate} তারিখে ৳ ${billAmount} রানিং বিল প্রদান করা হয়েছে।`;
                             detailMessage = `<p class="plog-note" style="color:#059669;font-weight:500;margin-top:0.5rem;">${billMessage}</p>` + (log.note ? `<p class="plog-note">${log.note}</p>` : '');
                         }
@@ -2643,6 +2710,14 @@
 
             // Documents — fetch and render list
             loadProjectDocsForDetail(r.id);
+
+            // Hide "Add Progress" button if project is completed (100% or is_completed = 1)
+            const addProgressBtn = document.getElementById('dm-add-progress-btn');
+            if (r.is_completed || r.progress_percentage === 100) {
+                addProgressBtn.classList.add('hidden');
+            } else {
+                addProgressBtn.classList.remove('hidden');
+            }
 
             // Open modal FIRST so the container has real pixel dimensions
             document.getElementById('detail-modal').classList.add('open');
@@ -3039,55 +3114,77 @@
 
         async function populateProgressSteps(method) {
             const steps = await fetchProgressSteps(method);
-            const currentStatus = (_progressRecord && _progressRecord.current_status) || '';
             const sel = document.getElementById('prog-progress-step');
 
-            // Use the current progress percentage directly from the record (more reliable than matching descriptions)
-            let currentStatusPercentage = (_progressRecord && _progressRecord.progress_percentage) || 0;
+            // Normalize method name
+            const normalizedMethod = method === 'সিপিপিসি' ? 'cppc' :
+                                   method === 'টেন্ডার' ? 'tender' :
+                                   method === 'আরএফকিউ' ? 'rfq' : method;
+
+            // Determine selectable steps
+            let selectableStepOrders = [];
+
+            if (_allProgressLogs && _allProgressLogs.length > 0) {
+                // Get step orders from existing logs
+                const stepOrders = [];
+                const stepMap = new Map(); // Map step_id to step_order for quick lookup
+                steps.forEach(s => stepMap.set(s.id, s.step_order));
+
+                _allProgressLogs.forEach(log => {
+                    if (log.progress_step_id && stepMap.has(log.progress_step_id)) {
+                        const stepOrder = stepMap.get(log.progress_step_id);
+                        if (!stepOrders.includes(stepOrder)) {
+                            stepOrders.push(stepOrder);
+                        }
+                    }
+                });
+
+                if (stepOrders.length > 0) {
+                    const maxStepOrder = Math.max(...stepOrders);
+                    const hasStep4 = stepOrders.includes(4);
+                    const hasStep5 = stepOrders.includes(5);
+
+                    // For tender/rfq: special multi-step workflow
+                    if ((normalizedMethod === 'tender' || normalizedMethod === 'rfq')) {
+                        if (hasStep4) {
+                            // Running Bill stage: allow Running Bill, Work Completed, Final Bill (steps 5, 6, 7)
+                            selectableStepOrders = [5, 6, 7];
+                        } else if (hasStep5) {
+                            // Work Completed stage: only allow Final Bill
+                            selectableStepOrders = [6];
+                        } else {
+                            // Before Running Bill: next step only
+                            selectableStepOrders = [maxStepOrder + 1];
+                        }
+                    } else {
+                        // CPPC: sequential steps only
+                        selectableStepOrders = [maxStepOrder + 1];
+                    }
+                } else {
+                    selectableStepOrders = [1];
+                }
+            } else {
+                selectableStepOrders = [1];
+            }
+
+            const currentStatus = (_progressRecord && _progressRecord.current_status) || '';
+            const isWorkCompleted = currentStatus === 'কাজ সম্পন্ন';
 
             const optionsHtml = steps.map(s => {
-                // Check if this step matches the current status
-                const isCurrentStatus = s.bengali_description === currentStatus;
-
-                // Check if this is রানিং বিল প্রদান (30% dynamic step)
-                const isRunningBill = s.base_percentage === 30 && s.is_dynamic_calculation === 1;
-
-                // Check if all funds are released (100%)
-                const alloc = parseFloat(_progressRecord?.allocation_amount) || 0;
-                const released = parseFloat(_progressRecord?.released_amount) || 0;
-                const fundReleaseRatio = alloc > 0 ? (released / alloc) : 0;
-                const allFundsReleased = fundReleaseRatio >= 1.0;
-
-                // Disable logic (in priority order):
-                // 1. Running bill: special case - disabled only if 100% funds released (allow multiple submissions)
-                // 2. Current status: disabled (already active) - UNLESS it's running bill
-                // 3. Previous steps: disabled if step percentage < current status percentage
-                // 4. Already added steps: disabled if step appears in history (prevents duplicates) - EXCEPT running bill
-                let isDisabled = false;
-                let disableReason = '';
-
-                if (isRunningBill) {
-                    // Running bill is special: can be added multiple times, disabled only when 100% funds released
-                    isDisabled = allFundsReleased;
-                    if (isDisabled) disableReason = 'সকল তহবিল ছাড় প্রদান সম্পন্ন (100%)';
-                } else if (isCurrentStatus) {
-                    // Current status disabled (can't re-select same status) - except running bill
-                    isDisabled = true;
-                    disableReason = 'বর্তমান অবস্থা';
-                } else if (s.base_percentage < currentStatusPercentage) {
-                    // Previous steps disabled (if their percentage is lower than current status)
-                    isDisabled = true;
-                    disableReason = 'এই ধাপ ইতিমধ্যে সম্পন্ন হয়েছে';
-                } else if (_addedProgressStepIds.has(s.id)) {
-                    // Already added steps disabled to prevent duplicates (except running bill and previous steps)
-                    isDisabled = true;
-                    disableReason = 'এই ধাপ ইতিমধ্যে যোগ করা হয়েছে';
+                // If Work Completed, only allow Final Bill step
+                let isSelectable = selectableStepOrders.includes(s.step_order);
+                if (isWorkCompleted) {
+                    // Only enable the Final Bill step (চূড়ান্ত বিল প্রদান)
+                    isSelectable = s.bengali_description && s.bengali_description.includes('চূড়ান্ত বিল');
                 }
+
+                const isDisabled = !isSelectable;
+                const disableReason = isSelectable ? '' : 'এই ধাপ এখনও নির্বাচনযোগ্য নয়';
 
                 const disabledAttr = isDisabled ? 'disabled' : '';
                 const disabledClass = isDisabled ? ' opacity-50' : '';
                 const title = disableReason;
-                return `<option value="${s.id}" data-percentage="${s.base_percentage}" data-dynamic="${s.is_dynamic_calculation}" ${disabledAttr} title="${title}" class="${disabledClass}">${s.bengali_description}</option>`;
+                return `<option value="${s.id}" data-step-order="${s.step_order}" data-percentage="${s.base_percentage}" data-dynamic="${s.is_dynamic_calculation}" ${disabledAttr} title="${title}" class="${disabledClass}">${s.bengali_description}</option>`;
             }).join('');
 
             sel.innerHTML = '<option value="">-- অগ্রগতি ধাপ নির্বাচন করুন --</option>' + optionsHtml;
@@ -3108,14 +3205,8 @@
             let pct = basePct;
 
             if (isDynamic) {
-                const released = parseFloat((_progressRecord && _progressRecord.released_amount) || 0);
-                const alloc    = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
-                if (alloc > 0) {
-                    const ratio = Math.min(released / alloc, 1.0);
-                    pct = Math.round(30 + (ratio * 60));
-                } else {
-                    pct = 30;
-                }
+                // For dynamic steps, show current progress percentage as default value
+                pct = (_progressRecord && _progressRecord.progress_percentage) || basePct;
             }
 
             // Auto-fill 50% fund release for "১ম কিস্তি বিতরণ সম্পন্ন" (base 50%, non-dynamic)
@@ -3135,22 +3226,40 @@
             if (basePct === 30 && isDynamic) {
                 const field = document.getElementById('prog-fund-release-field');
                 const toggleBtn = document.getElementById('prog-fund-toggle');
+                const requiredIndicator = document.getElementById('prog-fund-required-indicator');
                 // Show the fund release section if it's hidden
                 if (field && field.classList.contains('hidden')) {
                     field.classList.remove('hidden');
                     toggleBtn.innerHTML = `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg> তহবিল ছাড় বাতিল করুন`;
                 }
+                // Show required indicator for Running Bill
+                if (requiredIndicator) {
+                    requiredIndicator.classList.remove('hidden');
+                }
+            } else {
+                // Hide required indicator for non-Running Bill stages
+                const requiredIndicator = document.getElementById('prog-fund-required-indicator');
+                if (requiredIndicator) {
+                    requiredIndicator.classList.add('hidden');
+                }
             }
 
-            // Auto-fill 100% fund release for চূড়ান্ত বিল প্রদান সমাপ্ত (final bill, base 100%)
+            // Auto-fill expected final bill amount for চূড়ান্ত বিল প্রদান সমাপ্ত (final bill, base 100%)
             if (basePct === 100 && !isDynamic) {
                 const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
                 if (alloc > 0) {
+                    // Calculate expected final bill: allocation - sum of all running bills
+                    const runningBillLogs = _allProgressLogs.filter(log =>
+                        log.current_status === 'রানিং বিল প্রদান' || log.current_status === 'কাজ চলমান'
+                    );
+                    const totalRunningBills = runningBillLogs.reduce((sum, log) => sum + parseFloat(log.released_amount || 0), 0);
+                    const expectedFinalBill = alloc - totalRunningBills;
+
                     const field = document.getElementById('prog-fund-release-field');
                     const btn   = document.getElementById('prog-fund-toggle');
                     field.classList.remove('hidden');
                     btn.innerHTML = `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg> তহবিল ছাড় বাতিল করুন`;
-                    document.getElementById('prog-released').value = alloc.toFixed(2);
+                    document.getElementById('prog-released').value = expectedFinalBill.toFixed(2);
                 }
             }
 
@@ -3158,6 +3267,33 @@
             document.getElementById('prog-status').value = opt.text;
 
             display.classList.remove('hidden');
+            document.getElementById('prog-step-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
+            document.getElementById('prog-step-pct-bar').style.width = pct + '%';
+        }
+
+        function recalculateProgressFromFundInput() {
+            const stepSel = document.getElementById('prog-progress-step');
+            if (!stepSel || !stepSel.value) return;
+
+            const opt = stepSel.selectedOptions[0];
+            const isDynamic = opt.getAttribute('data-dynamic') === '1';
+            const basePct = parseInt(opt.getAttribute('data-percentage')) || 0;
+
+            if (!isDynamic) return; // Only recalculate for dynamic steps
+
+            const inputReleased = parseFloat(document.getElementById('prog-released').value) || 0;
+            const previousReleased = parseFloat((_progressRecord && _progressRecord.released_amount) || 0);
+            const totalReleased = previousReleased + inputReleased;
+            const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
+
+            let pct = basePct;
+            if (alloc > 0) {
+                const ratio = Math.min(totalReleased / alloc, 1.0);
+                // Dynamic range is 60% (from base 30% to max 90%)
+                // Calculation uses cumulative released amount (previous + current input)
+                pct = Math.round(basePct + (ratio * 60));
+            }
+
             document.getElementById('prog-step-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
             document.getElementById('prog-step-pct-bar').style.width = pct + '%';
         }
@@ -3295,6 +3431,9 @@
 
             updateProgressPreview();
 
+            // Add event listener for fund release input to recalculate progress in real-time
+            document.getElementById('prog-released').addEventListener('input', recalculateProgressFromFundInput);
+
             // Show modal
             document.getElementById('progress-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -3318,6 +3457,36 @@
 
         function closeErrorModal() {
             document.getElementById('error-modal').classList.add('hidden');
+        }
+
+        // Final Bill Warning Modal functions
+        let _finalBillWarningResolve = null;
+
+        function showFinalBillWarning(allocation, totalRunningBills, expectedFinalBill, userEnteredAmount) {
+            return new Promise((resolve) => {
+                _finalBillWarningResolve = resolve;
+                document.getElementById('fbw-total-allocation').textContent = '৳ ' + fmtAmt(allocation);
+                document.getElementById('fbw-running-total').textContent = '৳ ' + fmtAmt(totalRunningBills);
+                document.getElementById('fbw-expected-amount').textContent = '৳ ' + fmtAmt(expectedFinalBill);
+                document.getElementById('fbw-entered-amount').textContent = '৳ ' + fmtAmt(userEnteredAmount);
+                document.getElementById('final-bill-warning-modal').classList.remove('hidden');
+            });
+        }
+
+        function cancelFinalBillWarning() {
+            document.getElementById('final-bill-warning-modal').classList.add('hidden');
+            if (_finalBillWarningResolve) {
+                _finalBillWarningResolve(false);
+                _finalBillWarningResolve = null;
+            }
+        }
+
+        function confirmFinalBillWarning() {
+            document.getElementById('final-bill-warning-modal').classList.add('hidden');
+            if (_finalBillWarningResolve) {
+                _finalBillWarningResolve(true);
+                _finalBillWarningResolve = null;
+            }
         }
 
         // Global variables for delete confirmation
@@ -3346,7 +3515,11 @@
 
                 if (log.current_status === 'রানিং বিল প্রদান') {
                     const billDate = logDate;
-                    const billAmount = fmtAmt(log.released_amount || 0);
+                    // Calculate incremental amount: current - previous log's released amount
+                    const currentAmount = parseFloat(log.released_amount || 0);
+                    const previousAmount = (index < _allProgressLogs.length - 1) ? parseFloat(_allProgressLogs[index + 1]?.released_amount || 0) : 0;
+                    const incrementalAmount = currentAmount - previousAmount;
+                    const billAmount = fmtAmt(incrementalAmount);
                     const billMessage = `${billDate} তারিখে ৳ ${billAmount} রানিং বিল প্রদান করা হয়েছে।`;
                     detailMessage = `<p class="plog-note" style="color:#059669;font-weight:500;margin-top:0.5rem;">${billMessage}</p>` + (log.note ? `<p class="plog-note">${log.note}</p>` : '');
                 }
@@ -3420,72 +3593,32 @@
                     return;
                 }
 
-                // If we deleted the most recent log, update modal to show new latest
-                if (_allProgressLogs.length > 0) {
-                    const newLatest = _allProgressLogs[0];
-                    // Update _progressRecord to reflect new latest status
-                    _progressRecord.progress_percentage = newLatest.progress_percentage;
-                    _progressRecord.released_amount = newLatest.released_amount;
-                    _progressRecord.current_status = newLatest.current_status;
-                    _progressRecord.is_completed = newLatest.is_completed;
-                    _progressRecord.is_delayed = newLatest.is_delayed;
-
-                    // Update modal display
-                    document.getElementById('prog-current-pct-label').textContent = CRUDManager.toBengaliNumber(newLatest.progress_percentage) + '%';
-                    document.getElementById('prog-current-bar').style.width = newLatest.progress_percentage + '%';
-                    const released = parseFloat(newLatest.released_amount || 0);
-                    const alloc = parseFloat(_progressRecord.allocation_amount || 0);
-                    document.getElementById('prog-current-released').textContent = '৳ ' + fmtAmt(released);
-                    const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
-                    document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
-                    document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
-
-                    // Update progress step dropdown and fund release visibility
-                    await loadProgressModalLog(_progressProjectId);
-                    populateProgressSteps(_progressRecord.implementation_method);
-
-                    // Re-render progress logs to show delete button on new latest log ✅
-                    rerenderProgressLogsInModal();
-
-                    // Rebuild _addedProgressStepIds
-                    _addedProgressStepIds = new Set();
-                    _allProgressLogs.forEach(log => {
-                        if (log.progress_step_id) {
-                            _addedProgressStepIds.add(log.progress_step_id);
-                        }
-                    });
-                    if (_allProgressLogs.length > 0) {
-                        _lastProgressStepId = _allProgressLogs[0].progress_step_id || null;
-                    }
-                } else {
-                    // No logs remaining, reset to empty state
-                    _progressRecord.progress_percentage = 0;
-                    _progressRecord.released_amount = 0;
-                    _progressRecord.current_status = null;
-                    _progressRecord.is_completed = 0;
-                    _progressRecord.is_delayed = 0;
-
-                    document.getElementById('prog-current-pct-label').textContent = '0%';
-                    document.getElementById('prog-current-bar').style.width = '0%';
-                    document.getElementById('prog-current-released').textContent = '৳ 0';
-                    document.getElementById('dm-fund-release-pct').innerText = '0%';
-                    document.getElementById('dm-fund-release-bar').style.width = '0%';
-
-                    _addedProgressStepIds = new Set();
-                    _lastProgressStepId = null;
-                    await loadProgressModalLog(_progressProjectId);
-                    populateProgressSteps(_progressRecord.implementation_method);
-
-                    // Clear progress logs display when no logs remain
-                    document.getElementById('dm-progress-log-list').innerHTML = '';
-                }
-
-                // Update the project in allRecords with the new progress percentage from backend ✅
+                // Fetch the updated project from backend to get recalculated progress
                 try {
                     const projectRes = await fetch(`${AuthManager.API_URL}/projects/${projectId}`);
                     if (projectRes.ok) {
                         const updatedProject = await projectRes.json();
-                        // Find and update the project in allRecords
+
+                        // Update _progressRecord with the new recalculated values from backend
+                        _progressRecord.progress_percentage = updatedProject.progress_percentage;
+                        _progressRecord.released_amount = updatedProject.released_amount;
+                        _progressRecord.current_status = updatedProject.current_status;
+                        _progressRecord.is_completed = updatedProject.is_completed;
+                        _progressRecord.is_delayed = updatedProject.is_delayed;
+
+                        // Update modal display with recalculated values
+                        const pct = updatedProject.progress_percentage || 0;
+                        const released = parseFloat(updatedProject.released_amount || 0);
+                        const alloc = parseFloat(updatedProject.allocation_amount || 0);
+
+                        document.getElementById('prog-current-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
+                        document.getElementById('prog-current-bar').style.width = pct + '%';
+                        document.getElementById('prog-current-released').textContent = '৳ ' + fmtAmt(released);
+                        const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
+                        document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
+                        document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
+
+                        // Update the project in allRecords with the new progress percentage
                         const projectIndex = allRecords.findIndex(p => p.id === projectId);
                         if (projectIndex !== -1) {
                             allRecords[projectIndex].progress_percentage = updatedProject.progress_percentage;
@@ -3493,12 +3626,34 @@
                             allRecords[projectIndex].current_status = updatedProject.current_status;
                             allRecords[projectIndex].is_completed = updatedProject.is_completed;
                             allRecords[projectIndex].is_delayed = updatedProject.is_delayed;
-                            // Re-render the table to show updated progress bar
-                            renderRows();
                         }
                     }
                 } catch (err) {
+                    console.error('Failed to fetch updated project:', err);
                 }
+
+                // Update progress step dropdown and fund release visibility
+                await loadProgressModalLog(_progressProjectId);
+                populateProgressSteps(_progressRecord.implementation_method);
+
+                // Re-render progress logs to show delete button on new latest log ✅
+                rerenderProgressLogsInModal();
+
+                // Rebuild _addedProgressStepIds
+                _addedProgressStepIds = new Set();
+                _allProgressLogs.forEach(log => {
+                    if (log.progress_step_id) {
+                        _addedProgressStepIds.add(log.progress_step_id);
+                    }
+                });
+                if (_allProgressLogs.length > 0) {
+                    _lastProgressStepId = _allProgressLogs[0].progress_step_id || null;
+                } else {
+                    _lastProgressStepId = null;
+                }
+
+                // Update the project table to show updated progress bar
+                renderRows();
 
                 CRUDManager.showSuccess('অগ্রগতি লগ মুছে ফেলা হয়েছে');
                 _deleteConfirmationData = { projectId: null, logId: null };
@@ -3570,25 +3725,62 @@
                 const fundOpen = !document.getElementById('prog-fund-release-field').classList.contains('hidden');
                 const stepSel = document.getElementById('prog-progress-step');
                 const stepOpt = stepSel.options[stepSel.selectedIndex];
-                const payload = {
-                    progress_step_id:    parseInt(stepSel.value, 10) || null,
-                    current_status:      stepOpt && stepSel.value ? stepOpt.text : '',
-                    released_amount:     fundOpen ? (parseFloat(document.getElementById('prog-released').value) || 0) : null,
-                    is_completed:        0,
-                    is_delayed:          0,
-                    note:                document.getElementById('prog-note').value.trim(),
-                    activity_date:       document.getElementById('prog-activity-date').value || null
-                };
-                if (!payload.progress_step_id) {
+
+                if (!stepSel.value) {
                     showErrorModal('অনুগ্রহ করে একটি অগ্রগতি ধাপ নির্বাচন করুন', 'ধাপ নির্বাচন করুন');
                     btn.disabled = false;
                     btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
                     return;
                 }
 
-                // Validate progress step selection
-                const stepPercentage = parseInt(stepOpt.getAttribute('data-percentage')) || 0;
+                // Validate progress step selection FIRST to get step info
+                const stepBasePct = parseInt(stepOpt.getAttribute('data-percentage')) || 0;
+                const isDynamic = stepOpt.getAttribute('data-dynamic') === '1';
                 const currentProgress = (_progressRecord && _progressRecord.progress_percentage) || 0;
+
+                // For dynamic steps, calculate cumulative released amount
+                let cumulativeReleasedAmount = null;
+                let stepPercentage = stepBasePct;
+                if (isDynamic) {
+                    const previousReleased = parseFloat((_progressRecord && _progressRecord.released_amount) || 0);
+                    const inputReleased = fundOpen ? (parseFloat(document.getElementById('prog-released').value) || 0) : 0;
+                    cumulativeReleasedAmount = previousReleased + inputReleased;
+                    const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
+                    if (alloc > 0) {
+                        const ratio = Math.min(cumulativeReleasedAmount / alloc, 1.0);
+                        stepPercentage = Math.round(stepBasePct + (ratio * 60));
+                    }
+                }
+
+                // For final bill (100% completion), calculate cumulative amount only for non-CPPC
+                const method = (_progressRecord?.implementation_method || '').trim();
+                const isCPPCProject = method === 'সিপিপিসি' || method.toLowerCase() === 'cppc';
+
+                let finalBillCumulativeAmount = null;
+                if (stepBasePct === 100 && !isDynamic && !isCPPCProject && fundOpen) {
+                    const previousReleased = parseFloat((_progressRecord && _progressRecord.released_amount) || 0);
+                    const inputReleased = parseFloat(document.getElementById('prog-released').value) || 0;
+                    finalBillCumulativeAmount = previousReleased + inputReleased;
+                }
+
+                const payload = {
+                    progress_step_id:    parseInt(stepSel.value, 10),
+                    current_status:      stepOpt ? stepOpt.text : '',
+                    // For dynamic steps: send cumulative amount
+                    // For final bills (non-CPPC): send cumulative amount
+                    // For CPPC installments: send input amount as-is
+                    // For others: send input/step amount
+                    released_amount:     (isDynamic && cumulativeReleasedAmount !== null) ? cumulativeReleasedAmount :
+                                        (finalBillCumulativeAmount !== null ? finalBillCumulativeAmount :
+                                        (fundOpen ? (parseFloat(document.getElementById('prog-released').value) || 0) : null)),
+                    is_completed:        0,
+                    is_delayed:          0,
+                    note:                document.getElementById('prog-note').value.trim(),
+                    activity_date:       document.getElementById('prog-activity-date').value || null
+                };
+
+                // Add calculated progress percentage to payload
+                payload.progress_percentage = stepPercentage;
 
                 if (stepPercentage < currentProgress) {
                     showErrorModal(`এই ধাপ ইতিমধ্যে সম্পন্ন হয়েছে এবং আপনি পূর্ববর্তী ধাপে ফিরে যেতে পারবেন না।\n\nবর্তমান অগ্রগতি: ${CRUDManager.toBengaliNumber(currentProgress)}%\nনির্বাচিত ধাপের অগ্রগতি: ${CRUDManager.toBengaliNumber(stepPercentage)}%`, 'পূর্ববর্তী ধাপ');
@@ -3597,20 +3789,86 @@
                     return;
                 }
 
-                if (_addedProgressStepIds.has(payload.progress_step_id)) {
+                // Allow duplicate step only for Dynamic steps (like Running Bill - রানিং বিল প্রদান)
+                // Dynamic steps can be added multiple times, other steps cannot
+                const isDuplicateStep = _addedProgressStepIds.has(payload.progress_step_id);
+
+                if (isDuplicateStep && !isDynamic) {
                     showErrorModal('এই অগ্রগতি ধাপ ইতিমধ্যে এই প্রকল্পে যোগ করা হয়েছে। অন্য একটি ধাপ নির্বাচন করুন।', 'ধাপ ইতিমধ্যে যোগ করা হয়েছে');
                     btn.disabled = false;
                     btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
                     return;
                 }
+
+                // Validate: Running Bill stage requires fund release amount (only for dynamic running bills, not CPPC installments)
+                const isRunningBillStage = payload.current_status === 'রানিং বিল প্রদান' && isDynamic;
+                if (isRunningBillStage) {
+                    const releasedAmt = payload.released_amount;
+                    if (releasedAmt === null || releasedAmt === undefined || releasedAmt === 0 || releasedAmt === '0') {
+                        showErrorModal('রানিং বিল প্রদান স্তরে আপনাকে তহবিল ছাড়ের পরিমাণ অবশ্যই পূরণ করতে হবে।', 'তহবিল ছাড়ের পরিমাণ প্রয়োজন');
+                        btn.disabled = false;
+                        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
+                        return;
+                    }
+
+                    // Validate: Total running bills cannot exceed total allocation
+                    // For dynamic steps (running bills), releasedAmt is already the cumulative amount
+                    const allocation = parseFloat(_progressRecord?.allocation_amount) || 0;
+                    const cumulativeAmount = parseFloat(releasedAmt) || 0;
+
+                    // Round to nearest whole number to avoid floating-point precision issues
+                    const totalRounded = Math.round(cumulativeAmount);
+                    const allocationRounded = Math.round(allocation);
+
+                    if (totalRounded > allocationRounded) {
+                        const previousReleased = parseFloat(_progressRecord?.released_amount) || 0;
+                        showErrorModal(
+                            `মোট রানিং বিল মোট বরাদ্দের পরিমাণ অতিক্রম করবে।\n\nমোট বরাদ্দ: ৳ ${fmtAmt(allocation)} টাকা\nইতিমধ্যে ছাড়কৃত: ৳ ${fmtAmt(previousReleased)} টাকা\n\nদয়া করে সঠিক টাকার পরিমাণ উল্লেখ করুন`,
+                            'সীমা অতিক্রম'
+                        );
+                        btn.disabled = false;
+                        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
+                        return;
+                    }
+                }
+
+                // Validate: Final Bill amount = (allocation - sum of all running bills)
+                // For CPPC: skip warning, just accept the auto-filled amount
+                // For Tender/RFQ: show warning if amount doesn't match expected
+                const isFinalBill = payload.current_status === 'চূড়ান্ত বিল প্রদান সমাপ্ত';
+
+                if (isFinalBill && !isCPPCProject) {
+                    // Only show warning for Tender/RFQ, not for CPPC
+                    const allocation = parseFloat(_progressRecord?.allocation_amount) || 0;
+                    const runningBillLogs = _allProgressLogs.filter(log =>
+                        log.current_status === 'রানিং বিল প্রদান' || log.current_status === 'কাজ চলমান'
+                    );
+                    const totalRunningBills = runningBillLogs.reduce((sum, log) => sum + parseFloat(log.released_amount || 0), 0);
+                    const expectedFinalBill = allocation - totalRunningBills;
+                    const userEnteredAmount = parseFloat(payload.released_amount) || 0;
+
+                    // Show warning if user entered different amount than expected (use rounding for precision)
+                    const userRounded = Math.round(userEnteredAmount);
+                    const expectedRounded = Math.round(expectedFinalBill);
+                    if (userRounded !== expectedRounded) {
+                        const confirmed = await showFinalBillWarning(allocation, totalRunningBills, expectedFinalBill, userEnteredAmount);
+                        if (!confirmed) {
+                            btn.disabled = false;
+                            btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
+                            return;
+                        }
+                    }
+                }
+
                 if (payload.released_amount === null) delete payload.released_amount;
                 const res = await AuthManager.fetch(
                     `${AuthManager.API_URL}/projects/${_progressProjectId}/progress`,
                     { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }
                 );
+
+                const responseData = await res.json();
                 if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.message || 'সংরক্ষণ ব্যর্থ');
+                    throw new Error(responseData.message || 'সংরক্ষণ ব্যর্থ');
                 }
 
                 // Show appropriate success message
@@ -3621,7 +3879,19 @@
                 CRUDManager.showSuccess(successMsg);
                 const savedProjectId = _progressProjectId;
 
-                // Refresh detail popup if open
+                // Immediately update fund release percentage in detail modal if open
+                if (currentDetailId && (currentDetailId === savedProjectId || currentDetailId === String(savedProjectId))) {
+                    if (responseData.released_amount !== undefined && responseData.allocation_amount !== undefined) {
+                        const released = parseFloat(responseData.released_amount);
+                        const alloc = parseFloat(responseData.allocation_amount);
+                        const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
+                        document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
+                        document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
+                        document.getElementById('dm-released').innerText = '৳ ' + fmtAmt(released) + ' টাকা';
+                    }
+                }
+
+                // Refresh detail popup if open (to get progress logs and other updated data)
                 if (currentDetailId && (currentDetailId === savedProjectId || currentDetailId === String(savedProjectId))) {
                     const record = await CRUDManager.fetchList(`/projects/${currentDetailId}`);
                     if (record) { currentDetailRecord = record; showDetailModal(record); }
@@ -4721,6 +4991,35 @@
                 formData.approval_memo_id    = formData.approval_memo_id ? parseInt(formData.approval_memo_id, 10) : null;
                 formData.is_completed = formData.is_completed ? 1 : 0;
                 formData.is_delayed   = formData.is_delayed   ? 1 : 0;
+
+                // Validate: CPPC projects cannot exceed 300,000 tk
+                // Get the implementation_method from the form field directly (more reliable than formData)
+                const implMethodSelect = document.querySelector('select[name="implementation_method"]');
+                const implMethodValue = implMethodSelect ? implMethodSelect.value : (formData.implementation_method || '');
+                const isCPPC = (implMethodValue || '').trim() === 'সিপিপিসি' ||
+                               (implMethodValue || '').toLowerCase() === 'cppc';
+                console.log('CPPC Check:', {
+                    implMethodValue,
+                    isCPPC,
+                    allocation_amount: formData.allocation_amount,
+                    exceeds: formData.allocation_amount > 300000
+                });
+                if (isCPPC && formData.allocation_amount > 300000) {
+                    const maxAmount = CRUDManager.toBengaliNumber('300000');
+                    console.log('CPPC validation triggered - showing warning modal');
+                    // Ensure modal exists and try to show it
+                    const errorModal = document.getElementById('error-modal');
+                    if (errorModal) {
+                        showErrorModal(`সিপিপিসি প্রকল্পের সর্বোচ্চ বরাদ্দ ৳ ${maxAmount} টাকা।\n\nঅনুগ্রহ করে কম পরিমাণ প্রবেশ করুন।`, 'সর্বোচ্চ বরাদ্দ অতিক্রম');
+                        console.log('Modal shown, hidden class removed:', !errorModal.classList.contains('hidden'));
+                    } else {
+                        console.error('Error modal element not found!');
+                        alert(`সিপিপিসি প্রকল্পের সর্বোচ্চ বরাদ্দ ৳ ${maxAmount} টাকা। অনুগ্রহ করে কম পরিমাণ প্রবেশ করুন।`);
+                    }
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'সংরক্ষণ করুন';
+                    return;
+                }
 
                 // Strip empty date strings so they go as NULL
                 ['start_date', 'expected_end_date', 'actual_end_date'].forEach(k => {
