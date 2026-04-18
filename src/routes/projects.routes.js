@@ -12,6 +12,7 @@ router.get('/progress-steps', projectsController.getProgressSteps);
 router.get('/available-memos/:financialYear', projectsController.getAvailableMemos);
 router.get('/upazilas', projectsController.getUpazilas);
 router.get('/stats', projectsController.getStats);
+router.get('/map-data', projectsController.getMapData);
 router.get('/list', projectsController.getAll);
 router.get('/:id/progress', projectsController.getProgressLog);
 router.get('/:id/images', projectsController.getImages);

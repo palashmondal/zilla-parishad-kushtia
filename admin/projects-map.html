@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রকল্প ম্যাপ - জেলা পরিষদ, কুষ্টিয়া</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
+    <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
+
+    <!-- Leaflet — lightweight OSM map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+    <!-- Leaflet Marker Cluster -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerClusterDefault.css"/>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+
+    <style>
+        html { font-size: 18px; }
+        * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
+        body { background: #f9fafb; }
+
+        #mapContainer {
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .filter-box {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        select {
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .stats-box {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+    <div id="menu-container"></div>
+
+    <main class="container mx-auto px-4 py-6">
+        <!-- Filter Section -->
+        <div class="filter-box p-4 mb-6">
+            <h2 class="text-lg font-semibold mb-4 text-gray-900">ফিল্টার করুন</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">অর্থবছর</label>
+                    <select id="yearFilter" class="w-full">
+                        <option value="">সব বছর</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">উপজেলা</label>
+                    <select id="upazilaFilter" class="w-full">
+                        <option value="">সব উপজেলা</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">বাস্তবায়ন পদ্ধতি</label>
+                    <select id="methodFilter" class="w-full">
+                        <option value="">সব পদ্ধতি</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">অগ্রাধিকার</label>
+                    <select id="priorityFilter" class="w-full">
+                        <option value="">সব অগ্রাধিকার</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Container -->
+        <div id="mapContainer" style="height: 600px; width: 100%;" class="mb-6"></div>
+
+        <!-- Stats Box -->
+        <div class="stats-box p-4">
+            <p class="text-sm text-gray-700">মোট প্রকল্প: <span id="totalProjects" class="font-semibold text-gray-900">0</span></p>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="./assets/js/auth.js"></script>
+    <script src="./assets/js/components.js"></script>
+    <script src="./assets/js/projects-map.js"></script>
+</body>
+</html>

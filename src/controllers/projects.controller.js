@@ -125,6 +125,24 @@ const projectsController = {
         }
     },
 
+    async getMapData(req, res) {
+        try {
+            const year = req.query.year || '';
+            const priority = req.query.priority || '';
+            const upazila = req.query.upazila || '';
+            const implementation_method = req.query.implementation_method || '';
+
+            const results = await projectsModel.getAllForMap(year, priority, upazila, implementation_method);
+            res.json(results);
+        } catch (error) {
+            console.error('Projects map data error:', error);
+            res.status(500).json({
+                error: 'Failed to fetch map data',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
     async getAll(req, res) {
         try {
             const page = parseInt(req.query.page, 10) || 1;
