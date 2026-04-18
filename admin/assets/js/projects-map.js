@@ -2,6 +2,7 @@ const ProjectMap = {
     map: null,
     markerCluster: null,
     allProjects: [],
+    searchQuery: '',
 
     async init() {
         try {
@@ -35,6 +36,12 @@ const ProjectMap = {
             document.getElementById('upazilaFilter').addEventListener('change', () => this.applyFilters());
             document.getElementById('methodFilter').addEventListener('change', () => this.applyFilters());
             document.getElementById('priorityFilter').addEventListener('change', () => this.applyFilters());
+
+            // Attach search input listener
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                this.searchQuery = e.target.value.trim().toLowerCase();
+                this.applyFilters();
+            });
 
             console.log('ProjectMap initialized successfully');
         } catch (error) {
@@ -113,12 +120,22 @@ const ProjectMap = {
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`);
             }
-            this.allProjects = await res.json();
+            let projects = await res.json();
+
+            // Apply search filter if search query exists
+            if (this.searchQuery) {
+                projects = projects.filter(project => {
+                    const searchableText = `${project.name} ${project.upazila} ${project.id}`.toLowerCase();
+                    return searchableText.includes(this.searchQuery);
+                });
+            }
+
+            this.allProjects = projects;
 
             this.renderMarkers();
             document.getElementById('totalProjects').textContent = this.allProjects.length;
 
-            console.log(`Loaded ${this.allProjects.length} projects`);
+            console.log(`Loaded ${this.allProjects.length} projects (after search/filters)`);
         } catch (error) {
             console.error('Error loading map data:', error);
         }
