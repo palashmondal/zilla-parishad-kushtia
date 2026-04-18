@@ -5982,6 +5982,44 @@
             if (cell && !cell.contains(e.relatedTarget)) hideTooltip(cell);
         });
     })();
+
+    // Handle URL parameter ?id=xxx to auto-open project detail modal
+    (function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('id');
+
+        if (projectId) {
+            // Wait for page to fully load before opening modal
+            document.addEventListener('DOMContentLoaded', async function() {
+                try {
+                    // Fetch project data
+                    const response = await AuthManager.fetch(
+                        `${AuthManager.API_URL}/projects/${projectId}`
+                    );
+
+                    if (!response.ok) {
+                        console.error('Failed to fetch project:', response.status);
+                        return;
+                    }
+
+                    const project = await response.json();
+
+                    // Store current detail ID
+                    currentDetailId = project.id;
+                    currentDetailRecord = project;
+                    currentProjectData = project;
+
+                    // Open the detail modal with project data
+                    showDetailModal(project);
+
+                    // Remove the id parameter from URL to clean up
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } catch (error) {
+                    console.error('Error loading project from URL:', error);
+                }
+            });
+        }
+    })();
 </script>
 </body>
 </html>
