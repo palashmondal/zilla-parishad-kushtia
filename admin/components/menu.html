@@ -2,14 +2,28 @@
 <style>
     .projects-dropdown-menu {
         display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        z-index: 50;
+        width: 220px;
+        margin-top: 0;
+        padding: 0.25rem 0;
     }
     .projects-dropdown:hover .projects-dropdown-menu {
         display: block;
     }
+    .projects-dropdown {
+        position: relative;
+    }
 </style>
 <nav class="bg-white shadow-sm border-b border-gray-200" style="font-family: Shurjo, 'Siyam Rupali', Roboto, Arial, Helvetica, Monospace;">
     <div class="container mx-auto px-4">
-        <div class="flex gap-6 overflow-x-auto">
+        <div class="flex gap-6 items-center">
             <a href="/admin/" data-menu-item="dashboard" class="flex items-center gap-2 px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
@@ -30,26 +44,26 @@
             </a>
 
             <!-- Projects dropdown menu -->
-            <div class="relative projects-dropdown" data-module="projects">
+            <div class="projects-dropdown" data-module="projects">
                 <button class="flex items-center gap-2 px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
                     </svg>
                     প্রকল্প ব্যবস্থাপনা
-                    <svg class="w-4 h-4 ml-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
                     </svg>
                 </button>
 
                 <!-- Dropdown menu items -->
-                <div class="absolute left-0 mt-0 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 projects-dropdown-menu transition-all z-50">
-                    <a href="/admin/projects-manage.html" data-menu-item="projects" class="flex items-center gap-2 px-6 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition whitespace-nowrap">
+                <div class="projects-dropdown-menu">
+                    <a href="/admin/projects-manage.html" data-menu-item="projects" class="flex items-center gap-2 px-6 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition whitespace-nowrap block">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                         </svg>
                         প্রকল্প তালিকা
                     </a>
-                    <a href="/admin/approval-memos.html" data-menu-item="approval-memos" class="flex items-center gap-2 px-6 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition whitespace-nowrap">
+                    <a href="/admin/approval-memos.html" data-menu-item="approval-memos" class="flex items-center gap-2 px-6 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition whitespace-nowrap block">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
@@ -58,7 +72,7 @@
                 </div>
             </div>
 
-            <a href="/admin/users-manage.html" data-menu-item="users" data-role="admin" class="flex items-center gap-2 px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
+            <a href="/admin/users-manage.html" data-menu-item="users" data-role="admin" class="flex items-center gap-2 px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap ml-auto">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
