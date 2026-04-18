@@ -791,7 +791,18 @@
         // User Detail Modal Functions
         let currentUserDetail = null;
 
-        function showUserDetail(user) {
+        async function showUserDetail(user) {
+            try {
+                // Fetch fresh user data with modules
+                const response = await AuthManager.fetch(`${AuthManager.API_URL}/users/${user.id}`);
+                if (response.ok) {
+                    user = await response.json();
+                }
+            } catch (error) {
+                console.error('Failed to fetch fresh user data:', error);
+                // Fall back to the original user object from table
+            }
+
             currentUserDetail = user;
 
             // Avatar
