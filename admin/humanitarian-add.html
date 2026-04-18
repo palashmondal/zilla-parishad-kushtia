@@ -336,7 +336,7 @@
     </script>
     <script>
         // Initialize
-        AuthManager.init().then((user) => {
+        AuthManager.initModule('humanitarian_aid').then((user) => {
             if (!user) return;
         });
 

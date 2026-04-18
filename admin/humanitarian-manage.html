@@ -657,7 +657,7 @@
 
         // Initialize — load data immediately (list/years are public endpoints),
         // run auth check in parallel for redirect protection and role-based UI.
-        AuthManager.init(); // handles redirect to login if unauthenticated
+        AuthManager.initModule('humanitarian_aid'); // redirect if unauthenticated or no module access
         loadYears().then(() => loadData());
 
         // Search debouncing

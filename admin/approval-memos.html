@@ -968,6 +968,8 @@
         let pendingDeleteId = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
+            const user = await AuthManager.requireModule('projects');
+            if (!user) return;
             await DashboardComponents.loadAll('approval-memos', 'প্রকল্প অনুমোদন স্মারক');
             loadData();
             loadFinancialYears();

@@ -9,9 +9,10 @@ const AuthManager = {
         ? 'http://localhost:3000/api'
         : '/api',
 
-    // Token keys
+    // Storage keys
     TOKEN_KEY: 'zpk_admin_token',
     USER_KEY: 'zpk_admin_user',
+    MODULES_KEY: 'zpk_admin_modules',
 
     /**
      * Get stored token
@@ -34,6 +35,7 @@ const AuthManager = {
     setAuth(token, user) {
         localStorage.setItem(this.TOKEN_KEY, token);
         localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+        localStorage.setItem(this.MODULES_KEY, JSON.stringify(user.modules || []));
     },
 
     /**
@@ -42,6 +44,24 @@ const AuthManager = {
     clearAuth() {
         localStorage.removeItem(this.TOKEN_KEY);
         localStorage.removeItem(this.USER_KEY);
+        localStorage.removeItem(this.MODULES_KEY);
+    },
+
+    /**
+     * Get granted modules for current user
+     */
+    getModules() {
+        const raw = localStorage.getItem(this.MODULES_KEY);
+        return raw ? JSON.parse(raw) : [];
+    },
+
+    /**
+     * Check if current user has access to a module
+     * Admin role always returns true
+     */
+    hasModule(moduleName) {
+        if (this.isAdmin()) return true;
+        return this.getModules().includes(moduleName);
     },
 
     /**
@@ -88,8 +108,9 @@ const AuthManager = {
             }
 
             const user = await response.json();
-            // Update stored user info
+            // Update stored user info and modules
             localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+            localStorage.setItem(this.MODULES_KEY, JSON.stringify(user.modules || []));
             return user;
         } catch (error) {
             console.error('Token verification failed:', error);
@@ -106,6 +127,22 @@ const AuthManager = {
         const user = await this.verifyToken();
         if (!user) {
             window.location.href = '/admin/login.html';
+            return null;
+        }
+        return user;
+    },
+
+    /**
+     * Require access to a specific module
+     * Redirects to dashboard if the user lacks the module grant
+     */
+    async requireModule(moduleName) {
+        const user = await this.requireAuth();
+        if (!user) return null;
+
+        if (!this.hasModule(moduleName)) {
+            alert('এই মডিউলে আপনার অ্যাক্সেস নেই। আপনাকে ড্যাশবোর্ডে পুনঃনির্দেশিত করা হচ্ছে।');
+            window.location.href = '/admin/';
             return null;
         }
         return user;
@@ -199,6 +236,12 @@ const AuthManager = {
                 el.style.display = 'none';
             }
         });
+
+        // Show/hide module-gated elements
+        document.querySelectorAll('[data-module]').forEach(el => {
+            const mod = el.getAttribute('data-module');
+            el.style.display = this.hasModule(mod) ? '' : 'none';
+        });
     },
 
     /**
@@ -283,6 +326,22 @@ const AuthManager = {
         const user = requireAdminRole
             ? await this.requireAdmin()
             : await this.requireAuth();
+
+        if (user) {
+            this.displayUserInfo();
+            this.applyRoleBasedUI();
+            this.initProfileDropdown();
+        }
+
+        return user;
+    },
+
+    /**
+     * Initialize auth for a module-gated page
+     * Redirects to dashboard if user lacks the module grant
+     */
+    async initModule(moduleName) {
+        const user = await this.requireModule(moduleName);
 
         if (user) {
             this.displayUserInfo();

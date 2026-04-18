@@ -132,11 +132,26 @@ const projectsModel = {
     },
 
     async getAvailableMemos(financialYear) {
+        const BN_TO_EN = `REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                              p.financial_year,'০','0'),'১','1'),'২','2'),'৩','3'),'৪','4'),
+                              '৫','5'),'৬','6'),'৭','7'),'৮','8'),'৯','9')`;
         const [results] = await pool.execute(
             `SELECT am.id, am.memo_type, am.memo_date, am.memo_number, am.meeting_month, am.meeting_date, am.total_projects,
-                    COALESCE(COUNT(p.id), 0) AS actual_projects
+                    COALESCE(
+                        NULLIF(SUM(CASE WHEN p.approval_memo_id = am.id THEN 1 ELSE 0 END), 0),
+                        SUM(CASE WHEN p.approval_memo_id IS NULL
+                                  AND p.financial_year IS NOT NULL
+                                  AND ${BN_TO_EN} = am.financial_year
+                                 THEN 1 ELSE 0 END),
+                        0
+                    ) AS actual_projects
              FROM approval_memos am
-             LEFT JOIN projects p ON am.id = p.approval_memo_id
+             LEFT JOIN projects p ON (
+                 p.approval_memo_id = am.id
+                 OR (p.approval_memo_id IS NULL
+                     AND p.financial_year IS NOT NULL
+                     AND ${BN_TO_EN} = am.financial_year)
+             )
              WHERE am.financial_year = ?
              GROUP BY am.id, am.memo_type, am.memo_date, am.memo_number, am.meeting_month, am.meeting_date, am.total_projects
              ORDER BY COALESCE(am.memo_date, am.meeting_date) DESC`,
@@ -347,12 +362,14 @@ const projectsModel = {
         return result.affectedRows > 0;
     },
 
-    async getAll(page = 1, limit = 20, search = '', year = '', priority = '') {
+    async getAll(page = 1, limit = 20, search = '', year = '', priority = '', upazila = '', method = '', status = '') {
         const safeLimit = parseInt(limit, 10) || 20;
         const safePage = parseInt(page, 10) || 1;
         const offset = (safePage - 1) * safeLimit;
 
-        let sql = `SELECT ${PROJECT_FIELDS} FROM projects`;
+        let sql = `SELECT ${PROJECT_FIELDS},
+                   (SELECT MAX(logged_at) FROM project_progress_log WHERE project_id = projects.id) as last_logged_at
+                   FROM projects`;
         let countSql = 'SELECT COUNT(*) as total FROM projects';
         const params = [];
         const countParams = [];
@@ -412,6 +429,49 @@ const projectsModel = {
             conditions.push('priority = ?');
             params.push(priority);
             countParams.push(priority);
+        }
+
+        if (upazila && upazila !== '') {
+            conditions.push('upazila = ?');
+            params.push(upazila);
+            countParams.push(upazila);
+        }
+
+        if (method && method !== '') {
+            conditions.push('implementation_method = ?');
+            params.push(method);
+            countParams.push(method);
+        }
+
+        if (status && status !== '') {
+            // Status filter: completed, delayed, ongoing, pending
+            const oneMonthAgoDate = new Date();
+            oneMonthAgoDate.setMonth(oneMonthAgoDate.getMonth() - 1);
+            const oneMonthAgoIso = oneMonthAgoDate.toISOString().split('T')[0];
+
+            const twoMonthsAgoDate = new Date();
+            twoMonthsAgoDate.setMonth(twoMonthsAgoDate.getMonth() - 2);
+            const twoMonthsAgoIso = twoMonthsAgoDate.toISOString().split('T')[0];
+
+            if (status === 'completed') {
+                conditions.push('(is_completed = 1 OR progress_percentage >= 100)');
+            } else if (status === 'pending') {
+                conditions.push('(progress_percentage = 0 OR progress_percentage IS NULL)');
+            } else if (status === 'delayed') {
+                // Delayed: created >= 2 months ago AND 0 < progress < 100% AND no progress logged for > 1 month
+                // Use COALESCE to handle NULL (projects with no logs are considered delayed)
+                conditions.push(`created_at < ? AND progress_percentage > 0 AND progress_percentage < 100 AND COALESCE(
+                    (SELECT MAX(logged_at) FROM project_progress_log WHERE project_id = projects.id),
+                    '1900-01-01'
+                ) < ?`);
+                params.push(twoMonthsAgoIso);
+                params.push(oneMonthAgoIso);
+                countParams.push(twoMonthsAgoIso);
+                countParams.push(oneMonthAgoIso);
+            } else if (status === 'ongoing') {
+                // Ongoing: 0 < progress < 100% (regardless of age)
+                conditions.push('(progress_percentage > 0 AND progress_percentage < 100)');
+            }
         }
 
         if (conditions.length > 0) {

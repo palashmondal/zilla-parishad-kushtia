@@ -132,8 +132,11 @@ const projectsController = {
             const search = req.query.search || '';
             const year = req.query.year || '';
             const priority = req.query.priority || '';
+            const upazila = req.query.upazila || '';
+            const method = req.query.method || '';
+            const status = req.query.status || '';
 
-            const results = await projectsModel.getAll(page, limit, search, year, priority);
+            const results = await projectsModel.getAll(page, limit, search, year, priority, upazila, method, status);
             res.json(results);
         } catch (error) {
             console.error('Projects getAll error:', error);
