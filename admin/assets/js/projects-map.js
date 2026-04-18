@@ -14,8 +14,13 @@ const ProjectMap = {
                 maxZoom: 18
             }).addTo(this.map);
 
-            // Initialize marker cluster group
-            this.markerCluster = L.markerClusterGroup();
+            // Initialize marker cluster group with optimized settings
+            this.markerCluster = L.markerClusterGroup({
+                maxClusterRadius: 80, // Tighter clustering
+                disableClusteringAtZoom: 13, // Show individual markers at zoom 13+
+                chunkedLoading: true, // Load markers in chunks for better performance
+                zoomToBoundsOnClick: true // Zoom to cluster bounds on click
+            });
             this.map.addLayer(this.markerCluster);
 
             // Load filter options
@@ -137,11 +142,18 @@ const ProjectMap = {
         }
 
         let markersAdded = 0;
+        const bounds = L.latLngBounds();
 
         this.allProjects.forEach(project => {
             // Skip projects without valid coordinates
             if (!project.lat || !project.lng || isNaN(project.lat) || isNaN(project.lng)) {
+                console.warn(`Project ${project.id} has invalid coordinates: lat=${project.lat}, lng=${project.lng}`);
                 return;
+            }
+
+            // Validate coordinates are within reasonable bounds (Kushtia region)
+            if (project.lat < 23.5 || project.lat > 24.5 || project.lng < 88.5 || project.lng > 89.5) {
+                console.warn(`Project ${project.id} coordinates out of region: lat=${project.lat}, lng=${project.lng}`);
             }
 
             const color = this.getMarkerColor(project.implementation_method);
@@ -162,18 +174,28 @@ const ProjectMap = {
             });
 
             this.markerCluster.addLayer(marker);
+            bounds.extend([project.lat, project.lng]);
             markersAdded++;
         });
 
-        // Fit map bounds to show all markers
-        if (markersAdded > 0) {
-            const bounds = this.markerCluster.getBounds();
-            if (bounds.isValid()) {
-                this.map.fitBounds(bounds, { padding: [50, 50] });
-            }
-        }
+        console.log(`Rendered ${markersAdded} markers out of ${this.allProjects.length} projects`);
 
-        console.log(`Rendered ${markersAdded} markers`);
+        // Fit map bounds to show all markers with proper zoom
+        if (markersAdded > 0 && bounds.isValid()) {
+            try {
+                this.map.fitBounds(bounds, {
+                    padding: [50, 50],
+                    maxZoom: 14 // Prevent zooming in too much
+                });
+            } catch (error) {
+                console.error('Error fitting bounds:', error);
+                // Fallback: reset to default view
+                this.map.setView([23.9, 89.1], 11);
+            }
+        } else if (markersAdded === 0) {
+            // No valid markers, show default view
+            this.map.setView([23.9, 89.1], 11);
+        }
     },
 
     async applyFilters() {
