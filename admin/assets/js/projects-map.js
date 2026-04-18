@@ -277,20 +277,29 @@ const ProjectMap = {
 
         console.log(`Rendered ${markersAdded} markers out of ${this.allProjects.length} projects`);
 
-        // Fit map bounds to show all markers covering entire Kushtia area
+        // Fit map bounds with clusters expanded by default
         if (markersAdded > 0 && bounds.isValid()) {
             try {
-                // Use larger padding to ensure all markers are visible with good spacing
+                // Fit bounds with enough zoom to show individual pins by default
                 this.map.fitBounds(bounds, {
-                    padding: [100, 100],
-                    maxZoom: 11, // Lower max zoom to show more area at once
+                    padding: [80, 80],
+                    maxZoom: 12, // Shows expanded clusters with individual pins visible
                     animate: true,
                     duration: 0.8
                 });
+
+                // After map loads, zoom into center area to show expanded clusters better
+                this.map.once('zoomend', () => {
+                    const currentZoom = this.map.getZoom();
+                    if (currentZoom < 12) {
+                        // If bounds resulted in zoom < 12, zoom to 12 for better pin visibility
+                        this.map.setZoom(12);
+                    }
+                });
             } catch (error) {
                 console.error('Error fitting bounds:', error);
-                // Fallback: reset to default view showing entire Kushtia
-                this.map.setView([23.9, 89.1], 10);
+                // Fallback: show zoomed view with visible pins
+                this.map.setView([23.9, 89.1], 12);
             }
         } else if (markersAdded === 0) {
             // No valid markers, show default view
