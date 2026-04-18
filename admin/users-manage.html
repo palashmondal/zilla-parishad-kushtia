@@ -366,21 +366,40 @@
             container.innerHTML = MODULES.map(mod => {
                 const isGranted = grantedModules.includes(mod.name);
                 return `
-                    <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:border-green-300 transition">
+                    <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:border-green-300 transition module-row" data-module="${mod.name}">
                         <span class="text-sm font-medium text-gray-700">${mod.label}</span>
-                        <label class="relative inline-block w-12 h-6">
+                        <label class="relative inline-block w-12 h-6 cursor-pointer">
                             <input type="checkbox"
                                    name="module_${mod.name}"
                                    value="${mod.name}"
                                    ${isGranted ? 'checked' : ''}
                                    class="sr-only module-toggle"
                                    data-module="${mod.name}">
-                            <span class="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full transition ${isGranted ? 'bg-green-500' : ''}"></span>
-                            <span class="absolute cursor-pointer top-1 left-1 bg-white w-4 h-4 rounded-full transition ${isGranted ? 'translate-x-6' : ''}"></span>
+                            <span class="absolute top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full transition duration-300 module-bg ${isGranted ? 'bg-green-500' : ''}"></span>
+                            <span class="absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition duration-300 module-dot ${isGranted ? 'translate-x-6' : ''}"></span>
                         </label>
                     </div>
                 `;
             }).join('');
+
+            // Add click handlers to all toggles
+            document.querySelectorAll('#module-toggles .module-row').forEach(row => {
+                row.addEventListener('click', (e) => {
+                    const checkbox = row.querySelector('.module-toggle');
+                    checkbox.checked = !checkbox.checked;
+
+                    // Update visual state
+                    const bg = row.querySelector('.module-bg');
+                    const dot = row.querySelector('.module-dot');
+                    if (checkbox.checked) {
+                        bg.classList.add('bg-green-500');
+                        dot.classList.add('translate-x-6');
+                    } else {
+                        bg.classList.remove('bg-green-500');
+                        dot.classList.remove('translate-x-6');
+                    }
+                });
+            });
         }
 
         function updateModuleSectionVisibility() {
