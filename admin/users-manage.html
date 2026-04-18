@@ -230,8 +230,7 @@
                     <!-- Module Access (hidden for admin role) -->
                     <div id="module-access-section" class="mt-4 hidden">
                         <label class="block text-sm font-medium text-gray-700 mb-2">মডিউল অ্যাক্সেস</label>
-                        <p class="text-xs text-gray-500 mb-3">কোন কোন মডিউলে এই ব্যবহারকারী অ্যাক্সেস পাবেন তা নির্বাচন করুন।</p>
-                        <div class="space-y-2 border border-gray-200 rounded-lg p-3 bg-gray-50" id="module-toggles">
+                        <div class="space-y-3 border border-gray-200 rounded-lg p-4 bg-gray-50" id="module-toggles">
                             <!-- Rendered by JS -->
                         </div>
                     </div>
@@ -322,6 +321,19 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Module Access (non-admin users only) -->
+                <div id="detail-modules-section" class="mb-6 hidden">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                        মডিউল অ্যাক্সেস
+                    </h3>
+                    <div class="grid grid-cols-1 gap-2" id="detail-modules-list">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -351,16 +363,24 @@
 
         function renderModuleToggles(grantedModules = []) {
             const container = document.getElementById('module-toggles');
-            container.innerHTML = MODULES.map(mod => `
-                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-white transition">
-                    <input type="checkbox"
-                           name="module_${mod.name}"
-                           value="${mod.name}"
-                           ${grantedModules.includes(mod.name) ? 'checked' : ''}
-                           class="w-4 h-4 text-green-600 rounded border-gray-300 focus:ring-green-500">
-                    <span class="text-sm text-gray-700">${mod.label}</span>
-                </label>
-            `).join('');
+            container.innerHTML = MODULES.map(mod => {
+                const isGranted = grantedModules.includes(mod.name);
+                return `
+                    <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 hover:border-green-300 transition">
+                        <span class="text-sm font-medium text-gray-700">${mod.label}</span>
+                        <label class="relative inline-block w-12 h-6">
+                            <input type="checkbox"
+                                   name="module_${mod.name}"
+                                   value="${mod.name}"
+                                   ${isGranted ? 'checked' : ''}
+                                   class="sr-only module-toggle"
+                                   data-module="${mod.name}">
+                            <span class="absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 rounded-full transition ${isGranted ? 'bg-green-500' : ''}"></span>
+                            <span class="absolute cursor-pointer top-1 left-1 bg-white w-4 h-4 rounded-full transition ${isGranted ? 'translate-x-6' : ''}"></span>
+                        </label>
+                    </div>
+                `;
+            }).join('');
         }
 
         function updateModuleSectionVisibility() {
@@ -732,8 +752,8 @@
                 if (roleValue !== 'admin') {
                     const userId = editingId || responseData.id;
                     if (userId) {
-                        const checkboxes = document.querySelectorAll('#module-toggles input[type="checkbox"]');
-                        const selectedModules = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+                        const toggles = document.querySelectorAll('#module-toggles .module-toggle');
+                        const selectedModules = Array.from(toggles).filter(toggle => toggle.checked).map(toggle => toggle.value);
                         await AuthManager.fetch(`${AuthManager.API_URL}/auth/users/${userId}/modules`, {
                             method: 'PUT',
                             body: JSON.stringify({ modules: selectedModules })
@@ -816,6 +836,29 @@
             document.getElementById('detail-last-login').textContent = user.last_login
                 ? CRUDManager.formatDate(user.last_login)
                 : 'কখনো লগইন করেননি';
+
+            // Module Access (only for non-admin users)
+            const modulesSection = document.getElementById('detail-modules-section');
+            const modulesList = document.getElementById('detail-modules-list');
+            if (user.role === 'admin') {
+                modulesSection.classList.add('hidden');
+            } else {
+                modulesSection.classList.remove('hidden');
+                const userModules = user.modules || [];
+                modulesList.innerHTML = MODULES.map(mod => {
+                    const hasAccess = userModules.includes(mod.name);
+                    return `
+                        <div class="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <span class="text-sm font-medium text-gray-700">${mod.label}</span>
+                            <span class="inline-flex items-center gap-2">
+                                <span class="${hasAccess ? 'text-green-600 font-semibold' : 'text-gray-400'}">
+                                    ${hasAccess ? '✓ অ্যাক্সেস রয়েছে' : '✗ অ্যাক্সেস নেই'}
+                                </span>
+                            </span>
+                        </div>
+                    `;
+                }).join('');
+            }
 
             // Show modal
             document.getElementById('user-detail-modal').classList.add('open');
