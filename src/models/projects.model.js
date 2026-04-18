@@ -867,6 +867,63 @@ const projectsModel = {
         return row.photo_path;
     },
 
+    async getAllForMap(year = '', priority = '', upazila = '', method = '') {
+        let sql = `SELECT id, project_name, upazila, lat_lng, implementation_method, priority, progress_percentage, current_status FROM projects`;
+        const params = [];
+        const conditions = [];
+
+        if (year && year !== 'all') {
+            conditions.push('financial_year = ?');
+            params.push(year);
+        }
+
+        const validPriorities = ['general', 'medium', 'top_priority'];
+        if (priority && validPriorities.includes(priority)) {
+            conditions.push('priority = ?');
+            params.push(priority);
+        }
+
+        if (upazila && upazila !== '') {
+            conditions.push('upazila = ?');
+            params.push(upazila);
+        }
+
+        if (method && method !== '') {
+            conditions.push('implementation_method = ?');
+            params.push(method);
+        }
+
+        if (conditions.length > 0) {
+            sql += ' WHERE ' + conditions.join(' AND ');
+        }
+
+        sql += ' ORDER BY project_name ASC';
+
+        const [results] = await pool.execute(sql, params);
+
+        return results.map(project => {
+            const { lat, lng } = this.parseLatLng(project.lat_lng) || { lat: null, lng: null };
+            return {
+                id: project.id,
+                name: project.project_name,
+                upazila: project.upazila,
+                lat,
+                lng,
+                implementation_method: project.implementation_method,
+                priority: project.priority,
+                progress: project.progress_percentage,
+                status: project.current_status
+            };
+        });
+    },
+
+    parseLatLng(latLngString) {
+        if (!latLngString || typeof latLngString !== 'string') return null;
+        const [lat, lng] = latLngString.split(',').map(str => parseFloat(str.trim()));
+        if (isNaN(lat) || isNaN(lng)) return null;
+        return { lat, lng };
+    },
+
     async findSimilarProjects(projectName, upazila, financialYear, fundType, allocationAmount) {
         const stringSimilarity = require('string-similarity');
 
