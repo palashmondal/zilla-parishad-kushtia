@@ -132,6 +132,86 @@ const ProjectMap = {
         return colors[implementationMethod] || 'gray';
     },
 
+    getPriorityLabel(priority) {
+        const labels = {
+            'general': 'সাধারণ',
+            'medium': 'মধ্যম',
+            'top_priority': 'সর্বোচ্চ অগ্রাধিকার'
+        };
+        return labels[priority] || priority;
+    },
+
+    getProgressColor(progress) {
+        if (progress >= 75) return '#10b981'; // green
+        if (progress >= 50) return '#f59e0b'; // amber
+        if (progress >= 25) return '#f97316'; // orange
+        return '#ef4444'; // red
+    },
+
+    createPopupContent(project) {
+        const progressColor = this.getProgressColor(project.progress);
+        const priorityLabel = this.getPriorityLabel(project.priority);
+
+        return `
+            <div style="font-family: Shurjo, 'Siyam Rupali', Roboto; font-size: 14px;">
+                <div style="padding: 12px;">
+                    <!-- Project Name -->
+                    <h3 style="margin: 0 0 8px 0; font-size: 15px; font-weight: 600; color: #1f2937; line-height: 1.4;">
+                        ${project.name}
+                    </h3>
+
+                    <!-- Divider -->
+                    <div style="height: 1px; background: #e5e7eb; margin: 8px 0;"></div>
+
+                    <!-- Location -->
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #6b7280; font-size: 13px;">📍 উপজেলা:</span>
+                        <span style="color: #1f2937; font-weight: 500; margin-left: 6px;">${project.upazila}</span>
+                    </div>
+
+                    <!-- Implementation Method -->
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #6b7280; font-size: 13px;">🔧 পদ্ধতি:</span>
+                        <span style="color: #1f2937; font-weight: 500; margin-left: 6px;">${project.implementation_method}</span>
+                    </div>
+
+                    <!-- Priority -->
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #6b7280; font-size: 13px;">⭐ অগ্রাধিকার:</span>
+                        <span style="color: #1f2937; font-weight: 500; margin-left: 6px;">${priorityLabel}</span>
+                    </div>
+
+                    <!-- Status -->
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #6b7280; font-size: 13px;">📊 অবস্থা:</span>
+                        <span style="color: #1f2937; font-weight: 500; margin-left: 6px;">${project.status}</span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div style="margin-top: 10px; margin-bottom: 8px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="color: #6b7280; font-size: 13px;">📈 অগ্রগতি:</span>
+                            <span style="color: ${progressColor}; font-weight: 600; font-size: 13px;">${project.progress}%</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
+                            <div style="width: ${project.progress}%; height: 100%; background: ${progressColor}; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Details Link -->
+                    <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
+                        <a href="/admin/projects-manage.html?id=${project.id}"
+                           style="display: inline-block; background: #10b981; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: 600; transition: background 0.2s ease;"
+                           onmouseover="this.style.background='#059669'"
+                           onmouseout="this.style.background='#10b981'">
+                            বিস্তারিত দেখুন →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
     renderMarkers() {
         // Clear existing markers
         this.markerCluster.clearLayers();
@@ -168,9 +248,24 @@ const ProjectMap = {
 
             const marker = L.marker([project.lat, project.lng], { icon: markerIcon });
 
-            // Navigate to project detail page on click
+            // Hover tooltip with project name
+            marker.bindTooltip(project.name, {
+                permanent: false,
+                direction: 'top',
+                offset: [0, -10],
+                className: 'project-tooltip'
+            });
+
+            // Click popup with project details
+            const popupContent = this.createPopupContent(project);
+            marker.bindPopup(popupContent, {
+                maxWidth: 350,
+                className: 'project-popup'
+            });
+
+            // Open popup on click
             marker.on('click', () => {
-                window.location.href = `/admin/projects-manage.html?id=${project.id}`;
+                marker.openPopup();
             });
 
             this.markerCluster.addLayer(marker);
