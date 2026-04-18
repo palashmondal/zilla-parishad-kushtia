@@ -141,6 +141,81 @@ const ProjectMap = {
         }
     },
 
+    getProgressColor(progress) {
+        // Map progress percentage to color (red → yellow → green)
+        progress = Math.max(0, Math.min(100, progress || 0));
+
+        if (progress === 0) return '#ef4444'; // Red
+        if (progress < 25) {
+            // Red to Orange (0-25%)
+            const ratio = progress / 25;
+            return this.interpolateColor('#ef4444', '#f97316', ratio);
+        } else if (progress < 50) {
+            // Orange to Yellow (25-50%)
+            const ratio = (progress - 25) / 25;
+            return this.interpolateColor('#f97316', '#eab308', ratio);
+        } else if (progress < 75) {
+            // Yellow to Light Green (50-75%)
+            const ratio = (progress - 50) / 25;
+            return this.interpolateColor('#eab308', '#84cc16', ratio);
+        } else if (progress < 100) {
+            // Light Green to Green (75-100%)
+            const ratio = (progress - 75) / 25;
+            return this.interpolateColor('#84cc16', '#22c55e', ratio);
+        }
+        return '#22c55e'; // Full Green
+    },
+
+    interpolateColor(color1, color2, factor) {
+        // Convert hex to RGB
+        const c1 = parseInt(color1.slice(1), 16);
+        const c2 = parseInt(color2.slice(1), 16);
+
+        const r1 = (c1 >> 16) & 255;
+        const g1 = (c1 >> 8) & 255;
+        const b1 = c1 & 255;
+
+        const r2 = (c2 >> 16) & 255;
+        const g2 = (c2 >> 8) & 255;
+        const b2 = c2 & 255;
+
+        // Interpolate
+        const r = Math.round(r1 + (r2 - r1) * factor);
+        const g = Math.round(g1 + (g2 - g1) * factor);
+        const b = Math.round(b1 + (b2 - b1) * factor);
+
+        return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+    },
+
+    createProgressMarker(color) {
+        // Create SVG marker with custom color
+        const svg = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 40" width="25" height="41">
+                <defs>
+                    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                    </filter>
+                </defs>
+                <!-- Marker pin shape -->
+                <path d="M12 0C5.4 0 0 5.4 0 12c0 8 12 28 12 28s12-20 12-28c0-6.6-5.4-12-12-12z"
+                      fill="${color}" filter="url(#shadow)" />
+                <!-- White dot in center -->
+                <circle cx="12" cy="12" r="4" fill="white" opacity="0.9"/>
+            </svg>
+        `;
+
+        const markerIcon = L.icon({
+            iconUrl: `data:image/svg+xml;base64,${btoa(svg)}`,
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            shadowSize: [41, 41]
+        });
+
+        return markerIcon;
+    },
+
     getMarkerColor(implementationMethod) {
         const colors = {
             'টেন্ডার': 'blue',
@@ -169,6 +244,7 @@ const ProjectMap = {
     createPopupContent(project) {
         const progressColor = this.getProgressColor(project.progress);
         const priorityLabel = this.getPriorityLabel(project.priority);
+        const progressPercentage = project.progress || 0;
 
         return `
             <div style="font-family: Shurjo, 'Siyam Rupali', Roboto; font-size: 14px; width: 100%;">
@@ -209,10 +285,10 @@ const ProjectMap = {
                     <div style="margin-top: 10px; margin-bottom: 8px;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                             <span style="color: #6b7280; font-size: 13px;">📈 অগ্রগতি:</span>
-                            <span style="color: ${progressColor}; font-weight: 600; font-size: 13px;">${project.progress}%</span>
+                            <span style="color: ${progressColor}; font-weight: 600; font-size: 13px;">${progressPercentage}%</span>
                         </div>
-                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden;">
-                            <div style="width: ${project.progress}%; height: 100%; background: ${progressColor}; transition: width 0.3s ease;"></div>
+                        <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);">
+                            <div style="width: ${progressPercentage}%; height: 100%; background: ${progressColor}; transition: width 0.3s ease;"></div>
                         </div>
                     </div>
 
@@ -254,15 +330,10 @@ const ProjectMap = {
                 console.warn(`Project ${project.id} coordinates out of region: lat=${project.lat}, lng=${project.lng}`);
             }
 
-            const color = this.getMarkerColor(project.implementation_method);
-            const markerIcon = L.icon({
-                iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-${color}.png`,
-                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34],
-                shadowSize: [41, 41]
-            });
+            // Use progress-based color gradient instead of implementation method
+            const progressColor = this.getProgressColor(project.progress);
+            const markerIcon = this.createProgressMarker(progressColor);
+
 
             const marker = L.marker([project.lat, project.lng], { icon: markerIcon });
 
