@@ -153,8 +153,8 @@ const ProjectMap = {
         const priorityLabel = this.getPriorityLabel(project.priority);
 
         return `
-            <div style="font-family: Shurjo, 'Siyam Rupali', Roboto; font-size: 14px;">
-                <div style="padding: 12px;">
+            <div style="font-family: Shurjo, 'Siyam Rupali', Roboto; font-size: 14px; width: 100%;">
+                <div style="padding: 14px;">
                     <!-- Project Name -->
                     <h3 style="margin: 0 0 8px 0; font-size: 15px; font-weight: 600; color: #1f2937; line-height: 1.4;">
                         ${project.name}
@@ -259,7 +259,8 @@ const ProjectMap = {
             // Click popup with project details
             const popupContent = this.createPopupContent(project);
             marker.bindPopup(popupContent, {
-                maxWidth: 350,
+                maxWidth: 420,
+                minWidth: 420,
                 className: 'project-popup'
             });
 
