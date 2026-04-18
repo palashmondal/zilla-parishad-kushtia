@@ -64,6 +64,16 @@ const DashboardComponents = {
                         // Remove hover classes and add active classes
                         activeLink.classList.remove('text-gray-600', 'hover:text-green-600');
                         activeLink.classList.add('font-semibold', 'text-green-600', 'border-b-2', 'border-green-600');
+
+                        // If the active link is inside a dropdown, also highlight the dropdown button
+                        const dropdownParent = activeLink.closest('.group');
+                        if (dropdownParent) {
+                            const dropdownButton = dropdownParent.querySelector('button');
+                            if (dropdownButton) {
+                                dropdownButton.classList.remove('text-gray-600', 'hover:text-green-600');
+                                dropdownButton.classList.add('font-semibold', 'text-green-600');
+                            }
+                        }
                     }
                 }
 

@@ -20,18 +20,36 @@
                 </svg>
                 মানবিক সহায়তা
             </a>
-            <a href="/admin/projects-manage.html" data-menu-item="projects" data-module="projects" class="flex items-center gap-2 px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
-                </svg>
-                প্রকল্প তালিকা
-            </a>
-            <a href="/admin/approval-memos.html" data-menu-item="approval-memos" data-module="projects" class="flex items-center gap-2 px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-                বরাদ্দপত্র
-            </a>
+
+            <!-- Projects dropdown menu -->
+            <div class="relative group" data-module="projects">
+                <button class="flex items-center gap-2 px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                    </svg>
+                    প্রকল্প ব্যবস্থাপনা
+                    <svg class="w-4 h-4 ml-1 group-hover:rotate-180 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                    </svg>
+                </button>
+
+                <!-- Dropdown menu items -->
+                <div class="absolute left-0 mt-0 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 hidden group-hover:block transition-all z-50">
+                    <a href="/admin/projects-manage.html" data-menu-item="projects" class="flex items-center gap-2 px-6 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        প্রকল্প তালিকা
+                    </a>
+                    <a href="/admin/approval-memos.html" data-menu-item="approval-memos" class="flex items-center gap-2 px-6 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition whitespace-nowrap">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        বরাদ্দপত্র
+                    </a>
+                </div>
+            </div>
+
             <a href="/admin/users-manage.html" data-menu-item="users" data-role="admin" class="flex items-center gap-2 px-4 py-3 text-gray-600 hover:text-green-600 transition whitespace-nowrap">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -40,4 +58,11 @@
             </a>
         </div>
     </div>
+
+    <style>
+        /* Dropdown hover state for Tailwind compatibility */
+        .group:hover .group-hover\:block {
+            display: block;
+        }
+    </style>
 </nav>
