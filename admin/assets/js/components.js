@@ -77,6 +77,20 @@ const DashboardComponents = {
                     }
                 }
 
+                // Set up dropdown menu hover behavior
+                const dropdown = menuContainer.querySelector('.projects-dropdown');
+                if (dropdown) {
+                    const menu = dropdown.querySelector('.projects-dropdown-menu');
+                    if (menu) {
+                        dropdown.addEventListener('mouseenter', () => {
+                            menu.style.display = 'block';
+                        });
+                        dropdown.addEventListener('mouseleave', () => {
+                            menu.style.display = 'none';
+                        });
+                    }
+                }
+
                 // Apply role-based visibility after menu is injected into DOM
                 if (typeof AuthManager !== 'undefined') {
                     AuthManager.applyRoleBasedUI();
