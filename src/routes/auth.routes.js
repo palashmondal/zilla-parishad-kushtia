@@ -45,9 +45,13 @@ router.post('/profile/photo', requireAuth, upload.single('photo'), (req, res) =>
     }
 });
 
+// Module list (any authenticated user)
+router.get('/modules', requireAuth, authController.listModules);
+
 // Admin-only routes (require authentication + admin role)
 router.post('/users', requireAuth, requireAdmin, authController.createUser);
 router.get('/users', requireAuth, requireAdmin, authController.listUsers);
+router.put('/users/:id/modules', requireAuth, requireAdmin, authController.updateUserModules);
 router.put('/users/:id', requireAuth, requireAdmin, authController.updateUser);
 router.delete('/users/:id', requireAuth, requireAdmin, authController.deactivateUser);
 

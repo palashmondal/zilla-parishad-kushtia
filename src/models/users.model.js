@@ -30,7 +30,7 @@ exports.getAllUsers = async (searchQuery = null) => {
 };
 
 /**
- * Get user by ID
+ * Get user by ID (includes module grants)
  */
 exports.getUserById = async (id) => {
     const [rows] = await pool.query(
@@ -40,7 +40,17 @@ exports.getUserById = async (id) => {
          WHERE id = ?`,
         [id]
     );
-    return rows[0];
+    if (!rows[0]) return null;
+    const user = rows[0];
+    if (user.role !== 'admin') {
+        const [modRows] = await pool.query(
+            'SELECT module_name FROM user_modules WHERE user_id = ?', [id]
+        );
+        user.modules = modRows.map(r => r.module_name);
+    } else {
+        user.modules = [];
+    }
+    return user;
 };
 
 /**
@@ -106,4 +116,38 @@ exports.updateUser = async (id, userData) => {
  */
 exports.deleteUser = async (id) => {
     await pool.query('DELETE FROM admin_users WHERE id = ?', [id]);
+};
+
+/**
+ * Get module grants for a user
+ */
+exports.getUserModules = async (userId) => {
+    const [rows] = await pool.query(
+        'SELECT module_name FROM user_modules WHERE user_id = ?', [userId]
+    );
+    return rows.map(r => r.module_name);
+};
+
+/**
+ * Replace all module grants for a user atomically
+ */
+exports.updateUserModules = async (userId, modules, grantedBy) => {
+    const conn = await pool.getConnection();
+    try {
+        await conn.beginTransaction();
+        await conn.query('DELETE FROM user_modules WHERE user_id = ?', [userId]);
+        if (modules.length > 0) {
+            const rows = modules.map(m => [userId, m, grantedBy]);
+            await conn.query(
+                'INSERT INTO user_modules (user_id, module_name, granted_by) VALUES ?',
+                [rows]
+            );
+        }
+        await conn.commit();
+    } catch (err) {
+        await conn.rollback();
+        throw err;
+    } finally {
+        conn.release();
+    }
 };

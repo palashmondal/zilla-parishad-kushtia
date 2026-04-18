@@ -24,10 +24,30 @@ const approvalMemosModel = {
             params.push(financialYear);
         }
 
-        // Build query for data with both approved and actual project count
-        const query = `SELECT am.*, COALESCE(COUNT(p.id), 0) as actual_projects
+        // Build query for data with both approved and actual project count.
+        // actual_projects = FK-linked count; if that's 0 fall back to unlinked projects
+        // whose Bengali financial_year normalises to the same English year as the memo.
+        const BN_TO_EN = `REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                              p.financial_year,'০','0'),'১','1'),'২','2'),'৩','3'),'৪','4'),
+                              '৫','5'),'৬','6'),'৭','7'),'৮','8'),'৯','9')`;
+        const query = `SELECT am.*,
+                           COALESCE(
+                               NULLIF(SUM(CASE WHEN p.approval_memo_id = am.id THEN 1 ELSE 0 END), 0),
+                               SUM(CASE WHEN p.approval_memo_id IS NULL
+                                         AND p.financial_year IS NOT NULL
+                                         AND am.financial_year IS NOT NULL
+                                         AND ${BN_TO_EN} = am.financial_year
+                                        THEN 1 ELSE 0 END),
+                               0
+                           ) AS actual_projects
                        FROM approval_memos am
-                       LEFT JOIN projects p ON am.id = p.approval_memo_id
+                       LEFT JOIN projects p ON (
+                           p.approval_memo_id = am.id
+                           OR (p.approval_memo_id IS NULL
+                               AND p.financial_year IS NOT NULL
+                               AND am.financial_year IS NOT NULL
+                               AND ${BN_TO_EN} = am.financial_year)
+                       )
                        WHERE 1=1${whereClause}
                        GROUP BY am.id
                        ORDER BY am.memo_date DESC, am.id DESC
@@ -119,7 +139,11 @@ const approvalMemosModel = {
     },
 
     async getProjectsByMemoId(memoId) {
-        const [projects] = await pool.execute(
+        const memo = await this.findById(memoId);
+        if (!memo) return [];
+
+        // First try FK-linked projects
+        const [fkProjects] = await pool.execute(
             `SELECT id, project_id, project_name, allocation_amount, released_amount,
                     current_status, upazila, financial_year, project_approval_date, implementation_method
              FROM projects
@@ -127,7 +151,25 @@ const approvalMemosModel = {
              ORDER BY project_name ASC`,
             [memoId]
         );
-        return projects || [];
+
+        if (fkProjects.length > 0) return fkProjects;
+
+        // Fallback: unlinked projects whose Bengali financial_year matches this memo's year
+        if (!memo.financial_year) return [];
+
+        const [yearProjects] = await pool.execute(
+            `SELECT id, project_id, project_name, allocation_amount, released_amount,
+                    current_status, upazila, financial_year, project_approval_date, implementation_method
+             FROM projects
+             WHERE approval_memo_id IS NULL
+               AND financial_year IS NOT NULL
+               AND REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                       financial_year,'০','0'),'১','1'),'২','2'),'৩','3'),'৪','4'),
+                       '৫','5'),'৬','6'),'৭','7'),'৮','8'),'৯','9') = ?
+             ORDER BY project_name ASC`,
+            [memo.financial_year]
+        );
+        return yearProjects || [];
     }
 };
 

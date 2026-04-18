@@ -213,7 +213,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">ভূমিকা <span class="text-red-500">*</span></label>
-                            <select name="role" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <select name="role" id="role-select" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                                 <option value="user">সাধারণ ব্যবহারকারী</option>
                                 <option value="admin">এডমিন ব্যবহারকারী</option>
                             </select>
@@ -224,6 +224,15 @@
                                 <option value="1">সক্রিয়</option>
                                 <option value="0">নিষ্ক্রিয়</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- Module Access (hidden for admin role) -->
+                    <div id="module-access-section" class="mt-4 hidden">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">মডিউল অ্যাক্সেস</label>
+                        <p class="text-xs text-gray-500 mb-3">কোন কোন মডিউলে এই ব্যবহারকারী অ্যাক্সেস পাবেন তা নির্বাচন করুন।</p>
+                        <div class="space-y-2 border border-gray-200 rounded-lg p-3 bg-gray-50" id="module-toggles">
+                            <!-- Rendered by JS -->
                         </div>
                     </div>
                 </div>
@@ -333,6 +342,38 @@
         let emailCheckTimeout = null;
         let isUsernameAvailable = true;
         let isEmailValid = true;
+
+        const MODULES = [
+            { name: 'scholarship',      label: 'শিক্ষাবৃত্তি' },
+            { name: 'humanitarian_aid', label: 'মানবিক সহায়তা' },
+            { name: 'projects',         label: 'প্রকল্প ও বরাদ্দপত্র' }
+        ];
+
+        function renderModuleToggles(grantedModules = []) {
+            const container = document.getElementById('module-toggles');
+            container.innerHTML = MODULES.map(mod => `
+                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-white transition">
+                    <input type="checkbox"
+                           name="module_${mod.name}"
+                           value="${mod.name}"
+                           ${grantedModules.includes(mod.name) ? 'checked' : ''}
+                           class="w-4 h-4 text-green-600 rounded border-gray-300 focus:ring-green-500">
+                    <span class="text-sm text-gray-700">${mod.label}</span>
+                </label>
+            `).join('');
+        }
+
+        function updateModuleSectionVisibility() {
+            const role = document.getElementById('role-select').value;
+            const section = document.getElementById('module-access-section');
+            if (role === 'admin') {
+                section.classList.add('hidden');
+            } else {
+                section.classList.remove('hidden');
+            }
+        }
+
+        document.getElementById('role-select').addEventListener('change', updateModuleSectionVisibility);
 
         // Initialize - Require admin role
         AuthManager.init(true).then(async (user) => {
@@ -533,6 +574,9 @@
             isUsernameAvailable = true;
             isEmailValid = true;
 
+            renderModuleToggles([]);
+            updateModuleSectionVisibility();
+
             CRUDManager.openModal('form-modal');
         }
 
@@ -599,6 +643,9 @@
                     <input type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                     <p class="text-xs text-gray-500 mt-1">পাসওয়ার্ড পরিবর্তন করতে চাইলে এখানে লিখুন</p>
                 `;
+
+                renderModuleToggles(user.modules || []);
+                updateModuleSectionVisibility();
 
                 CRUDManager.openModal('form-modal');
             } catch (error) {
@@ -675,9 +722,23 @@
                     });
                 }
 
+                const responseData = await response.json();
                 if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'সংরক্ষণ করতে ব্যর্থ');
+                    throw new Error(responseData.message || 'সংরক্ষণ করতে ব্যর্থ');
+                }
+
+                // Sync module grants for non-admin users
+                const roleValue = document.getElementById('role-select').value;
+                if (roleValue !== 'admin') {
+                    const userId = editingId || responseData.id;
+                    if (userId) {
+                        const checkboxes = document.querySelectorAll('#module-toggles input[type="checkbox"]');
+                        const selectedModules = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+                        await AuthManager.fetch(`${AuthManager.API_URL}/auth/users/${userId}/modules`, {
+                            method: 'PUT',
+                            body: JSON.stringify({ modules: selectedModules })
+                        });
+                    }
                 }
 
                 CRUDManager.showSuccess(editingId ? 'ব্যবহারকারী সফলভাবে আপডেট হয়েছে' : 'নতুন ব্যবহারকারী সফলভাবে যোগ করা হয়েছে');

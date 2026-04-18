@@ -40,7 +40,8 @@ const requireAuth = (req, res, next) => {
             username: decoded.username,
             email: decoded.email,
             role: decoded.role,
-            full_name: decoded.full_name
+            full_name: decoded.full_name,
+            modules: decoded.modules || []
         };
 
         next();
@@ -109,7 +110,8 @@ const optionalAuth = (req, res, next) => {
                     username: decoded.username,
                     email: decoded.email,
                     role: decoded.role,
-                    full_name: decoded.full_name
+                    full_name: decoded.full_name,
+                    modules: decoded.modules || []
                 };
             }
         }
@@ -121,8 +123,32 @@ const optionalAuth = (req, res, next) => {
     next();
 };
 
+/**
+ * Require the user to have a specific module grant.
+ * Admin role bypasses this check entirely.
+ * Must be used AFTER requireAuth.
+ */
+const requireModule = (moduleName) => (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({
+            error: 'Authentication required',
+            message: 'User not authenticated'
+        });
+    }
+
+    if (req.user.role === 'admin') return next();
+
+    if ((req.user.modules || []).includes(moduleName)) return next();
+
+    return res.status(403).json({
+        error: 'Module access denied',
+        message: `আপনার এই মডিউলে অ্যাক্সেস নেই`
+    });
+};
+
 module.exports = {
     requireAuth,
     requireAdmin,
+    requireModule,
     optionalAuth
 };

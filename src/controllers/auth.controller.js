@@ -58,6 +58,15 @@ const authController = {
                 [user.id]
             );
 
+            // Fetch module grants (admins bypass, so empty array for them)
+            let modules = [];
+            if (user.role !== 'admin') {
+                const [modRows] = await db.query(
+                    'SELECT module_name FROM user_modules WHERE user_id = ?', [user.id]
+                );
+                modules = modRows.map(r => r.module_name);
+            }
+
             // Generate JWT token
             const token = jwt.sign(
                 {
@@ -65,7 +74,8 @@ const authController = {
                     username: user.username,
                     email: user.email,
                     role: user.role,
-                    full_name: user.full_name
+                    full_name: user.full_name,
+                    modules
                 },
                 jwtSecret,
                 { expiresIn: jwtExpiry }
@@ -84,7 +94,8 @@ const authController = {
                     office_name: user.office_name,
                     photo_path: user.photo_path,
                     role: user.role,
-                    last_login: user.last_login
+                    last_login: user.last_login,
+                    modules
                 }
             });
         } catch (error) {
@@ -120,7 +131,17 @@ const authController = {
                 });
             }
 
-            res.json(users[0]);
+            const userData = users[0];
+            if (userData.role !== 'admin') {
+                const [modRows] = await db.query(
+                    'SELECT module_name FROM user_modules WHERE user_id = ?', [userId]
+                );
+                userData.modules = modRows.map(r => r.module_name);
+            } else {
+                userData.modules = [];
+            }
+
+            res.json(userData);
         } catch (error) {
             console.error('Get current user error:', error);
             res.status(500).json({
@@ -430,6 +451,67 @@ const authController = {
             console.error('Change password error:', error);
             res.status(500).json({
                 error: 'Failed to change password',
+                message: isProduction ? 'An internal error occurred' : error.message
+            });
+        }
+    },
+
+    /**
+     * List available modules
+     * GET /api/auth/modules
+     */
+    async listModules(req, res) {
+        res.json([
+            { name: 'scholarship',      label: 'শিক্ষাবৃত্তি' },
+            { name: 'humanitarian_aid', label: 'মানবিক সহায়তা' },
+            { name: 'projects',         label: 'প্রকল্প ও বরাদ্দপত্র' }
+        ]);
+    },
+
+    /**
+     * Update a user's module grants (admin only)
+     * PUT /api/auth/users/:id/modules
+     * Body: { modules: ['scholarship', 'projects'] }
+     */
+    async updateUserModules(req, res) {
+        try {
+            const userId = parseInt(req.params.id, 10);
+            if (isNaN(userId) || userId <= 0) {
+                return res.status(400).json({ error: 'Invalid user ID' });
+            }
+
+            const { modules } = req.body;
+            if (!Array.isArray(modules)) {
+                return res.status(400).json({ error: 'modules must be an array' });
+            }
+
+            const VALID_MODULES = ['scholarship', 'humanitarian_aid', 'projects'];
+            const invalid = modules.filter(m => !VALID_MODULES.includes(m));
+            if (invalid.length > 0) {
+                return res.status(400).json({ error: 'Invalid module names', invalid });
+            }
+
+            const [users] = await db.query(
+                'SELECT id, role FROM admin_users WHERE id = ?', [userId]
+            );
+            if (users.length === 0) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            if (users[0].role === 'admin') {
+                return res.status(400).json({
+                    error: 'Cannot set modules for admin users',
+                    message: 'এডমিন ব্যবহারকারীদের সব মডিউলে স্বয়ংক্রিয় অ্যাক্সেস রয়েছে'
+                });
+            }
+
+            const usersModel = require('../models/users.model');
+            await usersModel.updateUserModules(userId, modules, req.user.id);
+
+            res.json({ success: true, message: 'মডিউল অ্যাক্সেস আপডেট হয়েছে', modules });
+        } catch (error) {
+            console.error('Update user modules error:', error);
+            res.status(500).json({
+                error: 'Failed to update modules',
                 message: isProduction ? 'An internal error occurred' : error.message
             });
         }

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const humanitarianController = require('../controllers/humanitarian.controller');
 const { searchLimiter } = require('../middleware/rateLimiter');
-const { requireAuth, requireAdmin } = require('../middleware/auth');
+const { requireAuth, requireModule } = require('../middleware/auth');
 
 // Public routes
 router.get('/search', searchLimiter, humanitarianController.search);
@@ -11,12 +11,12 @@ router.get('/stats', humanitarianController.getStats);
 router.get('/list', humanitarianController.getAll);
 router.get('/:id', humanitarianController.getById);
 
-// Protected routes (require authentication + admin role)
-router.post('/', requireAuth, requireAdmin, humanitarianController.create);
-router.post('/create', requireAuth, requireAdmin, humanitarianController.create); // Keep for backward compatibility
-router.put('/:id', requireAuth, requireAdmin, humanitarianController.update);
-router.put('/:id/update', requireAuth, requireAdmin, humanitarianController.update); // Keep for backward compatibility
-router.delete('/:id', requireAuth, requireAdmin, humanitarianController.delete);
-router.delete('/:id/delete', requireAuth, requireAdmin, humanitarianController.delete); // Keep for backward compatibility
+// Protected routes (require authentication + humanitarian_aid module access)
+router.post('/', requireAuth, requireModule('humanitarian_aid'), humanitarianController.create);
+router.post('/create', requireAuth, requireModule('humanitarian_aid'), humanitarianController.create);
+router.put('/:id', requireAuth, requireModule('humanitarian_aid'), humanitarianController.update);
+router.put('/:id/update', requireAuth, requireModule('humanitarian_aid'), humanitarianController.update);
+router.delete('/:id', requireAuth, requireModule('humanitarian_aid'), humanitarianController.delete);
+router.delete('/:id/delete', requireAuth, requireModule('humanitarian_aid'), humanitarianController.delete);
 
 module.exports = router;
