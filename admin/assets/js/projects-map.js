@@ -5,8 +5,8 @@ const ProjectMap = {
 
     async init() {
         try {
-            // Initialize Leaflet map centered on Kushtia (23.9, 89.1) with zoom level 11
-            this.map = L.map('mapContainer').setView([23.9, 89.1], 11);
+            // Initialize Leaflet map with default center (will fit bounds after loading data)
+            this.map = L.map('mapContainer').setView([23.9, 89.1], 10);
 
             // Add OpenStreetMap tile layer
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -16,10 +16,11 @@ const ProjectMap = {
 
             // Initialize marker cluster group with optimized settings
             this.markerCluster = L.markerClusterGroup({
-                maxClusterRadius: 80, // Tighter clustering
+                maxClusterRadius: 60, // Tighter clustering for better visibility
                 disableClusteringAtZoom: 13, // Show individual markers at zoom 13+
                 chunkedLoading: true, // Load markers in chunks for better performance
-                zoomToBoundsOnClick: true // Zoom to cluster bounds on click
+                zoomToBoundsOnClick: true, // Zoom to cluster bounds on click
+                animate: true // Smooth animation when clustering
             });
             this.map.addLayer(this.markerCluster);
 
@@ -276,21 +277,24 @@ const ProjectMap = {
 
         console.log(`Rendered ${markersAdded} markers out of ${this.allProjects.length} projects`);
 
-        // Fit map bounds to show all markers with proper zoom
+        // Fit map bounds to show all markers covering entire Kushtia area
         if (markersAdded > 0 && bounds.isValid()) {
             try {
+                // Use larger padding to ensure all markers are visible with good spacing
                 this.map.fitBounds(bounds, {
-                    padding: [50, 50],
-                    maxZoom: 14 // Prevent zooming in too much
+                    padding: [100, 100],
+                    maxZoom: 11, // Lower max zoom to show more area at once
+                    animate: true,
+                    duration: 0.8
                 });
             } catch (error) {
                 console.error('Error fitting bounds:', error);
-                // Fallback: reset to default view
-                this.map.setView([23.9, 89.1], 11);
+                // Fallback: reset to default view showing entire Kushtia
+                this.map.setView([23.9, 89.1], 10);
             }
         } else if (markersAdded === 0) {
             // No valid markers, show default view
-            this.map.setView([23.9, 89.1], 11);
+            this.map.setView([23.9, 89.1], 10);
         }
     },
 
