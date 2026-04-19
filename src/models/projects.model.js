@@ -868,7 +868,7 @@ const projectsModel = {
     },
 
     async getAllForMap(year = '', priority = '', upazila = '', method = '') {
-        let sql = `SELECT id, project_name, upazila, lat_lng, implementation_method, priority, progress_percentage, current_status FROM projects`;
+        let sql = `SELECT id, project_name, upazila, lat_lng, implementation_method, priority, progress_percentage, current_status, allocation_amount, financial_year, fund_type FROM projects`;
         const params = [];
         const conditions = [];
 
@@ -912,7 +912,10 @@ const projectsModel = {
                 implementation_method: project.implementation_method,
                 priority: project.priority,
                 progress: project.progress_percentage,
-                status: project.current_status
+                status: project.current_status,
+                allocation_amount: project.allocation_amount,
+                financial_year: project.financial_year,
+                fund_type: project.fund_type
             };
         });
     },

@@ -1160,6 +1160,13 @@
     });
 
     // ── modal ──
+    function maskPhone(phone) {
+        if (!phone) return 'N/A';
+        const s = String(phone).trim();
+        if (s.length <= 6) return s;
+        return s.slice(0, 5) + '*'.repeat(5) + s.slice(-4);
+    }
+
     function showDetails(r) {
         const fullAddr = [r.sang, r.post].filter(Boolean).join(', ');
         document.getElementById('m-name').innerText    = r.name;
@@ -1167,7 +1174,7 @@
         document.getElementById('m-father').innerText  = r.father_name;
         document.getElementById('m-mother').innerText  = r.mother_name;
         document.getElementById('m-address').innerText = fullAddr;
-        document.getElementById('m-phone').innerText   = r.phone || 'N/A';
+        document.getElementById('m-phone').innerText   = authToken ? (r.phone || 'N/A') : maskPhone(r.phone);
         document.getElementById('m-upazila').innerText = r.upazila || '';
         document.getElementById('m-zila').innerText    = r.zila || 'কুষ্টিয়া';
         document.getElementById('m-gpa').innerText     = r.gpa || '';
