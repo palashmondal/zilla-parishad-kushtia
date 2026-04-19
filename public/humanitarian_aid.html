@@ -1272,6 +1272,13 @@
     });
 
     // ── modal ──
+    function maskPhone(phone) {
+        if (!phone) return 'N/A';
+        const s = String(phone).trim();
+        if (s.length <= 6) return s;
+        return s.slice(0, 5) + '*'.repeat(5) + s.slice(-4);
+    }
+
     function showDetails(r) {
         document.getElementById('m-name').innerText       = r.name || '';
         document.getElementById('m-category').innerText   = r.category || '';
@@ -1280,7 +1287,7 @@
         document.getElementById('m-nid').innerText        = r.nid_birth_reg_no || 'N/A';
         document.getElementById('m-profession').innerText = r.profession || 'N/A';
         document.getElementById('m-address').innerText    = r.address || 'N/A';
-        document.getElementById('m-mobile').innerText     = r.mobile || 'N/A';
+        document.getElementById('m-mobile').innerText     = authToken ? (r.mobile || 'N/A') : maskPhone(r.mobile);
         document.getElementById('m-upazila').innerText    = r.upazila || '';
         document.getElementById('m-zila').innerText       = r.zila || 'কুষ্টিয়া';
         document.getElementById('m-relation').innerText   = r.relation_to_beneficiary || 'নিজ';

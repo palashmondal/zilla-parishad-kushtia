@@ -15,13 +15,42 @@ const ProjectMap = {
                 maxZoom: 18
             }).addTo(this.map);
 
-            // Initialize marker cluster group with optimized settings
+            // Initialize marker cluster group with per-upazila unclustering
             this.markerCluster = L.markerClusterGroup({
-                maxClusterRadius: 60, // Tighter clustering for better visibility
-                disableClusteringAtZoom: 13, // Show individual markers at zoom 13+
+                maxClusterRadius: 45, // Smaller radius for tighter clusters when zoomed out
+                disableClusteringAtZoom: 10, // Unclusters at zoom 10+ to show all individual pins in default view
                 chunkedLoading: true, // Load markers in chunks for better performance
                 zoomToBoundsOnClick: true, // Zoom to cluster bounds on click
-                animate: true // Smooth animation when clustering
+                animate: true, // Smooth animation when clustering
+                iconCreateFunction: (cluster) => {
+                    const childCount = cluster.getChildCount();
+                    // Color circles based on cluster size for visual hierarchy
+                    let color, size, fontSize;
+                    if (childCount > 30) {
+                        color = '#ef4444'; // Red for large clusters
+                        size = 60;
+                        fontSize = 20;
+                    } else if (childCount > 15) {
+                        color = '#f97316'; // Orange for medium-large clusters
+                        size = 55;
+                        fontSize = 18;
+                    } else if (childCount > 8) {
+                        color = '#eab308'; // Yellow for medium clusters
+                        size = 50;
+                        fontSize = 16;
+                    } else {
+                        color = '#84cc16'; // Light green for small clusters
+                        size = 45;
+                        fontSize = 15;
+                    }
+
+                    const html = `<div style="background-color: ${color}; width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: ${fontSize}px; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); box-shadow: 0 4px 8px rgba(0,0,0,0.2); border: 2px solid white;">${childCount}</div>`;
+                    return L.divIcon({
+                        html: html,
+                        className: 'custom-cluster-icon',
+                        iconSize: L.point(size, size)
+                    });
+                }
             });
             this.map.addLayer(this.markerCluster);
 
@@ -245,62 +274,78 @@ const ProjectMap = {
         const progressColor = this.getProgressColor(project.progress);
         const priorityLabel = this.getPriorityLabel(project.priority);
         const progressPercentage = project.progress || 0;
+        const budget = project.allocation_amount ? `৳${new Intl.NumberFormat('bn-BD').format(project.allocation_amount)}` : 'N/A';
+        const year = project.financial_year || 'N/A';
+        const fundType = project.fund_type || 'N/A';
 
         return `
-            <div style="font-family: Shurjo, 'Siyam Rupali', Roboto; font-size: 14px; width: 100%;">
-                <div style="padding: 14px;">
-                    <!-- Project Name -->
-                    <h3 style="margin: 0 0 8px 0; font-size: 15px; font-weight: 600; color: #1f2937; line-height: 1.4;">
-                        ${project.name}
-                    </h3>
-
-                    <!-- Divider -->
-                    <div style="height: 1px; background: #e5e7eb; margin: 8px 0;"></div>
-
-                    <!-- Location -->
-                    <div style="margin-bottom: 8px;">
-                        <span style="color: #6b7280; font-size: 13px;">📍 উপজেলা:</span>
-                        <span style="color: #1f2937; font-weight: 500; margin-left: 6px;">${project.upazila}</span>
+            <div style="font-family: Shurjo, 'Siyam Rupali', Roboto; font-size: 13px; width: 100%;">
+                <div style="padding: 12px;">
+                    <!-- Project Name with ID -->
+                    <div style="margin-bottom: 10px;">
+                        <h3 style="margin: 0; font-size: 14px; font-weight: 600; color: #1f2937; line-height: 1.3;">
+                            ${project.name}
+                        </h3>
+                        <p style="margin: 2px 0 0 0; font-size: 11px; color: #9ca3af;">Project ID: ${project.id}</p>
                     </div>
 
-                    <!-- Implementation Method -->
-                    <div style="margin-bottom: 8px;">
-                        <span style="color: #6b7280; font-size: 13px;">🔧 পদ্ধতি:</span>
-                        <span style="color: #1f2937; font-weight: 500; margin-left: 6px;">${project.implementation_method}</span>
-                    </div>
+                    <!-- Two Column Layout -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px;">
+                        <!-- Left Column -->
+                        <div>
+                            <div style="margin-bottom: 6px; display: flex; align-items: center; flex-wrap: wrap;">
+                                <span style="color: #6b7280; font-size: 12px;">📍 উপজেলা:</span>
+                                <span style="color: #1f2937; font-weight: 500; font-size: 12px; margin-left: 4px;">${project.upazila}</span>
+                            </div>
+                            <div style="margin-bottom: 6px; display: flex; align-items: center; flex-wrap: wrap;">
+                                <span style="color: #6b7280; font-size: 12px;">🔧 পদ্ধতি:</span>
+                                <span style="color: #1f2937; font-weight: 500; font-size: 12px; margin-left: 4px;">${project.implementation_method}</span>
+                            </div>
+                            <div style="margin-bottom: 6px; display: flex; align-items: center; flex-wrap: wrap;">
+                                <span style="color: #6b7280; font-size: 12px;">⭐ অগ্রাধিকার:</span>
+                                <span style="color: #1f2937; font-weight: 500; font-size: 12px; margin-left: 4px;">${priorityLabel}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; flex-wrap: wrap;">
+                                <span style="color: #6b7280; font-size: 12px;">📊 অবস্থা:</span>
+                                <span style="color: #1f2937; font-weight: 500; font-size: 12px; margin-left: 4px;">${project.status}</span>
+                            </div>
+                        </div>
 
-                    <!-- Priority -->
-                    <div style="margin-bottom: 8px;">
-                        <span style="color: #6b7280; font-size: 13px;">⭐ অগ্রাধিকার:</span>
-                        <span style="color: #1f2937; font-weight: 500; margin-left: 6px;">${priorityLabel}</span>
-                    </div>
-
-                    <!-- Status -->
-                    <div style="margin-bottom: 8px;">
-                        <span style="color: #6b7280; font-size: 13px;">📊 অবস্থা:</span>
-                        <span style="color: #1f2937; font-weight: 500; margin-left: 6px;">${project.status}</span>
+                        <!-- Right Column -->
+                        <div>
+                            <div style="margin-bottom: 6px; display: flex; align-items: center; flex-wrap: wrap;">
+                                <span style="color: #6b7280; font-size: 12px;">💰 বাজেট:</span>
+                                <span style="color: #1f2937; font-weight: 600; font-size: 12px; margin-left: 4px;">${budget}</span>
+                            </div>
+                            <div style="margin-bottom: 6px; display: flex; align-items: center; flex-wrap: wrap;">
+                                <span style="color: #6b7280; font-size: 12px;">📅 অর্থবছর:</span>
+                                <span style="color: #1f2937; font-weight: 500; font-size: 12px; margin-left: 4px;">${year}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; flex-wrap: wrap;">
+                                <span style="color: #6b7280; font-size: 12px;">🏦 তহবিল:</span>
+                                <span style="color: #1f2937; font-weight: 500; font-size: 12px; margin-left: 4px;">${fundType}</span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Progress Bar -->
-                    <div style="margin-top: 10px; margin-bottom: 8px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                            <span style="color: #6b7280; font-size: 13px;">📈 অগ্রগতি:</span>
-                            <span style="color: ${progressColor}; font-weight: 600; font-size: 13px;">${progressPercentage}%</span>
+                    <div style="margin-bottom: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="color: #6b7280; font-size: 12px;">📈 অগ্রগতি:</span>
+                            <span style="color: ${progressColor}; font-weight: 600; font-size: 12px;">${progressPercentage}%</span>
                         </div>
-                        <div style="width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);">
+                        <div style="width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);">
                             <div style="width: ${progressPercentage}%; height: 100%; background: ${progressColor}; transition: width 0.3s ease;"></div>
                         </div>
                     </div>
 
                     <!-- Details Link -->
-                    <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
-                        <a href="/admin/projects-manage.html?id=${project.id}"
-                           style="display: inline-block; background: #10b981; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: 600; transition: background 0.2s ease;"
-                           onmouseover="this.style.background='#059669'"
-                           onmouseout="this.style.background='#10b981'">
-                            বিস্তারিত দেখুন →
-                        </a>
-                    </div>
+                    <a href="/admin/projects-manage.html?id=${project.id}"
+                       style="display: block; text-align: center; background: #10b981; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 12px; font-weight: 600; transition: background 0.2s ease; cursor: pointer;"
+                       onmouseover="this.style.background='#059669'"
+                       onmouseout="this.style.background='#10b981'">
+                        বিস্তারিত দেখুন →
+                    </a>
                 </div>
             </div>
         `;
@@ -365,33 +410,24 @@ const ProjectMap = {
 
         console.log(`Rendered ${markersAdded} markers out of ${this.allProjects.length} projects`);
 
-        // Fit map bounds with clusters expanded by default
+        // Fit map bounds to show all upazilas with unclustered pins
         if (markersAdded > 0 && bounds.isValid()) {
             try {
-                // Fit bounds with enough zoom to show individual pins by default
+                // Fit bounds to show all projects unclustered within each upazila
                 this.map.fitBounds(bounds, {
-                    padding: [80, 80],
-                    maxZoom: 12, // Shows expanded clusters with individual pins visible
+                    padding: [60, 60],
+                    maxZoom: 10, // Keeps zoom at level where pins are unclustered (disableClusteringAtZoom: 10)
                     animate: true,
                     duration: 0.8
                 });
-
-                // After map loads, zoom into center area to show expanded clusters better
-                this.map.once('zoomend', () => {
-                    const currentZoom = this.map.getZoom();
-                    if (currentZoom < 12) {
-                        // If bounds resulted in zoom < 12, zoom to 12 for better pin visibility
-                        this.map.setZoom(12);
-                    }
-                });
             } catch (error) {
                 console.error('Error fitting bounds:', error);
-                // Fallback: show zoomed view with visible pins
-                this.map.setView([23.9, 89.1], 12);
+                // Fallback: show Kushtia region with all projects visible
+                this.map.setView([23.9, 89.1], 10);
             }
         } else if (markersAdded === 0) {
             // No valid markers, show default view
-            this.map.setView([23.9, 89.1], 10);
+            this.map.setView([23.9, 89.1], 9);
         }
     },
 
