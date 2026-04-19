@@ -1088,29 +1088,11 @@
                     </div>
                 </div>
 
-                <!-- Row 2: Fund Type -->
-                <div>
-                    <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তহবিলের ধরণ</p>
-                    <p id="m-fund-type" class="font-semibold text-slate-800 text-base"></p>
-                </div>
-
-                <!-- Row 3: Approval Date · Memo -->
-                <div class="grid grid-cols-2 gap-4 items-start">
-                    <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের তারিখ</p>
-                        <p id="m-approval-date" class="font-bold text-[#b45309] text-lg"></p>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক নংবর</p>
-                        <p id="m-memo-number" class="font-bold text-[#b45309] text-base font-mono"></p>
-                    </div>
-                </div>
-
-                <!-- Row 4: Project Type · Method · Status -->
+                <!-- Row 2: Fund Type · Method · Status -->
                 <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্পের ধরন</p>
-                        <p id="m-quick-type" class="font-semibold text-slate-800 text-base"></p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তহবিলের ধরণ</p>
+                        <p id="m-fund-type" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">বাস্তবায়ন পদ্ধতি</p>
@@ -1120,6 +1102,28 @@
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">বর্তমান অবস্থা</p>
                         <p class="font-semibold text-slate-700 text-base" id="m-status-text"></p>
                     </div>
+                </div>
+
+                <!-- Row 3: Approval Method · Date · Memo -->
+                <div class="grid grid-cols-3 gap-4 items-start">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের ধরণ</p>
+                        <p id="m-approval-method" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তারিখ</p>
+                        <p id="m-approval-date" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক/মাসের নাম</p>
+                        <p id="m-memo-number" class="font-semibold text-slate-800 text-base font-mono"></p>
+                    </div>
+                </div>
+
+                <!-- Row 4: Project Type -->
+                <div>
+                    <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্পের ধরন</p>
+                    <p id="m-quick-type" class="font-semibold text-slate-800 text-base"></p>
                 </div>
 
                 <!-- Remarks (hidden when empty) -->
@@ -1928,17 +1932,21 @@
         // Quick Info Row
         document.getElementById('m-quick-type').innerText = r.project_type || '';
         document.getElementById('m-quick-method').innerText = r.implementation_method || '';
-        document.getElementById('m-quick-status').innerText = r.current_status || '';
+        document.getElementById('m-status-text').innerText = r.current_status || '';
 
         // Details
         document.getElementById('m-id').innerText = r.id || '';
         document.getElementById('m-financial-year').innerText = r.financial_year || '';
         document.getElementById('m-upazila').innerText = r.upazila || '';
         document.getElementById('m-fund-type').innerText = r.fund_type || '';
-        const mCurStatus = document.getElementById('m-current-status');
-        if (mCurStatus) mCurStatus.innerText = r.current_status || '';
 
-        // Approval date and memo number
+        // Approval information
+        const approvalType = r.memo_type === 'monthly'
+            ? 'মাসিক সভার সিদ্ধান্ত'
+            : r.memo_type === 'ministry'
+            ? 'মন্ত্রণালয়ের স্মারক'
+            : 'N/A';
+        document.getElementById('m-approval-method').innerText = approvalType;
         document.getElementById('m-approval-date').innerText = r.project_approval_date ? formatDate(r.project_approval_date) : 'N/A';
         document.getElementById('m-memo-number').innerText = r.approval_memo_number || 'N/A';
 
