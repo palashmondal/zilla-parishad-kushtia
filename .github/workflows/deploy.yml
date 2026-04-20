@@ -29,6 +29,8 @@ jobs:
             git pull origin main || exit 1
             echo "Installing dependencies..."
             npm install --production || exit 1
+            echo "Creating upload directories..."
+            mkdir -p uploads/projects uploads/documents uploads/approval-memos uploads/profiles
             echo "Running database migrations..."
             node database/migrate.js || exit 1
             echo "Restarting application..."
