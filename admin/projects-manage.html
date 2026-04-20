@@ -872,7 +872,7 @@
             <div class="grid grid-cols-1 md:grid-cols-8 gap-3">
                 <div class="md:col-span-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">অনুসন্ধান</label>
-                    <input type="text" id="search-input" placeholder="নাম, আইডি, উপজেলা..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
+                    <input type="text" id="search-input" placeholder="নাম, আইডি, সভাপতি, মোবাইল, উপজেলা, সুপারিশকারী, মন্তব্য..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">অর্থবছর</label>
@@ -4297,12 +4297,6 @@
 
                 CRUDManager.populateForm(form, record);
 
-                // Ensure project_id is populated in the form
-                const projectIdInput = document.getElementById('form-id');
-                if (projectIdInput && record.project_id) {
-                    projectIdInput.value = record.project_id;
-                }
-
                 // Load approval memos for the financial year first (this recreates TomSelect)
                 await onFinancialYearChange();
 
@@ -4379,6 +4373,11 @@
                 setTimeout(() => {
                     toggleCppcFieldsVisibility();
                     setupCppcFieldsListener();
+                    // Ensure project_id is populated last to avoid being overwritten
+                    const projectIdInput = document.getElementById('form-id');
+                    if (projectIdInput && record.project_id) {
+                        projectIdInput.value = record.project_id;
+                    }
                     isLoadingFormData = false;
                 }, 300);
             } catch (err) {
@@ -5386,7 +5385,13 @@
             // If using TomSelect, get the value from the TomSelect instance
             const tomInstance = _tomInstances && _tomInstances.get(memoSelect);
             if (tomInstance) {
-                memoId = tomInstance.getValue() || '';
+                let value = tomInstance.getValue();
+                // TomSelect might return an array with maxItems:1, so handle both cases
+                if (Array.isArray(value)) {
+                    memoId = value[0] || '';
+                } else {
+                    memoId = value || '';
+                }
             }
 
             const approvalDateInput = document.querySelector('input[name="project_approval_date"]');
@@ -5399,11 +5404,24 @@
             }
 
             // Get data from selected option - look for the option with matching value
+            // TomSelect may hide the actual options, so we need to handle both cases
             let selectedOption = null;
-            for (let i = 0; i < memoSelect.options.length; i++) {
-                if (memoSelect.options[i].value === String(memoId)) {
-                    selectedOption = memoSelect.options[i];
-                    break;
+
+            // Try to find in actual options (works when TomSelect is not active or in regular select)
+            if (memoSelect.options && memoSelect.options.length > 0) {
+                for (let i = 0; i < memoSelect.options.length; i++) {
+                    if (memoSelect.options[i].value === String(memoId)) {
+                        selectedOption = memoSelect.options[i];
+                        break;
+                    }
+                }
+            }
+
+            // If not found in options, try finding in the DOM directly (for TomSelect cases)
+            if (!selectedOption) {
+                const option = memoSelect.querySelector(`option[value="${memoId}"]`);
+                if (option) {
+                    selectedOption = option;
                 }
             }
 
@@ -5415,6 +5433,7 @@
                     approvalDateInput.value = memoDate;
                     // Store the memo number with Bangla digits
                     memoNumberInput.value = convertAnyToBengaliDigits(memoNumber);
+                    console.log('📝 Approval memo changed:', { memoId, memoDate, memoNumber });
                 }
             }
         }
@@ -5426,6 +5445,18 @@
                 onFinancialYearChange();
             }
             if (e.target && e.target.id === 'approval-memo-select') {
+                // Sync TomSelect value back to form field before change handler
+                const tomInstance = _tomInstances && _tomInstances.get(e.target);
+                if (tomInstance) {
+                    let value = tomInstance.getValue();
+                    // TomSelect might return an array with maxItems:1, so handle both cases
+                    if (Array.isArray(value)) {
+                        value = value[0] || '';
+                    }
+                    if (e.target.value !== value) {
+                        e.target.value = value || '';
+                    }
+                }
                 onApprovalMemoChange();
             }
         });
@@ -5442,8 +5473,32 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'সংরক্ষণ হচ্ছে…';
             try {
+                // Sync TomSelect instances back to form fields before submission
+                const memoSelect = document.getElementById('approval-memo-select');
+                const tomMemoInstance = _tomInstances && _tomInstances.get(memoSelect);
+                if (tomMemoInstance) {
+                    let memoValue = tomMemoInstance.getValue();
+                    // TomSelect might return an array with maxItems:1, so handle both cases
+                    if (Array.isArray(memoValue)) {
+                        memoValue = memoValue[0] || '';
+                    }
+                    memoSelect.value = memoValue || '';
+                    console.log('📋 Synced approval_memo_id TomSelect to form field:', memoSelect.value);
+                }
+
+                const methodSelect = document.querySelector('select[name="implementation_method"]');
+                const tomMethodInstance = _tomInstances && _tomInstances.get(methodSelect);
+                if (tomMethodInstance) {
+                    let methodValue = tomMethodInstance.getValue();
+                    // TomSelect might return an array with maxItems:1, so handle both cases
+                    if (Array.isArray(methodValue)) {
+                        methodValue = methodValue[0] || '';
+                    }
+                    methodSelect.value = methodValue || '';
+                }
+
                 const formData = CRUDManager.formToJSON(e.target);
-                console.log('📋 Form data collected:', { cppc_president: formData.cppc_president, cppc_president_mobile: formData.cppc_president_mobile, implementation_method: formData.implementation_method });
+                console.log('📋 Form data collected:', { cppc_president: formData.cppc_president, cppc_president_mobile: formData.cppc_president_mobile, implementation_method: formData.implementation_method, approval_memo_id: formData.approval_memo_id });
 
                 // Convert Bengali numerals in allocation_amount to English
                 if (formData.allocation_amount) {

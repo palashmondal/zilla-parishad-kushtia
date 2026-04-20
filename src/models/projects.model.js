@@ -56,7 +56,7 @@ const projectsModel = {
 
             scoreParts.push(`
                 (CASE WHEN project_name LIKE ? THEN 10 ELSE 0 END) +
-                (CASE WHEN id LIKE ? THEN 3 ELSE 0 END) +
+                (CASE WHEN project_id LIKE ? THEN 3 ELSE 0 END) +
                 (CASE WHEN upazila LIKE ? THEN 5 ELSE 0 END) +
                 (CASE WHEN project_type LIKE ? THEN 3 ELSE 0 END) +
                 (CASE WHEN current_status LIKE ? THEN 2 ELSE 0 END) +
@@ -64,19 +64,20 @@ const projectsModel = {
                 (CASE WHEN fund_type LIKE ? THEN 1 ELSE 0 END) +
                 (CASE WHEN remarks LIKE ? THEN 1 ELSE 0 END) +
                 (CASE WHEN cppc_president LIKE ? THEN 5 ELSE 0 END) +
-                (CASE WHEN cppc_president_mobile LIKE ? THEN 5 ELSE 0 END)
+                (CASE WHEN cppc_president_mobile LIKE ? THEN 5 ELSE 0 END) +
+                (CASE WHEN reference LIKE ? THEN 4 ELSE 0 END)
             `);
 
-            for (let i = 0; i < 10; i++) queryParams.push(searchTerm);
+            for (let i = 0; i < 11; i++) queryParams.push(searchTerm);
 
             whereParts.push(`(
-                project_name LIKE ? OR id LIKE ? OR upazila LIKE ? OR
+                project_name LIKE ? OR project_id LIKE ? OR upazila LIKE ? OR
                 project_type LIKE ? OR current_status LIKE ? OR
                 implementation_method LIKE ? OR fund_type LIKE ? OR remarks LIKE ? OR
-                cppc_president LIKE ? OR cppc_president_mobile LIKE ?
+                cppc_president LIKE ? OR cppc_president_mobile LIKE ? OR reference LIKE ?
             )`);
 
-            for (let i = 0; i < 10; i++) queryParams.push(searchTerm);
+            for (let i = 0; i < 11; i++) queryParams.push(searchTerm);
         });
 
         selectClause += scoreParts.join(' + ') + `) AS relevance_score
@@ -136,26 +137,11 @@ const projectsModel = {
     },
 
     async getAvailableMemos(financialYear) {
-        const BN_TO_EN = `REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-                              p.financial_year,'০','0'),'১','1'),'২','2'),'৩','3'),'৪','4'),
-                              '৫','5'),'৬','6'),'৭','7'),'৮','8'),'৯','9')`;
         const [results] = await pool.execute(
             `SELECT am.id, am.memo_type, am.memo_date, am.memo_number, am.meeting_month, am.meeting_date, am.total_projects,
-                    COALESCE(
-                        NULLIF(SUM(CASE WHEN p.approval_memo_id = am.id THEN 1 ELSE 0 END), 0),
-                        SUM(CASE WHEN p.approval_memo_id IS NULL
-                                  AND p.financial_year IS NOT NULL
-                                  AND ${BN_TO_EN} = am.financial_year
-                                 THEN 1 ELSE 0 END),
-                        0
-                    ) AS actual_projects
+                    SUM(CASE WHEN p.approval_memo_id = am.id THEN 1 ELSE 0 END) AS actual_projects
              FROM approval_memos am
-             LEFT JOIN projects p ON (
-                 p.approval_memo_id = am.id
-                 OR (p.approval_memo_id IS NULL
-                     AND p.financial_year IS NOT NULL
-                     AND ${BN_TO_EN} = am.financial_year)
-             )
+             LEFT JOIN projects p ON p.approval_memo_id = am.id
              WHERE am.financial_year = ?
              GROUP BY am.id, am.memo_type, am.memo_date, am.memo_number, am.meeting_month, am.meeting_date, am.total_projects
              ORDER BY COALESCE(am.memo_date, am.meeting_date) DESC`,
@@ -307,6 +293,8 @@ const projectsModel = {
         try {
             const sanitized = sanitizeProjectData(data);
 
+            console.log(`📝 MODEL UPDATE id=${id}, approval_memo_id in data=${data.approval_memo_id}, after sanitize=${sanitized.approval_memo_id}`);
+
             // Auto-populate lat_lng from upazila if not provided
             if (sanitized.upazila && (!sanitized.lat_lng || sanitized.lat_lng === null)) {
                 sanitized.lat_lng = autoPopulateLatLng(sanitized.upazila, sanitized.lat_lng);
@@ -395,7 +383,7 @@ const projectsModel = {
                     // Score calculation parameters (for SELECT clause only)
                     scoreParts.push(`
                         (CASE WHEN project_name LIKE ? THEN 10 ELSE 0 END) +
-                        (CASE WHEN id LIKE ? THEN 3 ELSE 0 END) +
+                        (CASE WHEN project_id LIKE ? THEN 3 ELSE 0 END) +
                         (CASE WHEN upazila LIKE ? THEN 5 ELSE 0 END) +
                         (CASE WHEN project_type LIKE ? THEN 3 ELSE 0 END) +
                         (CASE WHEN current_status LIKE ? THEN 2 ELSE 0 END) +
@@ -403,18 +391,19 @@ const projectsModel = {
                         (CASE WHEN fund_type LIKE ? THEN 1 ELSE 0 END) +
                         (CASE WHEN remarks LIKE ? THEN 1 ELSE 0 END) +
                         (CASE WHEN cppc_president LIKE ? THEN 5 ELSE 0 END) +
-                        (CASE WHEN cppc_president_mobile LIKE ? THEN 5 ELSE 0 END)
+                        (CASE WHEN cppc_president_mobile LIKE ? THEN 5 ELSE 0 END) +
+                        (CASE WHEN reference LIKE ? THEN 4 ELSE 0 END)
                     `);
-                    for (let i = 0; i < 10; i++) params.push(searchTerm);
+                    for (let i = 0; i < 11; i++) params.push(searchTerm);
 
                     // WHERE clause parameters (for both SELECT and COUNT queries)
                     whereParts.push(`(
-                        project_name LIKE ? OR id LIKE ? OR upazila LIKE ? OR
+                        project_name LIKE ? OR project_id LIKE ? OR upazila LIKE ? OR
                         project_type LIKE ? OR current_status LIKE ? OR
                         implementation_method LIKE ? OR fund_type LIKE ? OR remarks LIKE ? OR
-                        cppc_president LIKE ? OR cppc_president_mobile LIKE ?
+                        cppc_president LIKE ? OR cppc_president_mobile LIKE ? OR reference LIKE ?
                     )`);
-                    for (let i = 0; i < 10; i++) {
+                    for (let i = 0; i < 11; i++) {
                         params.push(searchTerm);
                         countParams.push(searchTerm);
                     }
