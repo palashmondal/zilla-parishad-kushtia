@@ -34,7 +34,7 @@ jobs:
             echo "Running database migrations..."
             node database/migrate.js || exit 1
             echo "Restarting application..."
-            ~/.npm-global/bin/pm2 restart zpkushtia 2>/dev/null || \
-            ~/.local/bin/pm2 restart zpkushtia 2>/dev/null || \
-            /usr/local/bin/pm2 restart zpkushtia || exit 1
+            PM2=$(which pm2 2>/dev/null || find ~/. /usr/local /usr -name pm2 -type f 2>/dev/null | head -1)
+            [ -z "$PM2" ] && echo "pm2 not found" && exit 1
+            $PM2 restart zpkushtia || exit 1
             echo "✓ Deployment complete"
