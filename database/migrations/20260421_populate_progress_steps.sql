@@ -1,6 +1,10 @@
 -- Populate progress_step_definitions with CPPC, Tender, and RFQ workflows
 USE zpk;
 
+-- Clear existing data if any (safe truncate without foreign key issues)
+DELETE FROM progress_step_definitions WHERE 1=1;
+ALTER TABLE progress_step_definitions AUTO_INCREMENT = 1;
+
 INSERT INTO progress_step_definitions (implementation_method, step_order, bengali_description, base_percentage, is_dynamic_calculation, dynamic_min_percentage, dynamic_max_percentage) VALUES
 -- CPPC Steps
 ('cppc', 1, 'অনুমোদন প্রদান', 0, 0, NULL, NULL),
