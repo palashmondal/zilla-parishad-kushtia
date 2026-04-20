@@ -2276,6 +2276,7 @@
         let currentStatus = '';
         let currentPriority = '';
         let editingId = null;
+        let isLoadingFormData = false;
         let currentDetailId = null;
         let currentDetailRecord = null;
         let allRecords = [];
@@ -3319,6 +3320,7 @@
         function closeFormModal() {
             CRUDManager.closeModal('form-modal');
             editingId = null;
+            isLoadingFormData = false;
             pendingFiles = [];
             renderPendingPreviews();
             document.getElementById('upload-status').classList.add('hidden');
@@ -3376,8 +3378,9 @@
                 }
             }
 
-            // Clear fields if not CPPC
-            if (!isCppc) {
+            // Only clear fields when user explicitly changes to non-CPPC after form has been initialized
+            // Don't clear during initial load/edit - preserve values loaded from database
+            if (!isCppc && !isLoadingFormData) {
                 const presidentInput = document.querySelector('input[name="cppc_president"]');
                 const mobileInput = document.querySelector('input[name="cppc_president_mobile"]');
                 if (presidentInput) presidentInput.value = '';
@@ -4253,6 +4256,7 @@
         async function editRecord(id) {
             try {
                 editingId = id;
+                isLoadingFormData = true;
                 const record = await CRUDManager.fetchList(`/projects/${id}`);
 
                 document.getElementById('modal-title').textContent = 'প্রকল্প সম্পাদনা';
@@ -4260,10 +4264,24 @@
                 const form = document.getElementById('project-form');
                 CRUDManager.populateForm(form, record);
 
-                // Load approval memos for the financial year
+                // Load approval memos for the financial year first (this recreates TomSelect)
                 await onFinancialYearChange();
 
+                // Small delay to ensure TomSelect is fully initialized after onFinancialYearChange
+                await new Promise(resolve => setTimeout(resolve, 100));
+
+                // Sync TomSelect for implementation_method AFTER form population
+                const methodSelect = document.querySelector('select[name="implementation_method"]');
+                if (methodSelect && record.implementation_method) {
+                    const methodTomInstance = _tomInstances && _tomInstances.get(methodSelect);
+                    if (methodTomInstance) {
+                        methodTomInstance.setValue(record.implementation_method);
+                        methodTomInstance.sync();
+                    }
+                }
+
                 // If the project has an approval_memo_id, select it in the dropdown
+                // Do this AFTER onFinancialYearChange has loaded the memo options
                 if (record.approval_memo_id) {
                     const memoSelect = document.getElementById('approval-memo-select');
                     // Use TomSelect API to set value (not direct assignment)
@@ -4275,7 +4293,7 @@
                         memoSelect.value = record.approval_memo_id;
                     }
                     // Trigger the change event to populate the date/number fields
-                    await onApprovalMemoChange();
+                    onApprovalMemoChange();
                 }
 
                 // ID field readonly while editing (ID is the PK)
@@ -4301,12 +4319,14 @@
 
                 CRUDManager.openModal('form-modal');
 
-                // Toggle CPPC fields visibility based on edit data - after TomSelect sync
+                // Toggle CPPC fields visibility based on edit data - AFTER all TomSelect syncs
                 setTimeout(() => {
                     toggleCppcFieldsVisibility();
                     setupCppcFieldsListener();
-                }, 200);
+                    isLoadingFormData = false;
+                }, 300);
             } catch (err) {
+                isLoadingFormData = false;
                 CRUDManager.showError('রেকর্ড লোড করতে ব্যর্থ: ' + err.message);
             }
         }
@@ -5285,7 +5305,14 @@
         // Handle approval memo selection to populate related fields
         function onApprovalMemoChange() {
             const memoSelect = document.getElementById('approval-memo-select');
-            const memoId = memoSelect.value;
+            let memoId = memoSelect.value;
+
+            // If using TomSelect, get the value from the TomSelect instance
+            const tomInstance = _tomInstances && _tomInstances.get(memoSelect);
+            if (tomInstance) {
+                memoId = tomInstance.getValue() || '';
+            }
+
             const approvalDateInput = document.querySelector('input[name="project_approval_date"]');
             const memoNumberInput = document.querySelector('input[name="approval_memo_number"]');
 
@@ -5295,14 +5322,23 @@
                 return;
             }
 
-            // Get data from selected option
-            const selectedOption = memoSelect.options[memoSelect.selectedIndex];
-            const memoDate = selectedOption.getAttribute('data-memo-date');
-            const memoNumber = selectedOption.getAttribute('data-memo-number');
+            // Get data from selected option - look for the option with matching value
+            let selectedOption = null;
+            for (let i = 0; i < memoSelect.options.length; i++) {
+                if (memoSelect.options[i].value === String(memoId)) {
+                    selectedOption = memoSelect.options[i];
+                    break;
+                }
+            }
 
-            if (memoDate && memoNumber) {
-                approvalDateInput.value = memoDate;
-                memoNumberInput.value = memoNumber;
+            if (selectedOption) {
+                const memoDate = selectedOption.getAttribute('data-memo-date');
+                const memoNumber = selectedOption.getAttribute('data-memo-number');
+
+                if (memoDate && memoNumber) {
+                    approvalDateInput.value = memoDate;
+                    memoNumberInput.value = memoNumber;
+                }
             }
         }
 
@@ -5330,6 +5366,7 @@
             submitBtn.textContent = 'সংরক্ষণ হচ্ছে…';
             try {
                 const formData = CRUDManager.formToJSON(e.target);
+                console.log('📋 Form data collected:', { cppc_president: formData.cppc_president, cppc_president_mobile: formData.cppc_president_mobile, implementation_method: formData.implementation_method });
 
                 // Convert Bengali numerals in allocation_amount to English
                 if (formData.allocation_amount) {
@@ -5425,6 +5462,7 @@
 
                 if (editingId) {
                     const url = `${AuthManager.API_URL}/projects/${editingId}`;
+                    console.log('📤 Sending PUT request:', { cppc_president: formData.cppc_president, cppc_president_mobile: formData.cppc_president_mobile });
                     await AuthManager.fetch(url, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
