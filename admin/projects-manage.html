@@ -4278,6 +4278,9 @@
                 isLoadingFormData = true;
                 const record = await CRUDManager.fetchList(`/projects/${id}`);
 
+                console.log('📋 Full record from API:', record);
+                console.log('📋 Approval memo ID:', record.approval_memo_id);
+
                 // Store original project_id for comparison during save
                 originalProjectId = record.project_id;
 
