@@ -37,6 +37,20 @@ const approvalMemosController = {
         }
     },
 
+    async checkMemoNumber(req, res) {
+        try {
+            const { number, exclude_id } = req.query;
+            if (!number || !number.trim()) {
+                return res.status(400).json({ error: 'Memo number is required' });
+            }
+            const existing = await approvalMemosModel.findByMemoNumber(number.trim(), exclude_id || null);
+            res.json({ exists: !!existing });
+        } catch (error) {
+            console.error('checkMemoNumber error:', error);
+            res.status(500).json({ error: 'Check failed' });
+        }
+    },
+
     async getById(req, res) {
         try {
             const id = req.params.id;

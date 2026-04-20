@@ -843,7 +843,8 @@
                         </div>
                         <div id="memo-number-field" class="hidden">
                             <label>স্মারক নম্বর <span class="text-red-500">*</span></label>
-                            <input type="text" name="memo_number" required placeholder="যেমন: MEM/2024/001" style="font-family: 'Courier New', monospace;">
+                            <input type="text" id="memo-number-input" name="memo_number" required placeholder="যেমন: MEM/2024/001" style="font-family: 'Courier New', monospace;">
+                            <p id="memo-number-error" class="hidden text-red-600 text-sm mt-1">এই স্মারক নম্বরটি ইতিমধ্যে বিদ্যমান। একটি ভিন্ন নম্বর ব্যবহার করুন।</p>
                         </div>
                         <!-- Monthly Type Fields -->
                         <div id="meeting-month-field" class="hidden">
@@ -1349,6 +1350,44 @@
             }
         }
 
+        async function checkMemoNumberUnique(memoNumber, excludeId) {
+            if (!memoNumber) return true;
+            try {
+                const params = new URLSearchParams({ number: memoNumber });
+                if (excludeId) params.set('exclude_id', excludeId);
+                const res = await fetch(`${API_BASE}/check-memo-number?${params}`);
+                if (!res.ok) return true;
+                const data = await res.json();
+                return !data.exists;
+            } catch {
+                return true;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const memoNumberInput = document.getElementById('memo-number-input');
+            const memoNumberError = document.getElementById('memo-number-error');
+            if (memoNumberInput) {
+                memoNumberInput.addEventListener('blur', async function() {
+                    const val = this.value.trim();
+                    if (!val) { memoNumberError.classList.add('hidden'); return; }
+                    const recordId = document.getElementById('record-id').value;
+                    const isUnique = await checkMemoNumberUnique(val, recordId || null);
+                    if (!isUnique) {
+                        memoNumberError.classList.remove('hidden');
+                        memoNumberInput.classList.add('border-red-500');
+                    } else {
+                        memoNumberError.classList.add('hidden');
+                        memoNumberInput.classList.remove('border-red-500');
+                    }
+                });
+                memoNumberInput.addEventListener('input', function() {
+                    memoNumberError.classList.add('hidden');
+                    memoNumberInput.classList.remove('border-red-500');
+                });
+            }
+        });
+
         async function handleFormSubmit(e) {
             e.preventDefault();
             const recordId = document.getElementById('record-id').value;
@@ -1359,8 +1398,17 @@
 
             // Add memo date and number only for ministry memos
             if (memoType === 'ministry') {
+                const memoNumberVal = document.querySelector('input[name="memo_number"]').value.trim();
+                const isUnique = await checkMemoNumberUnique(memoNumberVal, recordId || null);
+                if (!isUnique) {
+                    const errEl = document.getElementById('memo-number-error');
+                    const inputEl = document.getElementById('memo-number-input');
+                    if (errEl) errEl.classList.remove('hidden');
+                    if (inputEl) inputEl.classList.add('border-red-500');
+                    return;
+                }
                 formData.append('memo_date', document.querySelector('input[name="memo_date"]').value);
-                formData.append('memo_number', document.querySelector('input[name="memo_number"]').value);
+                formData.append('memo_number', memoNumberVal);
             } else if (memoType === 'monthly') {
                 // For monthly meetings, use the meeting month and date
                 const meetingMonth = document.querySelector('select[name="meeting_month"]').value;
