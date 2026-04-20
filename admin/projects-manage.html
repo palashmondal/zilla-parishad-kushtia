@@ -5496,14 +5496,22 @@
 
                 // Check for ID uniqueness when editing and ID has changed
                 if (editingId && formData.project_id && originalProjectId && String(formData.project_id).trim() !== String(originalProjectId).trim()) {
+                    console.log('🔍 Checking ID uniqueness:', {
+                        editingId,
+                        newProjectId: formData.project_id,
+                        originalProjectId
+                    });
                     try {
                         const idCheckRes = await fetch(`${AuthManager.API_URL}/projects/${formData.project_id}`);
+                        console.log('🔍 ID check response status:', idCheckRes.status);
 
                         // If status is 200, the ID already exists (which is an error)
                         if (idCheckRes.ok) {
                             const existingProject = await idCheckRes.json();
+                            console.log('🔍 Existing project found:', { existingId: existingProject.id, editingId });
                             // Make sure it's not the same project we're editing
                             if (existingProject && existingProject.id !== editingId) {
+                                console.log('❌ Duplicate ID detected!');
                                 CRUDManager.showError(`প্রকল্প আইডি "${formData.project_id}" ইতিমধ্যে বিদ্যমান। অনুগ্রহ করে অন্য একটি অনন্য আইডি নির্বাচন করুন।`);
                                 submitBtn.disabled = false;
                                 submitBtn.textContent = 'সংরক্ষণ করুন';
@@ -5511,6 +5519,7 @@
                             }
                         }
                         // If 404, the ID is available - proceed normally
+                        console.log('✅ ID is unique, proceeding with save');
                     } catch (err) {
                         console.warn('ID uniqueness check error:', err);
                         // Network errors - allow user to retry
@@ -5519,6 +5528,13 @@
                         submitBtn.textContent = 'সংরক্ষণ করুন';
                         return;
                     }
+                } else {
+                    console.log('⏭️ Skipping ID uniqueness check:', {
+                        hasEditingId: !!editingId,
+                        hasProjectId: !!formData.project_id,
+                        hasOriginalProjectId: !!originalProjectId,
+                        idChanged: originalProjectId ? String(formData.project_id).trim() !== String(originalProjectId).trim() : 'N/A'
+                    });
                 }
 
                 let savedId = editingId;
