@@ -2543,8 +2543,8 @@
                 }
             }
             dmStatus.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold ' + statusClass;
-            // Details
-            document.getElementById('dm-id').innerText = r.project_id || r.id || '';
+            // Details - always display project_id, never fall back to numeric id
+            document.getElementById('dm-id').innerText = r.project_id ? String(r.project_id).trim() : '(নির্ধারিত নয়)';
             document.getElementById('dm-year').innerText = r.financial_year || '';
             document.getElementById('dm-upazila').innerText = r.upazila || '';
             document.getElementById('dm-fund-type').innerText = r.fund_type || '';
