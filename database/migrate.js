@@ -50,7 +50,9 @@ async function runMigration(filename) {
   console.log(`\n🔄 Running: ${filename}`);
 
   const sql = fs.readFileSync(filepath, 'utf8');
-  const statements = sql.split(';').filter(s => s.trim());
+  // Strip single-line comments before splitting to avoid false splits on semicolons inside comments
+  const cleaned = sql.replace(/--[^\n]*/g, '');
+  const statements = cleaned.split(';').filter(s => s.trim());
 
   let count = 0;
   for (const statement of statements) {
