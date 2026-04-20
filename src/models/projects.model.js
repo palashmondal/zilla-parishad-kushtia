@@ -9,13 +9,14 @@ const PROJECT_FIELDS = `
     upazila, project_type, current_status, progress_percentage, progress_step_id,
     is_completed, is_delayed, performance_score,
     start_date, expected_end_date, actual_end_date, lat_lng, remarks, priority, reference,
+    cppc_president, cppc_president_mobile,
     created_at, updated_at
 `;
 
 // DATE columns — empty string must become NULL (MySQL strict mode rejects '')
 const DATE_FIELDS = ['project_approval_date', 'start_date', 'expected_end_date', 'actual_end_date'];
 // Nullable text columns — send NULL instead of empty string
-const NULLABLE_TEXT = ['project_id', 'approval_memo_number', 'lat_lng', 'remarks', 'reference', 'performance_score', 'priority'];
+const NULLABLE_TEXT = ['project_id', 'approval_memo_number', 'lat_lng', 'remarks', 'reference', 'cppc_president', 'cppc_president_mobile', 'performance_score', 'priority'];
 // Nullable integer columns — send NULL instead of empty/invalid values
 const NULLABLE_INT = ['approval_memo_id', 'progress_step_id'];
 
@@ -61,18 +62,21 @@ const projectsModel = {
                 (CASE WHEN current_status LIKE ? THEN 2 ELSE 0 END) +
                 (CASE WHEN implementation_method LIKE ? THEN 2 ELSE 0 END) +
                 (CASE WHEN fund_type LIKE ? THEN 1 ELSE 0 END) +
-                (CASE WHEN remarks LIKE ? THEN 1 ELSE 0 END)
+                (CASE WHEN remarks LIKE ? THEN 1 ELSE 0 END) +
+                (CASE WHEN cppc_president LIKE ? THEN 5 ELSE 0 END) +
+                (CASE WHEN cppc_president_mobile LIKE ? THEN 5 ELSE 0 END)
             `);
 
-            for (let i = 0; i < 8; i++) queryParams.push(searchTerm);
+            for (let i = 0; i < 10; i++) queryParams.push(searchTerm);
 
             whereParts.push(`(
                 project_name LIKE ? OR id LIKE ? OR upazila LIKE ? OR
                 project_type LIKE ? OR current_status LIKE ? OR
-                implementation_method LIKE ? OR fund_type LIKE ? OR remarks LIKE ?
+                implementation_method LIKE ? OR fund_type LIKE ? OR remarks LIKE ? OR
+                cppc_president LIKE ? OR cppc_president_mobile LIKE ?
             )`);
 
-            for (let i = 0; i < 8; i++) queryParams.push(searchTerm);
+            for (let i = 0; i < 10; i++) queryParams.push(searchTerm);
         });
 
         selectClause += scoreParts.join(' + ') + `) AS relevance_score
@@ -397,17 +401,20 @@ const projectsModel = {
                         (CASE WHEN current_status LIKE ? THEN 2 ELSE 0 END) +
                         (CASE WHEN implementation_method LIKE ? THEN 2 ELSE 0 END) +
                         (CASE WHEN fund_type LIKE ? THEN 1 ELSE 0 END) +
-                        (CASE WHEN remarks LIKE ? THEN 1 ELSE 0 END)
+                        (CASE WHEN remarks LIKE ? THEN 1 ELSE 0 END) +
+                        (CASE WHEN cppc_president LIKE ? THEN 5 ELSE 0 END) +
+                        (CASE WHEN cppc_president_mobile LIKE ? THEN 5 ELSE 0 END)
                     `);
-                    for (let i = 0; i < 8; i++) params.push(searchTerm);
+                    for (let i = 0; i < 10; i++) params.push(searchTerm);
 
                     // WHERE clause parameters (for both SELECT and COUNT queries)
                     whereParts.push(`(
                         project_name LIKE ? OR id LIKE ? OR upazila LIKE ? OR
                         project_type LIKE ? OR current_status LIKE ? OR
-                        implementation_method LIKE ? OR fund_type LIKE ? OR remarks LIKE ?
+                        implementation_method LIKE ? OR fund_type LIKE ? OR remarks LIKE ? OR
+                        cppc_president LIKE ? OR cppc_president_mobile LIKE ?
                     )`);
-                    for (let i = 0; i < 8; i++) {
+                    for (let i = 0; i < 10; i++) {
                         params.push(searchTerm);
                         countParams.push(searchTerm);
                     }

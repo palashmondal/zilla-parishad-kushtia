@@ -1029,35 +1029,63 @@
                     </div>
                 </div>
 
-                <!-- Row 2.5: Approval Type · Approval Date · Memo Number -->
+                <!-- Row 2.5: Priority · Approval Type · Approval Date -->
                 <div class="grid grid-cols-3 gap-4 items-start">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অগ্রাধিকার</p>
+                        <p id="dm-priority" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের ধরণ</p>
                         <p id="dm-approval-method" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তারিখ</p>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদন তারিখ</p>
                         <p id="dm-approval-date" class="font-semibold text-slate-800 text-base"></p>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক/মাসের নাম</p>
-                        <p id="dm-memo-number" class="font-semibold text-slate-800 text-base whitespace-nowrap overflow-hidden text-ellipsis" style="font-family: 'Hind Siliguri', 'Solaimanlipi', 'Nikosh', sans-serif;"></p>
                     </div>
                 </div>
 
-                <!-- Row 2.7: Project Type · Priority · Reference -->
-                <div class="grid grid-cols-3 gap-4">
+                <!-- Row 2.55: Project Type · Memo/Month · Recommender (Tender layout) -->
+                <div id="dm-tender-row" class="grid gap-4" style="grid-template-columns: 1fr 1fr 1fr; display: none;">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্পের ধরন</p>
+                        <p id="dm-quick-type-tender" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p id="dm-memo-label-tender" class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক/মাসের নাম</p>
+                        <p id="dm-memo-number-tender" class="font-semibold text-slate-800 text-base whitespace-nowrap overflow-hidden text-ellipsis" style="font-family: 'Hind Siliguri', 'Solaimanlipi', 'Nikosh', sans-serif;"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সুপারিশকারী</p>
+                        <p id="dm-reference-tender" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2.55: Project Type (1 col) · Memo/Month (2 cols) (CPPC layout) -->
+                <div id="dm-cppc-row-2" class="grid gap-4" style="grid-template-columns: 1fr 2fr;">
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্পের ধরন</p>
                         <p id="dm-quick-type" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                     <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অগ্রাধিকার</p>
-                        <p id="dm-priority" class="ont-semibold text-slate-800 text-base"></p>
+                        <p id="dm-memo-label" class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক/মাসের নাম</p>
+                        <p id="dm-memo-number" class="font-semibold text-slate-800 text-base whitespace-nowrap overflow-hidden text-ellipsis" style="font-family: 'Hind Siliguri', 'Solaimanlipi', 'Nikosh', sans-serif;"></p>
                     </div>
+                </div>
+
+                <!-- Row 2.8: Reference · CPPC President · CPPC Mobile (CPPC only) -->
+                <div id="dm-cppc-row" class="grid grid-cols-3 gap-4">
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সুপারিশকারী</p>
                         <p id="dm-reference" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div id="dm-cppc-president-wrap" class="hidden">
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্প সভাপতি</p>
+                        <p id="dm-cppc-president" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div id="dm-cppc-mobile-wrap" class="hidden">
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সভাপতির মোবাইল</p>
+                        <p id="dm-cppc-mobile" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
 
@@ -1079,8 +1107,10 @@
 
                 <!-- Remarks -->
                 <div id="dm-remarks-wrap" class="hidden">
-                    <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">মন্তব্য</p>
-                    <p id="dm-remarks" class="font-medium text-slate-600 text-base leading-relaxed"></p>
+                    <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl border border-amber-200 p-5 shadow-sm">
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-3">মন্তব্য</p>
+                        <p id="dm-remarks" class="font-medium text-slate-700 text-base leading-relaxed whitespace-pre-wrap" style="font-family: 'Hind Siliguri', 'Solaimanlipi', 'Nikosh', sans-serif;"></p>
+                    </div>
                 </div>
 
                 <!-- Amount box with progress bars -->
@@ -1413,6 +1443,16 @@
                                 <option value="medium">🟡 মধ্যম</option>
                                 <option value="top_priority">🔴 সর্বোচ্চ</option>
                             </select>
+                        </div>
+
+                        <!-- Row 6.5: CPPC-only fields (সভাপতি) — hidden by default -->
+                        <div id="cppc-fields-row" class="form-field hidden">
+                            <label>প্রকল্প সভাপতি</label>
+                            <input type="text" name="cppc_president" placeholder="সভাপতির নাম লিখুন…" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
+                        </div>
+                        <div id="cppc-mobile-row" class="form-field hidden">
+                            <label>সভাপতির মোবাইল নম্বর</label>
+                            <input type="tel" name="cppc_president_mobile" placeholder="০১XXXXXXXXX" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
 
                         <!-- Row 7: সুপারিশকারী | GPS Location -->
@@ -2715,7 +2755,42 @@
 
             // Reference (who recommended the project)
             document.getElementById('dm-reference').innerText = r.reference || 'N/A';
-            // dm-status removed (duplicate of dm-quick-status)
+
+            // CPPC fields (only for সিপিপিসি projects)
+            const isCppc = (r.implementation_method || '').trim() === 'সিপিপিসি';
+            const cppcPresidentWrap = document.getElementById('dm-cppc-president-wrap');
+            const cppcMobileWrap = document.getElementById('dm-cppc-mobile-wrap');
+
+            if (cppcPresidentWrap) cppcPresidentWrap.classList.toggle('hidden', !isCppc);
+            if (cppcMobileWrap) cppcMobileWrap.classList.toggle('hidden', !isCppc);
+
+            if (isCppc) {
+                document.getElementById('dm-cppc-president').innerText = r.cppc_president || '-';
+                document.getElementById('dm-cppc-mobile').innerText = r.cppc_president_mobile || '-';
+            }
+
+            // Layout toggle: Tender projects show Type+Memo+Recommender in one row; CPPC shows Type+Memo in two-column layout
+            const dmTenderRow = document.getElementById('dm-tender-row');
+            const dmCppcRow2 = document.getElementById('dm-cppc-row-2');
+            const dmCppcRow = document.getElementById('dm-cppc-row');
+
+            if (isCppc) {
+                // CPPC layout: show type+memo row and recommender+cppc fields row
+                dmTenderRow.style.display = 'none';
+                dmCppcRow2.style.display = 'grid';
+                dmCppcRow.style.display = 'grid';
+            } else {
+                // Tender layout: show type+memo+recommender in one row, hide the cppc row
+                dmTenderRow.style.display = 'grid';
+                dmCppcRow2.style.display = 'none';
+                dmCppcRow.style.display = 'none';
+                // Populate tender row
+                document.getElementById('dm-quick-type-tender').innerText = r.project_type || '';
+                document.getElementById('dm-memo-number-tender').innerText = (r.approval_memo_number || 'N/A').replace(/\d/g, d => '०१२३४५६७८९'[d]);
+                document.getElementById('dm-reference-tender').innerText = r.reference || 'N/A';
+                const memoLabel = r.memo_type === 'ministry' ? 'স্মারক নম্বর' : 'সভার মাস';
+                document.getElementById('dm-memo-label-tender').innerText = memoLabel;
+            }
 
             // Approval info (Row 2.5: Type · Date · Memo)
             const approvalType = r.memo_type === 'monthly'
@@ -2729,6 +2804,9 @@
             const memoNumber = r.approval_memo_number || 'N/A';
             const bengaliMemoNumber = memoNumber.replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
             document.getElementById('dm-memo-number').innerText = bengaliMemoNumber;
+            // Update memo label based on memo_type
+            const memoLabel = r.memo_type === 'ministry' ? 'স্মারক নম্বর' : 'সভার মাস';
+            document.getElementById('dm-memo-label').innerText = memoLabel;
 
             // Progress percentage for the progress bars
             const pct = r.progress_percentage || 0;
@@ -3177,13 +3255,19 @@
             setTimeout(() => {
                 document.querySelectorAll('#form-modal select:not([data-no-tomselect])').forEach(el => {
                     if (!_tomInstances.has(el)) {
-                        _tomInstances.set(el, new TomSelect(el, {
+                        const ts = new TomSelect(el, {
                             create: false,
                             sortField: false,
                             allowEmptyOption: true,
                             controlInput: null,
-                            onInitialize() { this.control.style.fontFamily = 'Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace'; }
-                        }));
+                            onInitialize() { this.control.style.fontFamily = 'Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace'; },
+                            onChange: function() {
+                                if (el.name === 'implementation_method') {
+                                    toggleCppcFieldsVisibility();
+                                }
+                            }
+                        });
+                        _tomInstances.set(el, ts);
                     }
                 });
             }, 50);
@@ -3219,6 +3303,17 @@
             if (_fpInstances['expected_end_date']) _fpInstances['expected_end_date'].clear();
 
             CRUDManager.openModal('form-modal');
+
+            // Setup CPPC fields toggle - ensure hidden initially and listen for changes
+            setTimeout(() => {
+                const methodSelect = document.querySelector('select[name="implementation_method"]');
+                if (methodSelect) {
+                    // Hide CPPC fields initially
+                    toggleCppcFieldsVisibility();
+                    // Listen to both native change (fallback) and TomSelect events
+                    methodSelect.addEventListener('change', toggleCppcFieldsVisibility);
+                }
+            }, 100);
         }
 
         function closeFormModal() {
@@ -3229,6 +3324,70 @@
             document.getElementById('upload-status').classList.add('hidden');
             pendingDocs = [];
             renderPendingDocs();
+        }
+
+        // Toggle CPPC fields based on implementation_method
+        function toggleCppcFieldsVisibility() {
+            const methodSelect = document.querySelector('select[name="implementation_method"]');
+            if (!methodSelect) return;
+
+            // Get the selected value - check multiple sources
+            let methodValue = '';
+
+            // Try TomSelect first
+            const tomInstance = _tomInstances && _tomInstances.get(methodSelect);
+            if (tomInstance) {
+                const val = tomInstance.getValue();
+                methodValue = val || '';
+            }
+
+            // Fallback to direct select value if TomSelect didn't give us anything
+            if (!methodValue) {
+                methodValue = methodSelect.value || '';
+            }
+
+            // Also check the selected option text as ultimate fallback
+            if (!methodValue && methodSelect.selectedIndex >= 0) {
+                methodValue = methodSelect.options[methodSelect.selectedIndex].value || '';
+            }
+
+            const isCppc = (methodValue || '').trim() === 'সিপিপিসি';
+            const fieldRow = document.getElementById('cppc-fields-row');
+            const mobileRow = document.getElementById('cppc-mobile-row');
+
+            // Show or hide the rows - use both class and inline style for reliability
+            if (fieldRow) {
+                if (isCppc) {
+                    fieldRow.classList.remove('hidden');
+                    fieldRow.style.display = 'block';
+                } else {
+                    fieldRow.classList.add('hidden');
+                    fieldRow.style.display = 'none';
+                }
+            }
+
+            if (mobileRow) {
+                if (isCppc) {
+                    mobileRow.classList.remove('hidden');
+                    mobileRow.style.display = 'block';
+                } else {
+                    mobileRow.classList.add('hidden');
+                    mobileRow.style.display = 'none';
+                }
+            }
+
+            // Clear fields if not CPPC
+            if (!isCppc) {
+                const presidentInput = document.querySelector('input[name="cppc_president"]');
+                const mobileInput = document.querySelector('input[name="cppc_president_mobile"]');
+                if (presidentInput) presidentInput.value = '';
+                if (mobileInput) mobileInput.value = '';
+            }
+        }
+
+        function setupCppcFieldsListener() {
+            // Listener is now handled in TomSelect onChange during initialization
+            // This function kept for compatibility
         }
 
         // ── Add Progress Log ──────────────────────────────────────────
@@ -4141,6 +4300,12 @@
                 _tomInstances.forEach((ts, el) => { if (el.closest('#form-modal')) ts.sync(); });
 
                 CRUDManager.openModal('form-modal');
+
+                // Toggle CPPC fields visibility based on edit data - after TomSelect sync
+                setTimeout(() => {
+                    toggleCppcFieldsVisibility();
+                    setupCppcFieldsListener();
+                }, 200);
             } catch (err) {
                 CRUDManager.showError('রেকর্ড লোড করতে ব্যর্থ: ' + err.message);
             }

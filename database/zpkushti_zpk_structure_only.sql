@@ -229,6 +229,8 @@ CREATE TABLE `projects` (
   `lat_lng` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remarks` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'মন্তব্য — optional remarks or notes',
   `reference` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'সুপারিশকারী — who recommended/referred the project, e.g., minister/official name',
+  `cppc_president` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'প্রকল্প সভাপতি — CPPC project president name (only for সিপিপিসি method)',
+  `cppc_president_mobile` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'সভাপতির মোবাইল নম্বর — CPPC president mobile number (only for সিপিপিসি method)',
   `priority` enum('general','medium','top_priority') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'general',
   `created_by` int DEFAULT NULL COMMENT 'FK to admin_users.id — who created this record',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
