@@ -1,6 +1,21 @@
 const approvalMemosModel = require('../models/approval-memos.model');
+const pool = require('../../config/database');
 
 const isProduction = process.env.NODE_ENV === 'production';
+
+// Look up actual DB id by username+role to avoid stale JWT ids across deploys
+async function resolveUserId(jwtUser) {
+    if (!jwtUser?.username) return null;
+    try {
+        const [[row]] = await pool.execute(
+            'SELECT id FROM admin_users WHERE username = ? AND role = ? LIMIT 1',
+            [jwtUser.username, jwtUser.role]
+        );
+        return row?.id || null;
+    } catch {
+        return null;
+    }
+}
 
 const approvalMemosController = {
     async getAll(req, res) {
@@ -68,7 +83,7 @@ const approvalMemosController = {
                 total_projects: parseInt(total_projects, 10) || 0,
                 remarks: req.body.remarks || null,
                 document_file: req.file ? `/uploads/approval-memos/${req.file.filename}` : null,
-                created_by: req.user?.id || null
+                created_by: await resolveUserId(req.user)
             };
 
             // Add type-specific fields
