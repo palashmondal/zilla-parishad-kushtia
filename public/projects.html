@@ -1819,16 +1819,16 @@
         return '/api';
     })();
 
+    function toBengaliNumber(num) {
+        const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+        return String(num).replace(/\d/g, d => bengaliDigits[d]);
+    }
     function formatBDMoney(amount) {
-        if (amount === null || amount === undefined || isNaN(amount)) return '0';
-        let num = Math.floor(Number(amount));
-        if (num === 0) return '0';
-        let str = num.toString();
-        if (str.length <= 3) return str;
-        let lastThree = str.substring(str.length - 3);
-        let otherNumbers = str.substring(0, str.length - 3);
-        if (otherNumbers !== '') lastThree = ',' + lastThree;
-        return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+        if (amount === null || amount === undefined || isNaN(amount)) return '০';
+        const n = Math.floor(Number(amount));
+        if (n === 0) return '০';
+        const formatted = n.toLocaleString('en-IN');
+        return toBengaliNumber(formatted);
     }
 
     function formatDate(dateStr) {
