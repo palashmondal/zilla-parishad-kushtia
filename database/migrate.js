@@ -37,6 +37,7 @@ async function getExecutedMigrations() {
 }
 
 async function getPendingMigrations() {
+  if (!fs.existsSync(MIGRATIONS_DIR)) return [];
   const files = fs.readdirSync(MIGRATIONS_DIR)
     .filter(f => f.endsWith('.sql'))
     .sort();
