@@ -119,7 +119,7 @@ const approvalMemosController = {
 
             res.status(500).json({
                 error: 'Creation failed',
-                message: isProduction ? 'An internal error occurred' : error.message
+                message: error.message
             });
         }
     },
