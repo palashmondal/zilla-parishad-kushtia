@@ -4319,17 +4319,35 @@
                 // If the project has an approval_memo_id, select it in the dropdown
                 // Do this AFTER onFinancialYearChange has loaded the memo options
                 if (record.approval_memo_id) {
+                    console.log('📋 Setting approval_memo_id:', record.approval_memo_id);
                     const memoSelect = document.getElementById('approval-memo-select');
-                    // Use TomSelect API to set value (not direct assignment)
+
+                    // Wait a bit longer to ensure TomSelect is ready
+                    await new Promise(resolve => setTimeout(resolve, 150));
+
                     const tomInstance = _tomInstances && _tomInstances.get(memoSelect);
+                    console.log('📋 TomSelect instance found:', !!tomInstance);
+
                     if (tomInstance) {
+                        // Clear any existing value first
+                        tomInstance.clear();
+                        // Set the new value
                         tomInstance.setValue(record.approval_memo_id);
                         tomInstance.sync();
+                        console.log('📋 TomSelect value set:', tomInstance.getValue());
                     } else {
+                        // Fallback to direct assignment
                         memoSelect.value = record.approval_memo_id;
+                        console.log('📋 Direct value assignment:', memoSelect.value);
                     }
+
                     // Trigger the change event to populate the date/number fields
-                    onApprovalMemoChange();
+                    setTimeout(() => {
+                        onApprovalMemoChange();
+                        console.log('📋 onApprovalMemoChange called');
+                    }, 50);
+                } else {
+                    console.log('⏭️ No approval_memo_id to load');
                 }
 
                 // ID field is now editable while editing - validation for uniqueness is done on save
