@@ -32,5 +32,7 @@ jobs:
             echo "Running database migrations..."
             node database/migrate.js || exit 1
             echo "Restarting application..."
-            pm2 restart zpkushtia || exit 1
+            ~/.npm-global/bin/pm2 restart zpkushtia 2>/dev/null || \
+            ~/.local/bin/pm2 restart zpkushtia 2>/dev/null || \
+            /usr/local/bin/pm2 restart zpkushtia || exit 1
             echo "✓ Deployment complete"
