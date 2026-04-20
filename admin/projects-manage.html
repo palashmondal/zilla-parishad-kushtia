@@ -2787,7 +2787,8 @@
                 dmCppcRow.style.display = 'none';
                 // Populate tender row
                 document.getElementById('dm-quick-type-tender').innerText = r.project_type || '';
-                document.getElementById('dm-memo-number-tender').innerText = (r.approval_memo_number || 'N/A').replace(/\d/g, d => '०१२३४५६७८९'[d]);
+                const tenderMemoNumber = r.approval_memo_number || 'N/A';
+                document.getElementById('dm-memo-number-tender').innerText = tenderMemoNumber === 'N/A' ? 'N/A' : convertAnyToBengaliDigits(tenderMemoNumber);
                 document.getElementById('dm-reference-tender').innerText = r.reference || 'N/A';
                 const memoLabel = r.memo_type === 'ministry' ? 'স্মারক নম্বর' : 'সভার মাস';
                 document.getElementById('dm-memo-label-tender').innerText = memoLabel;
@@ -2803,7 +2804,7 @@
             document.getElementById('dm-approval-date').innerText = r.project_approval_date ? CRUDManager.formatDate(r.project_approval_date) : 'N/A';
             // Convert English digits to Bengali digits for memo number
             const memoNumber = r.approval_memo_number || 'N/A';
-            const bengaliMemoNumber = memoNumber.replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+            const bengaliMemoNumber = memoNumber === 'N/A' ? 'N/A' : convertAnyToBengaliDigits(memoNumber);
             document.getElementById('dm-memo-number').innerText = bengaliMemoNumber;
             // Update memo label based on memo_type
             const memoLabel = r.memo_type === 'ministry' ? 'স্মারক নম্বর' : 'সভার মাস';
@@ -5096,6 +5097,23 @@
             return result;
         }
 
+        function convertAnyToBengaliDigits(number) {
+            if (!number) return '';
+            let result = String(number);
+            const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            const devanagariDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+
+            // Convert any digit format to Bangla
+            englishDigits.forEach((digit, index) => {
+                result = result.replace(new RegExp(digit, 'g'), bengaliDigits[index]);
+            });
+            devanagariDigits.forEach((digit, index) => {
+                result = result.replace(new RegExp(digit, 'g'), bengaliDigits[index]);
+            });
+            return result;
+        }
+
         // Setup allocation amount field to display Bengali numerals
         document.addEventListener('DOMContentLoaded', () => {
             const allocationField = document.getElementById('allocation-amount-input');
@@ -5231,7 +5249,9 @@
                                 });
                                 isoDateStr = memo.memo_date ? memo.memo_date.split('T')[0] : '';
                                 memoNumber = memo.memo_number || '';
-                                optionText = `${dateStr} তারিখের ${memo.memo_number} নং স্মারক (${memo.actual_projects}/${memo.total_projects} প্রকল্প)`;
+                                // Convert memo number to Bangla digits for display
+                                const bengaliMemoNumber = convertAnyToBengaliDigits(memoNumber);
+                                optionText = `${dateStr} তারিখের ${bengaliMemoNumber} নং স্মারক (${memo.actual_projects}/${memo.total_projects} প্রকল্প)`;
                                 if (isFull) optionText += ' (সম্পূর্ণ)';
                             }
 
@@ -5239,7 +5259,8 @@
                             option.value = memo.id;
                             option.textContent = optionText;
                             option.setAttribute('data-memo-date', isoDateStr);
-                            option.setAttribute('data-memo-number', memoNumber);
+                            // Store memo number with Bangla digits for consistency
+                            option.setAttribute('data-memo-number', convertAnyToBengaliDigits(memoNumber));
                             option.setAttribute('data-memo-type', memo.memo_type || 'ministry');
                             option.setAttribute('data-actual-projects', memo.actual_projects);
                             option.setAttribute('data-total-projects', memo.total_projects);
@@ -5337,7 +5358,8 @@
 
                 if (memoDate && memoNumber) {
                     approvalDateInput.value = memoDate;
-                    memoNumberInput.value = memoNumber;
+                    // Store the memo number with Bangla digits
+                    memoNumberInput.value = convertAnyToBengaliDigits(memoNumber);
                 }
             }
         }
