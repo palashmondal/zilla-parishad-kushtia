@@ -4267,12 +4267,18 @@
                 // Clear form first to ensure clean state when editing
                 form.reset();
 
+                console.log('📝 Record data from API:', { id: record.id, project_id: record.project_id, project_name: record.project_name });
+
                 CRUDManager.populateForm(form, record);
 
                 // Explicitly ensure project_id is populated in the form
                 const projectIdInput = document.getElementById('form-id');
+                console.log('📝 Before setting project_id:', { value: projectIdInput.value, recordProjectId: record.project_id });
                 if (projectIdInput && record.project_id) {
                     projectIdInput.value = record.project_id;
+                    console.log('📝 After setting project_id:', { value: projectIdInput.value });
+                } else {
+                    console.log('❌ Could not set project_id - input:', projectIdInput, 'recordProjectId:', record.project_id);
                 }
 
                 // Load approval memos for the financial year first (this recreates TomSelect)
