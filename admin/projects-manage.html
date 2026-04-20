@@ -1336,6 +1336,16 @@
                 </button>
             </div>
 
+            <!-- Error message container for modal-specific errors -->
+            <div id="modal-error-container" class="hidden mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <div id="modal-error-text" class="text-sm text-red-700"></div>
+                </div>
+            </div>
+
             <form id="project-form" class="space-y-4">
                 <input type="hidden" id="record-id">
 
@@ -3245,6 +3255,9 @@
             document.getElementById('modal-title').textContent = 'নতুন প্রকল্প যোগ করুন';
             document.getElementById('project-form').reset();
             document.getElementById('form-id').removeAttribute('readonly');
+            // Clear any previous error messages
+            document.getElementById('modal-error-container').classList.add('hidden');
+            document.getElementById('modal-error-text').textContent = '';
 
             // Destroy and clear all TomSelect instances in the form modal, then reinitialize
             _tomInstances.forEach((tomSelectInstance, element) => {
@@ -3329,6 +3342,9 @@
             document.getElementById('upload-status').classList.add('hidden');
             pendingDocs = [];
             renderPendingDocs();
+            // Clear error message
+            document.getElementById('modal-error-container').classList.add('hidden');
+            document.getElementById('modal-error-text').textContent = '';
         }
 
         // Toggle CPPC fields based on implementation_method
@@ -4266,6 +4282,10 @@
                 originalProjectId = record.project_id;
 
                 document.getElementById('modal-title').textContent = 'প্রকল্প সম্পাদনা';
+
+                // Clear any previous error messages
+                document.getElementById('modal-error-container').classList.add('hidden');
+                document.getElementById('modal-error-text').textContent = '';
 
                 const form = document.getElementById('project-form');
 
@@ -5518,7 +5538,13 @@
                                 // For editing, only a match with a different numeric ID is a duplicate
                                 if (!editingId || (existingProject && existingProject.id !== editingId)) {
                                     console.log('❌ Duplicate project_id detected!');
-                                    CRUDManager.showError(`প্রকল্প আইডি "${newProjectId}" ইতিমধ্যে বিদ্যমান। অনুগ্রহ করে অন্য একটি অনন্য আইডি নির্বাচন করুন।`);
+                                    const errorMsg = `প্রকল্প আইডি "${newProjectId}" ইতিমধ্যে বিদ্যমান। অনুগ্রহ করে অন্য একটি অনন্য আইডি নির্বাচন করুন।`;
+                                    const errorContainer = document.getElementById('modal-error-container');
+                                    const errorText = document.getElementById('modal-error-text');
+                                    errorText.textContent = errorMsg;
+                                    errorContainer.classList.remove('hidden');
+                                    // Scroll to top of modal to show error
+                                    document.querySelector('#form-modal .relative').scrollTop = 0;
                                     submitBtn.disabled = false;
                                     submitBtn.textContent = 'সংরক্ষণ করুন';
                                     return;
