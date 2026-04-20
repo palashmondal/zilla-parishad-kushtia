@@ -2276,6 +2276,7 @@
         let currentStatus = '';
         let currentPriority = '';
         let editingId = null;
+        let originalProjectId = null;
         let isLoadingFormData = false;
         let currentDetailId = null;
         let currentDetailRecord = null;
@@ -3321,6 +3322,7 @@
         function closeFormModal() {
             CRUDManager.closeModal('form-modal');
             editingId = null;
+            originalProjectId = null;
             isLoadingFormData = false;
             pendingFiles = [];
             renderPendingPreviews();
@@ -4259,6 +4261,9 @@
                 editingId = id;
                 isLoadingFormData = true;
                 const record = await CRUDManager.fetchList(`/projects/${id}`);
+
+                // Store original project_id for comparison during save
+                originalProjectId = record.project_id;
 
                 document.getElementById('modal-title').textContent = 'প্রকল্প সম্পাদনা';
 
@@ -5507,7 +5512,7 @@
                 bypassDuplicateCheck = false;
 
                 // Check for ID uniqueness when editing and ID has changed
-                if (editingId && formData.project_id && String(formData.project_id).trim() !== String(editingId).trim()) {
+                if (editingId && formData.project_id && originalProjectId && String(formData.project_id).trim() !== String(originalProjectId).trim()) {
                     try {
                         const idCheckRes = await fetch(`${AuthManager.API_URL}/projects/${formData.project_id}`);
 
