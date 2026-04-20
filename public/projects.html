@@ -1166,35 +1166,63 @@
                     </div>
                 </div>
 
-                <!-- Row 2.5: Approval Type · Date · Memo -->
+                <!-- Row 2.5: Priority · Approval Type · Approval Date -->
                 <div class="grid grid-cols-3 gap-4 items-start">
-                    <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের ধরণ</p>
-                        <p id="m-approval-method" class="font-semibold text-slate-800 text-base"></p>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">তারিখ</p>
-                        <p id="m-approval-date" class="font-semibold text-slate-800 text-base"></p>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক/মাসের নাম</p>
-                        <p id="m-memo-number" class="font-semibold text-slate-800 text-base whitespace-nowrap overflow-hidden text-ellipsis" style="font-family: 'Hind Siliguri', 'Solaimanlipi', 'Nikosh', sans-serif;"></p>
-                    </div>
-                </div>
-
-                <!-- Row 2.7: Project Type · Priority · Reference -->
-                <div class="grid grid-cols-3 gap-4">
-                    <div>
-                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্পের ধরন</p>
-                        <p id="m-quick-type" class="font-semibold text-slate-800 text-base"></p>
-                    </div>
                     <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অগ্রাধিকার</p>
                         <p id="m-priority" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                     <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদনের ধরণ</p>
+                        <p id="m-approval-method" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">অনুমোদন তারিখ</p>
+                        <p id="m-approval-date" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2.55: Project Type · Memo Number · Recommender (Tender layout) -->
+                <div id="m-tender-row" class="grid gap-4" style="grid-template-columns: 1fr 1fr 1fr; display: none;">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্পের ধরন</p>
+                        <p id="m-quick-type-tender" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p id="m-memo-label-tender" class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক/মাসের নাম</p>
+                        <p id="m-memo-number-tender" class="font-semibold text-slate-800 text-base whitespace-nowrap overflow-hidden text-ellipsis" style="font-family: 'Hind Siliguri', 'Solaimanlipi', 'Nikosh', sans-serif;"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সুপারিশকারী</p>
+                        <p id="m-reference-tender" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2.55: Project Type (1 col) · Memo Number (2 cols) (CPPC layout) -->
+                <div id="m-cppc-row-2" class="grid gap-4" style="grid-template-columns: 1fr 2fr;">
+                    <div>
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্পের ধরন</p>
+                        <p id="m-quick-type" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div>
+                        <p id="m-memo-label" class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">স্মারক/মাসের নাম</p>
+                        <p id="m-memo-number" class="font-semibold text-slate-800 text-base whitespace-nowrap overflow-hidden text-ellipsis" style="font-family: 'Hind Siliguri', 'Solaimanlipi', 'Nikosh', sans-serif;"></p>
+                    </div>
+                </div>
+
+                <!-- Row 2.8: Reference · CPPC President · CPPC Mobile (CPPC only) -->
+                <div id="m-cppc-row" class="grid grid-cols-3 gap-4">
+                    <div>
                         <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সুপারিশকারী</p>
                         <p id="m-reference" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div id="m-cppc-president-wrap" class="hidden">
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">প্রকল্প সভাপতি</p>
+                        <p id="m-cppc-president" class="font-semibold text-slate-800 text-base"></p>
+                    </div>
+                    <div id="m-cppc-mobile-wrap" class="hidden">
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">সভাপতির মোবাইল</p>
+                        <p id="m-cppc-mobile" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
 
@@ -1216,8 +1244,10 @@
 
                 <!-- Remarks (hidden when empty) -->
                 <div id="m-remarks-section" class="hidden">
-                    <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">মন্তব্য</p>
-                    <p id="m-remarks" class="font-medium text-slate-600 text-base leading-relaxed"></p>
+                    <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl border border-amber-200 p-5 shadow-sm">
+                        <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-3">মন্তব্য</p>
+                        <p id="m-remarks" class="font-medium text-slate-700 text-base leading-relaxed whitespace-pre-wrap" style="font-family: 'Hind Siliguri', 'Solaimanlipi', 'Nikosh', sans-serif;"></p>
+                    </div>
                 </div>
 
                 <!-- Amount & progress bars -->
@@ -2027,12 +2057,51 @@
         document.getElementById('m-approval-date').innerText = r.project_approval_date ? formatDate(r.project_approval_date) : 'N/A';
         const memoNum = r.approval_memo_number || 'N/A';
         document.getElementById('m-memo-number').innerText = memoNum.replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+        // Update memo label based on memo_type
+        const memoLabel = r.memo_type === 'ministry' ? 'স্মারক নম্বর' : 'সভার মাস';
+        document.getElementById('m-memo-label').innerText = memoLabel;
 
         // Row 2.7: Project Type · Priority · Reference
         document.getElementById('m-quick-type').innerText = r.project_type || '';
         const priorityMap = { general: 'সাধারণ', medium: 'মধ্যম', top_priority: 'সর্বোচ্চ' };
         document.getElementById('m-priority').innerText = priorityMap[r.priority] || r.priority || 'N/A';
         document.getElementById('m-reference').innerText = r.reference || 'N/A';
+
+        // Row 2.8: CPPC fields (সিপিপিসি প্রকল্পের জন্য)
+        const isCppc = (r.implementation_method || '').trim() === 'সিপিপিসি';
+        const cppcPresidentWrap = document.getElementById('m-cppc-president-wrap');
+        const cppcMobileWrap = document.getElementById('m-cppc-mobile-wrap');
+
+        if (cppcPresidentWrap) cppcPresidentWrap.classList.toggle('hidden', !isCppc);
+        if (cppcMobileWrap) cppcMobileWrap.classList.toggle('hidden', !isCppc);
+
+        if (isCppc) {
+            document.getElementById('m-cppc-president').innerText = r.cppc_president || '-';
+            document.getElementById('m-cppc-mobile').innerText = r.cppc_president_mobile || '-';
+        }
+
+        // Layout toggle: Tender projects show Type+Memo+Recommender in one row; CPPC shows Type+Memo in two-column layout
+        const mTenderRow = document.getElementById('m-tender-row');
+        const mCppcRow2 = document.getElementById('m-cppc-row-2');
+        const mCppcRow = document.getElementById('m-cppc-row');
+
+        if (isCppc) {
+            // CPPC layout: show type+memo row and recommender+cppc fields row
+            mTenderRow.style.display = 'none';
+            mCppcRow2.style.display = 'grid';
+            mCppcRow.style.display = 'grid';
+        } else {
+            // Tender layout: show type+memo+recommender in one row, hide the cppc row
+            mTenderRow.style.display = 'grid';
+            mCppcRow2.style.display = 'none';
+            mCppcRow.style.display = 'none';
+            // Populate tender row
+            document.getElementById('m-quick-type-tender').innerText = r.project_type || '';
+            document.getElementById('m-memo-number-tender').innerText = (r.approval_memo_number || 'N/A').replace(/\d/g, d => '०१२३४५६७८९'[d]);
+            document.getElementById('m-reference-tender').innerText = r.reference || 'N/A';
+            const tenderMemoLabel = r.memo_type === 'ministry' ? 'স্মারক নম্বর' : 'সভার মাস';
+            document.getElementById('m-memo-label-tender').innerText = tenderMemoLabel;
+        }
 
         // Row 3: Dates
         document.getElementById('m-start-date').innerText = r.start_date ? formatDate(r.start_date) : 'N/A';
