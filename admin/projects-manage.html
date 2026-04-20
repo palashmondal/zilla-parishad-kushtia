@@ -4297,8 +4297,7 @@
                     onApprovalMemoChange();
                 }
 
-                // ID field readonly while editing (ID is the PK)
-                document.getElementById('form-id').setAttribute('readonly', 'readonly');
+                // ID field is now editable while editing - validation for uniqueness is done on save
 
                 // Clear pending photo state for this edit session
                 pendingFiles = [];
@@ -5479,6 +5478,33 @@
 
                 // Reset bypass flag after using it
                 bypassDuplicateCheck = false;
+
+                // Check for ID uniqueness when editing and ID has changed
+                if (editingId && formData.project_id && String(formData.project_id).trim() !== String(editingId).trim()) {
+                    try {
+                        const idCheckRes = await fetch(`${AuthManager.API_URL}/projects/${formData.project_id}`);
+
+                        // If status is 200, the ID already exists (which is an error)
+                        if (idCheckRes.ok) {
+                            const existingProject = await idCheckRes.json();
+                            // Make sure it's not the same project we're editing
+                            if (existingProject && existingProject.id !== editingId) {
+                                CRUDManager.showError(`প্রকল্প আইডি "${formData.project_id}" ইতিমধ্যে বিদ্যমান। অনুগ্রহ করে অন্য একটি অনন্য আইডি নির্বাচন করুন।`);
+                                submitBtn.disabled = false;
+                                submitBtn.textContent = 'সংরক্ষণ করুন';
+                                return;
+                            }
+                        }
+                        // If 404, the ID is available - proceed normally
+                    } catch (err) {
+                        console.warn('ID uniqueness check error:', err);
+                        // Network errors - allow user to retry
+                        CRUDManager.showError('আইডি যাচাই করতে সমস্যা হয়েছে। অনুগ্রহ করে পুনরায় চেষ্টা করুন।');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'সংরক্ষণ করুন';
+                        return;
+                    }
+                }
 
                 let savedId = editingId;
 
