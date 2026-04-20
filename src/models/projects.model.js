@@ -65,19 +65,21 @@ const projectsModel = {
                 (CASE WHEN remarks LIKE ? THEN 1 ELSE 0 END) +
                 (CASE WHEN cppc_president LIKE ? THEN 5 ELSE 0 END) +
                 (CASE WHEN cppc_president_mobile LIKE ? THEN 5 ELSE 0 END) +
-                (CASE WHEN reference LIKE ? THEN 4 ELSE 0 END)
+                (CASE WHEN reference LIKE ? THEN 4 ELSE 0 END) +
+                (CASE WHEN approval_memo_number LIKE ? THEN 4 ELSE 0 END)
             `);
 
-            for (let i = 0; i < 11; i++) queryParams.push(searchTerm);
+            for (let i = 0; i < 12; i++) queryParams.push(searchTerm);
 
             whereParts.push(`(
                 project_name LIKE ? OR project_id LIKE ? OR upazila LIKE ? OR
                 project_type LIKE ? OR current_status LIKE ? OR
                 implementation_method LIKE ? OR fund_type LIKE ? OR remarks LIKE ? OR
-                cppc_president LIKE ? OR cppc_president_mobile LIKE ? OR reference LIKE ?
+                cppc_president LIKE ? OR cppc_president_mobile LIKE ? OR reference LIKE ? OR
+                approval_memo_number LIKE ?
             )`);
 
-            for (let i = 0; i < 11; i++) queryParams.push(searchTerm);
+            for (let i = 0; i < 12; i++) queryParams.push(searchTerm);
         });
 
         selectClause += scoreParts.join(' + ') + `) AS relevance_score
