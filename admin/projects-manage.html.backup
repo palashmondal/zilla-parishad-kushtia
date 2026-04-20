@@ -872,7 +872,7 @@
             <div class="grid grid-cols-1 md:grid-cols-8 gap-3">
                 <div class="md:col-span-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">অনুসন্ধান</label>
-                    <input type="text" id="search-input" placeholder="নাম, আইডি, সভাপতি, মোবাইল, উপজেলা, সুপারিশকারী, মন্তব্য..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
+                    <input type="text" id="search-input" placeholder="নাম, আইডি, উপজেলা..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">অর্থবছর</label>
@@ -1334,16 +1334,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
-            </div>
-
-            <!-- Error message container for modal-specific errors -->
-            <div id="modal-error-container" class="hidden mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <div class="flex items-start gap-3">
-                    <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                    </svg>
-                    <div id="modal-error-text" class="text-sm text-red-700"></div>
-                </div>
             </div>
 
             <form id="project-form" class="space-y-4">
@@ -2286,7 +2276,6 @@
         let currentStatus = '';
         let currentPriority = '';
         let editingId = null;
-        let originalProjectId = null;
         let isLoadingFormData = false;
         let currentDetailId = null;
         let currentDetailRecord = null;
@@ -2815,7 +2804,7 @@
             document.getElementById('dm-approval-date').innerText = r.project_approval_date ? CRUDManager.formatDate(r.project_approval_date) : 'N/A';
             // Convert English digits to Bengali digits for memo number
             const memoNumber = r.approval_memo_number || 'N/A';
-            const bengaliMemoNumber = memoNumber === 'N/A' ? 'N/A' : convertAnyToBengaliDigits(memoNumber);
+            const bengaliMemoNumber = memoNumber.replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
             document.getElementById('dm-memo-number').innerText = bengaliMemoNumber;
             // Update memo label based on memo_type
             const memoLabel = r.memo_type === 'ministry' ? 'স্মারক নম্বর' : 'সভার মাস';
@@ -3255,9 +3244,6 @@
             document.getElementById('modal-title').textContent = 'নতুন প্রকল্প যোগ করুন';
             document.getElementById('project-form').reset();
             document.getElementById('form-id').removeAttribute('readonly');
-            // Clear any previous error messages
-            document.getElementById('modal-error-container').classList.add('hidden');
-            document.getElementById('modal-error-text').textContent = '';
 
             // Destroy and clear all TomSelect instances in the form modal, then reinitialize
             _tomInstances.forEach((tomSelectInstance, element) => {
@@ -3335,16 +3321,12 @@
         function closeFormModal() {
             CRUDManager.closeModal('form-modal');
             editingId = null;
-            originalProjectId = null;
             isLoadingFormData = false;
             pendingFiles = [];
             renderPendingPreviews();
             document.getElementById('upload-status').classList.add('hidden');
             pendingDocs = [];
             renderPendingDocs();
-            // Clear error message
-            document.getElementById('modal-error-container').classList.add('hidden');
-            document.getElementById('modal-error-text').textContent = '';
         }
 
         // Toggle CPPC fields based on implementation_method
@@ -4278,23 +4260,9 @@
                 isLoadingFormData = true;
                 const record = await CRUDManager.fetchList(`/projects/${id}`);
 
-                console.log('📋 Full record from API:', record);
-                console.log('📋 Approval memo ID:', record.approval_memo_id);
-
-                // Store original project_id for comparison during save
-                originalProjectId = record.project_id;
-
                 document.getElementById('modal-title').textContent = 'প্রকল্প সম্পাদনা';
 
-                // Clear any previous error messages
-                document.getElementById('modal-error-container').classList.add('hidden');
-                document.getElementById('modal-error-text').textContent = '';
-
                 const form = document.getElementById('project-form');
-
-                // Clear form first to ensure clean state when editing
-                form.reset();
-
                 CRUDManager.populateForm(form, record);
 
                 // Load approval memos for the financial year first (this recreates TomSelect)
@@ -4316,38 +4284,21 @@
                 // If the project has an approval_memo_id, select it in the dropdown
                 // Do this AFTER onFinancialYearChange has loaded the memo options
                 if (record.approval_memo_id) {
-                    console.log('📋 Setting approval_memo_id:', record.approval_memo_id);
                     const memoSelect = document.getElementById('approval-memo-select');
-
-                    // Wait a bit longer to ensure TomSelect is ready
-                    await new Promise(resolve => setTimeout(resolve, 150));
-
+                    // Use TomSelect API to set value (not direct assignment)
                     const tomInstance = _tomInstances && _tomInstances.get(memoSelect);
-                    console.log('📋 TomSelect instance found:', !!tomInstance);
-
                     if (tomInstance) {
-                        // Clear any existing value first
-                        tomInstance.clear();
-                        // Set the new value
                         tomInstance.setValue(record.approval_memo_id);
                         tomInstance.sync();
-                        console.log('📋 TomSelect value set:', tomInstance.getValue());
                     } else {
-                        // Fallback to direct assignment
                         memoSelect.value = record.approval_memo_id;
-                        console.log('📋 Direct value assignment:', memoSelect.value);
                     }
-
                     // Trigger the change event to populate the date/number fields
-                    setTimeout(() => {
-                        onApprovalMemoChange();
-                        console.log('📋 onApprovalMemoChange called');
-                    }, 50);
-                } else {
-                    console.log('⏭️ No approval_memo_id to load');
+                    onApprovalMemoChange();
                 }
 
-                // ID field is now editable while editing - validation for uniqueness is done on save
+                // ID field readonly while editing (ID is the PK)
+                document.getElementById('form-id').setAttribute('readonly', 'readonly');
 
                 // Clear pending photo state for this edit session
                 pendingFiles = [];
@@ -4373,11 +4324,6 @@
                 setTimeout(() => {
                     toggleCppcFieldsVisibility();
                     setupCppcFieldsListener();
-                    // Ensure project_id is populated last to avoid being overwritten
-                    const projectIdInput = document.getElementById('form-id');
-                    if (projectIdInput && record.project_id) {
-                        projectIdInput.value = record.project_id;
-                    }
                     isLoadingFormData = false;
                 }, 300);
             } catch (err) {
@@ -5385,13 +5331,7 @@
             // If using TomSelect, get the value from the TomSelect instance
             const tomInstance = _tomInstances && _tomInstances.get(memoSelect);
             if (tomInstance) {
-                let value = tomInstance.getValue();
-                // TomSelect might return an array with maxItems:1, so handle both cases
-                if (Array.isArray(value)) {
-                    memoId = value[0] || '';
-                } else {
-                    memoId = value || '';
-                }
+                memoId = tomInstance.getValue() || '';
             }
 
             const approvalDateInput = document.querySelector('input[name="project_approval_date"]');
@@ -5404,24 +5344,11 @@
             }
 
             // Get data from selected option - look for the option with matching value
-            // TomSelect may hide the actual options, so we need to handle both cases
             let selectedOption = null;
-
-            // Try to find in actual options (works when TomSelect is not active or in regular select)
-            if (memoSelect.options && memoSelect.options.length > 0) {
-                for (let i = 0; i < memoSelect.options.length; i++) {
-                    if (memoSelect.options[i].value === String(memoId)) {
-                        selectedOption = memoSelect.options[i];
-                        break;
-                    }
-                }
-            }
-
-            // If not found in options, try finding in the DOM directly (for TomSelect cases)
-            if (!selectedOption) {
-                const option = memoSelect.querySelector(`option[value="${memoId}"]`);
-                if (option) {
-                    selectedOption = option;
+            for (let i = 0; i < memoSelect.options.length; i++) {
+                if (memoSelect.options[i].value === String(memoId)) {
+                    selectedOption = memoSelect.options[i];
+                    break;
                 }
             }
 
@@ -5433,7 +5360,6 @@
                     approvalDateInput.value = memoDate;
                     // Store the memo number with Bangla digits
                     memoNumberInput.value = convertAnyToBengaliDigits(memoNumber);
-                    console.log('📝 Approval memo changed:', { memoId, memoDate, memoNumber });
                 }
             }
         }
@@ -5445,18 +5371,6 @@
                 onFinancialYearChange();
             }
             if (e.target && e.target.id === 'approval-memo-select') {
-                // Sync TomSelect value back to form field before change handler
-                const tomInstance = _tomInstances && _tomInstances.get(e.target);
-                if (tomInstance) {
-                    let value = tomInstance.getValue();
-                    // TomSelect might return an array with maxItems:1, so handle both cases
-                    if (Array.isArray(value)) {
-                        value = value[0] || '';
-                    }
-                    if (e.target.value !== value) {
-                        e.target.value = value || '';
-                    }
-                }
                 onApprovalMemoChange();
             }
         });
@@ -5473,32 +5387,8 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'সংরক্ষণ হচ্ছে…';
             try {
-                // Sync TomSelect instances back to form fields before submission
-                const memoSelect = document.getElementById('approval-memo-select');
-                const tomMemoInstance = _tomInstances && _tomInstances.get(memoSelect);
-                if (tomMemoInstance) {
-                    let memoValue = tomMemoInstance.getValue();
-                    // TomSelect might return an array with maxItems:1, so handle both cases
-                    if (Array.isArray(memoValue)) {
-                        memoValue = memoValue[0] || '';
-                    }
-                    memoSelect.value = memoValue || '';
-                    console.log('📋 Synced approval_memo_id TomSelect to form field:', memoSelect.value);
-                }
-
-                const methodSelect = document.querySelector('select[name="implementation_method"]');
-                const tomMethodInstance = _tomInstances && _tomInstances.get(methodSelect);
-                if (tomMethodInstance) {
-                    let methodValue = tomMethodInstance.getValue();
-                    // TomSelect might return an array with maxItems:1, so handle both cases
-                    if (Array.isArray(methodValue)) {
-                        methodValue = methodValue[0] || '';
-                    }
-                    methodSelect.value = methodValue || '';
-                }
-
                 const formData = CRUDManager.formToJSON(e.target);
-                console.log('📋 Form data collected:', { cppc_president: formData.cppc_president, cppc_president_mobile: formData.cppc_president_mobile, implementation_method: formData.implementation_method, approval_memo_id: formData.approval_memo_id });
+                console.log('📋 Form data collected:', { cppc_president: formData.cppc_president, cppc_president_mobile: formData.cppc_president_mobile, implementation_method: formData.implementation_method });
 
                 // Convert Bengali numerals in allocation_amount to English
                 if (formData.allocation_amount) {
@@ -5589,54 +5479,6 @@
 
                 // Reset bypass flag after using it
                 bypassDuplicateCheck = false;
-
-                // Check for project_id uniqueness (for both new and edited projects)
-                if (formData.project_id) {
-                    const newProjectId = String(formData.project_id).trim();
-                    const projectIdChanged = !editingId || (originalProjectId && newProjectId !== String(originalProjectId).trim());
-
-                    // Only check if: creating new project OR editing and ID has changed
-                    if (projectIdChanged) {
-                        console.log('🔍 Checking project_id uniqueness:', {
-                            mode: editingId ? 'editing' : 'creating',
-                            newProjectId
-                        });
-                        try {
-                            const idCheckRes = await fetch(`${AuthManager.API_URL}/projects/${newProjectId}`);
-                            console.log('🔍 Project ID check response status:', idCheckRes.status);
-
-                            // If status is 200, the ID already exists
-                            if (idCheckRes.ok) {
-                                const existingProject = await idCheckRes.json();
-                                console.log('🔍 Project with this ID found:', { existingId: existingProject.id, editingId });
-
-                                // For new projects, any match is a duplicate
-                                // For editing, only a match with a different numeric ID is a duplicate
-                                if (!editingId || (existingProject && existingProject.id !== editingId)) {
-                                    console.log('❌ Duplicate project_id detected!');
-                                    const errorMsg = `প্রকল্প আইডি "${newProjectId}" ইতিমধ্যে বিদ্যমান। অনুগ্রহ করে অন্য একটি অনন্য আইডি নির্বাচন করুন।`;
-                                    const errorContainer = document.getElementById('modal-error-container');
-                                    const errorText = document.getElementById('modal-error-text');
-                                    errorText.textContent = errorMsg;
-                                    errorContainer.classList.remove('hidden');
-                                    // Scroll to top of modal to show error
-                                    document.querySelector('#form-modal .relative').scrollTop = 0;
-                                    submitBtn.disabled = false;
-                                    submitBtn.textContent = 'সংরক্ষণ করুন';
-                                    return;
-                                }
-                            }
-                            console.log('✅ Project ID is unique, proceeding with save');
-                        } catch (err) {
-                            console.warn('Project ID uniqueness check error:', err);
-                            // 404 or network error - ID is available or endpoint not responding
-                            console.log('✅ Project ID check passed (404 or error - treating as unique)');
-                        }
-                    } else {
-                        console.log('⏭️ Skipping project_id check - ID not changed during edit');
-                    }
-                }
-
 
                 let savedId = editingId;
 

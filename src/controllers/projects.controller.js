@@ -194,6 +194,8 @@ const projectsController = {
             // Filter out fields that should not be updated (allow project_id to be updated)
             const { id: _, created_at, updated_at, created_by, ...updateData } = req.body;
 
+            console.log(`📝 UPDATE project ${project.id} (project_id: ${id}), approval_memo_id: ${updateData.approval_memo_id}`);
+
             const updated = await projectsModel.update(project.id, updateData);
             if (!updated) {
                 return res.status(404).json({ error: 'Project not found' });
