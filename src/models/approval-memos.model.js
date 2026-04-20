@@ -75,6 +75,16 @@ const approvalMemosModel = {
         return row || null;
     },
 
+    async findByMemoNumber(memoNumber, excludeId = null) {
+        if (!memoNumber) return null;
+        const query = excludeId
+            ? 'SELECT id FROM approval_memos WHERE memo_number = ? AND id != ? LIMIT 1'
+            : 'SELECT id FROM approval_memos WHERE memo_number = ? LIMIT 1';
+        const params = excludeId ? [memoNumber, excludeId] : [memoNumber];
+        const [[row]] = await pool.execute(query, params);
+        return row || null;
+    },
+
     async create(data) {
         const {
             memo_type,
