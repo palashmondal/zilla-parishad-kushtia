@@ -2033,7 +2033,7 @@
         document.getElementById('m-project-name').innerText = r.project_name || '';
 
         // Row 1: ID · Year · Upazila
-        document.getElementById('m-id').innerText = r.id || '';
+        document.getElementById('m-id').innerText = r.project_id ? String(r.project_id).trim() : '(নির্ধারিত নয়)';
         document.getElementById('m-financial-year').innerText = r.financial_year || '';
         document.getElementById('m-upazila').innerText = r.upazila || '';
 
