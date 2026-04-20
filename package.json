@@ -4,8 +4,10 @@
   "description": "ZP Kushtia Tools - জেলা পরিষদ, কুষ্টিয়া",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "build:css": "npx tailwindcss -i ./public/styles.css -o ./public/output.css",
+    "watch:css": "npx tailwindcss -i ./public/styles.css -o ./public/output.css --watch",
+    "start": "npm run build:css && node src/server.js",
+    "dev": "npm run watch:css & nodemon src/server.js",
     "legacy": "node server.js",
     "test": "curl http://localhost:3000/api/health"
   },
@@ -32,6 +34,9 @@
     "string-similarity": "^4.0.4"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "autoprefixer": "^10.5.0",
+    "nodemon": "^3.0.2",
+    "postcss": "^8.5.10",
+    "tailwindcss": "^3.4.19"
   }
 }
