@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
     <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
@@ -15,31 +14,25 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
-
     <style>
         html { font-size: 18px; }
         * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
-
         /* Beautiful Data Table */
         #table-wrapper {
             background: white;
         }
-
         .table-row {
             transition: all 0.2s ease;
             border-bottom: 1px solid #e5e7eb;
         }
-
         .table-row:nth-child(even) {
             background: #f9fafb;
         }
-
         .table-row:hover {
             background: #eff6ff;
             box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.1);
             transform: none;
         }
-
         /* Project Count Badge */
         .project-count-badge {
             display: inline-flex;
@@ -57,13 +50,11 @@
             color: #059669;
             transition: all 0.2s ease;
         }
-
         .project-count-badge:hover {
             box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
             transform: scale(1.05);
             border-color: #6ee7b7;
         }
-
         /* Sortable Column Headers */
         .sortable-header {
             cursor: pointer;
@@ -73,20 +64,16 @@
             gap: 0.5rem;
             transition: all 0.2s ease;
         }
-
         .sortable-header:hover {
             color: #ffffff;
         }
-
         .sort-icon {
             opacity: 0.5;
             transition: all 0.2s ease;
         }
-
         .sortable-header.active .sort-icon {
             opacity: 1;
         }
-
         /* Monospace text for memo numbers */
         .memo-number {
             font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
@@ -95,7 +82,6 @@
             color: #1f2937;
             font-size: 0.95rem;
         }
-
         /* Financial year styling */
         .financial-year {
             font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
@@ -104,7 +90,6 @@
             letter-spacing: 0.02em;
             white-space: nowrap;
         }
-
         /* Detail Modal */
         .detail-backdrop {
             opacity: 0;
@@ -127,7 +112,6 @@
             transform: translateY(0) scale(1);
             opacity: 1;
         }
-
         /* Modal internals - matching projects page */
         .modal-avatar {
             background: linear-gradient(135deg, #fef3c7, #fbbf24);
@@ -137,7 +121,6 @@
             border: 1px solid #fbbf24;
             box-shadow: 0 4px 6px rgba(180, 83, 9, 0.1);
         }
-
         /* Modal progress bar */
         .progress-bar-track {
             background: #e5e7eb; border-radius: 8px; height: 16px; overflow: hidden;
@@ -153,14 +136,12 @@
         .progress-bar-orange {
             background: linear-gradient(90deg, #f97316, #ea580c);
         }
-
         /* Form modal backdrop */
         #form-modal {
             background: rgba(120,53,15,0.18);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
-
         /* Form modal card */
         #form-modal > div {
             border: none !important;
@@ -170,7 +151,6 @@
                 0 0 0 1px rgba(59,130,246,0.12),
                 0 1px 0 rgba(255,255,255,0.9) inset !important;
         }
-
         /* Modal header gradient bar */
         .form-modal-header {
             background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
@@ -181,7 +161,6 @@
             align-items: center;
             justify-content: space-between;
         }
-
         /* Section cards inside form */
         .form-section {
             background: #ffffff;
@@ -211,7 +190,6 @@
             height: 1px;
             background: linear-gradient(to right, #dbeafe, transparent);
         }
-
         /* Input / textarea polish */
         .form-field input[type="text"],
         .form-field input[type="number"],
@@ -251,7 +229,6 @@
             letter-spacing: 0.05em;
             margin-bottom: 0.35rem;
         }
-
         /* Action buttons */
         .btn-cancel {
             padding: 0.6rem 1.5rem;
@@ -283,7 +260,6 @@
             transform: translateY(-1px);
         }
         .btn-save:active { transform: translateY(0); }
-
         .detail-amount-box {
             background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%);
             border: 1.5px solid #6ee7b7;
@@ -295,23 +271,19 @@
         .detail-close-btn:hover {
             filter: brightness(1.1);
         }
-
         /* Action Button Animations */
         .action-btn {
             transition: all 0.2s ease;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
-
         .action-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
         }
-
         .action-btn:active {
             transform: translateY(0);
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
-
         /* File upload input styling */
         .file-input-wrapper {
             position: relative;
@@ -319,12 +291,10 @@
             display: inline-block;
             width: 100%;
         }
-
         .file-input-wrapper input[type="file"] {
             position: absolute;
             left: -9999px;
         }
-
         .file-input-label {
             display: block;
             padding: 0.75rem 1rem;
@@ -337,20 +307,17 @@
             font-weight: 500;
             color: #6b7280;
         }
-
         .file-input-label:hover {
             border-color: #3b82f6;
             background-color: #eff6ff;
             color: #1e40af;
         }
-
         .file-input-label.has-file {
             border-style: solid;
             background-color: #dbeafe;
             border-color: #93c5fd;
             color: #1e40af;
         }
-
         .file-name-display {
             margin-top: 0.5rem;
             padding: 0.5rem;
@@ -359,14 +326,12 @@
             font-size: 0.875rem;
             color: #374151;
         }
-
         /* Document viewer modal */
         #document-modal {
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
         }
-
         .document-viewer-card {
             transform: scale(0.95);
             opacity: 0;
@@ -380,19 +345,16 @@
             display: flex;
             flex-direction: column;
         }
-
         #document-modal.open .document-viewer-card {
             transform: scale(1);
             opacity: 1;
         }
-
         .pdf-viewer {
             width: 100%;
             height: 100%;
             border: none;
             flex: 1;
         }
-
         .image-viewer {
             width: 100%;
             height: 100%;
@@ -405,10 +367,8 @@
 <body class="bg-gray-50 flex flex-col min-h-screen">
     <!-- Header -->
     <div id="header-container"></div>
-
     <!-- Navigation -->
     <div id="menu-container"></div>
-
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 flex-1">
         <!-- Success/Error Messages -->
@@ -418,7 +378,6 @@
         <div id="error-message" class="hidden mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg shadow-sm">
             <p id="error-text"></p>
         </div>
-
         <!-- Header Section -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-6">
             <div class="flex items-center justify-between mb-6">
@@ -433,7 +392,6 @@
                     নতুন স্মারক যোগ করুন
                 </button>
             </div>
-
             <!-- Search and Filter -->
             <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <div class="md:col-span-3">
@@ -456,7 +414,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Records List Section -->
         <div class="space-y-4">
             <!-- Loading Spinner -->
@@ -464,10 +421,8 @@
                 <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-amber-600"></div>
                 <p class="mt-4 text-lg text-gray-600 font-medium">লোড হচ্ছে...</p>
             </div>
-
             <!-- Table Wrapper: header + rows share the same width -->
             <div id="table-wrapper" class="bg-white rounded-xl shadow-md overflow-hidden">
-
             <!-- Table Header (Column Names) -->
             <div id="table-header" class="hidden border-b-2 border-gray-200 bg-gradient-to-r from-gray-100 to-gray-200">
                 <div class="grid grid-cols-6 gap-3 px-6 py-5 items-center">
@@ -503,13 +458,10 @@
                     </div>
                 </div>
             </div>
-
             <!-- Records Container -->
             <div id="table-container">
             </div>
-
             </div><!-- end table-wrapper -->
-
             <!-- Empty State -->
             <div id="empty-state" class="hidden p-12 text-center bg-white rounded-xl">
                 <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -518,7 +470,6 @@
                 <h3 class="mt-4 text-lg font-semibold text-gray-900">কোনো স্মারক পাওয়া যায়নি</h3>
                 <p class="mt-2 text-sm text-gray-500">নতুন স্মারক যোগ করতে উপরের বাটনে ক্লিক করুন</p>
             </div>
-
             <!-- Records Per Page Selector & Pagination & Total Count -->
             <div class="flex items-center justify-between gap-4 py-4 px-4">
                 <div id="records-per-page-selector"></div>
@@ -527,7 +478,6 @@
             </div>
         </div>
     </main>
-
     <!-- Document Viewer Modal -->
     <div id="document-modal" class="detail-backdrop fixed inset-0 z-[95] flex items-center justify-center p-0">
         <div class="document-viewer-card bg-white shadow-2xl p-0 relative">
@@ -540,14 +490,12 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
-
             <!-- Document Container -->
             <div id="dv-content" class="flex-1 flex items-center justify-center bg-white overflow-auto w-full">
                 <div class="text-gray-500">লোড হচ্ছে...</div>
             </div>
         </div>
     </div>
-
     <!-- Projects Popup Modal -->
     <div id="projects-modal" class="detail-backdrop fixed inset-0 z-[95] flex items-center justify-center p-4">
         <div class="detail-card bg-white w-full max-w-4xl rounded-[1.75rem] shadow-2xl p-6 relative max-h-[90vh] flex flex-col">
@@ -560,7 +508,6 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
-
             <!-- Memo Details (Compact) -->
             <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg mb-4 border border-blue-200">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 text-xs">
@@ -590,7 +537,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Projects Table -->
             <div class="flex-1 overflow-y-auto">
                 <div class="space-y-2">
@@ -601,18 +547,15 @@
                         <div class="col-span-1">পদ্ধতি</div>
                         <div class="col-span-1 text-right">অর্থ</div>
                     </div>
-
                     <!-- Projects List -->
                     <div id="pm-projects-list" class="space-y-1">
                         <!-- Projects will be populated here -->
                     </div>
                 </div>
             </div>
-
             <button onclick="closeProjectsModal()" class="detail-close-btn w-full mt-4 text-white font-bold py-3 rounded-xl shadow-lg text-[14px]">বন্ধ করুন</button>
         </div>
     </div>
-
     <!-- Project Detail Modal (Shared) -->
     <div id="project-detail-modal" class="detail-backdrop fixed inset-0 z-[96] flex items-center justify-center p-4">
         <div class="detail-card bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl p-8 relative max-h-[90vh] overflow-y-auto">
@@ -631,7 +574,6 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
-
             <div class="space-y-5 border-t border-[#fcd34d] pt-6">
                 <!-- Row 1: ID · Year · Upazila -->
                 <div class="grid grid-cols-3 gap-4">
@@ -648,7 +590,6 @@
                         <p id="dm-upazila" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
-
                 <!-- Row 2: Fund Type · Priority -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -664,7 +605,6 @@
                         <p id="dm-reference" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
-
                 <!-- Row 2.5: Approval Date · Memo Number -->
                 <div class="grid grid-cols-2 gap-4 items-start">
                     <div>
@@ -676,7 +616,6 @@
                         <p id="dm-memo-number" class="font-bold text-[#b45309] text-base font-mono" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
                 </div>
-
                 <!-- Row 2.7: Project Type · Implementation · Status -->
                 <div class="grid grid-cols-3 gap-4">
                     <div>
@@ -692,7 +631,6 @@
                         <p id="dm-quick-status" class="font-semibold text-slate-700 text-base"></p>
                     </div>
                 </div>
-
                 <!-- Row 3: Start · Expected End · Actual End -->
                 <div class="grid grid-cols-3 gap-4">
                     <div>
@@ -708,13 +646,11 @@
                         <p id="dm-actual-end" class="font-semibold text-slate-800 text-base" style="font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;"></p>
                     </div>
                 </div>
-
                 <!-- Remarks -->
                 <div id="dm-remarks-wrap" class="hidden">
                     <p class="text-xs font-bold text-[#d4a017] uppercase tracking-wider mb-2">মন্তব্য</p>
                     <p id="dm-remarks" class="font-medium text-slate-600 text-base leading-relaxed"></p>
                 </div>
-
                 <!-- Amount box with progress bars -->
                 <div class="modal-amount-box p-6 rounded-2xl">
                     <div class="flex justify-between items-start mb-5">
@@ -749,7 +685,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Location Map Section -->
             <div id="dm-map-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider mb-4">প্রকল্পের অবস্থান</p>
@@ -770,24 +705,20 @@
                     </a>
                 </div>
             </div>
-
             <!-- Photo Gallery -->
             <div id="dm-photos-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider mb-4">প্রকল্পের ছবি</p>
                 <div id="dm-photos-grid" class="grid grid-cols-3 gap-3"></div>
             </div>
-
             <!-- Documents section -->
             <div id="dm-docs-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <p class="text-sm font-bold text-[#d4a017] uppercase tracking-wider mb-4">সংযুক্ত ফাইল</p>
                 <div id="dm-docs-list" class="space-y-2"></div>
                 <div id="dm-docs-empty" class="text-center text-gray-400 py-8 text-sm">কোনো ফাইল নেই</div>
             </div>
-
             <button onclick="closeDetailModal()" class="detail-close-btn w-full mt-6 text-white font-bold py-3 rounded-xl shadow-lg text-[14px]">বন্ধ করুন</button>
         </div>
     </div>
-
     <!-- Add/Edit Modal -->
     <div id="form-modal" class="hidden fixed inset-0 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto border w-full max-w-2xl rounded-xl">
@@ -799,10 +730,8 @@
                     </svg>
                 </button>
             </div>
-
             <form id="memo-form" class="p-6 space-y-6">
                 <input type="hidden" id="record-id" name="id">
-
                 <!-- স্মারক বিবরণ সেকশন -->
                 <div class="form-section">
                     <div class="form-section-title">
@@ -811,7 +740,6 @@
                         </svg>
                         স্মারক বিবরণ
                     </div>
-
                     <!-- Row 1: অনুমোদন ধরণ and আর্থিক বছর -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 form-field mb-4">
                         <div>
@@ -833,7 +761,6 @@
                             </select>
                         </div>
                     </div>
-
                     <!-- Row 2: Ministry type (memo date & number) or Monthly type (meeting month) -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 form-field mb-4">
                         <!-- Ministry Type Fields -->
@@ -870,7 +797,6 @@
                             <input type="date" name="meeting_date" required>
                         </div>
                     </div>
-
                     <!-- Row 3: মোট প্রকল্প সংখ্যা and মন্তব্য -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 form-field">
                         <div>
@@ -883,7 +809,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- ডকুমেন্ট সেকশন -->
                 <div class="form-section">
                     <div class="form-section-title">
@@ -907,7 +832,6 @@
                         <p class="text-xs text-gray-500 mt-2">সমর্থিত: PDF, JPG, PNG, WebP (সর্বোচ্চ ৫ MB)</p>
                     </div>
                 </div>
-
                 <!-- অ্যাকশন বাটন -->
                 <div class="flex gap-3 justify-end pt-4 border-t border-amber-100">
                     <button type="button" onclick="closeFormModal()" class="btn-cancel">বাতিল করুন</button>
@@ -916,7 +840,6 @@
             </form>
         </div>
     </div>
-
     <!-- Delete Confirmation Modal -->
     <div id="delete-modal" class="detail-backdrop fixed inset-0 z-[97] flex items-center justify-center p-4">
         <div class="detail-card bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 relative">
@@ -928,7 +851,6 @@
                     </svg>
                 </div>
             </div>
-
             <!-- Content -->
             <div class="text-center mb-6">
                 <h2 class="text-2xl font-extrabold text-slate-900 mb-3">স্মারক মুছে ফেলুন?</h2>
@@ -936,7 +858,6 @@
                     আপনি কি নিশ্চিত যে আপনি এই স্মারকটি মুছতে চান? এই পদক্ষেপটি পূর্বাবস্থায় ফেরানো যাবে না।
                 </p>
             </div>
-
             <!-- Memo Info Section -->
             <div class="form-section mb-6">
                 <div class="form-section-title">
@@ -947,7 +868,6 @@
                 </div>
                 <p id="delete-memo-info" class="text-sm font-semibold text-slate-800">স্মারক নম্বর: <span id="delete-memo-number" class="font-mono text-red-600"></span></p>
             </div>
-
             <!-- Buttons -->
             <div class="flex gap-3">
                 <button onclick="closeDeleteModal()" class="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-lg transition-colors">বাতিল করুন</button>
@@ -955,7 +875,6 @@
             </div>
         </div>
     </div>
-
     <script>
         const API_BASE = '/api/approval-memos';
         let currentData = [];
@@ -966,7 +885,6 @@
         let recordsPerPage = 20;
         let selectedRecordId = null;
         let pendingDeleteId = null;
-
         document.addEventListener('DOMContentLoaded', async () => {
             const user = await AuthManager.requireModule('projects');
             if (!user) return;
@@ -978,14 +896,12 @@
             document.getElementById('approval-type-filter').addEventListener('change', filterData);
             document.getElementById('memo-form').addEventListener('submit', handleFormSubmit);
             document.getElementById('memo-type').addEventListener('change', handleMemoTypeChange);
-
             // Close delete modal when clicking outside
             document.getElementById('delete-modal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeDeleteModal();
                 }
             });
-
             // Close form modal when clicking outside
             document.getElementById('form-modal').addEventListener('click', function(e) {
                 if (e.target === this) {
@@ -993,7 +909,6 @@
                 }
             });
         });
-
         async function loadData() {
             showLoading(true);
             try {
@@ -1007,28 +922,23 @@
                 updateRecordCount();
                 showTableHeader(currentData.length > 0);
             } catch (error) {
-                console.error('Error loading data:', error);
                 showError('ডেটা লোড করতে ব্যর্থ হয়েছে');
             } finally {
                 showLoading(false);
             }
         }
-
         async function loadFinancialYears() {
             try {
                 // Fetch all available financial years from database
                 const response = await fetch(`${API_BASE}/years`);
                 if (!response.ok) throw new Error('Failed to load years');
                 const years = await response.json();
-
                 // Populate the dropdown
                 const select = document.getElementById('financial-year-filter');
-
                 // Clear existing options except the first one
                 while (select.options.length > 1) {
                     select.remove(1);
                 }
-
                 // Add years from database
                 if (Array.isArray(years) && years.length > 0) {
                     years.forEach(year => {
@@ -1039,28 +949,23 @@
                     });
                 }
             } catch (error) {
-                console.error('Error loading financial years:', error);
             }
         }
-
         function filterData() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
             const financialYear = document.getElementById('financial-year-filter').value;
             const approvalType = document.getElementById('approval-type-filter').value;
-
             filteredData = currentData.filter(item => {
                 const matchesQuery = query === '' || (item.memo_number || '').toLowerCase().includes(query);
                 const matchesFinancialYear = financialYear === '' || item.financial_year === financialYear;
                 const matchesApprovalType = approvalType === '' || item.memo_type === approvalType;
                 return matchesQuery && matchesFinancialYear && matchesApprovalType;
             });
-
             currentPage = 1;
             renderTable();
             updatePagination();
             updateRecordCount();
         }
-
         function renderTable() {
             const container = document.getElementById('table-container');
             if (filteredData.length === 0) {
@@ -1100,11 +1005,9 @@
                 </div>
             `).join('');
         }
-
         function showTableHeader(show) {
             document.getElementById('table-header').classList.toggle('hidden', !show);
         }
-
         function sortTable(column) {
             if (sortColumn === column) {
                 sortAscending = !sortAscending;
@@ -1123,7 +1026,6 @@
             });
             renderTable();
         }
-
         function updatePagination() {
             const totalPages = Math.ceil(filteredData.length / recordsPerPage);
             const container = document.getElementById('pagination-container');
@@ -1145,53 +1047,41 @@
             }
             container.innerHTML = html;
         }
-
         function goToPage(page) {
             currentPage = page;
             renderTable();
             updatePagination();
         }
-
         function updateRecordCount() {
             document.getElementById('total-records').textContent = `মোট: ${filteredData.length} টি`;
         }
-
         function openFormModal(recordId = null) {
             const form = document.getElementById('memo-form');
             const title = document.getElementById('modal-title');
             const fileLabel = document.getElementById('file-label');
             const fileNameDisplay = document.getElementById('file-name-display');
             const fileInput = document.getElementById('document-file');
-
             if (recordId) {
                 title.textContent = 'স্মারক সম্পাদনা করুন';
                 const record = currentData.find(r => r.id === recordId);
                 if (record) {
                     document.getElementById('record-id').value = record.id;
-
                     // Set memo type first
                     const memoType = record.memo_type || 'ministry';
                     document.querySelector('select[name="memo_type"]').value = memoType;
-
                     // Trigger memo type change first to show/hide appropriate fields
                     handleMemoTypeChange({ target: document.querySelector('select[name="memo_type"]') });
-
                     // Ensure date is in YYYY-MM-DD format
                     const dateValue = record.memo_date ? new Date(record.memo_date).toISOString().split('T')[0] : '';
                     document.querySelector('input[name="memo_date"]').value = dateValue;
-                    console.log('Setting date:', record.memo_date, '→', dateValue);
-
                     document.querySelector('select[name="financial_year"]').value = record.financial_year || '';
                     document.querySelector('input[name="memo_number"]').value = record.memo_number || '';
-
                     // Set total_projects
                     const totalProjectsInput = document.querySelector('input[name="total_projects"]');
                     if (totalProjectsInput) {
                         totalProjectsInput.value = record.total_projects || '';
                     }
-
                     document.querySelector('input[name="remarks"]').value = record.remarks || '';
-
                     // Set meeting month and date if present
                     if (record.meeting_month) {
                         document.querySelector('select[name="meeting_month"]').value = record.meeting_month;
@@ -1200,7 +1090,6 @@
                         const meetingDateValue = record.meeting_date ? new Date(record.meeting_date).toISOString().split('T')[0] : '';
                         document.querySelector('input[name="meeting_date"]').value = meetingDateValue;
                     }
-
                     // Handle file display
                     fileInput.value = '';
                     if (record.document_file) {
@@ -1219,14 +1108,12 @@
                 fileInput.value = '';
                 fileNameDisplay.classList.add('hidden');
                 fileLabel.classList.remove('has-file');
-
                 // Reset memo type and trigger change handler
                 document.getElementById('memo-type').value = '';
                 handleMemoTypeChange({ target: document.getElementById('memo-type') });
             }
             document.getElementById('form-modal').classList.remove('hidden');
         }
-
         function closeFormModal() {
             document.getElementById('form-modal').classList.add('hidden');
             document.getElementById('memo-form').reset();
@@ -1234,7 +1121,6 @@
             document.getElementById('memo-type').value = '';
             handleMemoTypeChange({ target: document.getElementById('memo-type') });
         }
-
         function openDetailModal(recordId) {
             selectedRecordId = recordId;
             const record = currentData.find(r => r.id === recordId);
@@ -1246,7 +1132,6 @@
             document.getElementById('dm-total-projects').textContent = toBengaliNumeral(record.total_projects);
             document.getElementById('dm-badge-display').textContent = toBengaliNumeral(record.total_projects);
             document.getElementById('dm-remarks').textContent = record.remarks || 'নেই';
-
             // Handle document display
             const docSection = document.getElementById('dm-document-section');
             const docInfo = document.getElementById('dm-document-info');
@@ -1259,35 +1144,29 @@
                 docSection.classList.add('hidden');
                 viewPdfBtn.classList.add('hidden');
             }
-
             document.getElementById('project-detail-modal').classList.add('open');
         }
-
         function closeDetailModal() {
             document.getElementById('project-detail-modal').classList.remove('open');
             selectedRecordId = null;
         }
-
         function viewDocumentFromModal() {
             if (selectedRecordId) {
                 viewDocument(selectedRecordId);
             }
         }
-
         function editRecordFromModal() {
             if (selectedRecordId) {
                 openFormModal(selectedRecordId);
                 closeDetailModal();
             }
         }
-
         function deleteRecordFromModal() {
             if (selectedRecordId) {
                 deleteRecord(selectedRecordId);
                 closeDetailModal();
             }
         }
-
         function handleMemoTypeChange(e) {
             const memoType = e.target.value;
             const memoDateField = document.getElementById('memo-date-field');
@@ -1298,20 +1177,17 @@
             const memoNumberInput = document.querySelector('input[name="memo_number"]');
             const monthInput = document.querySelector('select[name="meeting_month"]');
             const meetingDateInput = document.querySelector('input[name="meeting_date"]');
-
             if (memoType === 'ministry') {
                 // Ministry memo - show memo date and number fields
                 memoDateField.classList.remove('hidden');
                 memoNumberField.classList.remove('hidden');
                 meetingMonthField.classList.add('hidden');
                 meetingDateField.classList.add('hidden');
-
                 // Set fields as required
                 memoDateInput.required = true;
                 memoNumberInput.required = true;
                 monthInput.required = false;
                 meetingDateInput.required = false;
-
                 // Clear monthly fields
                 monthInput.value = '';
                 meetingDateInput.value = '';
@@ -1321,13 +1197,11 @@
                 memoNumberField.classList.add('hidden');
                 meetingMonthField.classList.remove('hidden');
                 meetingDateField.classList.remove('hidden');
-
                 // Set fields as required/not required
                 memoDateInput.required = false;
                 memoNumberInput.required = false;
                 monthInput.required = true;
                 meetingDateInput.required = true;
-
                 // Clear ministry fields
                 memoDateInput.value = '';
                 memoNumberInput.value = '';
@@ -1337,19 +1211,16 @@
                 memoNumberField.classList.add('hidden');
                 meetingMonthField.classList.add('hidden');
                 meetingDateField.classList.add('hidden');
-
                 // Set all as not required initially
                 memoDateInput.required = false;
                 memoNumberInput.required = false;
                 monthInput.required = false;
                 meetingDateInput.required = false;
-
                 // Clear all conditional fields
                 monthInput.value = '';
                 meetingDateInput.value = '';
             }
         }
-
         async function checkMemoNumberUnique(memoNumber, excludeId) {
             if (!memoNumber) return true;
             try {
@@ -1363,7 +1234,6 @@
                 return true;
             }
         }
-
         document.addEventListener('DOMContentLoaded', function() {
             const memoNumberInput = document.getElementById('memo-number-input');
             const memoNumberError = document.getElementById('memo-number-error');
@@ -1387,15 +1257,12 @@
                 });
             }
         });
-
         async function handleFormSubmit(e) {
             e.preventDefault();
             const recordId = document.getElementById('record-id').value;
             const formData = new FormData();
-
             const memoType = document.querySelector('select[name="memo_type"]').value;
             formData.append('memo_type', memoType);
-
             // Add memo date and number only for ministry memos
             if (memoType === 'ministry') {
                 const memoNumberVal = document.querySelector('input[name="memo_number"]').value.trim();
@@ -1418,31 +1285,22 @@
                 formData.append('memo_date', ''); // Empty date for monthly
                 formData.append('memo_number', ''); // Empty number for monthly
             }
-
             formData.append('financial_year', document.querySelector('select[name="financial_year"]').value);
             formData.append('total_projects', parseInt(document.querySelector('input[name="total_projects"]').value, 10));
             formData.append('remarks', document.querySelector('input[name="remarks"]').value || null);
-
             const fileInput = document.getElementById('document-file');
             if (fileInput.files.length > 0) {
                 formData.append('document_file', fileInput.files[0]);
             }
-
             try {
                 const url = recordId ? `${API_BASE}/${recordId}` : API_BASE;
                 const method = recordId ? 'PUT' : 'POST';
                 const token = AuthManager.getToken();
-
-                console.log('Token:', token ? 'Present' : 'Missing');
-                console.log('User:', AuthManager.getUser());
-
+);
                 if (!token) {
                     showError('আপনি লগ ইন করা নন। অনুগ্রহ করে লগ ইন করুন।');
                     return;
                 }
-
-                console.log('Sending request to:', url, 'with method:', method);
-
                 const response = await fetch(url, {
                     method,
                     headers: {
@@ -1450,8 +1308,6 @@
                     },
                     body: formData
                 });
-
-                console.log('Response status:', response.status);
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
                     const errorMsg = errorData.message || errorData.error || `HTTP ${response.status}`;
@@ -1461,38 +1317,30 @@
                 closeFormModal();
                 loadData();
             } catch (error) {
-                console.error('Error saving record:', error);
                 showError('স্মারক সংরক্ষণ করতে ব্যর্থ হয়েছে: ' + error.message);
             }
         }
-
         function openDeleteModal(recordId) {
             const record = currentData.find(r => r.id === recordId);
             if (!record) return;
-
             pendingDeleteId = recordId;
             document.getElementById('delete-memo-number').textContent = record.memo_number || 'N/A';
             document.getElementById('delete-modal').classList.add('open');
         }
-
         function closeDeleteModal() {
             document.getElementById('delete-modal').classList.remove('open');
             pendingDeleteId = null;
         }
-
         async function confirmDelete() {
             if (!pendingDeleteId) return;
-
             const recordId = pendingDeleteId;
             closeDeleteModal();
-
             try {
                 const token = AuthManager.getToken();
                 if (!token) {
                     showError('আপনি লগ ইন করা নন। অনুগ্রহ করে লগ ইন করুন।');
                     return;
                 }
-
                 const response = await fetch(`${API_BASE}/${recordId}`, {
                     method: 'DELETE',
                     headers: {
@@ -1507,27 +1355,22 @@
                 showSuccess('স্মারক মুছে ফেলা হয়েছে');
                 loadData();
             } catch (error) {
-                console.error('Error deleting record:', error);
                 showError('স্মারক মুছতে ব্যর্থ হয়েছে: ' + error.message);
             }
         }
-
         async function deleteRecord(recordId) {
             openDeleteModal(recordId);
         }
-
         function formatDate(dateStr) {
             if (!dateStr) return '';
             const date = new Date(dateStr);
             const formatted = date.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
             return toBengaliNumeral(formatted);
         }
-
         function formatFinancialYear(year) {
             if (!year) return '';
             return toBengaliNumeral(year);
         }
-
         function toBengaliNumeral(str) {
             if (str === null || str === undefined || str === '') return '';
             const englishDigits = '0123456789';
@@ -1536,7 +1379,6 @@
             // Font styling is applied via CSS/inline styles
             return String(str);
         }
-
         function truncateMemoNumber(memoNumber, maxLength = 10) {
             if (!memoNumber) return '';
             const str = String(memoNumber);
@@ -1545,16 +1387,13 @@
             }
             return str;
         }
-
         function escapeHtml(text) {
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return (text || '').replace(/[&<>"']/g, m => map[m]);
         }
-
         function showLoading(show) {
             document.getElementById('loading').classList.toggle('hidden', !show);
         }
-
         function showSuccess(message) {
             document.getElementById('success-text').textContent = message;
             document.getElementById('success-message').classList.remove('hidden');
@@ -1562,7 +1401,6 @@
                 document.getElementById('success-message').classList.add('hidden');
             }, 3000);
         }
-
         function showError(message) {
             document.getElementById('error-text').textContent = message;
             document.getElementById('error-message').classList.remove('hidden');
@@ -1570,7 +1408,6 @@
                 document.getElementById('error-message').classList.add('hidden');
             }, 5000);
         }
-
         // File input change handler
         document.addEventListener('DOMContentLoaded', function() {
             const fileInput = document.getElementById('document-file');
@@ -1597,12 +1434,10 @@
                 });
             }
         });
-
         function handleFileSelect() {
             const fileInput = document.getElementById('document-file');
             const fileLabel = document.getElementById('file-label');
             const fileNameDisplay = document.getElementById('file-name-display');
-
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 // Validate file size (5MB max)
@@ -1621,25 +1456,19 @@
                 fileNameDisplay.classList.add('hidden');
             }
         }
-
         // View document in fullscreen modal
         async function viewDocument(recordId) {
             const record = currentData.find(r => r.id === recordId);
             if (!record || !record.document_file) return;
-
             const documentModal = document.getElementById('document-modal');
             const dvTitle = document.getElementById('dv-title');
             const dvFilename = document.getElementById('dv-filename');
             const dvContent = document.getElementById('dv-content');
-
             dvTitle.textContent = `${formatDate(record.memo_date)} তারিখের ${toBengaliNumeral(record.memo_number)}এর বরাদ্দপত্র (মোট প্রকল্প ${toBengaliNumeral(record.total_projects)})`;
             dvTitle.style.fontFamily = "'Hind Siliguri', 'Noto Sans Bengali', sans-serif";
-
             const fileExtension = record.document_file.split('.').pop().toLowerCase();
             const filePath = record.document_file;
-
             dvContent.innerHTML = '';
-
             if (fileExtension === 'pdf') {
                 const pdfUrl = filePath.startsWith('/uploads/') ? filePath : '/uploads/' + filePath;
                 dvContent.innerHTML = `
@@ -1653,51 +1482,40 @@
             } else {
                 dvContent.innerHTML = '<p class="text-red-600">অসমর্থিত ফাইল ফর্ম্যাট</p>';
             }
-
             documentModal.classList.add('open');
         }
-
         function closeDocumentModal() {
             document.getElementById('document-modal').classList.remove('open');
             document.getElementById('dv-content').innerHTML = '';
         }
-
         // Projects Modal Functions
         async function viewProjectsFromModal() {
             if (selectedRecordId) {
                 await openProjectsModal(selectedRecordId);
             }
         }
-
         async function openProjectsModal(memoId) {
             try {
-                console.log('Fetching projects for memo ID:', memoId);
                 const response = await fetch(`/api/approval-memos/${memoId}/projects`);
                 if (!response.ok) {
                     const errorText = await response.text();
-                    console.error('API Error Response:', response.status, errorText);
                     throw new Error(`HTTP ${response.status}: ${errorText}`);
                 }
                 const data = await response.json();
-                console.log('Projects data received:', data);
                 populateProjectsModal(data);
                 document.getElementById('projects-modal').classList.add('open');
             } catch (error) {
-                console.error('Error fetching projects:', error);
                 alert('প্রকল্প লোড করতে ব্যর্থ। অনুগ্রহ করে পুনরায় চেষ্টা করুন।\n\nত্রুটি: ' + error.message);
             }
         }
-
         function populateProjectsModal(data) {
             const { memoNumber, memoDate, financial_year, memo_type, meeting_month, projects, total, actual_projects } = data;
-
             // Helper function to convert memo_type to Bengali
             const getMemoTypeLabel = (type) => {
                 if (type === 'ministry') return 'মন্ত্রণালয় স্মারক';
                 if (type === 'monthly') return 'মাসিক সভা';
                 return 'N/A';
             };
-
             // Update memo details
             // For monthly meetings, show N/A for memo number; for ministry memos, show truncated number (last 10 digits)
             document.getElementById('pm-memo-number').textContent = memo_type === 'monthly' ? 'N/A' : truncateMemoNumber(memoNumber);
@@ -1708,14 +1526,12 @@
             document.getElementById('pm-memo-type').textContent = getMemoTypeLabel(memo_type);
             document.getElementById('pm-total-count').textContent = toBengaliNumeral(total.toString());
             document.getElementById('pm-connected-count').textContent = toBengaliNumeral(actual_projects.toString());
-
             // Populate projects list
             const projectsList = document.getElementById('pm-projects-list');
             if (projects.length === 0) {
                 projectsList.innerHTML = '<p class="text-center text-gray-500 py-8 col-span-12">কোনো প্রকল্প পাওয়া যায়নি।</p>';
                 return;
             }
-
             projectsList.innerHTML = projects.map((project) => `
                 <div class="grid grid-cols-12 gap-3 px-4 py-3 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all" onclick="openProjectDetailModal(${project.id})">
                     <div class="col-span-9 font-semibold text-slate-900 truncate" title="${escapeHtml(project.project_name)}">
@@ -1733,7 +1549,6 @@
                 </div>
             `).join('');
         }
-
         async function openProjectDetailModal(projectId) {
             try {
                 const response = await fetch(`/api/projects/${projectId}`);
@@ -1743,17 +1558,14 @@
                 const project = await response.json();
                 showDetailModal(project);
             } catch (error) {
-                console.error('Error fetching project details:', error);
                 alert('প্রকল্পের বিবরণ লোড করতে ব্যর্থ। অনুগ্রহ করে পুনরায় চেষ্টা করুন।');
             }
         }
-
         function showDetailModal(r) {
             // Project name
             document.getElementById('dm-name').innerText = r.project_name || '';
             document.getElementById('dm-quick-type').innerText = r.project_type || '';
             document.getElementById('dm-quick-method').innerText = r.implementation_method || '';
-
             // Status pill
             const dmStatus = document.getElementById('dm-quick-status');
             dmStatus.innerText = r.current_status || '';
@@ -1762,7 +1574,6 @@
                  r.is_delayed   ? 'bg-red-100 text-red-800 border border-red-200' :
                  r.progress_percentage > 0 ? 'bg-blue-100 text-blue-800 border border-blue-200' :
                                              'bg-gray-100 text-gray-700 border border-gray-200');
-
             // Details
             document.getElementById('dm-id').innerText = r.project_id || r.id || '';
             const yearEl = document.getElementById('dm-year');
@@ -1770,7 +1581,6 @@
             yearEl.style.fontFamily = "'Hind Siliguri', 'Noto Sans Bengali', sans-serif";
             document.getElementById('dm-upazila').innerText = r.upazila || '';
             document.getElementById('dm-fund-type').innerText = r.fund_type || '';
-
             // Priority pill
             const dmPriority = document.getElementById('dm-priority');
             const priorityMap = { general: 'সাধারণ', medium: 'মধ্যম', top_priority: 'সর্বোচ্চ অগ্রাধিকার' };
@@ -1780,31 +1590,25 @@
                 (pVal === 'top_priority' ? 'bg-red-100 text-red-700 border border-red-200' :
                  pVal === 'medium'       ? 'bg-amber-100 text-amber-700 border border-amber-200' :
                                           'bg-gray-100 text-gray-600 border border-gray-200');
-
             // Reference
             document.getElementById('dm-reference').innerText = r.reference || 'N/A';
-
             // Approval date and memo number
             document.getElementById('dm-approval-date').innerText = r.project_approval_date ? formatDate(r.project_approval_date) : 'N/A';
             document.getElementById('dm-memo-number').innerText = r.approval_memo_number ? toBengaliNumeral(r.approval_memo_number) : 'N/A';
-
             // Progress percentage
             const pct = r.progress_percentage || 0;
             document.getElementById('dm-progress-pct').innerText = toBengaliNumeral(pct.toString()) + '%';
             document.getElementById('dm-progress-bar').style.width = pct + '%';
-
             // Fund release percentage
             const alloc   = parseFloat(r.allocation_amount) || 0;
             const released = parseFloat(r.released_amount) || 0;
             const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
             document.getElementById('dm-fund-release-pct').innerText = toBengaliNumeral(fundPct.toString()) + '%';
             document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
-
             // Dates
             document.getElementById('dm-start').innerText = r.start_date ? formatDate(r.start_date) : 'N/A';
             document.getElementById('dm-expected-end').innerText = r.expected_end_date ? formatDate(r.expected_end_date) : 'N/A';
             document.getElementById('dm-actual-end').innerText = r.actual_end_date ? formatDate(r.actual_end_date) : 'N/A';
-
             // Remarks
             const remarksWrap = document.getElementById('dm-remarks-wrap');
             if (r.remarks && r.remarks.trim()) {
@@ -1813,43 +1617,33 @@
             } else {
                 remarksWrap.classList.add('hidden');
             }
-
             // Amounts
             document.getElementById('dm-allocation').innerText = '৳ ' + toBengaliNumeral(formatCurrency(r.allocation_amount)) + ' টাকা';
             document.getElementById('dm-released').innerText = '৳ ' + toBengaliNumeral(formatCurrency(r.released_amount)) + ' টাকা';
-
             // Load map, photos and documents
-            console.log('Loading project details:', r.id, 'lat_lng:', r.lat_lng);
             loadProjectMap(r.lat_lng, r.project_name);
             loadProjectPhotos(r.id);
             loadProjectDocsForDetail(r.id);
-
             // Make sure modal opens
             setTimeout(() => {
                 document.getElementById('project-detail-modal').classList.add('open');
             }, 100);
         }
-
         function closeDetailModal() {
             document.getElementById('project-detail-modal').classList.remove('open');
         }
-
         function closeProjectsModal() {
             document.getElementById('projects-modal').classList.remove('open');
         }
-
         // Load and display project photos
         async function loadProjectPhotos(projectId) {
             const section = document.getElementById('dm-photos-section');
             const grid = document.getElementById('dm-photos-grid');
             const emptyMsg = document.getElementById('dm-photos-empty');
-
             if (!section || !grid) return;
-
             try {
                 section.classList.remove('hidden');
                 grid.innerHTML = '<p class="text-center text-gray-400 col-span-3 py-4">লোড হচ্ছে...</p>';
-
                 const res = await fetch(`/api/projects/${projectId}/images`);
                 if (!res.ok) {
                     grid.innerHTML = '';
@@ -1857,13 +1651,11 @@
                     return;
                 }
                 const photos = await res.json();
-
                 if (!photos || photos.length === 0) {
                     grid.innerHTML = '';
                     emptyMsg.classList.remove('hidden');
                     return;
                 }
-
                 emptyMsg.classList.add('hidden');
                 grid.innerHTML = photos.map(photo => `
                     <div class="relative group rounded-xl overflow-hidden bg-gray-200 aspect-square border-4 border-amber-100 cursor-pointer shadow-sm hover:shadow-md transition-all">
@@ -1874,61 +1666,49 @@
                     </div>
                 `).join('');
             } catch (e) {
-                console.error('Error loading photos:', e);
                 grid.innerHTML = '';
                 emptyMsg.classList.remove('hidden');
             }
         }
-
         // Load and display project location map
         function loadProjectMap(latLng, projectName) {
             const section = document.getElementById('dm-map-section');
             const container = document.getElementById('m-map-container');
             const coordText = document.getElementById('dm-coord-text');
             const mapLink = document.getElementById('dm-map-link');
-
             if (!section || !container) return;
-
             // Hide if no coordinates
             if (!latLng || !latLng.trim()) {
                 section.classList.add('hidden');
                 return;
             }
-
             const parts = latLng.split(',').map(s => parseFloat(s.trim()));
             if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) {
                 section.classList.add('hidden');
                 return;
             }
-
             const [lat, lng] = parts;
             section.classList.remove('hidden');
             coordText.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
             mapLink.href = `https://www.google.com/maps?q=${lat},${lng}`;
-
             // Use OpenStreetMap static map
             const zoomLevel = 13;
             const mapUrl = `https://tile.openstreetmap.org/${zoomLevel}/${Math.floor(Math.pow(2, zoomLevel) * (lng + 180) / 360)}/${Math.floor(Math.pow(2, zoomLevel) * (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2)}.png`;
-
             // Set background image with fallback
             container.style.backgroundImage = `url('https://tile.openstreetmap.org/${zoomLevel}/${Math.floor(Math.pow(2, zoomLevel) * (lng + 180) / 360)}/${Math.floor(Math.pow(2, zoomLevel) * (1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2)}.png')`;
             container.style.backgroundSize = 'cover';
             container.style.backgroundPosition = 'center';
             container.style.backgroundColor = '#e5e7eb';
         }
-
         // Load and display project documents
         async function loadProjectDocsForDetail(projectId) {
             const section = document.getElementById('dm-docs-section');
             const list = document.getElementById('dm-docs-list');
             const emptyMsg = document.getElementById('dm-docs-empty');
-
             if (!section || !list) return;
-
             try {
                 section.classList.remove('hidden');
                 list.innerHTML = '<p class="text-center text-gray-400 py-4">লোড হচ্ছে...</p>';
-
                 const res = await fetch(`/api/projects/${projectId}/documents`);
                 if (!res.ok) {
                     list.innerHTML = '';
@@ -1936,15 +1716,12 @@
                     return;
                 }
                 const docs = await res.json();
-
                 if (!docs || docs.length === 0) {
                     list.innerHTML = '';
                     emptyMsg.classList.remove('hidden');
                     return;
                 }
-
                 emptyMsg.classList.add('hidden');
-
                 list.innerHTML = docs.map(doc => {
                     const fileName = doc.document_path.split('/').pop();
                     const fileExt = fileName.split('.').pop().toUpperCase();
@@ -1977,19 +1754,16 @@
                     `;
                 }).join('');
             } catch (e) {
-                console.error('Error loading documents:', e);
                 list.innerHTML = '';
                 emptyMsg.classList.remove('hidden');
             }
         }
-
         function formatCurrency(amount) {
             if (!amount) return '০';
             const num = Math.floor(parseFloat(amount) || 0);
             const formatted = num.toLocaleString('en-IN');
             return toBengaliNumeral(formatted);
         }
-
         // Close modals on backdrop click
         document.addEventListener('DOMContentLoaded', function() {
             const documentModal = document.getElementById('document-modal');
@@ -1998,14 +1772,12 @@
                     if (e.target === this) closeDocumentModal();
                 });
             }
-
             const projectsModal = document.getElementById('projects-modal');
             if (projectsModal) {
                 projectsModal.addEventListener('click', function(e) {
                     if (e.target === this) closeProjectsModal();
                 });
             }
-
             const projectDetailModal = document.getElementById('project-detail-modal');
             if (projectDetailModal) {
                 projectDetailModal.addEventListener('click', function(e) {
@@ -2014,10 +1786,8 @@
             }
         });
     </script>
-
     <!-- Footer injected by components.js -->
     <div id="footer-container"></div>
-
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/components.js"></script>
 </body>

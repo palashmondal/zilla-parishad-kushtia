@@ -9,25 +9,20 @@
     <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-
     <!-- Leaflet — lightweight OSM map for project location -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-
     <!-- Flatpickr — beautiful date picker -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
     <!-- PDF.js — Mozilla PDF viewer library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
     <!-- LightGallery — image viewer with zoom, fullscreen, thumbnails (download is built-in) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lightgallery-bundle.min.css">
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/lightgallery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/zoom/lg-zoom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/fullscreen/lg-fullscreen.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/thumbnail/lg-thumbnail.min.js"></script>
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
@@ -35,11 +30,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
-
     <style>
         html { font-size: 18px; }
         * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
-
         .ts-wrapper {
             font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
             border: none !important;
@@ -96,10 +89,8 @@
         .ts-dropdown .option:hover,
         .ts-dropdown .option.active { background: #fef3c7 !important; color: #92400e !important; }
         .ts-dropdown .option.selected { background: #fde68a !important; color: #92400e !important; font-weight: 700 !important; }
-
         .table-row { transition: all 0.2s ease; }
         .table-row:hover { background: #fffbeb; }
-
         /* Project name tooltip */
         .project-name-cell { position: relative; }
         .project-tooltip {
@@ -157,12 +148,10 @@
             color: #fbbf24;
             margin-bottom: 4px;
         }
-
         .sortable-th { cursor: pointer; user-select: none; }
         .sortable-th:hover { background: #e5e7eb; }
         .sortable-th .sort-icon { opacity: 0.35; transition: all 0.2s ease; display: inline-block; vertical-align: middle; }
         .sortable-th.active .sort-icon { opacity: 1; color: #b45309; }
-
         /* Currency display — plain text */
         .currency-amount {
             display: inline-flex;
@@ -171,11 +160,9 @@
             font-variant-numeric: tabular-nums;
         }
         .currency-symbol { font-size: 1rem; font-weight: 700; color: #b45309; }
-
         .action-btn { transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .action-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.12); }
         .action-btn:active { transform: translateY(0); }
-
         /* Gear action menu */
         .action-menu { position: relative; display: inline-block; }
         .action-gear-btn { display: inline-flex; align-items: center; gap: 3px; padding: 0.3rem 0.55rem; border-radius: 0.5rem; background: #f3f4f6; border: 1px solid #e5e7eb; color: #374151; cursor: pointer; transition: background 0.15s, box-shadow 0.15s; font-size: 0.8rem; }
@@ -187,7 +174,6 @@
         .action-menu-item.danger { color: #dc2626; }
         .action-menu-item.danger:hover { background: #fef2f2; }
         .action-menu-divider { height: 1px; background: #f3f4f6; margin: 2px 0; }
-
         /* Detail modal animation */
         .detail-backdrop {
             opacity: 0; pointer-events: none;
@@ -199,14 +185,12 @@
         .detail-backdrop.open { opacity: 1; pointer-events: auto; }
         .detail-card { transform: translateY(24px) scale(0.97); opacity: 0; transition: transform 0.32s cubic-bezier(.34,1.56,.64,1), opacity 0.28s ease; }
         .detail-backdrop.open .detail-card { transform: translateY(0) scale(1); opacity: 1; }
-
         /* ── Form modal backdrop ── */
         #form-modal {
             background: rgba(120,53,15,0.18);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
-
         /* ── Form modal card ── */
         #form-modal > div {
             border: none !important;
@@ -216,7 +200,6 @@
                 0 0 0 1px rgba(245,158,11,0.18),
                 0 1px 0 rgba(255,255,255,0.9) inset !important;
         }
-
         /* ── Modal header gradient bar ── */
         .form-modal-header {
             background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
@@ -227,7 +210,6 @@
             align-items: center;
             justify-content: space-between;
         }
-
         /* ── Section cards inside form ── */
         .form-section {
             background: #ffffff;
@@ -259,7 +241,6 @@
             height: 1px;
             background: linear-gradient(to right, #fde68a, transparent);
         }
-
         /* ── Input / textarea polish ── */
         .form-field input[type="text"],
         .form-field input[type="number"],
@@ -317,7 +298,6 @@
             letter-spacing: 0.05em;
             margin-bottom: 0.5rem;
         }
-
         /* ── Flatpickr date input — ZPK amber theme ── */
         .date-field-wrapper {
             position: relative;
@@ -352,7 +332,6 @@
             border-color: #fcd34d;
             background: #fffdf5;
         }
-
         /* ── Flatpickr calendar popup — amber theme ── */
         .flatpickr-calendar {
             font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important;
@@ -456,7 +435,6 @@
         .flatpickr-calendar .flatpickr-innerContainer {
             padding: 4px !important;
         }
-
         /* ── TomSelect inside form-field ── */
         .form-field .ts-control {
             background: #fafafa !important;
@@ -472,7 +450,6 @@
             box-shadow: 0 0 0 3px rgba(245,158,11,0.15) !important;
         }
         .form-field .ts-control:hover { background: #fffdf5 !important; border-color: #fcd34d !important; }
-
         /* ── TomSelect: Fix height expansion after selection ── */
         #approval-memo-select.ts-hidden-accessible + .ts-wrapper .ts-control {
             height: 38px !important;
@@ -490,7 +467,6 @@
             max-height: 20px !important;
             overflow: hidden !important;
         }
-
         /* ── Action buttons ── */
         .btn-cancel {
             padding: 0.6rem 1.5rem;
@@ -522,11 +498,9 @@
             transform: translateY(-1px);
         }
         .btn-save:active { transform: translateY(0); }
-
         /* Progress bar */
         .progress-bar-bg { background: #e5e7eb; border-radius: 999px; height: 8px; }
         .progress-bar-fill { height: 8px; border-radius: 999px; transition: width 0.6s ease; }
-
         /* Status badges - Enhanced for prominence */
         .badge-completed {
             background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
@@ -552,7 +526,6 @@
             border: 2px solid #9ca3af;
             box-shadow: 0 2px 4px rgba(156, 163, 175, 0.2);
         }
-
         /* Modal internals - matching public page */
         .modal-avatar {
             background: linear-gradient(135deg, #fef3c7, #fbbf24);
@@ -567,7 +540,6 @@
         }
         .modal-close-btn:hover { filter: brightness(1.12); }
         .modal-close-btn:active { transform: scale(0.97); }
-
         /* Modal progress bar */
         .progress-bar-track {
             background: #e5e7eb; border-radius: 8px; height: 16px; overflow: hidden;
@@ -583,7 +555,6 @@
         .progress-bar-orange {
             background: linear-gradient(90deg, #f97316, #ea580c);
         }
-
         /* Progress log timeline */
         .progress-log-row {
             display: flex; align-items: flex-start; gap: 12px;
@@ -631,7 +602,6 @@
         .plog-delete-btn:active { transform: scale(0.95); }
         .plog-flag-delayed  { background: #fee2e2; color: #991b1b; }
         .plog-flag-complete { background: #dcfce7; color: #166534; }
-
         /* ── LightGallery Admin — ZPK amber theme overrides ── */
         .lg-toolbar .lg-icon { color: #fbbf24 !important; }
         .lg-toolbar .lg-icon:hover { color: #f59e0b !important; }
@@ -662,7 +632,6 @@
             border-color: #fbbf24 !important;
         }
         .lg-counter { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace !important; color: rgba(255,255,255,0.65) !important; }
-
         /* Photo Gallery */
         .photo-tab {
             display: inline-flex; align-items: center; gap: 5px;
@@ -673,7 +642,6 @@
         }
         .photo-tab.active { background: #b45309; color: #fff; border-color: #b45309; }
         .photo-tab:hover:not(.active) { background: #fef3c7; }
-
         .photo-thumb {
             position: relative; aspect-ratio: 4/3; overflow: hidden;
             border-radius: 0.75rem; cursor: pointer;
@@ -692,7 +660,6 @@
         .ptype-during  { background: #dbeafe; color: #1e40af; }
         .ptype-after   { background: #d1fae5; color: #065f46; }
         .ptype-general { background: #f3e8ff; color: #6b21a8; }
-
         /* ── Photo upload section (form modal) ── */
         /* ── Document upload zone ── */
         .doc-upload-zone {
@@ -736,7 +703,6 @@
         }
         .doc-caption-input::placeholder { color: #d97706; opacity: 0.6; }
         .doc-caption-input:focus { background: #fef9c3; }
-
         .photo-upload-zone {
             border: 2px dashed #fcd34d; border-radius: 1rem;
             background: #fffbeb; padding: 1.5rem 1.5rem;
@@ -791,7 +757,6 @@
         }
         .photo-thumb:hover .photo-delete-btn { display: flex; }
         .photo-delete-btn:hover { background: #dc2626 !important; }
-
         /* Project location map */
         #m-map-section {
             margin-top: 1.5rem; padding-top: 1.25rem;
@@ -829,7 +794,6 @@
         }
         .map-open-link:hover { background: #b45309; color: #fff; border-color: #b45309; }
         .map-open-link svg { width: 12px; height: 12px; }
-
         .zpk-marker-pin {
             width: 30px; height: 30px;
             display: flex; align-items: center; justify-content: center;
@@ -839,10 +803,8 @@
 <body class="bg-gray-50 flex flex-col min-h-screen">
     <!-- Header -->
     <div id="header-container"></div>
-
     <!-- Navigation -->
     <div id="menu-container"></div>
-
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 flex-1">
         <!-- Success/Error Messages -->
@@ -852,7 +814,6 @@
         <div id="error-message" class="hidden mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
             <p id="error-text"></p>
         </div>
-
         <!-- Header Section -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
@@ -867,12 +828,11 @@
                     নতুন প্রকল্প যোগ করুন
                 </button>
             </div>
-
             <!-- Search and Filters -->
             <div class="grid grid-cols-1 md:grid-cols-8 gap-3">
                 <div class="md:col-span-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">অনুসন্ধান</label>
-                    <input type="text" id="search-input" placeholder="নাম, আইডি, সভাপতি, মোবাইল, উপজেলা, সুপারিশকারী, মন্তব্য..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
+                    <input type="text" id="search-input" placeholder="নাম, আইডি, উপজেলা..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">অর্থবছর</label>
@@ -922,14 +882,12 @@
                 </div>
             </div>
         </div>
-
         <!-- Records List -->
         <div class="space-y-4">
             <div id="loading" class="hidden p-12 text-center bg-white rounded-xl">
                 <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-amber-600"></div>
                 <p class="mt-4 text-lg text-gray-600 font-medium">লোড হচ্ছে...</p>
             </div>
-
             <div id="table-container" class="hidden bg-white rounded-xl shadow-md overflow-hidden">
                 <table class="w-full table-fixed">
                     <thead class="bg-gray-50 border-b-2 border-gray-200">
@@ -958,7 +916,6 @@
                     <tbody id="table-body" class="bg-white divide-y divide-gray-100"></tbody>
                 </table>
             </div>
-
             <div id="empty-state" class="hidden p-12 text-center bg-white rounded-xl">
                 <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
@@ -966,7 +923,6 @@
                 <h3 class="mt-4 text-lg font-semibold text-gray-900">কোনো প্রকল্প পাওয়া যায়নি</h3>
                 <p class="mt-2 text-sm text-gray-500">নতুন প্রকল্প যোগ করতে উপরের বাটনে ক্লিক করুন</p>
             </div>
-
             <!-- Records Per Page Selector & Pagination & Total Count -->
             <div class="flex items-center justify-between gap-4 py-4 px-4">
                 <div id="records-per-page-selector"></div>
@@ -975,7 +931,6 @@
             </div>
         </div>
     </main>
-
     <!-- ── Detail Modal ── -->
     <div id="detail-modal" class="detail-backdrop fixed inset-0 z-[90] flex items-center justify-center p-4">
         <div class="detail-card bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl p-8 relative max-h-[90vh] overflow-y-auto">
@@ -994,9 +949,7 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
-
             <div class="space-y-5 border-t border-[#fcd34d] pt-6">
-
                 <!-- Row 1: ID · Year · Upazila -->
                 <div class="grid grid-cols-3 gap-4">
                     <div>
@@ -1012,7 +965,6 @@
                         <p id="dm-upazila" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
-
                 <!-- Row 2: Fund Type · Priority · Recommender -->
                 <div class="grid grid-cols-3 gap-4">
                     <div>
@@ -1028,7 +980,6 @@
                         <p id="dm-quick-status" class="font-semibold text-slate-700 text-base"></p>
                     </div>
                 </div>
-
                 <!-- Row 2.5: Priority · Approval Type · Approval Date -->
                 <div class="grid grid-cols-3 gap-4 items-start">
                     <div>
@@ -1044,7 +995,6 @@
                         <p id="dm-approval-date" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
-
                 <!-- Row 2.55: Project Type · Memo/Month · Recommender (Tender layout) -->
                 <div id="dm-tender-row" class="grid gap-4" style="grid-template-columns: 1fr 1fr 1fr; display: none;">
                     <div>
@@ -1060,7 +1010,6 @@
                         <p id="dm-reference-tender" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
-
                 <!-- Row 2.55: Project Type (1 col) · Memo/Month (2 cols) (CPPC layout) -->
                 <div id="dm-cppc-row-2" class="grid gap-4" style="grid-template-columns: 1fr 2fr;">
                     <div>
@@ -1072,7 +1021,6 @@
                         <p id="dm-memo-number" class="font-semibold text-slate-800 text-base whitespace-nowrap overflow-hidden text-ellipsis" style="font-family: Shurjo, 'Siyam Rupali', 'Solaimanlipi';"></p>
                     </div>
                 </div>
-
                 <!-- Row 2.8: Reference · CPPC President · CPPC Mobile (CPPC only) -->
                 <div id="dm-cppc-row" class="grid grid-cols-3 gap-4">
                     <div>
@@ -1088,7 +1036,6 @@
                         <p id="dm-cppc-mobile" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
-
                 <!-- Row 3: Start · Expected End · Actual End -->
                 <div class="grid grid-cols-3 gap-4">
                     <div>
@@ -1104,7 +1051,6 @@
                         <p id="dm-actual-end" class="font-semibold text-slate-800 text-base"></p>
                     </div>
                 </div>
-
                 <!-- Remarks -->
                 <div id="dm-remarks-wrap" class="hidden">
                     <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl border border-amber-200 p-5 shadow-sm">
@@ -1112,7 +1058,6 @@
                         <p id="dm-remarks" class="font-medium text-slate-700 text-base leading-relaxed whitespace-pre-wrap" style="font-family: Shurjo, 'Siyam Rupali', 'Solaimanlipi';"></p>
                     </div>
                 </div>
-
                 <!-- Amount box with progress bars -->
                 <div class="modal-amount-box p-6 rounded-2xl">
                     <div class="flex justify-between items-start mb-5">
@@ -1179,7 +1124,6 @@
                     </a>
                 </div>
             </div>
-
             <!-- Progress Log Timeline -->
             <div id="dm-progress-log-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <div class="flex items-center justify-between mb-4">
@@ -1196,7 +1140,6 @@
                 </div>
                 <div id="dm-progress-log-list" class="space-y-2"></div>
             </div>
-
             <!-- Photo Gallery -->
             <div id="dm-photos-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <div class="flex items-center justify-between mb-3">
@@ -1213,11 +1156,8 @@
                 </div>
                 <div id="dm-photos-tabs" class="hidden flex gap-2 flex-wrap mb-3"></div>
                 <div id="dm-photos-grid" class="grid grid-cols-3 gap-2"></div>
-
                 <!-- No photos message -->
-               
             </div>
-
             <!-- Quick photo upload panel (inside detail modal) -->
             <div id="quick-upload-panel" class="hidden mt-4 pt-4 border-t border-[#fcd34d]">
                 <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">ছবি আপলোড করুন</p>
@@ -1229,7 +1169,6 @@
                 <div id="quick-preview-grid" class="upload-preview-grid"></div>
                 <div id="quick-per-file-meta" class="mt-2 space-y-2"></div>
                 <div class="flex gap-2 mt-3">
-
                     <button type="button" id="quick-upload-btn"
                         onclick="submitQuickUpload()"
                         class="flex-1 py-1.5 px-4 rounded-lg font-bold text-sm
@@ -1244,7 +1183,6 @@
                 </div>
                 <div id="quick-upload-status" class="hidden mt-2 text-sm font-semibold text-amber-700"></div>
             </div>
-
             <!-- Documents section (inside detail modal) -->
             <div id="dm-docs-section" class="hidden mt-6 pt-5 border-t border-[#fcd34d]">
                 <div class="flex items-center justify-between mb-3">
@@ -1261,7 +1199,6 @@
                 </div>
                 <div id="dm-docs-list" class="space-y-1.5"></div>
             </div>
-
             <!-- Quick document upload panel (inside detail modal) -->
             <div id="quick-doc-upload-panel" class="hidden mt-4 pt-4 border-t border-[#fcd34d]">
                 <p class="text-[11px] font-bold text-[#d4a017] uppercase tracking-wider mb-3">ফাইল আপলোড করুন</p>
@@ -1286,7 +1223,6 @@
                 </div>
                 <div id="quick-doc-status" class="hidden mt-2 text-sm font-semibold text-amber-700"></div>
             </div>
-
             <!-- Action buttons -->
             <div class="flex gap-3 mt-6 pt-5 border-t-2 border-[#fcd34d]">
                 <button onclick="closeDetailModal(); editRecord(currentDetailId)" class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-3.5 rounded-xl shadow-lg text-base transition-all active:scale-[0.98] hover:shadow-xl hover:from-blue-700 hover:to-blue-800">
@@ -1310,12 +1246,9 @@
             </div>
         </div>
     </div>
-
-
     <!-- ── Add/Edit Modal ── -->
     <div id="form-modal" class="hidden fixed inset-0 overflow-y-auto h-full w-full z-50">
         <div class="relative top-8 mx-auto p-5 w-full max-w-4xl rounded-2xl mb-10">
-
             <!-- Gradient header -->
             <div class="form-modal-header">
                 <div class="flex items-center gap-3">
@@ -1335,20 +1268,8 @@
                     </svg>
                 </button>
             </div>
-
-            <!-- Error message container for modal-specific errors -->
-            <div id="modal-error-container" class="hidden mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <div class="flex items-start gap-3">
-                    <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                    </svg>
-                    <div id="modal-error-text" class="text-sm text-red-700"></div>
-                </div>
-            </div>
-
             <form id="project-form" class="space-y-4">
                 <input type="hidden" id="record-id">
-
                 <!-- Section: Basic Info -->
                 <div class="form-section">
                     <div class="form-section-title">
@@ -1356,13 +1277,11 @@
                         প্রকল্পের মূল তথ্য
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-
                         <!-- Row 1: Project name — full width -->
                         <div class="md:col-span-2 form-field">
                             <label>প্রকল্পের নাম <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
                             <textarea name="project_name" required rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500" placeholder="প্রকল্পের পূর্ণ নাম লিখুন…"></textarea>
                         </div>
-
                         <!-- Row 2: Project ID | Financial Year -->
                         <div class="form-field">
                             <label>প্রকল্প আইডি</label>
@@ -1386,11 +1305,9 @@
                                 <option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>
                             </select>
                         </div>
-
                         <!-- Hidden fields for approval date and memo number - auto-filled from memo selection -->
                         <input type="hidden" name="project_approval_date">
                         <input type="hidden" name="approval_memo_number">
-
                         <!-- Row 5: Allocation Amount | Fund Type -->
                         <div class="form-field">
                             <label>উপজেলা <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
@@ -1408,15 +1325,12 @@
                             <label>প্রকল্পের ধরন <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
                             <select name="project_type" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white">
                                 <option value="">-- ধরন নির্বাচন করুন --</option>
-                                
                                 <option value="ধর্মীয় ও সামাজিক">🕌 ধর্মীয় ও সামাজিক</option>
                                 <option value="সেবামূলক">🏥 সেবামূলক</option>
                                 <option value="শিক্ষা">📚 শিক্ষা</option>
                                 <option value="ক্রীড়া">⚽ ক্রীড়া</option>
                             </select>
                         </div>
-
-
                         <!-- Row 5: Allocation Amount | Fund Type -->
                         <div class="form-field">
                             <label>মোট বরাদ্দ (টাকা) <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
@@ -1434,7 +1348,6 @@
                                 <option value="জেলা পরিষদ উন্নয়ন সহায়তা (বিশেষ বরাদ্দ)">⭐ জেলা পরিষদ উন্নয়ন সহায়তা (বিশেষ বরাদ্দ)</option>
                             </select>
                         </div>
-
                         <!-- Row 6: Implementation Method | Priority -->
                         <div class="form-field">
                             <label>বাস্তবায়ন পদ্ধতি <span class="text-red-400 normal-case not-italic font-bold">*</span></label>
@@ -1454,7 +1367,6 @@
                                 <option value="top_priority">🔴 সর্বোচ্চ</option>
                             </select>
                         </div>
-
                         <!-- Row 6.5: CPPC-only fields (সভাপতি) — hidden by default -->
                         <div id="cppc-fields-row" class="form-field hidden">
                             <label>প্রকল্প সভাপতি</label>
@@ -1464,7 +1376,6 @@
                             <label>সভাপতির মোবাইল নম্বর</label>
                             <input type="tel" name="cppc_president_mobile" placeholder="০১XXXXXXXXX" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500">
                         </div>
-
                         <!-- Row 7: সুপারিশকারী | GPS Location -->
                         <div class="form-field">
                             <label>সুপারিশকারী</label>
@@ -1487,7 +1398,6 @@
                                 </button>
                             </div>
                         </div>
-
                         <!-- Row 8: Start Date | Expected End Date -->
                         <div class="form-field">
                             <label class="flex items-center gap-1">
@@ -1509,10 +1419,8 @@
                                 <input type="text" name="expected_end_date" id="expected-end-date-input" class="flatpickr-input" placeholder="তারিখ নির্বাচন করুন">
                             </div>
                         </div>
-
                     </div>
                 </div>
-
                 <!-- Section: Photo Upload & Files — Side by Side -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Section: Photo Upload -->
@@ -1522,7 +1430,6 @@
                         প্রকল্পের ছবি
                         <span class="text-gray-400 text-xs normal-case font-normal tracking-normal ml-1">সর্বোচ্চ ১০টি · প্রতিটি ৫ MB · JPEG / PNG / WebP</span>
                     </div>
-
                     <!-- Drag-drop / click zone -->
                     <div class="photo-upload-zone" id="upload-drop-zone">
                         <input type="file" id="photo-file-input" accept="image/jpeg,image/png,image/webp" multiple max="10">
@@ -1533,9 +1440,7 @@
                         <p class="text-base font-semibold text-amber-700">ছবি টেনে আনুন বা ক্লিক করুন</p>
                         <p class="text-sm text-gray-400 mt-2">একসাথে একাধিক ছবি নির্বাচন করতে পারবেন</p>
                     </div>
-
                     <div id="upload-preview-grid" class="upload-preview-grid mt-4"></div>
-
                     <div class="flex items-center gap-3 mt-3 flex-wrap" id="upload-global-meta" style="display:none!important">
                         <div>
                             <label class="text-xs font-semibold text-gray-600 mb-1 block">ছবির ধরন (সব ছবির জন্য)</label>
@@ -1552,17 +1457,14 @@
                                    class="w-full px-3 py-1.5 border border-amber-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500">
                         </div>
                     </div>
-
                     <div id="upload-per-file-meta" class="mt-3 space-y-2"></div>
                     <div id="upload-status" class="hidden mt-2 text-sm font-semibold text-amber-700"></div>
-
                     <div id="existing-photos-section" class="hidden mt-4">
                         <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">বিদ্যমান ছবি</p>
                         <div id="existing-photos-tabs" class="flex gap-2 flex-wrap mb-2"></div>
                         <div id="existing-photos-grid" class="upload-preview-grid"></div>
                     </div>
                 </div>
-
                 <!-- Section: Documents -->
                 <div class="form-section" id="doc-upload-section">
                     <div class="form-section-title">
@@ -1591,7 +1493,6 @@
                     </div>
                 </div>
                 </div>
-
                 <!-- Section: Remarks -->
                 <div class="form-section">
                     <div class="form-section-title">
@@ -1600,7 +1501,6 @@
                     </div>
                     <textarea name="remarks" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-400 bg-gray-50 text-sm transition-all" placeholder="প্রয়োজনে মন্তব্য লিখুন…"></textarea>
                 </div>
-
                 <!-- Form Actions -->
                 <div class="flex justify-end gap-3 pt-2">
                     <button type="button" onclick="closeFormModal()" class="btn-cancel">বাতিল</button>
@@ -1612,7 +1512,6 @@
             </form>
         </div>
     </div>
-
     <!-- ── Add Progress Log Modal ── -->
     <div id="progress-modal" class="hidden fixed inset-0 z-[150] flex items-start justify-center py-12 px-4"
          style="background:rgba(120,53,15,0.25);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);overflow-y:auto;"
@@ -1620,7 +1519,6 @@
         <div class="w-full max-w-lg rounded-2xl overflow-hidden flex-shrink-0"
              style="background:linear-gradient(160deg,#fffbf0 0%,#ffffff 60%,#fff8ed 100%);
                     box-shadow:0 32px 80px rgba(120,53,15,0.28),0 0 0 1px rgba(245,158,11,0.2);">
-
             <!-- Header -->
             <div style="background:linear-gradient(135deg,#b45309 0%,#d97706 50%,#f59e0b 100%);padding:1.1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
                 <div style="display:flex;align-items:center;gap:0.75rem;">
@@ -1642,10 +1540,8 @@
                     </svg>
                 </button>
             </div>
-
             <!-- Form body -->
             <form id="progress-form" novalidate style="padding:1.25rem;display:flex;flex-direction:column;gap:1rem;">
-
                 <!-- Current progress display (read-only) -->
                 <div id="prog-current-display" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:0.75rem;padding:0.85rem 1rem;">
                     <div class="flex items-center justify-between mb-1.5">
@@ -1657,13 +1553,11 @@
                              style="width:0%;background:linear-gradient(90deg,#fbbf24,#d97706);"></div>
                     </div>
                 </div>
-
                 <!-- Latest Update Status -->
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                     <p class="text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">সর্বশেষ আপডেট</p>
                     <p id="prog-latest-status-text" class="text-sm font-semibold text-gray-900 text-center">কার্যক্রম শুরু হয় নাই</p>
                 </div>
-
                 <!-- Section 2: Status -->
                 <div class="form-section">
                     <div class="form-section-title">
@@ -1730,7 +1624,6 @@
                         <input type="hidden" id="prog-status" name="current_status">
                     </div>
                 </div>
-
                 <!-- Section 4: Note -->
                 <div class="form-section">
                     <div class="form-section-title">
@@ -1741,7 +1634,6 @@
                               class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 focus:bg-amber-50 hover:border-amber-300 transition-all resize-none"
                               placeholder="এই আপডেটের বিস্তারিত বিবরণ লিখুন…"></textarea>
                 </div>
-
                 <!-- Actions -->
                 <div class="flex justify-end gap-3 pt-1">
                     <button type="button" onclick="closeProgressModal()" class="btn-cancel">বাতিল</button>
@@ -1750,7 +1642,6 @@
                         আপডেট সংরক্ষণ করুন
                     </button>
                 </div>
-
                 <!-- Progress Log History -->
                 <div id="prog-modal-log-section" class="hidden pt-3 border-t border-amber-200">
                     <p class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2">অগ্রগতির ইতিহাস</p>
@@ -1759,14 +1650,12 @@
             </form>
         </div>
     </div>
-
     <!-- Error Modal -->
     <div id="error-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
          style="background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn 0.2s ease-out;"
          onclick="if(event.target===this)closeErrorModal()">
         <div class="w-full max-w-sm rounded-xl overflow-hidden flex-shrink-0"
              style="background:white;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);animation:slideUp 0.3s ease-out;">
-
             <!-- Warning Icon Section -->
             <div style="padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;border-bottom:1px solid #f3f4f6;">
                 <div style="width:3.5rem;height:3.5rem;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;">
@@ -1779,11 +1668,9 @@
                     <p style="font-size:0.875rem;color:#6b7280;margin:0.5rem 0 0 0;line-height:1.5;" id="error-modal-subtitle">ত্রুটি বার্তা</p>
                 </div>
             </div>
-
             <!-- Content -->
             <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem;">
                 <p style="font-size:0.95rem;color:#4b5563;line-height:1.6;margin:0;text-align:center;white-space:pre-wrap;word-wrap:break-word;" id="error-modal-message">ত্রুটি বার্তা এখানে প্রদর্শিত হবে</p>
-
                 <!-- Action Button -->
                 <button onclick="closeErrorModal()"
                         style="padding:0.75rem 1.5rem;background:linear-gradient(135deg,#dc2626,#ef4444);color:white;border:none;border-radius:0.75rem;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(220,38,38,0.25);width:100%;"
@@ -1794,14 +1681,12 @@
             </div>
         </div>
     </div>
-
     <!-- Final Bill Amount Warning Modal -->
     <div id="final-bill-warning-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
          style="background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn 0.2s ease-out;"
          onclick="if(event.target===this)cancelFinalBillWarning()">
         <div class="w-full max-w-sm rounded-xl overflow-hidden flex-shrink-0"
              style="background:white;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);animation:slideUp 0.3s ease-out;">
-
             <!-- Warning Icon Section -->
             <div style="padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;border-bottom:1px solid #f3f4f6;">
                 <div style="width:3.5rem;height:3.5rem;border-radius:50%;background:#fef3c7;display:flex;align-items:center;justify-content:center;">
@@ -1814,7 +1699,6 @@
                     <p style="font-size:0.875rem;color:#6b7280;margin:0.5rem 0 0 0;line-height:1.5;">প্রবেশকৃত পরিমাণ প্রত্যাশিত মূল্যের সাথে মিলে না</p>
                 </div>
             </div>
-
             <!-- Content -->
             <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem;">
                 <!-- Amount Breakdown -->
@@ -1838,7 +1722,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Action Buttons -->
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
                     <button onclick="cancelFinalBillWarning()"
@@ -1857,14 +1740,12 @@
             </div>
         </div>
     </div>
-
     <!-- Project Delete Modal -->
     <div id="project-delete-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
          style="background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn 0.2s ease-out;"
          onclick="if(event.target===this)cancelProjectDelete()">
         <div class="w-full max-w-sm rounded-xl overflow-hidden flex-shrink-0"
              style="background:white;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);animation:slideUp 0.3s ease-out;">
-
             <!-- Warning Icon Section -->
             <div style="padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;border-bottom:1px solid #f3f4f6;">
                 <div style="width:3.5rem;height:3.5rem;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;">
@@ -1877,7 +1758,6 @@
                     <p style="font-size:0.875rem;color:#6b7280;margin:0.5rem 0 0 0;line-height:1.5;">এই পদক্ষেপ চিরস্থায়ী এবং পূর্বাবস্থায় যাওয়া যাবে না</p>
                 </div>
             </div>
-
             <!-- Content -->
             <div style="padding:1.5rem;">
                 <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:0.75rem;padding:1rem;margin-bottom:1rem;">
@@ -1892,7 +1772,6 @@
                     এই প্রকল্পটি এবং এর সমস্ত ডেটা চিরস্থায়ীভাবে মুছে ফেলা হবে। আপনি কি নিশ্চিত?
                 </p>
             </div>
-
             <!-- Action Buttons -->
             <div style="padding:0 1.5rem 1.5rem 1.5rem;display:flex;gap:0.75rem;flex-direction:column-reverse;">
                 <button onclick="confirmProjectDelete()"
@@ -1910,14 +1789,12 @@
             </div>
         </div>
     </div>
-
     <!-- Delete Confirmation Modal (Progress Log) -->
     <div id="delete-confirmation-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
          style="background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn 0.2s ease-out;"
          onclick="if(event.target===this)cancelDelete()">
         <div class="w-full max-w-sm rounded-xl overflow-hidden flex-shrink-0"
              style="background:white;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);animation:slideUp 0.3s ease-out;">
-
             <!-- Warning Icon Section -->
             <div style="padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;border-bottom:1px solid #f3f4f6;">
                 <div style="width:3.5rem;height:3.5rem;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;">
@@ -1930,14 +1807,12 @@
                     <p style="font-size:0.875rem;color:#6b7280;margin:0.5rem 0 0 0;line-height:1.5;">এই পদক্ষেপ পূর্বাবস্থায় যাওয়া যাবে না</p>
                 </div>
             </div>
-
             <!-- Content -->
             <div style="padding:1.5rem;">
                 <p style="font-size:0.95rem;color:#4b5563;line-height:1.6;margin:0;text-align:center;">
                     আপনি কি নিশ্চিত আপনি এই অগ্রগতি লগ মুছে ফেলতে চান? এই ডেটা আর ফিরে পাবেন না।
                 </p>
             </div>
-
             <!-- Action Buttons -->
             <div style="padding:0 1.5rem 1.5rem 1.5rem;display:flex;gap:0.75rem;flex-direction:column-reverse;">
                 <button onclick="confirmDelete()"
@@ -1955,7 +1830,6 @@
             </div>
         </div>
     </div>
-
     <style>
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -1972,14 +1846,12 @@
             }
         }
     </style>
-
     <!-- Document Delete Confirmation Modal -->
     <div id="doc-delete-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4"
          style="background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn 0.2s ease-out;"
          onclick="if(event.target===this)cancelDocDelete()">
         <div class="w-full max-w-sm rounded-xl overflow-hidden flex-shrink-0"
              style="background:white;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);animation:slideUp 0.3s ease-out;">
-
             <!-- Warning Icon Section -->
             <div style="padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;border-bottom:1px solid #f3f4f6;">
                 <div style="width:3.5rem;height:3.5rem;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;">
@@ -1992,7 +1864,6 @@
                     <p style="font-size:0.875rem;color:#6b7280;margin:0.5rem 0 0 0;line-height:1.5;">এটি চিরস্থায়ীভাবে মুছে ফেলা হবে</p>
                 </div>
             </div>
-
             <!-- Content -->
             <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem;">
                 <div style="background:#f3f4f6;border:1px solid #e5e7eb;border-radius:0.75rem;padding:1rem;">
@@ -2006,7 +1877,6 @@
                 <p style="font-size:0.9rem;color:#6b7280;line-height:1.6;margin:0;">
                     এই ফাইলটি চিরস্থায়ীভাবে মুছে ফেলা হবে এবং আর পুনরুদ্ধার করা যাবে না।
                 </p>
-
                 <!-- Action Buttons -->
                 <div style="display:flex;gap:0.75rem;flex-direction:column-reverse;margin-top:0.5rem;">
                     <button onclick="confirmDocDelete()"
@@ -2025,7 +1895,6 @@
             </div>
         </div>
     </div>
-
     <!-- Location Picker Modal -->
     <div id="location-picker-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60">
         <div class="bg-white w-full max-w-5xl rounded-2xl shadow-2xl overflow-hidden" style="max-height: 90vh;">
@@ -2043,7 +1912,6 @@
                     </svg>
                 </button>
             </div>
-
             <!-- Content -->
             <div class="flex flex-col lg:flex-row" style="height: calc(90vh - 180px);">
                 <!-- Search Panel -->
@@ -2061,7 +1929,6 @@
                                 </svg>
                             </div>
                         </div>
-
                         <!-- Get Current Location Button -->
                         <button onclick="getCurrentLocation()" id="current-location-btn"
                             class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md flex items-center justify-center gap-2 font-semibold">
@@ -2070,12 +1937,10 @@
                             </svg>
                             আমার বর্তমান অবস্থান
                         </button>
-
                         <!-- Search Results -->
                         <div id="search-results" class="space-y-2">
                             <!-- Results will be inserted here -->
                         </div>
-
                         <!-- Selected Coordinates Display -->
                         <div id="selected-coords-display" class="hidden mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
                             <p class="text-sm font-semibold text-amber-800 mb-1">নির্বাচিত স্থান:</p>
@@ -2089,7 +1954,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Map Panel -->
                 <div class="lg:w-2/3 p-4">
                     <div class="h-full rounded-lg overflow-hidden border-2 border-gray-300 relative">
@@ -2100,7 +1964,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Footer Actions -->
             <div class="bg-gray-50 px-6 py-4 flex gap-3 border-t border-gray-200">
                 <button onclick="applySelectedLocation()"
@@ -2117,7 +1980,6 @@
             </div>
         </div>
     </div>
-
     <!-- Full Screen Map Modal -->
     <div id="full-map-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex flex-col">
         <!-- Top Bar -->
@@ -2137,10 +1999,8 @@
                 </svg>
             </button>
         </div>
-
         <!-- Map Container -->
         <div id="full-map-container" class="flex-1"></div>
-
         <!-- Bottom Info Bar -->
         <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-3 flex items-center justify-between">
             <div class="text-white/90 text-sm" id="full-map-project-name"></div>
@@ -2152,7 +2012,6 @@
             </a>
         </div>
     </div>
-
     <!-- Duplicate Warning Modal -->
     <div id="duplicate-warning-modal" class="hidden fixed inset-0 z-[250] flex items-center justify-center p-4 bg-black/50">
         <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
@@ -2170,20 +2029,17 @@
                     </svg>
                 </button>
             </div>
-
             <!-- Content -->
             <div class="p-6 max-h-[60vh] overflow-y-auto">
                 <div class="mb-4 p-4 bg-orange-50 border border-orange-200 rounded-lg">
                     <p class="text-sm text-orange-800 font-semibold">⚠️ সতর্কতা: নিম্নলিখিত প্রকল্পগুলি আপনি যোগ করতে চলেছেন তার সাথে সদৃশ বলে মনে হচ্ছে।</p>
                     <p class="text-xs text-orange-700 mt-1">অনুগ্রহ করে যাচাই করুন এটি একটি নতুন প্রকল্প বা বিদ্যমান একটির সদৃশ।</p>
                 </div>
-
                 <!-- Duplicates List -->
                 <div id="duplicate-list" class="space-y-3">
                     <!-- Duplicates will be inserted here -->
                 </div>
             </div>
-
             <!-- Footer Actions -->
             <div class="bg-gray-50 px-6 py-4 flex gap-3 border-t border-gray-200">
                 <button onclick="proceedWithAddProject()"
@@ -2200,14 +2056,11 @@
             </div>
         </div>
     </div>
-
     <!-- Footer -->
     <div id="footer-container"></div>
-
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/components.js"></script>
     <script src="assets/js/crud.js"></script>
-
     <script>
         // Tom Select init — must be var so Safari can access it across <script> blocks
         var _tomInstances = new Map();
@@ -2231,10 +2084,8 @@
                 CRUDManager.openModal = function(id) { orig(id); setTimeout(initTomSelects, 50); };
             }
         });
-
         // ── Flatpickr date pickers ────────────────────────────────────
         var _fpInstances = {};
-
         function initFlatpickrs() {
             const cfg = {
                 dateFormat:    'Y-m-d',       // value stored as YYYY-MM-DD
@@ -2250,7 +2101,6 @@
                 _fpInstances[el.name || el.id] = fp;
             });
         }
-
         // Sync Flatpickr display when a record is loaded for editing
         function syncFlatpickrValues() {
             Object.values(_fpInstances).forEach(fp => {
@@ -2259,7 +2109,6 @@
                 else fp.clear();
             });
         }
-
         document.addEventListener('DOMContentLoaded', () => {
             initFlatpickrs();
             // Re-sync after form opens with data
@@ -2276,7 +2125,6 @@
     </script>
     <script>
         DashboardComponents.loadAll('projects', 'প্রকল্প তালিকা পরিচালনা');
-
         let currentPage = 1;
         let recordsPerPage = 20;
         let currentSearch = '';
@@ -2286,21 +2134,18 @@
         let currentStatus = '';
         let currentPriority = '';
         let editingId = null;
-        let originalProjectId = null;
         let isLoadingFormData = false;
         let currentDetailId = null;
         let currentDetailRecord = null;
         let allRecords = [];
         let sortColumn = '';
         let sortDirection = 'asc';
-
         // Initialize — load data immediately (list/years are public endpoints),
         // run auth check in parallel for redirect protection and role-based UI.
         AuthManager.initModule('projects'); // redirect if unauthenticated or no module access
         loadYears().then(() => loadData());
         // Load upazilas in background (they're already hardcoded in the dropdown)
         loadUpazilas().catch(() => {});
-
         // Search debounce
         const searchInput = document.getElementById('search-input');
         const debouncedSearch = CRUDManager.debounce(() => {
@@ -2309,42 +2154,36 @@
             loadData();
         }, 500);
         searchInput.addEventListener('input', debouncedSearch);
-
         // Year filter
         document.getElementById('year-filter').addEventListener('change', (e) => {
             currentYear = e.target.value;
             currentPage = 1;
             loadData();
         });
-
         // Upazila filter (server-side via loadData)
         document.getElementById('upazila-filter').addEventListener('change', (e) => {
             currentUpazila = e.target.value;
             currentPage = 1;
             loadData();
         });
-
         // Method filter (server-side via loadData)
         document.getElementById('method-filter').addEventListener('change', (e) => {
             currentMethod = e.target.value;
             currentPage = 1;
             loadData();
         });
-
         // Status filter (server-side via loadData)
         document.getElementById('status-filter').addEventListener('change', (e) => {
             currentStatus = e.target.value;
             currentPage = 1;
             loadData();
         });
-
         // Priority filter (server-side via loadData)
         document.getElementById('priority-filter').addEventListener('change', (e) => {
             currentPriority = e.target.value;
             currentPage = 1;
             loadData();
         });
-
         async function loadYears() {
             try {
                 const years = await CRUDManager.fetchList('/projects/years');
@@ -2365,13 +2204,11 @@
             } catch (err) {
             }
         }
-
         async function loadUpazilas() {
             try {
                 const upazilas = await CRUDManager.fetchList('/projects/upazilas');
                 const select = document.getElementById('upazila-filter');
                 if (!select) return;
-
                 const ts = _tomInstances.get(select);
                 upazilas.forEach(upazila => {
                     // Check if option already exists to avoid duplicates
@@ -2391,18 +2228,15 @@
             } catch (err) {
             }
         }
-
         async function loadData() {
             const tbody = document.getElementById('table-body');
             const loading = document.getElementById('loading');
             const emptyState = document.getElementById('empty-state');
             const tableContainer = document.getElementById('table-container');
-
             try {
                 loading.classList.remove('hidden');
                 tableContainer.classList.add('hidden');
                 emptyState.classList.add('hidden');
-
                 const response = await CRUDManager.fetchList('/projects/list', {
                     page: currentPage, limit: recordsPerPage === 'all' ? 9999 : recordsPerPage,
                     search: currentSearch, year: currentYear,
@@ -2411,21 +2245,16 @@
                     method: currentMethod,
                     status: currentStatus
                 });
-
                 loading.classList.add('hidden');
-
                 if (!response.data || response.data.length === 0) {
                     emptyState.classList.remove('hidden');
                     return;
                 }
-
                 tableContainer.classList.remove('hidden');
                 allRecords = response.data;
                 // Sort by updated_at descending (latest first)
                 allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-                console.log('Projects loaded and sorted:', allRecords.map(p => ({ id: p.id, name: p.project_name, updated_at: p.updated_at })).slice(0, 5));
                 renderRows();
-
                 // Records per page selector
                 try {
                     CRUDManager.createRecordsPerPageSelector(
@@ -2435,7 +2264,6 @@
                     );
                 } catch (selectorError) {
                 }
-
                 // Total records count
                 try {
                     const totalRecordsEl = document.getElementById('total-records');
@@ -2445,7 +2273,6 @@
                     }
                 } catch (countError) {
                 }
-
                 // Pagination
                 try {
                     const perPageForPagination = recordsPerPage === 'all' ? response.total : recordsPerPage;
@@ -2457,7 +2284,6 @@
                 CRUDManager.showError('ডেটা লোড করতে ব্যর্থ: ' + err.message);
             }
         }
-
         function sortTable(column) {
             if (sortColumn === column) {
                 sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
@@ -2478,43 +2304,35 @@
             }
             renderRows();
         }
-
         function statusBadge(r) {
             if (r.is_completed) return '<span class="text-sm text-gray-700">সম্পন্ন</span>';
             const pct = parseInt(r.progress_percentage) || 0;
             if (pct >= 100) return '<span class="text-sm text-gray-700">সম্পন্ন</span>';
-
             // Pending: 0% progress
             if (pct === 0) return '<span class="text-sm text-gray-700">অপেক্ষমান</span>';
-
             // At this point: 0 < pct < 100
             // Delayed: created >= 2 months ago AND 0 < progress < 100% AND no progress logged for > 1 month
             const createdAt = new Date(r.created_at);
             const twoMonthsAgo = new Date();
             twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
-
             if (createdAt < twoMonthsAgo) {
                 // Project is at least 2 months old - check if progress was logged recently
                 const oneMonthAgo = new Date();
                 oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-
                 const lastLoggedAt = r.last_logged_at ? new Date(r.last_logged_at) : null;
                 if (!lastLoggedAt || lastLoggedAt < oneMonthAgo) {
                     // No progress logged or last log is more than 1 month old
                     return '<span class="text-sm text-gray-700">বিলম্বিত</span>';
                 }
             }
-
             // Ongoing: 0 < progress < 100%
             return '<span class="text-sm text-gray-700">চলমান</span>';
         }
-
         // Format a number with Bengali digits + thousand-comma separators (en-IN grouping)
         function fmtAmt(num) {
             const n = Math.floor(parseFloat(num) || 0);
             return CRUDManager.toBengaliNumber(n.toLocaleString('en-IN'));
         }
-
         // Toggle gear action dropdown; close all others first
         function toggleActionMenu(e, id) {
             e.stopPropagation();
@@ -2526,53 +2344,42 @@
         document.addEventListener('click', () => {
             document.querySelectorAll('.action-menu-dropdown.open').forEach(m => m.classList.remove('open'));
         });
-
         function progressColor(pct) {
             if (pct >= 100) return 'bg-green-500';
             if (pct >= 60)  return 'bg-amber-500';
             if (pct >= 30)  return 'bg-blue-500';
             return 'bg-gray-400';
         }
-
         function getStatusKey(r) {
             if (r.is_completed) return 'completed';
             const pct = parseInt(r.progress_percentage) || 0;
             if (pct >= 100) return 'completed';  // 100% progress = completed
-
             // Pending: 0% progress (regardless of age)
             if (pct === 0) return 'pending';
-
             // At this point: 0 < pct < 100
             // Delayed: created >= 2 months ago AND 0 < progress < 100% AND no progress logged for > 1 month
             const createdAt = new Date(r.created_at);
             const twoMonthsAgo = new Date();
             twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
-
             if (createdAt < twoMonthsAgo) {
                 // Project is at least 2 months old - check if progress was logged recently
                 const oneMonthAgo = new Date();
                 oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-
                 const lastLoggedAt = r.last_logged_at ? new Date(r.last_logged_at) : null;
                 if (!lastLoggedAt || lastLoggedAt < oneMonthAgo) {
                     // No progress logged or last log is more than 1 month old
                     return 'delayed';
                 }
             }
-
             // Ongoing: 0 < progress < 100% (regardless of age)
             return 'ongoing';
         }
-
         function renderRows() {
             const tbody = document.getElementById('table-body');
             const tableContainer = document.getElementById('table-container');
             const emptyState = document.getElementById('empty-state');
-
             let records = [...allRecords];
-
             // Filters are now applied server-side in loadData()
-
             // Update total records count
             try {
                 const totalRecordsEl = document.getElementById('total-records');
@@ -2582,7 +2389,6 @@
                 }
             } catch (countError) {
             }
-
             // Show/hide table based on filtered result
             if (records.length === 0) {
                 tableContainer.classList.add('hidden');
@@ -2592,7 +2398,6 @@
                 tableContainer.classList.remove('hidden');
                 emptyState.classList.add('hidden');
             }
-
             if (sortColumn) {
                 records.sort((a, b) => {
                     let aVal = a[sortColumn] ?? '';
@@ -2606,7 +2411,6 @@
                     return sortDirection === 'asc' ? cmp : -cmp;
                 });
             }
-
             tbody.innerHTML = '';
             records.forEach(record => {
                 const pct = parseInt(record.progress_percentage) || 0;
@@ -2678,10 +2482,8 @@
                 tbody.appendChild(row);
             });
         }
-
         function showDetailModal(r) {
             currentDetailId = r.id;
-
             // Fetch fresh data from API to ensure we get all fields including memo_type
             fetch(`${AuthManager.API_URL}/projects/${r.id}`)
                 .then(res => res.ok ? res.json() : Promise.reject('Failed to fetch'))
@@ -2695,19 +2497,15 @@
                     displayProjectDetails(r);
                 });
         }
-
         function displayProjectDetails(r) {
             // Project name
             document.getElementById('dm-name').innerText = r.project_name || '';
-
             // Header subtitle & detail type
             document.getElementById('dm-quick-type').innerText = r.project_type || '';
             document.getElementById('dm-quick-method').innerText = r.implementation_method || '';
-
             // Status pill
             const dmStatus = document.getElementById('dm-quick-status');
             dmStatus.innerText = r.current_status || '';
-
             // Determine status color class
             let statusClass = 'bg-gray-100 text-gray-700 border border-gray-200';
             if (r.is_completed) {
@@ -2725,12 +2523,10 @@
                     const createdAt = new Date(r.created_at);
                     const twoMonthsAgo = new Date();
                     twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
-
                     if (createdAt < twoMonthsAgo) {
                         // Project is at least 2 months old - check if progress was logged recently
                         const oneMonthAgo = new Date();
                         oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-
                         const lastLoggedAt = r.last_logged_at ? new Date(r.last_logged_at) : null;
                         if (!lastLoggedAt || lastLoggedAt < oneMonthAgo) {
                             // No progress logged or last log is more than 1 month old
@@ -2746,7 +2542,6 @@
                 }
             }
             dmStatus.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold ' + statusClass;
-
             // Details
             document.getElementById('dm-id').innerText = r.project_id || r.id || '';
             document.getElementById('dm-year').innerText = r.financial_year || '';
@@ -2754,7 +2549,6 @@
             document.getElementById('dm-fund-type').innerText = r.fund_type || '';
             const ptDetail = document.getElementById('dm-project-type-detail');
             if (ptDetail) ptDetail.innerText = r.project_type || '';
-
             // Priority pill
             const dmPriority = document.getElementById('dm-priority');
             const priorityMap = { general: 'সাধারণ', medium: 'মধ্যম', top_priority: 'সর্বোচ্চ' };
@@ -2764,28 +2558,22 @@
                 (pVal === 'top_priority' ? 'bg-red-100 text-red-700 border border-red-200' :
                  pVal === 'medium'       ? 'bg-amber-100 text-amber-700 border border-amber-200' :
                                           'bg-gray-100 text-gray-600 border border-gray-200');
-
             // Reference (who recommended the project)
             document.getElementById('dm-reference').innerText = r.reference || 'N/A';
-
             // CPPC fields (only for সিপিপিসি projects)
             const isCppc = (r.implementation_method || '').trim() === 'সিপিপিসি';
             const cppcPresidentWrap = document.getElementById('dm-cppc-president-wrap');
             const cppcMobileWrap = document.getElementById('dm-cppc-mobile-wrap');
-
             if (cppcPresidentWrap) cppcPresidentWrap.classList.toggle('hidden', !isCppc);
             if (cppcMobileWrap) cppcMobileWrap.classList.toggle('hidden', !isCppc);
-
             if (isCppc) {
                 document.getElementById('dm-cppc-president').innerText = r.cppc_president || '-';
                 document.getElementById('dm-cppc-mobile').innerText = r.cppc_president_mobile || '-';
             }
-
             // Layout toggle: Tender projects show Type+Memo+Recommender in one row; CPPC shows Type+Memo in two-column layout
             const dmTenderRow = document.getElementById('dm-tender-row');
             const dmCppcRow2 = document.getElementById('dm-cppc-row-2');
             const dmCppcRow = document.getElementById('dm-cppc-row');
-
             if (isCppc) {
                 // CPPC layout: show type+memo row and recommender+cppc fields row
                 dmTenderRow.style.display = 'none';
@@ -2804,7 +2592,6 @@
                 const memoLabel = r.memo_type === 'ministry' ? 'স্মারক নম্বর' : 'সভার মাস';
                 document.getElementById('dm-memo-label-tender').innerText = memoLabel;
             }
-
             // Approval info (Row 2.5: Type · Date · Memo)
             const approvalType = r.memo_type === 'monthly'
                 ? 'মাসিক সভার সিদ্ধান্ত'
@@ -2815,29 +2602,25 @@
             document.getElementById('dm-approval-date').innerText = r.project_approval_date ? CRUDManager.formatDate(r.project_approval_date) : 'N/A';
             // Convert English digits to Bengali digits for memo number
             const memoNumber = r.approval_memo_number || 'N/A';
-            const bengaliMemoNumber = memoNumber === 'N/A' ? 'N/A' : convertAnyToBengaliDigits(memoNumber);
+            const bengaliMemoNumber = memoNumber.replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
             document.getElementById('dm-memo-number').innerText = bengaliMemoNumber;
             // Update memo label based on memo_type
             const memoLabel = r.memo_type === 'ministry' ? 'স্মারক নম্বর' : 'সভার মাস';
             document.getElementById('dm-memo-label').innerText = memoLabel;
-
             // Progress percentage for the progress bars
             const pct = r.progress_percentage || 0;
             document.getElementById('dm-progress-pct').innerText = pct + '%';
             document.getElementById('dm-progress-bar').style.width = pct + '%';
-
             // Fund release percentage
             const alloc   = parseFloat(r.allocation_amount) || 0;
             const released = parseFloat(r.released_amount) || 0;
             const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
             document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
             document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
-
             // Dates
             document.getElementById('dm-start').innerText = r.start_date ? CRUDManager.formatDate(r.start_date) : 'N/A';
             document.getElementById('dm-expected-end').innerText = r.expected_end_date ? CRUDManager.formatDate(r.expected_end_date) : 'N/A';
             document.getElementById('dm-actual-end').innerText = r.actual_end_date ? CRUDManager.formatDate(r.actual_end_date) : 'N/A';
-
             // Remarks
             const remarksWrap = document.getElementById('dm-remarks-wrap');
             if (r.remarks && r.remarks.trim()) {
@@ -2846,17 +2629,14 @@
             } else {
                 remarksWrap.classList.add('hidden');
             }
-
             // Amounts
             document.getElementById('dm-allocation').innerText = '৳ ' + fmtAmt(r.allocation_amount) + ' টাকা';
             document.getElementById('dm-released').innerText = '৳ ' + fmtAmt(r.released_amount) + ' টাকা';
-
             // Progress log — fetch and render
             const logSection = document.getElementById('dm-progress-log-section');
             const logList    = document.getElementById('dm-progress-log-list');
             logSection.classList.add('hidden');
             logList.innerHTML = '<p class="text-xs text-[#b45309] opacity-60 text-center py-2">লোড হচ্ছে…</p>';
-
             fetch(`${AuthManager.API_URL}/projects/${r.id}/progress`)
                 .then(res => res.ok ? res.json() : Promise.resolve([]))
                 .then(logs => {
@@ -2865,14 +2645,12 @@
                         logList.innerHTML = '';
                         return;
                     }
-
                     // Always use latest log as source of truth for progress and released amounts
                     if (logs.length > 0) {
                         const latestLog = logs[0]; // First log is latest (ordered DESC)
                         const pct = latestLog.progress_percentage || 0;
                         document.getElementById('dm-progress-pct').innerText = pct + '%';
                         document.getElementById('dm-progress-bar').style.width = pct + '%';
-
                         // Update fund release percentage from latest log's released_amount
                         const alloc = parseFloat(r.allocation_amount) || 0;
                         const released = parseFloat(latestLog.released_amount) || 0;
@@ -2892,14 +2670,11 @@
                             : log.is_delayed
                                 ? '<span class="plog-flag plog-flag-delayed">বিলম্ব</span>'
                                 : '';
-
                         // Format status with percentage and date
                         const logDate = CRUDManager.formatDate(log.logged_at);
                         const statusWithPct = `${logDate} তারিখে ${log.current_status} (${CRUDManager.toBengaliNumber(log.progress_percentage)}% সম্পন্ন)`;
-
                         // Special formatting for running bill
                         let detailMessage = log.note ? `<p class="plog-note">${log.note}</p>` : '';
-
                         if (log.current_status === 'রানিং বিল প্রদান') {
                             const billDate = CRUDManager.formatDate(log.logged_at);
                             // Calculate incremental amount: current - previous log's released amount
@@ -2910,10 +2685,8 @@
                             const billMessage = `${billDate} তারিখে ৳ ${billAmount} টাকা রানিং বিল প্রদান করা হয়েছে।`;
                             detailMessage = `<p class="plog-note" style="color:#059669;font-weight:500;margin-top:0.5rem;">${billMessage}</p>` + (log.note ? `<p class="plog-note">${log.note}</p>` : '');
                         }
-
                         // Only show delete button for admin AND if it's the latest log
                         const deleteBtn = (AuthManager.isAdmin() && isLatestLog) ? `<button onclick="showDeleteConfirmation(${currentDetailId}, ${log.id})" class="plog-delete-btn" title="মুছুন">×</button>` : '';
-
                         return `
                         <div class="progress-log-row" id="plog-row-${log.id}">
                             <span class="plog-dot ${dotClass}"></span>
@@ -2934,13 +2707,10 @@
                 .catch(err => {
                     logSection.classList.remove('hidden');
                 });
-
             // Photos — fetch and render gallery
             loadProjectPhotos(r.id);
-
             // Documents — fetch and render list
             loadProjectDocsForDetail(r.id);
-
             // Hide "Add Progress" button if project is completed (100% or is_completed = 1)
             const addProgressBtn = document.getElementById('dm-add-progress-btn');
             if (r.is_completed || r.progress_percentage === 100) {
@@ -2948,50 +2718,40 @@
             } else {
                 addProgressBtn.classList.remove('hidden');
             }
-
             // Open modal FIRST so the container has real pixel dimensions
             document.getElementById('detail-modal').classList.add('open');
-
             // Location map — called after modal is open (modal transition = 0.28s)
             // 350ms gives the animation time to complete before Leaflet measures the container
             loadProjectMap(r.lat_lng, r.project_name, r.upazila);
         }
-
         function closeDetailModal() {
             document.getElementById('detail-modal').classList.remove('open');
         }
-
         document.getElementById('detail-modal').addEventListener('click', function(e) {
             if (e.target === this) closeDetailModal();
         });
-
         // ── Project Location Map (Leaflet) ─────────────────────────
         let _leafletMap = null;
         let _leafletMarker = null;
-
         function loadProjectMap(latLng, projectName, upazila) {
             const section = document.getElementById('dm-map-section');
             const container = document.getElementById('m-map-container');
             const coordText = document.getElementById('dm-coord-text');
             const mapLink   = document.getElementById('dm-map-link');
-
             // Hide if no coordinates
             if (!latLng || !latLng.trim()) {
                 section.classList.add('hidden');
                 return;
             }
-
             const parts = latLng.split(',').map(s => parseFloat(s.trim()));
             if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) {
                 section.classList.add('hidden');
                 return;
             }
             const [lat, lng] = parts;
-
             section.classList.remove('hidden');
             coordText.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
             mapLink.href = `https://www.google.com/maps?q=${lat},${lng}`;
-
             // Leaflet must initialise after the modal is visible (transition = 0.28s).
             // 350ms gives a safe margin; a second invalidateSize at 900ms
             // ensures tiles reload even if the scroll container caused a layout shift.
@@ -3003,7 +2763,6 @@
                         <p style="font-size:11px;color:#b45309;font-weight:600;margin:0">📍 ${upazila || ''}</p>
                         <p style="font-size:10px;color:#64748b;margin:4px 0 0;font-family:monospace">${lat.toFixed(5)}, ${lng.toFixed(5)}</p>
                     </div>`;
-
                 // Amber pin icon
                 const amberIcon = L.divIcon({
                     className: '',
@@ -3021,7 +2780,6 @@
                     iconAnchor: [19, 38],
                     popupAnchor: [0, -40],
                 });
-
                 if (_leafletMap) {
                     // Reuse: pan to new location
                     _leafletMap.setView([lat, lng], 14, { animate: false });
@@ -3052,50 +2810,40 @@
                         .bindPopup(popupHtml, { maxWidth: 240 })
                         .openPopup();
                 }
-
                 // First invalidateSize — forces Leaflet to measure the container
                 _leafletMap.invalidateSize();
-
                 // Second invalidateSize after tiles have had time to load
                 // (scroll containers can cause a layout shift that needs re-measuring)
                 setTimeout(() => { _leafletMap.invalidateSize(); }, 500);
             }, 350);
         }
-
         // ── Photo gallery ──────────────────────────────────────────
         let allPhotos = [];
         let activePhotoType = 'all';
-
         const PHOTO_TYPE_LABELS = {
             before:  'কাজের আগে',
             during:  'চলাকালীন',
             after:   'কাজের পরে',
             general: 'সাধারণ'
         };
-
         async function loadProjectPhotos(projectId) {
             const section  = document.getElementById('dm-photos-section');
             const grid     = document.getElementById('dm-photos-grid');
             const tabsEl   = document.getElementById('dm-photos-tabs');
             const noPhotosMsg = document.getElementById('dm-no-photos-msg');
-
             section.classList.add('hidden');
             grid.innerHTML = '';
             tabsEl.innerHTML = '';
             allPhotos = [];
             activePhotoType = 'all';
-
             // Hide no-photos message initially
             if (noPhotosMsg) noPhotosMsg.classList.add('hidden');
-
             try {
                 const res = await fetch(`${AuthManager.API_URL}/projects/${projectId}/images`);
                 if (!res.ok) return;
                 const photos = await res.json();
-
                 // Show section even if no photos
                 section.classList.remove('hidden');
-
                 if (!photos || photos.length === 0) {
                     // Show no-photos message, hide grid and tabs
                     if (noPhotosMsg) noPhotosMsg.classList.remove('hidden');
@@ -3103,14 +2851,11 @@
                     tabsEl.classList.add('hidden');
                     return;
                 }
-
                 // Hide no-photos message, show grid and tabs
                 if (noPhotosMsg) noPhotosMsg.classList.add('hidden');
                 grid.classList.remove('hidden');
                 tabsEl.classList.remove('hidden');
-
                 allPhotos = photos;
-
                 // Build type filter tabs
                 const types = ['all', ...new Set(photos.map(p => p.photo_type))];
                 types.forEach(type => {
@@ -3126,18 +2871,15 @@
                     };
                     tabsEl.appendChild(tab);
                 });
-
                 renderPhotoGrid('all');
             } catch (e) {
                 // silently hide on error
             }
         }
-
         // ── LightGallery: single dynamic instance on body ──────────────
         // dynamic:true avoids getBoundingClientRect errors when the photo
         // section is inside a hidden parent element.
         let _admLgInstance = null;
-
         function _ensureAdmLgInstance() {
             if (_admLgInstance) return;
             _admLgInstance = lightGallery(document.body, {
@@ -3160,21 +2902,17 @@
                 mobileSettings: { controls: true, showCloseIcon: true, download: true }
             });
         }
-
         function renderPhotoGrid(typeFilter) {
             const grid = document.getElementById('dm-photos-grid');
             grid.innerHTML = '';
-
             const filtered = typeFilter === 'all'
                 ? allPhotos
                 : allPhotos.filter(p => p.photo_type === typeFilter);
-
             filtered.forEach((photo, idx) => {
                 const typeClass = `ptype-${photo.photo_type}`;
                 const typeLabel = PHOTO_TYPE_LABELS[photo.photo_type] || photo.photo_type;
                 const caption   = photo.caption || '';
                 const imgSrc    = `/uploads/${photo.photo_path}`;
-
                 const thumb = document.createElement('div');
                 thumb.className = 'photo-thumb';
                 thumb.style.cursor = 'pointer';
@@ -3204,7 +2942,6 @@
                 grid.appendChild(thumb);
             });
         }
-
         async function deleteDetailPhoto(imageId, btn) {
             if (!confirm('এই ছবিটি মুছে ফেলতে চান?')) return;
             try {
@@ -3221,7 +2958,6 @@
                     tabsEl.querySelector('[data-type="all"]').textContent = `সব (${allPhotos.length})`
                 );
                 if (allPhotos.length === 0) document.getElementById('dm-photos-section').classList.add('hidden');
-
                 // Update project list to reflect deletion
                 const projectIdx = allRecords.findIndex(p => p.id === currentDetailId);
                 if (projectIdx !== -1) {
@@ -3229,36 +2965,28 @@
                     allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
                     renderRows();
                 }
-
                 CRUDManager.showSuccess('ছবিটি মুছে ফেলা হয়েছে');
             } catch (e) {
                 btn.disabled = false;
                 CRUDManager.showError('ছবি মুছতে ব্যর্থ');
             }
         }
-
         function changePage(page) {
             currentPage = page;
             loadData();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
         function changeRecordsPerPage(e) {
             const value = e.target ? e.target.value : e.value;
             recordsPerPage = value === 'all' ? allRecords.length : parseInt(value);
             currentPage = 1;
             loadData();
         }
-
         function openAddModal() {
             editingId = null;
             document.getElementById('modal-title').textContent = 'নতুন প্রকল্প যোগ করুন';
             document.getElementById('project-form').reset();
             document.getElementById('form-id').removeAttribute('readonly');
-            // Clear any previous error messages
-            document.getElementById('modal-error-container').classList.add('hidden');
-            document.getElementById('modal-error-text').textContent = '';
-
             // Destroy and clear all TomSelect instances in the form modal, then reinitialize
             _tomInstances.forEach((tomSelectInstance, element) => {
                 if (element.closest('#form-modal')) {
@@ -3266,7 +2994,6 @@
                     _tomInstances.delete(element);
                 }
             });
-
             // Reinitialize TomSelect for form modal
             setTimeout(() => {
                 document.querySelectorAll('#form-modal select:not([data-no-tomselect])').forEach(el => {
@@ -3287,7 +3014,6 @@
                     }
                 });
             }, 50);
-
             // Clear photo upload state
             pendingFiles = [];
             renderPendingPreviews();
@@ -3302,7 +3028,6 @@
             if (docStatus2) docStatus2.classList.add('hidden');
             const existDocSec = document.getElementById('existing-docs-section');
             if (existDocSec) existDocSec.classList.add('hidden');
-
             // Clear memo dropdown on form reset
             const memoSelect = document.getElementById('approval-memo-select');
             if (memoSelect) {
@@ -3313,13 +3038,10 @@
             const memoNumberInput = document.querySelector('input[name="approval_memo_number"]');
             if (approvalDateInput) approvalDateInput.value = '';
             if (memoNumberInput) memoNumberInput.value = '';
-
             // Clear date fields
             if (_fpInstances['start_date']) _fpInstances['start_date'].clear();
             if (_fpInstances['expected_end_date']) _fpInstances['expected_end_date'].clear();
-
             CRUDManager.openModal('form-modal');
-
             // Setup CPPC fields toggle - ensure hidden initially and listen for changes
             setTimeout(() => {
                 const methodSelect = document.querySelector('select[name="implementation_method"]');
@@ -3331,51 +3053,39 @@
                 }
             }, 100);
         }
-
         function closeFormModal() {
             CRUDManager.closeModal('form-modal');
             editingId = null;
-            originalProjectId = null;
             isLoadingFormData = false;
             pendingFiles = [];
             renderPendingPreviews();
             document.getElementById('upload-status').classList.add('hidden');
             pendingDocs = [];
             renderPendingDocs();
-            // Clear error message
-            document.getElementById('modal-error-container').classList.add('hidden');
-            document.getElementById('modal-error-text').textContent = '';
         }
-
         // Toggle CPPC fields based on implementation_method
         function toggleCppcFieldsVisibility() {
             const methodSelect = document.querySelector('select[name="implementation_method"]');
             if (!methodSelect) return;
-
             // Get the selected value - check multiple sources
             let methodValue = '';
-
             // Try TomSelect first
             const tomInstance = _tomInstances && _tomInstances.get(methodSelect);
             if (tomInstance) {
                 const val = tomInstance.getValue();
                 methodValue = val || '';
             }
-
             // Fallback to direct select value if TomSelect didn't give us anything
             if (!methodValue) {
                 methodValue = methodSelect.value || '';
             }
-
             // Also check the selected option text as ultimate fallback
             if (!methodValue && methodSelect.selectedIndex >= 0) {
                 methodValue = methodSelect.options[methodSelect.selectedIndex].value || '';
             }
-
             const isCppc = (methodValue || '').trim() === 'সিপিপিসি';
             const fieldRow = document.getElementById('cppc-fields-row');
             const mobileRow = document.getElementById('cppc-mobile-row');
-
             // Show or hide the rows - use both class and inline style for reliability
             if (fieldRow) {
                 if (isCppc) {
@@ -3386,7 +3096,6 @@
                     fieldRow.style.display = 'none';
                 }
             }
-
             if (mobileRow) {
                 if (isCppc) {
                     mobileRow.classList.remove('hidden');
@@ -3396,7 +3105,6 @@
                     mobileRow.style.display = 'none';
                 }
             }
-
             // Only clear fields when user explicitly changes to non-CPPC after form has been initialized
             // Don't clear during initial load/edit - preserve values loaded from database
             if (!isCppc && !isLoadingFormData) {
@@ -3406,19 +3114,16 @@
                 if (mobileInput) mobileInput.value = '';
             }
         }
-
         function setupCppcFieldsListener() {
             // Listener is now handled in TomSelect onChange during initialization
             // This function kept for compatibility
         }
-
         // ── Add Progress Log ──────────────────────────────────────────
         let _progressProjectId = null;
         let _progressRecord    = null;
         let _lastProgressStepId = null;
         let _allProgressLogs = [];
         let _addedProgressStepIds = new Set();
-
         async function fetchProgressSteps(method) {
             try {
                 const normalizedMethod = method === 'সিপিপিসি' ? 'cppc' :
@@ -3431,25 +3136,20 @@
                 return [];
             }
         }
-
         async function populateProgressSteps(method) {
             const steps = await fetchProgressSteps(method);
             const sel = document.getElementById('prog-progress-step');
-
             // Normalize method name
             const normalizedMethod = method === 'সিপিপিসি' ? 'cppc' :
                                    method === 'টেন্ডার' ? 'tender' :
                                    method === 'আরএফকিউ' ? 'rfq' : method;
-
             // Determine selectable steps
             let selectableStepOrders = [];
-
             if (_allProgressLogs && _allProgressLogs.length > 0) {
                 // Get step orders from existing logs
                 const stepOrders = [];
                 const stepMap = new Map(); // Map step_id to step_order for quick lookup
                 steps.forEach(s => stepMap.set(s.id, s.step_order));
-
                 _allProgressLogs.forEach(log => {
                     if (log.progress_step_id && stepMap.has(log.progress_step_id)) {
                         const stepOrder = stepMap.get(log.progress_step_id);
@@ -3458,12 +3158,10 @@
                         }
                     }
                 });
-
                 if (stepOrders.length > 0) {
                     const maxStepOrder = Math.max(...stepOrders);
                     const hasStep4 = stepOrders.includes(4);
                     const hasStep5 = stepOrders.includes(5);
-
                     // For tender/rfq: special multi-step workflow
                     if ((normalizedMethod === 'tender' || normalizedMethod === 'rfq')) {
                         if (hasStep4) {
@@ -3486,10 +3184,8 @@
             } else {
                 selectableStepOrders = [1];
             }
-
             const currentStatus = (_progressRecord && _progressRecord.current_status) || '';
             const isWorkCompleted = currentStatus === 'কাজ সম্পন্ন';
-
             const optionsHtml = steps.map(s => {
                 // If Work Completed, only allow Final Bill step
                 let isSelectable = selectableStepOrders.includes(s.step_order);
@@ -3497,38 +3193,30 @@
                     // Only enable the Final Bill step (চূড়ান্ত বিল প্রদান)
                     isSelectable = s.bengali_description && s.bengali_description.includes('চূড়ান্ত বিল');
                 }
-
                 const isDisabled = !isSelectable;
                 const disableReason = isSelectable ? '' : 'এই ধাপ এখনও নির্বাচনযোগ্য নয়';
-
                 const disabledAttr = isDisabled ? 'disabled' : '';
                 const disabledClass = isDisabled ? ' opacity-50' : '';
                 const title = disableReason;
                 return `<option value="${s.id}" data-step-order="${s.step_order}" data-percentage="${s.base_percentage}" data-dynamic="${s.is_dynamic_calculation}" ${disabledAttr} title="${title}" class="${disabledClass}">${s.bengali_description}</option>`;
             }).join('');
-
             sel.innerHTML = '<option value="">-- অগ্রগতি ধাপ নির্বাচন করুন --</option>' + optionsHtml;
             sel.value = '';
             document.getElementById('prog-step-progress-display').classList.add('hidden');
         }
-
         function handleProgStepChange() {
             const sel = document.getElementById('prog-progress-step');
             const opt = sel.options[sel.selectedIndex];
             const stepId = sel.value;
             const display = document.getElementById('prog-step-progress-display');
-
             if (!stepId) { display.classList.add('hidden'); return; }
-
             const isDynamic = opt.getAttribute('data-dynamic') === '1';
             const basePct   = parseInt(opt.getAttribute('data-percentage')) || 0;
             let pct = basePct;
-
             if (isDynamic) {
                 // For dynamic steps, show current progress percentage as default value
                 pct = (_progressRecord && _progressRecord.progress_percentage) || basePct;
             }
-
             // Auto-fill 50% fund release for "১ম কিস্তি বিতরণ সম্পন্ন" (base 50%, non-dynamic)
             if (basePct === 50 && !isDynamic) {
                 const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
@@ -3541,7 +3229,6 @@
                     document.getElementById('prog-released').value = half;
                 }
             }
-
             // Ensure fund release button is visible for রানিং বিল প্রদান (30% dynamic)
             if (basePct === 30 && isDynamic) {
                 const field = document.getElementById('prog-fund-release-field');
@@ -3563,7 +3250,6 @@
                     requiredIndicator.classList.add('hidden');
                 }
             }
-
             // Auto-fill expected final bill amount for চূড়ান্ত বিল প্রদান সমাপ্ত (final bill, base 100%)
             if (basePct === 100 && !isDynamic) {
                 const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
@@ -3578,14 +3264,11 @@
                         ? parseFloat(runningBillLogs[runningBillLogs.length - 1].released_amount || 0)
                         : 0;
                     const expectedFinalBill = alloc - totalRunningBills;
-
                     const method = (_progressRecord?.implementation_method || '').trim();
                     const isCPPC = method === 'সিপিপিসি' || method.toLowerCase() === 'cppc';
-
                     const field = document.getElementById('prog-fund-release-field');
                     const btn   = document.getElementById('prog-fund-toggle');
                     const input = document.getElementById('prog-released');
-
                     // For CPPC and Tender/RFQ: Auto-calculate and hide input, show confirmation message
                     if (isCPPC || (method !== 'সিপিপিসি' && method.toLowerCase() !== 'cppc')) {
                         // Hide the input field for all projects on final bill - amount is auto-calculated
@@ -3597,11 +3280,9 @@
                         msgDiv.id = 'final-bill-auto-msg';
                         msgDiv.style.cssText = 'background:#d1fae5;border:1px solid #6ee7b7;padding:0.75rem 1rem;border-radius:0.5rem;font-size:0.875rem;color:#065f46;margin-bottom:0.5rem;';
                         msgDiv.innerHTML = `✓ চূড়ান্ত বিল স্বয়ংক্রিয়ভাবে গণনা করা হয়েছে: <strong>৳ ${fmtAmt(expectedFinalBill)} টাকা</strong><br><span style="font-size:0.8rem;color:#0b7a5f;">মোট বরাদ্দ ৳ ${fmtAmt(alloc)} - চলমান বিল ৳ ${fmtAmt(totalRunningBills)} = চূড়ান্ত বিল</span>`;
-
                         // Remove existing message if any
                         const existing = document.getElementById('final-bill-auto-msg');
                         if (existing) existing.remove();
-
                         // Insert message before the field
                         field.parentNode.insertBefore(msgDiv, field);
                     } else {
@@ -3612,30 +3293,23 @@
                     }
                 }
             }
-
             // Update hidden legacy status field
             document.getElementById('prog-status').value = opt.text;
-
             display.classList.remove('hidden');
             document.getElementById('prog-step-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
             document.getElementById('prog-step-pct-bar').style.width = pct + '%';
         }
-
         function recalculateProgressFromFundInput() {
             const stepSel = document.getElementById('prog-progress-step');
             if (!stepSel || !stepSel.value) return;
-
             const opt = stepSel.selectedOptions[0];
             const isDynamic = opt.getAttribute('data-dynamic') === '1';
             const basePct = parseInt(opt.getAttribute('data-percentage')) || 0;
-
             if (!isDynamic) return; // Only recalculate for dynamic steps
-
             const inputReleased = parseFloat(document.getElementById('prog-released').value) || 0;
             const previousReleased = parseFloat((_progressRecord && _progressRecord.released_amount) || 0);
             const totalReleased = previousReleased + inputReleased;
             const alloc = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
-
             let pct = basePct;
             if (alloc > 0) {
                 const ratio = Math.min(totalReleased / alloc, 1.0);
@@ -3643,31 +3317,26 @@
                 // Calculation uses cumulative released amount (previous + current input)
                 pct = Math.round(basePct + (ratio * 60));
             }
-
             document.getElementById('prog-step-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
             document.getElementById('prog-step-pct-bar').style.width = pct + '%';
         }
-
         async function loadProgressModalLog(projectId) {
             const method  = (_progressRecord && _progressRecord.implementation_method) || '';
             const section = document.getElementById('prog-modal-log-section');
             const list    = document.getElementById('prog-modal-log-list');
             // History section hidden for all methods
             section.classList.add('hidden');
-
             try {
                 const res = await fetch(`${AuthManager.API_URL}/projects/${projectId}/progress`);
                 if (!res.ok) return;
                 const logs = await res.json();
                 _allProgressLogs = logs || [];
-
                 // Extract all progress step IDs to disable already-added steps
                 _addedProgressStepIds = new Set();
                 if (logs && logs.length > 0) {
                     // logs[0] is most recent (ordered by logged_at DESC)
                     const lastLog = logs[0];
                     _lastProgressStepId = lastLog.progress_step_id || null;
-
                     // Collect all step IDs from the progress history
                     logs.forEach(log => {
                         if (log.progress_step_id) {
@@ -3675,7 +3344,6 @@
                         }
                     });
                 }
-
                 // Note: History section display is hidden for all methods
                 // but we still fetch logs to prevent duplicate/lower steps
             } catch (e) {
@@ -3684,7 +3352,6 @@
                 _addedProgressStepIds = new Set();
             }
         }
-
         function toggleFundRelease() {
             const field  = document.getElementById('prog-fund-release-field');
             const icon   = document.getElementById('prog-fund-toggle-icon');
@@ -3701,7 +3368,6 @@
                 document.getElementById('prog-released').focus();
             }
         }
-
         async function openAddProgressModal(record) {
             // Support passing either a full record object or just an ID string (fallback)
             if (typeof record === 'object' && record !== null) {
@@ -3721,23 +3387,19 @@
                     _progressRecord = null;
                 }
             }
-
             // Header title
             const name = (_progressRecord && _progressRecord.project_name)
                 ? _progressRecord.project_name
                 : ('প্রকল্প #' + _progressProjectId);
             document.getElementById('progress-modal-project-id').textContent = name;
-
             // Populate current progress display
             const pct      = (_progressRecord && _progressRecord.progress_percentage) || 0;
             const released = parseFloat((_progressRecord && _progressRecord.released_amount) || 0);
             const alloc    = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
             document.getElementById('prog-current-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
             document.getElementById('prog-current-bar').style.width = pct + '%';
-
             // Load progress log history FIRST (to set _lastProgressStepId before populating steps)
             await loadProgressModalLog(_progressProjectId);
-
             // Populate latest status text (index 0 is most recent due to DESC order)
             if (_allProgressLogs && _allProgressLogs.length > 0) {
                 const lastLog = _allProgressLogs[0];
@@ -3746,11 +3408,9 @@
                 // For new projects with no progress logs, show default initial status
                 document.getElementById('prog-latest-status-text').textContent = 'কার্যক্রম শুরু হয় নাই';
             }
-
             // Populate progress steps filtered by implementation method
             const method = (_progressRecord && _progressRecord.implementation_method) || '';
             await populateProgressSteps(method);
-
             // Reset form & fund release section
             document.getElementById('progress-form').reset();
             // Set activity_date to today by default
@@ -3759,32 +3419,25 @@
             document.getElementById('prog-fund-release-field').classList.add('hidden');
             document.getElementById('prog-fund-toggle').innerHTML =
                 `<svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg> তহবিল ছাড় যোগ করুন`;
-
             // Show/hide fund release block based on:
             // 1. CPPC method = always hidden
             // 2. Other methods = show when status is "কাজ চলমান" or "রানিং বিল প্রদান"
             const isCppc = method === 'সিপিপিসি';
             const currentStatus = (_progressRecord && _progressRecord.current_status) || '';
-
             // Fund release is allowed for specific statuses
             const showFundRelease = !isCppc && (
                 currentStatus === 'কাজ চলমান' ||
                 currentStatus === 'রানিং বিল প্রদান'
             );
-
             document.getElementById('prog-fund-toggle').parentElement.style.display = showFundRelease ? 'block' : 'none';
             // prog-pct-preview removed
-
             updateProgressPreview();
-
             // Add event listener for fund release input to recalculate progress in real-time
             document.getElementById('prog-released').addEventListener('input', recalculateProgressFromFundInput);
-
             // Show modal
             document.getElementById('progress-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
-
         function closeProgressModal() {
             document.getElementById('progress-modal').classList.add('hidden');
             document.body.style.overflow = '';
@@ -3793,41 +3446,30 @@
             _lastProgressStepId = null;
             _allProgressLogs = [];
         }
-
         // Error modal functions
         function showErrorModal(message, subtitle = 'ত্রুটি') {
             try {
                 const msgEl = document.getElementById('error-modal-message');
                 const subtitleEl = document.getElementById('error-modal-subtitle');
                 const modalEl = document.getElementById('error-modal');
-
                 if (!msgEl || !subtitleEl || !modalEl) {
-                    console.error('Error modal elements missing:', { msgEl: !!msgEl, subtitleEl: !!subtitleEl, modalEl: !!modalEl });
                     alert(message); // Fallback
                     return;
                 }
-
                 msgEl.textContent = message;
                 subtitleEl.textContent = subtitle;
                 modalEl.classList.remove('hidden');
-
                 // Force a reflow to ensure the change is processed
                 modalEl.offsetHeight;
-
-                console.log('Error modal shown:', { hidden: modalEl.classList.contains('hidden'), message, subtitle });
             } catch (err) {
-                console.error('Error showing modal:', err);
                 alert(message); // Fallback
             }
         }
-
         function closeErrorModal() {
             document.getElementById('error-modal').classList.add('hidden');
         }
-
         // Final Bill Warning Modal functions
         let _finalBillWarningResolve = null;
-
         function showFinalBillWarning(allocation, totalRunningBills, expectedFinalBill, userEnteredAmount) {
             return new Promise((resolve) => {
                 _finalBillWarningResolve = resolve;
@@ -3838,7 +3480,6 @@
                 document.getElementById('final-bill-warning-modal').classList.remove('hidden');
             });
         }
-
         function cancelFinalBillWarning() {
             document.getElementById('final-bill-warning-modal').classList.add('hidden');
             if (_finalBillWarningResolve) {
@@ -3846,7 +3487,6 @@
                 _finalBillWarningResolve = null;
             }
         }
-
         function confirmFinalBillWarning() {
             document.getElementById('final-bill-warning-modal').classList.add('hidden');
             if (_finalBillWarningResolve) {
@@ -3854,15 +3494,12 @@
                 _finalBillWarningResolve = null;
             }
         }
-
         // Global variables for delete confirmation
         let _deleteConfirmationData = { projectId: null, logId: null };
         let _docDeleteData = { projectId: null, docId: null, filename: null };
-
         // Re-render progress logs in detail modal to show/hide delete buttons correctly
         function rerenderProgressLogsInModal() {
             if (!_allProgressLogs || _allProgressLogs.length === 0) return;
-
             const logList = document.getElementById('dm-progress-log-list');
             const html = _allProgressLogs.map((log, index) => {
                 const isLatestLog = (index === 0); // First log is the latest (ordered DESC)
@@ -3874,11 +3511,9 @@
                     : log.is_delayed
                         ? '<span class="plog-flag plog-flag-delayed">বিলম্ব</span>'
                         : '';
-
                 const logDate = CRUDManager.formatDate(log.logged_at);
                 const statusWithPct = `${logDate} তারিখে ${log.current_status} (${CRUDManager.toBengaliNumber(log.progress_percentage)}% সম্পন্ন)`;
                 let detailMessage = log.note ? `<p class="plog-note">${log.note}</p>` : '';
-
                 if (log.current_status === 'রানিং বিল প্রদান') {
                     const billDate = logDate;
                     // Calculate incremental amount: current - previous log's released amount
@@ -3889,10 +3524,8 @@
                     const billMessage = `${billDate} তারিখে ৳ ${billAmount} টাকা রানিং বিল প্রদান করা হয়েছে।`;
                     detailMessage = `<p class="plog-note" style="color:#059669;font-weight:500;margin-top:0.5rem;">${billMessage}</p>` + (log.note ? `<p class="plog-note">${log.note}</p>` : '');
                 }
-
                 // Only show delete button for admin AND if it's the latest log
                 const deleteBtn = (AuthManager.isAdmin() && isLatestLog) ? `<button onclick="showDeleteConfirmation(${currentDetailId}, ${log.id})" class="plog-delete-btn" title="মুছুন">×</button>` : '';
-
                 return `
                 <div class="progress-log-row" id="plog-row-${log.id}">
                     <span class="plog-dot ${dotClass}"></span>
@@ -3908,81 +3541,65 @@
                     </div>
                 </div>`;
             }).join('');
-
             logList.innerHTML = html;
         }
-
         function showDeleteConfirmation(projectId, logId) {
             if (!AuthManager.isAdmin()) {
                 CRUDManager.showError('আপনার এই অনুমতি নেই');
                 return;
             }
-
             _deleteConfirmationData = { projectId, logId };
             document.getElementById('delete-confirmation-modal').classList.remove('hidden');
         }
-
         function cancelDelete() {
             document.getElementById('delete-confirmation-modal').classList.add('hidden');
             _deleteConfirmationData = { projectId: null, logId: null };
         }
-
         async function confirmDelete() {
             const { projectId, logId } = _deleteConfirmationData;
-
             try {
                 const res = await AuthManager.fetch(
                     `${AuthManager.API_URL}/projects/${projectId}/progress/${logId}`,
                     { method: 'DELETE' }
                 );
-
                 if (!res.ok) {
                     const err = await res.json().catch(() => ({}));
                     throw new Error(err.message || 'মুছতে ব্যর্থ');
                 }
-
                 // Close confirmation modal
                 document.getElementById('delete-confirmation-modal').classList.add('hidden');
-
                 // Remove from DOM
                 const logElement = document.getElementById(`plog-row-${logId}`);
                 if (logElement) {
                     logElement.remove();
                 }
-
                 // Remove from _allProgressLogs array
                 _allProgressLogs = _allProgressLogs.filter(log => log.id !== logId);
-
                 // Only update modal if it's still open
                 if (!_progressRecord || !_progressProjectId) {
                     CRUDManager.showSuccess('অগ্রগতি লগ মুছে ফেলা হয়েছে');
                     return;
                 }
-
                 // Fetch the updated project from backend to get recalculated progress
                 try {
                     const projectRes = await fetch(`${AuthManager.API_URL}/projects/${projectId}`);
                     if (projectRes.ok) {
                         const updatedProject = await projectRes.json();
-
                         // Update _progressRecord with the new recalculated values from backend
                         _progressRecord.progress_percentage = updatedProject.progress_percentage;
                         _progressRecord.released_amount = updatedProject.released_amount;
                         _progressRecord.current_status = updatedProject.current_status;
                         _progressRecord.is_completed = updatedProject.is_completed;
                         _progressRecord.is_delayed = updatedProject.is_delayed;
-
                         // Update modal display with recalculated values
                         const pct = updatedProject.progress_percentage || 0;
                         const released = parseFloat(updatedProject.released_amount || 0);
                         const alloc = parseFloat(updatedProject.allocation_amount || 0);
-
                         document.getElementById('prog-current-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
                         document.getElementById('prog-current-bar').style.width = pct + '%';
                         const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
                         document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
                         document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
-
                         // Update the project in allRecords with the new progress percentage
                         const projectIndex = allRecords.findIndex(p => p.id === projectId);
                         if (projectIndex !== -1) {
@@ -3994,16 +3611,12 @@
                         }
                     }
                 } catch (err) {
-                    console.error('Failed to fetch updated project:', err);
                 }
-
                 // Update progress step dropdown and fund release visibility
                 await loadProgressModalLog(_progressProjectId);
                 populateProgressSteps(_progressRecord.implementation_method);
-
                 // Re-render progress logs to show delete button on new latest log ✅
                 rerenderProgressLogsInModal();
-
                 // Rebuild _addedProgressStepIds
                 _addedProgressStepIds = new Set();
                 _allProgressLogs.forEach(log => {
@@ -4016,41 +3629,33 @@
                 } else {
                     _lastProgressStepId = null;
                 }
-
                 // Update the project table to show updated progress bar
                 renderRows();
-
                 CRUDManager.showSuccess('অগ্রগতি লগ মুছে ফেলা হয়েছে');
                 _deleteConfirmationData = { projectId: null, logId: null };
             } catch (error) {
                 CRUDManager.showError('ত্রুটি: ' + error.message);
             }
         }
-
         function showDocDeleteModal(projectId, docId, filename) {
             _docDeleteData = { projectId, docId, filename };
             document.getElementById('doc-delete-filename').textContent = filename;
             document.getElementById('doc-delete-modal').classList.remove('hidden');
         }
-
         function cancelDocDelete() {
             document.getElementById('doc-delete-modal').classList.add('hidden');
             _docDeleteData = { projectId: null, docId: null, filename: null };
         }
-
         async function confirmDocDelete() {
             const { projectId, docId } = _docDeleteData;
-
             try {
                 const r = await AuthManager.fetch(
                     `${AuthManager.API_URL}/projects/${projectId}/documents/${docId}`,
                     { method: 'DELETE' }
                 );
                 if (!r.ok) throw new Error();
-
                 document.getElementById('doc-delete-modal').classList.add('hidden');
                 _docDeleteData = { projectId: null, docId: null, filename: null };
-
                 // Remove from docs array and re-render
                 const docs = window._currentDetailDocs;
                 const list = window._currentDetailList;
@@ -4059,9 +3664,7 @@
                     if (idx > -1) docs.splice(idx, 1);
                     renderDetailDocs(docs, projectId, list);
                 }
-
                 CRUDManager.showSuccess('ফাইলটি মুছে ফেলা হয়েছে');
-
                 // Update project list to reflect deletion
                 const projectIdx = allRecords.findIndex(p => p.id === projectId);
                 if (projectIdx !== -1) {
@@ -4069,7 +3672,6 @@
                     allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
                     renderRows();
                 }
-
                 window._currentDetailProjectId = null;
                 window._currentDetailDocs = null;
                 window._currentDetailList = null;
@@ -4077,9 +3679,7 @@
                 CRUDManager.showError('মুছতে ব্যর্থ');
             }
         }
-
         function updateProgressPreview() { /* progress % input removed */ }
-
         document.getElementById('progress-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             if (!_progressProjectId) return;
@@ -4090,19 +3690,16 @@
                 const fundOpen = !document.getElementById('prog-fund-release-field').classList.contains('hidden');
                 const stepSel = document.getElementById('prog-progress-step');
                 const stepOpt = stepSel.options[stepSel.selectedIndex];
-
                 if (!stepSel.value) {
                     showErrorModal('অনুগ্রহ করে একটি অগ্রগতি ধাপ নির্বাচন করুন', 'ধাপ নির্বাচন করুন');
                     btn.disabled = false;
                     btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
                     return;
                 }
-
                 // Validate progress step selection FIRST to get step info
                 const stepBasePct = parseInt(stepOpt.getAttribute('data-percentage')) || 0;
                 const isDynamic = stepOpt.getAttribute('data-dynamic') === '1';
                 const currentProgress = (_progressRecord && _progressRecord.progress_percentage) || 0;
-
                 // For dynamic steps, calculate cumulative released amount
                 let cumulativeReleasedAmount = null;
                 let stepPercentage = stepBasePct;
@@ -4116,11 +3713,9 @@
                         stepPercentage = Math.round(stepBasePct + (ratio * 60));
                     }
                 }
-
                 // For final bill (100% completion), use auto-calculated amount
                 const method = (_progressRecord?.implementation_method || '').trim();
                 const isCPPCProject = method === 'সিপিপিসি' || method.toLowerCase() === 'cppc';
-
                 let finalBillCumulativeAmount = null;
                 // For final bills: always send the calculated amount (even if field is hidden)
                 if (stepBasePct === 100 && !isDynamic) {
@@ -4132,9 +3727,7 @@
                     if (inputReleased >= 0) {
                         finalBillCumulativeAmount = inputReleased;
                     }
-                    console.log('Final bill released amount:', { inputValue, inputReleased, finalBillCumulativeAmount, allocation: _progressRecord?.allocation_amount });
                 }
-
                 // For final bills: ensure we have the allocation amount
                 let finalReleaseAmount = null;
                 if (stepBasePct === 100 && !isDynamic) {
@@ -4144,7 +3737,6 @@
                         finalReleaseAmount = alloc;
                     }
                 }
-
                 const payload = {
                     progress_step_id:    parseInt(stepSel.value, 10),
                     current_status:      stepOpt ? stepOpt.text : '',
@@ -4159,28 +3751,23 @@
                     note:                document.getElementById('prog-note').value.trim(),
                     activity_date:       document.getElementById('prog-activity-date').value || null
                 };
-
                 // Add calculated progress percentage to payload
                 payload.progress_percentage = stepPercentage;
-
                 if (stepPercentage < currentProgress) {
                     showErrorModal(`এই ধাপ ইতিমধ্যে সম্পন্ন হয়েছে এবং আপনি পূর্ববর্তী ধাপে ফিরে যেতে পারবেন না।\n\nবর্তমান অগ্রগতি: ${CRUDManager.toBengaliNumber(currentProgress)}%\nনির্বাচিত ধাপের অগ্রগতি: ${CRUDManager.toBengaliNumber(stepPercentage)}%`, 'পূর্ববর্তী ধাপ');
                     btn.disabled = false;
                     btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
                     return;
                 }
-
                 // Allow duplicate step only for Dynamic steps (like Running Bill - রানিং বিল প্রদান)
                 // Dynamic steps can be added multiple times, other steps cannot
                 const isDuplicateStep = _addedProgressStepIds.has(payload.progress_step_id);
-
                 if (isDuplicateStep && !isDynamic) {
                     showErrorModal('এই অগ্রগতি ধাপ ইতিমধ্যে এই প্রকল্পে যোগ করা হয়েছে। অন্য একটি ধাপ নির্বাচন করুন।', 'ধাপ ইতিমধ্যে যোগ করা হয়েছে');
                     btn.disabled = false;
                     btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
                     return;
                 }
-
                 // Validate: Running Bill stage requires fund release amount (only for dynamic running bills, not CPPC installments)
                 const isRunningBillStage = payload.current_status === 'রানিং বিল প্রদান' && isDynamic;
                 if (isRunningBillStage) {
@@ -4191,16 +3778,13 @@
                         btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> সংরক্ষণ করুন';
                         return;
                     }
-
                     // Validate: Total running bills cannot exceed total allocation
                     // For dynamic steps (running bills), releasedAmt is already the cumulative amount
                     const allocation = parseFloat(_progressRecord?.allocation_amount) || 0;
                     const cumulativeAmount = parseFloat(releasedAmt) || 0;
-
                     // Round to nearest whole number to avoid floating-point precision issues
                     const totalRounded = Math.round(cumulativeAmount);
                     const allocationRounded = Math.round(allocation);
-
                     if (totalRounded > allocationRounded) {
                         const previousReleased = parseFloat(_progressRecord?.released_amount) || 0;
                         showErrorModal(
@@ -4212,28 +3796,21 @@
                         return;
                     }
                 }
-
                 // Final Bill is now auto-calculated and non-editable, so no warning needed
                 // The amount is always correct since it's calculated as (allocation - sum of running bills)
-
                 // For final bills: ensure released_amount is always included (don't delete it)
                 const isFinalBill = (stepOpt?.getAttribute('data-percentage') === '100');
                 if (payload.released_amount === null && !isFinalBill) {
                     delete payload.released_amount;
                 }
-
-                console.log('Sending progress payload:', { ...payload, is_final_bill: isFinalBill });
-
                 const res = await AuthManager.fetch(
                     `${AuthManager.API_URL}/projects/${_progressProjectId}/progress`,
                     { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }
                 );
-
                 const responseData = await res.json();
                 if (!res.ok) {
                     throw new Error(responseData.message || 'সংরক্ষণ ব্যর্থ');
                 }
-
                 // Show appropriate success message
                 let successMsg = 'অগ্রগতি সফলভাবে সংরক্ষিত হয়েছে';
                 if (stepPercentage === 100) {
@@ -4241,7 +3818,6 @@
                 }
                 CRUDManager.showSuccess(successMsg);
                 const savedProjectId = _progressProjectId;
-
                 // Immediately update fund release percentage in detail modal if open
                 if (currentDetailId && (currentDetailId === savedProjectId || currentDetailId === String(savedProjectId))) {
                     if (responseData.released_amount !== undefined && responseData.allocation_amount !== undefined) {
@@ -4253,7 +3829,6 @@
                         document.getElementById('dm-released').innerText = '৳ ' + fmtAmt(released) + ' টাকা';
                     }
                 }
-
                 // Refresh detail popup if open (to get progress logs and other updated data)
                 if (currentDetailId && (currentDetailId === savedProjectId || currentDetailId === String(savedProjectId))) {
                     const record = await CRUDManager.fetchList(`/projects/${currentDetailId}`);
@@ -4261,7 +3836,6 @@
                 }
                 // Refresh table list in background
                 loadData();
-
                 // Close modal after successful save
                 closeProgressModal();
             } catch (err) {
@@ -4271,38 +3845,18 @@
                 btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> আপডেট সংরক্ষণ করুন';
             }
         });
-
         async function editRecord(id) {
             try {
                 editingId = id;
                 isLoadingFormData = true;
                 const record = await CRUDManager.fetchList(`/projects/${id}`);
-
-                console.log('📋 Full record from API:', record);
-                console.log('📋 Approval memo ID:', record.approval_memo_id);
-
-                // Store original project_id for comparison during save
-                originalProjectId = record.project_id;
-
                 document.getElementById('modal-title').textContent = 'প্রকল্প সম্পাদনা';
-
-                // Clear any previous error messages
-                document.getElementById('modal-error-container').classList.add('hidden');
-                document.getElementById('modal-error-text').textContent = '';
-
                 const form = document.getElementById('project-form');
-
-                // Clear form first to ensure clean state when editing
-                form.reset();
-
                 CRUDManager.populateForm(form, record);
-
                 // Load approval memos for the financial year first (this recreates TomSelect)
                 await onFinancialYearChange();
-
                 // Small delay to ensure TomSelect is fully initialized after onFinancialYearChange
                 await new Promise(resolve => setTimeout(resolve, 100));
-
                 // Sync TomSelect for implementation_method AFTER form population
                 const methodSelect = document.querySelector('select[name="implementation_method"]');
                 if (methodSelect && record.implementation_method) {
@@ -4312,72 +3866,42 @@
                         methodTomInstance.sync();
                     }
                 }
-
                 // If the project has an approval_memo_id, select it in the dropdown
                 // Do this AFTER onFinancialYearChange has loaded the memo options
                 if (record.approval_memo_id) {
-                    console.log('📋 Setting approval_memo_id:', record.approval_memo_id);
                     const memoSelect = document.getElementById('approval-memo-select');
-
-                    // Wait a bit longer to ensure TomSelect is ready
-                    await new Promise(resolve => setTimeout(resolve, 150));
-
+                    // Use TomSelect API to set value (not direct assignment)
                     const tomInstance = _tomInstances && _tomInstances.get(memoSelect);
-                    console.log('📋 TomSelect instance found:', !!tomInstance);
-
                     if (tomInstance) {
-                        // Clear any existing value first
-                        tomInstance.clear();
-                        // Set the new value
                         tomInstance.setValue(record.approval_memo_id);
                         tomInstance.sync();
-                        console.log('📋 TomSelect value set:', tomInstance.getValue());
                     } else {
-                        // Fallback to direct assignment
                         memoSelect.value = record.approval_memo_id;
-                        console.log('📋 Direct value assignment:', memoSelect.value);
                     }
-
                     // Trigger the change event to populate the date/number fields
-                    setTimeout(() => {
-                        onApprovalMemoChange();
-                        console.log('📋 onApprovalMemoChange called');
-                    }, 50);
-                } else {
-                    console.log('⏭️ No approval_memo_id to load');
+                    onApprovalMemoChange();
                 }
-
-                // ID field is now editable while editing - validation for uniqueness is done on save
-
+                // ID field readonly while editing (ID is the PK)
+                document.getElementById('form-id').setAttribute('readonly', 'readonly');
                 // Clear pending photo state for this edit session
                 pendingFiles = [];
                 renderPendingPreviews();
                 document.getElementById('upload-status').classList.add('hidden');
-
                 // Clear pending doc state and load existing docs
                 pendingDocs = [];
                 renderPendingDocs();
                 const docStatus = document.getElementById('doc-upload-status');
                 if (docStatus) docStatus.classList.add('hidden');
                 loadExistingDocsForForm(id);
-
                 // Load existing photos into the form
                 loadExistingPhotosForForm(id);
-
                 // Sync Tom Select instances
                 _tomInstances.forEach((ts, el) => { if (el.closest('#form-modal')) ts.sync(); });
-
                 CRUDManager.openModal('form-modal');
-
                 // Toggle CPPC fields visibility based on edit data - AFTER all TomSelect syncs
                 setTimeout(() => {
                     toggleCppcFieldsVisibility();
                     setupCppcFieldsListener();
-                    // Ensure project_id is populated last to avoid being overwritten
-                    const projectIdInput = document.getElementById('form-id');
-                    if (projectIdInput && record.project_id) {
-                        projectIdInput.value = record.project_id;
-                    }
                     isLoadingFormData = false;
                 }, 300);
             } catch (err) {
@@ -4385,24 +3909,19 @@
                 CRUDManager.showError('রেকর্ড লোড করতে ব্যর্থ: ' + err.message);
             }
         }
-
         let _projectDeleteData = { id: null };
-
         function showProjectDeleteModal(id) {
             _projectDeleteData = { id };
             document.getElementById('project-delete-id').textContent = id;
             document.getElementById('project-delete-modal').classList.remove('hidden');
         }
-
         function cancelProjectDelete() {
             document.getElementById('project-delete-modal').classList.add('hidden');
             _projectDeleteData = { id: null };
         }
-
         async function confirmProjectDelete() {
             const { id } = _projectDeleteData;
             if (!id) return;
-
             try {
                 const url = `${AuthManager.API_URL}/projects/${id}`;
                 await AuthManager.fetch(url, { method: 'DELETE' });
@@ -4414,23 +3933,18 @@
                 CRUDManager.showError('মুছতে ব্যর্থ: ' + err.message);
             }
         }
-
         async function deleteRecord(id) {
             showProjectDeleteModal(id);
         }
-
         // ── Photo upload state ──────────────────────────────────────
         let pendingFiles = []; // Array of { file, type, caption }
-
         const PHOTO_TYPES_BD = {
             general: 'সাধারণ', before: 'কাজের আগে',
             during: 'চলাকালীন', after: 'কাজের পরে'
         };
-
         function initPhotoUpload() {
             const zone  = document.getElementById('upload-drop-zone');
             const input = document.getElementById('photo-file-input');
-
             input.addEventListener('change', () => addFiles(Array.from(input.files)));
             zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
             zone.addEventListener('dragleave', ()  => zone.classList.remove('drag-over'));
@@ -4443,7 +3957,6 @@
                 input.value = '';
             });
         }
-
         function addFiles(files) {
             const remaining = 10 - pendingFiles.length;
             if (remaining <= 0) { CRUDManager.showError('সর্বোচ্চ ১০টি ছবি যোগ করা যাবে'); return; }
@@ -4458,30 +3971,24 @@
             renderPendingPreviews();
             document.getElementById('photo-file-input').value = '';
         }
-
         function renderPendingPreviews() {
             const grid = document.getElementById('upload-preview-grid');
             const metaEl = document.getElementById('upload-per-file-meta');
             grid.innerHTML = '';
             metaEl.innerHTML = '';
-
             if (pendingFiles.length === 0) return;
-
             pendingFiles.forEach((item, idx) => {
                 // Thumbnail
                 const wrap = document.createElement('div');
                 wrap.className = 'upload-preview-item';
-
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(item.file);
                 img.onload = () => URL.revokeObjectURL(img.src);
                 wrap.appendChild(img);
-
                 const badge = document.createElement('span');
                 badge.className = 'preview-type-badge';
                 badge.textContent = PHOTO_TYPES_BD[item.type] || item.type;
                 wrap.appendChild(badge);
-
                 const rmBtn = document.createElement('button');
                 rmBtn.type = 'button';
                 rmBtn.className = 'preview-remove';
@@ -4490,7 +3997,6 @@
                 rmBtn.onclick = () => { pendingFiles.splice(idx, 1); renderPendingPreviews(); };
                 wrap.appendChild(rmBtn);
                 grid.appendChild(wrap);
-
                 // Per-file type + caption row
                 const row = document.createElement('div');
                 row.className = 'flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2';
@@ -4515,33 +4021,27 @@
                 metaEl.appendChild(row);
             });
         }
-
         async function uploadPendingPhotos(projectId) {
             if (pendingFiles.length === 0) return;
-
             const statusEl = document.getElementById('upload-status');
             statusEl.classList.remove('hidden');
             statusEl.textContent = `${pendingFiles.length}টি ছবি আপলোড হচ্ছে…`;
-
             const fd = new FormData();
             pendingFiles.forEach(item => {
                 fd.append('images', item.file);
                 fd.append('photo_type', item.type);
                 fd.append('caption', item.caption || '');
             });
-
             const url = `${AuthManager.API_URL}/projects/${projectId}/images`;
             const res = await AuthManager.fetch(url, { method: 'POST', body: fd });
             if (!res.ok) {
                 const err = await res.json().catch(() => ({}));
                 throw new Error(err.error || 'ছবি আপলোড ব্যর্থ');
             }
-
             statusEl.textContent = `${pendingFiles.length}টি ছবি সফলভাবে আপলোড হয়েছে ✓`;
             pendingFiles = [];
             renderPendingPreviews();
         }
-
         async function loadExistingPhotosForForm(projectId) {
             const section = document.getElementById('existing-photos-section');
             const grid    = document.getElementById('existing-photos-grid');
@@ -4549,19 +4049,16 @@
             section.classList.add('hidden');
             grid.innerHTML = '';
             tabsEl.innerHTML = '';
-
             if (!projectId) return;
             try {
                 const res = await fetch(`${AuthManager.API_URL}/projects/${projectId}/images`);
                 if (!res.ok) return;
                 const photos = await res.json();
                 if (!photos || !photos.length) return;
-
                 section.classList.remove('hidden');
                 renderExistingPhotoGrid(photos, projectId, grid, tabsEl);
             } catch(e) { /* silently skip */ }
         }
-
         function renderExistingPhotoGrid(photos, projectId, grid, tabsEl) {
             // Build simple type tabs
             const types = ['all', ...new Set(photos.map(p => p.photo_type))];
@@ -4582,7 +4079,6 @@
             });
             renderExistingGrid(photos, photos, projectId, grid, tabsEl);
         }
-
         function renderExistingGrid(filtered, allPh, projectId, grid, tabsEl) {
             grid.innerHTML = '';
             filtered.forEach(photo => {
@@ -4613,12 +4109,10 @@
                 grid.appendChild(item);
             });
         }
-
         // ─────────────────────────────────────────────────────────────
         // DOCUMENT UPLOAD (add/edit form)
         // ─────────────────────────────────────────────────────────────
         let pendingDocs = []; // Array of { file, caption }
-
         const DOC_ICON_MAP = {
             'pdf':  { bg: '#ef4444', label: 'PDF' },
             'doc':  { bg: '#3b82f6', label: 'DOC' },
@@ -4640,7 +4134,6 @@
             if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
             return (bytes/1024/1024).toFixed(1) + ' MB';
         }
-
         function initDocUpload() {
             const zone  = document.getElementById('doc-drop-zone');
             const input = document.getElementById('doc-file-input');
@@ -4686,7 +4179,6 @@
                 list.appendChild(row);
             });
         }
-
         async function uploadPendingDocs(projectId) {
             if (pendingDocs.length === 0) return;
             const statusEl = document.getElementById('doc-upload-status');
@@ -4702,7 +4194,6 @@
             pendingDocs = [];
             renderPendingDocs();
         }
-
         async function loadExistingDocsForForm(projectId) {
             const section = document.getElementById('existing-docs-section');
             const list    = document.getElementById('existing-docs-list');
@@ -4719,7 +4210,6 @@
                 renderExistingDocs(docs, projectId, list, section);
             } catch(e) { /* silently skip */ }
         }
-
         function renderExistingDocs(docs, projectId, list, section) {
             list.innerHTML = '';
             docs.forEach(doc => {
@@ -4755,10 +4245,8 @@
                 list.appendChild(row);
             });
         }
-
         // ── Quick Upload (inside detail modal) ─────────────────────
         let quickFiles = [];
-
         function openQuickUpload() {
             quickFiles = [];
             renderQuickPreviews();
@@ -4770,7 +4258,6 @@
             quickFiles = [];
             renderQuickPreviews();
         }
-
         function initQuickUpload() {
             const zone  = document.getElementById('quick-drop-zone');
             const input = document.getElementById('quick-file-input');
@@ -4783,7 +4270,6 @@
                     ['image/jpeg','image/jpg','image/png','image/webp'].includes(f.type)));
             });
         }
-
         function addQuickFiles(files) {
             const rem = 10 - quickFiles.length;
             if (rem <= 0) { CRUDManager.showError('সর্বোচ্চ ১০টি ছবি'); return; }
@@ -4793,7 +4279,6 @@
             });
             renderQuickPreviews();
         }
-
         function renderQuickPreviews() {
             const grid = document.getElementById('quick-preview-grid');
             const meta = document.getElementById('quick-per-file-meta');
@@ -4814,7 +4299,6 @@
                 rm.onclick = () => { quickFiles.splice(idx,1); renderQuickPreviews(); };
                 wrap.appendChild(rm);
                 grid.appendChild(wrap);
-
                 const row = document.createElement('div');
                 row.className = 'flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2';
                 row.innerHTML = `
@@ -4833,7 +4317,6 @@
                 meta.appendChild(row);
             });
         }
-
         async function submitQuickUpload() {
             if (quickFiles.length === 0) { CRUDManager.showError('কোনো ছবি নির্বাচন করুন'); return; }
             const btn = document.getElementById('quick-upload-btn');
@@ -4860,19 +4343,14 @@
                 // Close modal and reload project list
                 setTimeout(() => {
                     closeQuickUpload();
-                    console.log('Reloading project list after photo upload, currentDetailId:', currentDetailId);
                     // Update the local record's timestamp to current time
                     const projectIndex = allRecords.findIndex(p => p.id === parseInt(currentDetailId));
                     if (projectIndex !== -1) {
-                        console.log('Found project at index:', projectIndex);
                         allRecords[projectIndex].updated_at = new Date().toISOString();
-                        console.log('Updated project timestamp to:', allRecords[projectIndex].updated_at);
                         // Re-sort and re-render
                         allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
                         renderRows();
-                        console.log('Project list re-sorted and rendered');
                     } else {
-                        console.log('Project not found in allRecords, refreshing from server');
                         loadData();
                     }
                 }, 1200);
@@ -4882,10 +4360,8 @@
                 btn.disabled = false;
             }
         }
-
         // ── Quick Document Upload (inside detail modal) ─────────────
         let quickDocFiles = [];
-
         function openQuickDocUpload() {
             quickDocFiles = [];
             renderQuickDocPreviews();
@@ -4957,19 +4433,14 @@
                 // Close modal and reload project list
                 setTimeout(() => {
                     closeQuickDocUpload();
-                    console.log('Reloading project list after document upload, currentDetailId:', currentDetailId);
                     // Update the local record's timestamp to current time
                     const projectIndex = allRecords.findIndex(p => p.id === parseInt(currentDetailId));
                     if (projectIndex !== -1) {
-                        console.log('Found project at index:', projectIndex);
                         allRecords[projectIndex].updated_at = new Date().toISOString();
-                        console.log('Updated project timestamp to:', allRecords[projectIndex].updated_at);
                         // Re-sort and re-render
                         allRecords.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
                         renderRows();
-                        console.log('Project list re-sorted and rendered');
                     } else {
-                        console.log('Project not found in allRecords, refreshing from server');
                         loadData();
                     }
                 }, 1200);
@@ -4977,7 +4448,6 @@
                 status.textContent = 'ব্যর্থ: ' + e.message;
             }
         }
-
         async function loadProjectDocsForDetail(projectId) {
             const section = document.getElementById('dm-docs-section');
             const list    = document.getElementById('dm-docs-list');
@@ -4993,11 +4463,9 @@
                 renderDetailDocs(docs, projectId, list);
             } catch(e) { list.innerHTML = '<p class="text-xs text-gray-400">লোড ব্যর্থ</p>'; }
         }
-
         function renderDetailDocs(docs, projectId, list) {
             list.innerHTML = '';
             docs.forEach(doc => {
-                console.log('Rendering doc:', doc.original_name, 'Path:', doc.file_path);
                 const icon = getDocIcon(doc.original_name);
                 // For approval memos, show the nice Bengali label; for others, show clean filename
                 const isApprovalMemo = doc.file_path && doc.file_path.includes('approval-memos');
@@ -5028,24 +4496,19 @@
                 list.appendChild(row);
             });
         }
-
         // ═══════════════════════════════════════════════════════════
         // DUPLICATE WARNING MODAL
         // ═══════════════════════════════════════════════════════════
-
         function showDuplicateWarning(duplicates) {
             const modal = document.getElementById('duplicate-warning-modal');
             const listContainer = document.getElementById('duplicate-list');
-
             // Clear previous list
             listContainer.innerHTML = '';
-
             // Generate list items
             duplicates.forEach(dup => {
                 const similarity = dup.similarity_score || 0;
                 const similarityColor = similarity >= 90 ? 'text-red-600' : similarity >= 80 ? 'text-orange-600' : 'text-yellow-600';
                 const similarityBg = similarity >= 90 ? 'bg-red-50' : similarity >= 80 ? 'bg-orange-50' : 'bg-yellow-50';
-
                 const item = document.createElement('div');
                 item.className = `p-4 border rounded-lg ${similarityBg}`;
                 item.innerHTML = `
@@ -5069,12 +4532,10 @@
                 `;
                 listContainer.appendChild(item);
             });
-
             // Show modal
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
-
         function closeDuplicateWarning() {
             const modal = document.getElementById('duplicate-warning-modal');
             modal.classList.add('hidden');
@@ -5082,25 +4543,20 @@
             pendingFormData = null;
             bypassDuplicateCheck = false;
         }
-
         function proceedWithAddProject() {
             if (!pendingFormData) {
                 CRUDManager.showError('ত্রুটি: ফর্ম ডেটা পাওয়া যায়নি');
                 closeDuplicateWarning();
                 return;
             }
-
             closeDuplicateWarning();
             bypassDuplicateCheck = true;
-
             // Trigger form submit again
             const form = document.getElementById('project-form');
             form.dispatchEvent(new Event('submit'));
         }
-
         // Initialise upload zones once DOM ready
         document.addEventListener('DOMContentLoaded', () => { initPhotoUpload(); initQuickUpload(); initDocUpload(); initQuickDocUpload(); });
-
         // Bengali to English numeral conversion helper
         function convertBengaliToEnglishYear(bengaliYear) {
             const bengaliDigits = ['০', '১', '२', '३', '४', '५', '६', '७', '८', '९'];
@@ -5110,16 +4566,13 @@
             bengaliDigits.forEach((bengali, index) => {
                 result = result.replace(new RegExp(bengali, 'g'), englishDigits[index]);
             });
-
             // Also handle Bengali numerals (০-९)
             for (let i = 0; i < 10; i++) {
                 const bengaliDigit = String.fromCharCode(0x09E6 + i);
                 result = result.replace(new RegExp(bengaliDigit, 'g'), englishDigits[i]);
             }
-
             return result;
         }
-
         // Helper function to convert English numbers to Bengali
         function convertEnglishToBengali(englishNumber) {
             if (!englishNumber) return '';
@@ -5131,7 +4584,6 @@
             }
             return result;
         }
-
         // Helper function to convert Bengali to English
         function convertBengaliToEnglish(bengaliNumber) {
             if (!bengaliNumber) return '';
@@ -5150,14 +4602,12 @@
             });
             return result;
         }
-
         function convertAnyToBengaliDigits(number) {
             if (!number) return '';
             let result = String(number);
             const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
             const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
             const devanagariDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-
             // Convert any digit format to Bangla
             englishDigits.forEach((digit, index) => {
                 result = result.replace(new RegExp(digit, 'g'), bengaliDigits[index]);
@@ -5167,7 +4617,6 @@
             });
             return result;
         }
-
         // Setup allocation amount field to display Bengali numerals
         document.addEventListener('DOMContentLoaded', () => {
             const allocationField = document.getElementById('allocation-amount-input');
@@ -5190,34 +4639,26 @@
                 });
             }
         });
-
         // Calculate the last date of the financial year (June 30 of the second year)
         function calculateFinancialYearEndDate(financialYearStr) {
             // E.g., "২০২৫-२६" or "2025-26"
             // Convert to English if needed
             let englishYear = convertBengaliToEnglishYear(financialYearStr);
-
             if (!englishYear) return null;
-
             // Extract the second year from "2025-26"
             const parts = englishYear.split('-');
             if (parts.length !== 2) return null;
-
             const endYear = parseInt(parts[1], 10);
             // Financial year ends on June 30 (month 5 in 0-indexed)
             const endDate = new Date(2000 + endYear, 5, 30); // 5 = June (0-indexed)
-
             return endDate;
         }
-
         // Handle financial year change to populate approval memos dropdown and set expected end date
         async function onFinancialYearChange() {
             const financialYearSelect = document.querySelector('select[name="financial_year"]');
             const memoSelect = document.getElementById('approval-memo-select');
             const expectedEndDateInput = document.getElementById('expected-end-date-input');
-
             let financialYear = financialYearSelect.value;
-
             if (!financialYear) {
                 memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
                 memoSelect.disabled = true;
@@ -5231,7 +4672,6 @@
                 }
                 return;
             }
-
             // Auto-calculate and set the expected end date to last date of financial year
             const endDate = calculateFinancialYearEndDate(financialYear);
             if (endDate && expectedEndDateInput) {
@@ -5243,42 +4683,32 @@
                     expectedEndDateInput.value = dateStr;
                 }
             }
-
             // Convert Bengali numerals to English
             financialYear = convertBengaliToEnglishYear(financialYear);
-
             try {
                 memoSelect.disabled = true;
                 const apiUrl = `/api/projects/available-memos/${encodeURIComponent(financialYear)}`;
                 const response = await fetch(apiUrl);
-
                 if (!response.ok) {
                     throw new Error('স্মারক লোড করতে ব্যর্থ - Status: ' + response.status);
                 }
-
                 const memos = await response.json();
-
                 if (memos && memos.length > 0) {
-
                     // Destroy existing TomSelect first
                     if (_tomInstances && _tomInstances.has(memoSelect)) {
                         const tomSelectInstance = _tomInstances.get(memoSelect);
                         tomSelectInstance.destroy();
                         _tomInstances.delete(memoSelect);
                     }
-
                     // Clear and rebuild select with simple HTML
                     memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
-
                     memos.forEach(memo => {
                         try {
                             let optionText = '';
                             let isoDateStr = '';
                             let memoNumber = '';
-
                             // Check if memo is full (actual_projects >= total_projects)
                             const isFull = memo.actual_projects >= memo.total_projects;
-
                             // Handle ministry memos vs monthly meeting memos
                             if (memo.memo_type === 'monthly') {
                                 // For monthly meeting memos
@@ -5308,7 +4738,6 @@
                                 optionText = `${dateStr} তারিখের ${bengaliMemoNumber} নং স্মারক (${memo.actual_projects}/${memo.total_projects} প্রকল্প)`;
                                 if (isFull) optionText += ' (সম্পূর্ণ)';
                             }
-
                             const option = document.createElement('option');
                             option.value = memo.id;
                             option.textContent = optionText;
@@ -5318,22 +4747,17 @@
                             option.setAttribute('data-memo-type', memo.memo_type || 'ministry');
                             option.setAttribute('data-actual-projects', memo.actual_projects);
                             option.setAttribute('data-total-projects', memo.total_projects);
-
                             // Disable if memo is full
                             if (isFull) {
                                 option.disabled = true;
                                 option.title = 'এই স্মারকটি সম্পূর্ণ হয়েছে, অন্য স্মারক নির্বাচন করুন';
                             }
-
                             memoSelect.appendChild(option);
-
                         } catch (itemError) {
                         }
                     });
-
                     // Enable the select
                     memoSelect.disabled = false;
-
                     // Recreate Tom Select with new options
                     if (typeof TomSelect !== 'undefined') {
                         const newInstance = new TomSelect(memoSelect, {
@@ -5346,28 +4770,23 @@
                                 this.close();
                             }
                         });
-
                         // Make the control input readonly to prevent typing
                         const controlInput = memoSelect.parentElement.querySelector('.ts-control input');
                         if (controlInput) {
                             controlInput.readOnly = true;
                             controlInput.style.pointerEvents = 'none';
                         }
-
                         if (_tomInstances) {
                             _tomInstances.set(memoSelect, newInstance);
                         }
                     }
-
                 } else {
-
                     // Destroy existing TomSelect
                     if (_tomInstances && _tomInstances.has(memoSelect)) {
                         const tomSelectInstance = _tomInstances.get(memoSelect);
                         tomSelectInstance.destroy();
                         _tomInstances.delete(memoSelect);
                     }
-
                     memoSelect.innerHTML = '<option value="">-- অনুমোদন স্মারক নির্বাচন করুন --</option>';
                     memoSelect.disabled = true;
                 }
@@ -5376,68 +4795,40 @@
                 memoSelect.disabled = true;
             }
         }
-
         // Handle approval memo selection to populate related fields
         function onApprovalMemoChange() {
             const memoSelect = document.getElementById('approval-memo-select');
             let memoId = memoSelect.value;
-
             // If using TomSelect, get the value from the TomSelect instance
             const tomInstance = _tomInstances && _tomInstances.get(memoSelect);
             if (tomInstance) {
-                let value = tomInstance.getValue();
-                // TomSelect might return an array with maxItems:1, so handle both cases
-                if (Array.isArray(value)) {
-                    memoId = value[0] || '';
-                } else {
-                    memoId = value || '';
-                }
+                memoId = tomInstance.getValue() || '';
             }
-
             const approvalDateInput = document.querySelector('input[name="project_approval_date"]');
             const memoNumberInput = document.querySelector('input[name="approval_memo_number"]');
-
             if (!memoId) {
                 approvalDateInput.value = '';
                 memoNumberInput.value = '';
                 return;
             }
-
             // Get data from selected option - look for the option with matching value
-            // TomSelect may hide the actual options, so we need to handle both cases
             let selectedOption = null;
-
-            // Try to find in actual options (works when TomSelect is not active or in regular select)
-            if (memoSelect.options && memoSelect.options.length > 0) {
-                for (let i = 0; i < memoSelect.options.length; i++) {
-                    if (memoSelect.options[i].value === String(memoId)) {
-                        selectedOption = memoSelect.options[i];
-                        break;
-                    }
+            for (let i = 0; i < memoSelect.options.length; i++) {
+                if (memoSelect.options[i].value === String(memoId)) {
+                    selectedOption = memoSelect.options[i];
+                    break;
                 }
             }
-
-            // If not found in options, try finding in the DOM directly (for TomSelect cases)
-            if (!selectedOption) {
-                const option = memoSelect.querySelector(`option[value="${memoId}"]`);
-                if (option) {
-                    selectedOption = option;
-                }
-            }
-
             if (selectedOption) {
                 const memoDate = selectedOption.getAttribute('data-memo-date');
                 const memoNumber = selectedOption.getAttribute('data-memo-number');
-
                 if (memoDate && memoNumber) {
                     approvalDateInput.value = memoDate;
                     // Store the memo number with Bangla digits
                     memoNumberInput.value = convertAnyToBengaliDigits(memoNumber);
-                    console.log('📝 Approval memo changed:', { memoId, memoDate, memoNumber });
                 }
             }
         }
-
         // Use event delegation to handle changes on financial_year selects
         // This works even if the select is in a hidden modal
         document.addEventListener('change', (e) => {
@@ -5445,27 +4836,12 @@
                 onFinancialYearChange();
             }
             if (e.target && e.target.id === 'approval-memo-select') {
-                // Sync TomSelect value back to form field before change handler
-                const tomInstance = _tomInstances && _tomInstances.get(e.target);
-                if (tomInstance) {
-                    let value = tomInstance.getValue();
-                    // TomSelect might return an array with maxItems:1, so handle both cases
-                    if (Array.isArray(value)) {
-                        value = value[0] || '';
-                    }
-                    if (e.target.value !== value) {
-                        e.target.value = value || '';
-                    }
-                }
                 onApprovalMemoChange();
             }
         });
-
-
         // Global state for duplicate warning handling
         let pendingFormData = null;
         let bypassDuplicateCheck = false;
-
         // Form submit — save project data then upload any pending photos
         document.getElementById('project-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -5473,40 +4849,13 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'সংরক্ষণ হচ্ছে…';
             try {
-                // Sync TomSelect instances back to form fields before submission
-                const memoSelect = document.getElementById('approval-memo-select');
-                const tomMemoInstance = _tomInstances && _tomInstances.get(memoSelect);
-                if (tomMemoInstance) {
-                    let memoValue = tomMemoInstance.getValue();
-                    // TomSelect might return an array with maxItems:1, so handle both cases
-                    if (Array.isArray(memoValue)) {
-                        memoValue = memoValue[0] || '';
-                    }
-                    memoSelect.value = memoValue || '';
-                    console.log('📋 Synced approval_memo_id TomSelect to form field:', memoSelect.value);
-                }
-
-                const methodSelect = document.querySelector('select[name="implementation_method"]');
-                const tomMethodInstance = _tomInstances && _tomInstances.get(methodSelect);
-                if (tomMethodInstance) {
-                    let methodValue = tomMethodInstance.getValue();
-                    // TomSelect might return an array with maxItems:1, so handle both cases
-                    if (Array.isArray(methodValue)) {
-                        methodValue = methodValue[0] || '';
-                    }
-                    methodSelect.value = methodValue || '';
-                }
-
                 const formData = CRUDManager.formToJSON(e.target);
-                console.log('📋 Form data collected:', { cppc_president: formData.cppc_president, cppc_president_mobile: formData.cppc_president_mobile, implementation_method: formData.implementation_method, approval_memo_id: formData.approval_memo_id });
-
                 // Convert Bengali numerals in allocation_amount to English
                 if (formData.allocation_amount) {
                     // Remove taka sign, spaces, and convert Bengali to English
                     let value = String(formData.allocation_amount).replace(/[৳\s]/g, '').trim();
                     formData.allocation_amount = convertBengaliToEnglish(value);
                 }
-
                 // Coerce numeric & boolean fields
                 formData.allocation_amount   = parseFloat(formData.allocation_amount)   || 0;
                 formData.released_amount     = parseFloat(formData.released_amount)     || 0;
@@ -5515,48 +4864,35 @@
                 formData.approval_memo_id    = formData.approval_memo_id ? parseInt(formData.approval_memo_id, 10) : null;
                 formData.is_completed = formData.is_completed ? 1 : 0;
                 formData.is_delayed   = formData.is_delayed   ? 1 : 0;
-
                 // Validate: CPPC projects cannot exceed 300,000 tk
                 // Get the implementation_method from the form field directly (more reliable than formData)
                 const implMethodSelect = document.querySelector('select[name="implementation_method"]');
                 const implMethodValue = implMethodSelect ? implMethodSelect.value : (formData.implementation_method || '');
                 const isCPPC = (implMethodValue || '').trim() === 'সিপিপিসি' ||
                                (implMethodValue || '').toLowerCase() === 'cppc';
-                console.log('CPPC Check:', {
-                    implMethodValue,
-                    isCPPC,
-                    allocation_amount: formData.allocation_amount,
-                    exceeds: formData.allocation_amount > 300000
-                });
                 if (isCPPC && formData.allocation_amount > 300000) {
                     const maxAmount = CRUDManager.toBengaliNumber('300000');
-                    console.log('CPPC validation triggered - showing warning modal');
                     // Ensure modal exists and try to show it
                     const errorModal = document.getElementById('error-modal');
                     if (errorModal) {
-                        showErrorModal(`সিপিপিসি প্রকল্পের সর্বোচ্চ বরাদ্দ ৳ ${maxAmount} টাকা।\n\nঅনুগ্রহ করে কম পরিমাণ প্রবেশ করুন।`, 'সর্বোচ্চ বরাদ্দ অতিক্রম');
-                        console.log('Modal shown, hidden class removed:', !errorModal.classList.contains('hidden'));
+                        showErrorModal(`সিপিপিসি প্রকল্পের সর্বোচ্চ বরাদ্দ ৳ ${maxAmount} টাকা।\n\nঅনুগ্রহ করে কম পরিমাণ প্রবেশ করুন।`, 'সর্বোচ্চ বরাদ্দ অতিক্রম'););
                     } else {
-                        console.error('Error modal element not found!');
                         alert(`সিপিপিসি প্রকল্পের সর্বোচ্চ বরাদ্দ ৳ ${maxAmount} টাকা। অনুগ্রহ করে কম পরিমাণ প্রবেশ করুন।`);
                     }
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'সংরক্ষণ করুন';
                     return;
                 }
-
                 // Strip empty date strings so they go as NULL
                 ['start_date', 'expected_end_date', 'actual_end_date'].forEach(k => {
                     if (!formData[k]) delete formData[k];
                 });
-
                 // Normalize lat_lng: empty string → null
                 if (!formData.lat_lng || !formData.lat_lng.trim()) {
                     formData.lat_lng = null;
                 } else {
                     formData.lat_lng = formData.lat_lng.trim();
                 }
-
                 // Check for duplicates before saving (only for new projects)
                 if (!editingId && !bypassDuplicateCheck) {
                     try {
@@ -5571,9 +4907,7 @@
                                 allocation_amount: formData.allocation_amount
                             })
                         });
-
                         const duplicateResult = await duplicateCheckRes.json();
-
                         // If duplicates found, show warning modal
                         if (duplicateResult.duplicates && duplicateResult.duplicates.length > 0) {
                             pendingFormData = formData;
@@ -5583,66 +4917,13 @@
                             return;
                         }
                     } catch (err) {
-                        console.warn('Duplicate check error (proceeding anyway):', err);
                     }
                 }
-
                 // Reset bypass flag after using it
                 bypassDuplicateCheck = false;
-
-                // Check for project_id uniqueness (for both new and edited projects)
-                if (formData.project_id) {
-                    const newProjectId = String(formData.project_id).trim();
-                    const projectIdChanged = !editingId || (originalProjectId && newProjectId !== String(originalProjectId).trim());
-
-                    // Only check if: creating new project OR editing and ID has changed
-                    if (projectIdChanged) {
-                        console.log('🔍 Checking project_id uniqueness:', {
-                            mode: editingId ? 'editing' : 'creating',
-                            newProjectId
-                        });
-                        try {
-                            const idCheckRes = await fetch(`${AuthManager.API_URL}/projects/${newProjectId}`);
-                            console.log('🔍 Project ID check response status:', idCheckRes.status);
-
-                            // If status is 200, the ID already exists
-                            if (idCheckRes.ok) {
-                                const existingProject = await idCheckRes.json();
-                                console.log('🔍 Project with this ID found:', { existingId: existingProject.id, editingId });
-
-                                // For new projects, any match is a duplicate
-                                // For editing, only a match with a different numeric ID is a duplicate
-                                if (!editingId || (existingProject && existingProject.id !== editingId)) {
-                                    console.log('❌ Duplicate project_id detected!');
-                                    const errorMsg = `প্রকল্প আইডি "${newProjectId}" ইতিমধ্যে বিদ্যমান। অনুগ্রহ করে অন্য একটি অনন্য আইডি নির্বাচন করুন।`;
-                                    const errorContainer = document.getElementById('modal-error-container');
-                                    const errorText = document.getElementById('modal-error-text');
-                                    errorText.textContent = errorMsg;
-                                    errorContainer.classList.remove('hidden');
-                                    // Scroll to top of modal to show error
-                                    document.querySelector('#form-modal .relative').scrollTop = 0;
-                                    submitBtn.disabled = false;
-                                    submitBtn.textContent = 'সংরক্ষণ করুন';
-                                    return;
-                                }
-                            }
-                            console.log('✅ Project ID is unique, proceeding with save');
-                        } catch (err) {
-                            console.warn('Project ID uniqueness check error:', err);
-                            // 404 or network error - ID is available or endpoint not responding
-                            console.log('✅ Project ID check passed (404 or error - treating as unique)');
-                        }
-                    } else {
-                        console.log('⏭️ Skipping project_id check - ID not changed during edit');
-                    }
-                }
-
-
                 let savedId = editingId;
-
                 if (editingId) {
                     const url = `${AuthManager.API_URL}/projects/${editingId}`;
-                    console.log('📤 Sending PUT request:', { cppc_president: formData.cppc_president, cppc_president_mobile: formData.cppc_president_mobile });
                     await AuthManager.fetch(url, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
@@ -5659,7 +4940,6 @@
                     const json = await res.json().catch(() => ({}));
                     savedId = json.id;
                 }
-
                 // Upload pending photos (if any) using the saved project ID
                 if (pendingFiles.length > 0 && savedId) {
                     try {
@@ -5672,7 +4952,6 @@
                         return;
                     }
                 }
-
                 // Upload pending documents (if any)
                 if (pendingDocs.length > 0 && savedId) {
                     try {
@@ -5684,7 +4963,6 @@
                         return;
                     }
                 }
-
                 CRUDManager.showSuccess(editingId ? 'প্রকল্পটি সফলভাবে আপডেট হয়েছে' : 'নতুন প্রকল্প সফলভাবে যোগ হয়েছে');
                 closeFormModal();
                 await loadData();
@@ -5695,26 +4973,21 @@
                 submitBtn.textContent = 'সংরক্ষণ করুন';
             }
         });
-
         // ═══════════════════════════════════════════════════════════
         // LOCATION PICKER
         // ═══════════════════════════════════════════════════════════
-
         let locationPickerMap = null;
         let locationPickerMarker = null;
         let selectedLocation = null;
         let searchTimeout = null;
-
         function openLocationPicker() {
             const modal = document.getElementById('location-picker-modal');
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
-
             // Initialize map after modal is visible
             setTimeout(() => {
                 initLocationPickerMap();
             }, 100);
-
             // Get current value if exists
             const currentValue = document.getElementById('lat-lng-input').value;
             if (currentValue && currentValue.trim()) {
@@ -5728,70 +5001,56 @@
                 }
             }
         }
-
         function closeLocationPicker() {
             const modal = document.getElementById('location-picker-modal');
             modal.classList.add('hidden');
             document.body.style.overflow = '';
-
             // Clear search
             document.getElementById('location-search-input').value = '';
             document.getElementById('search-results').innerHTML = '';
             document.getElementById('selected-coords-display').classList.add('hidden');
         }
-
         function initLocationPickerMap() {
             const container = document.getElementById('location-picker-map');
-
             // Default center: Kushtia, Bangladesh
             const defaultLat = 23.9012;
             const defaultLng = 89.1195;
-
             if (locationPickerMap) {
                 locationPickerMap.remove();
                 locationPickerMap = null;
                 locationPickerMarker = null;
             }
-
             locationPickerMap = L.map(container, {
                 center: [defaultLat, defaultLng],
                 zoom: 13,
                 zoomControl: true,
                 scrollWheelZoom: true
             });
-
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '© OpenStreetMap'
             }).addTo(locationPickerMap);
-
             // Click handler for map
             locationPickerMap.on('click', function(e) {
                 const lat = e.latlng.lat;
                 const lng = e.latlng.lng;
                 setMapLocation(lat, lng, 'নির্বাচিত স্থান');
-
                 // Reverse geocode to get place name
                 reverseGeocode(lat, lng);
             });
-
             // Force resize
             setTimeout(() => {
                 locationPickerMap.invalidateSize();
             }, 200);
         }
-
         function setMapLocation(lat, lng, name) {
             if (!locationPickerMap) return;
-
             selectedLocation = { lat, lng, name };
             updateSelectedDisplay();
-
             // Remove existing marker
             if (locationPickerMarker) {
                 locationPickerMap.removeLayer(locationPickerMarker);
             }
-
             // Custom amber marker
             const amberIcon = L.divIcon({
                 className: '',
@@ -5810,7 +5069,6 @@
                 iconAnchor: [20, 40],
                 popupAnchor: [0, -42]
             });
-
             // Add new marker
             locationPickerMarker = L.marker([lat, lng], { icon: amberIcon })
                 .addTo(locationPickerMap)
@@ -5821,16 +5079,13 @@
                     </div>
                 `)
                 .openPopup();
-
             // Center map on marker
             locationPickerMap.setView([lat, lng], 15);
         }
-
         function updateSelectedDisplay() {
             const display = document.getElementById('selected-coords-display');
             const coordsText = document.getElementById('selected-coords-text');
             const placeName = document.getElementById('selected-place-name');
-
             if (selectedLocation) {
                 display.classList.remove('hidden');
                 coordsText.textContent = `${selectedLocation.lat.toFixed(5)}, ${selectedLocation.lng.toFixed(5)}`;
@@ -5839,16 +5094,13 @@
                 display.classList.add('hidden');
             }
         }
-
         function getCurrentLocation() {
             const btn = document.getElementById('current-location-btn');
             const originalText = btn.innerHTML;
-
             if (!navigator.geolocation) {
                 CRUDManager.showError('আপনার ব্রাউজার Geolocation সাপোর্ট করে না');
                 return;
             }
-
             btn.disabled = true;
             btn.innerHTML = `
                 <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -5856,15 +5108,12 @@
                 </svg>
                 অবস্থান খুঁজছি...
             `;
-
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-
                     setMapLocation(lat, lng, 'আপনার বর্তমান অবস্থান');
                     reverseGeocode(lat, lng);
-
                     btn.disabled = false;
                     btn.innerHTML = originalText;
                 },
@@ -5875,7 +5124,6 @@
                     } else if (error.code === 2) {
                         errorMsg = 'অবস্থান পাওয়া যাচ্ছে না';
                     }
-
                     CRUDManager.showError(errorMsg);
                     btn.disabled = false;
                     btn.innerHTML = originalText;
@@ -5887,18 +5135,14 @@
                 }
             );
         }
-
         // Search with autocomplete using Nominatim
         document.getElementById('location-search-input').addEventListener('input', function(e) {
             const query = e.target.value.trim();
-
             clearTimeout(searchTimeout);
-
             if (query.length < 3) {
                 document.getElementById('search-results').innerHTML = '';
                 return;
             }
-
             searchTimeout = setTimeout(async () => {
                 try {
                     const response = await fetch(
@@ -5906,17 +5150,14 @@
                         `format=json&q=${encodeURIComponent(query)}&` +
                         `countrycodes=bd&limit=5&addressdetails=1`
                     );
-
                     const results = await response.json();
                     displaySearchResults(results);
                 } catch (error) {
                 }
             }, 500);
         });
-
         function displaySearchResults(results) {
             const container = document.getElementById('search-results');
-
             if (!results || results.length === 0) {
                 container.innerHTML = `
                     <div class="p-4 text-center text-gray-500 text-sm">
@@ -5928,7 +5169,6 @@
                 `;
                 return;
             }
-
             container.innerHTML = results.map(result => `
                 <div class="search-result-item p-3 bg-white border border-gray-200 rounded-lg hover:bg-amber-50 hover:border-amber-300 cursor-pointer transition-all"
                     onclick='selectSearchResult(${result.lat}, ${result.lon}, ${JSON.stringify(result.display_name)})'>
@@ -5944,18 +5184,15 @@
                 </div>
             `).join('');
         }
-
         function selectSearchResult(lat, lon, name) {
             setMapLocation(parseFloat(lat), parseFloat(lon), name);
         }
-
         async function reverseGeocode(lat, lng) {
             try {
                 const response = await fetch(
                     `https://nominatim.openstreetmap.org/reverse?` +
                     `format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
                 );
-
                 const data = await response.json();
                 if (data && data.display_name) {
                     selectedLocation.name = data.display_name;
@@ -5964,38 +5201,31 @@
             } catch (error) {
             }
         }
-
         function applySelectedLocation() {
             if (!selectedLocation) {
                 CRUDManager.showError('দয়া করে একটি স্থান নির্বাচন করুন');
                 return;
             }
-
             const input = document.getElementById('lat-lng-input');
             input.value = `${selectedLocation.lat.toFixed(5)},${selectedLocation.lng.toFixed(5)}`;
-
             // Visual feedback
             input.classList.add('ring-2', 'ring-green-500');
             setTimeout(() => {
                 input.classList.remove('ring-2', 'ring-green-500');
             }, 1000);
-
             closeLocationPicker();
             CRUDManager.showSuccess('স্থান সফলভাবে নির্বাচিত হয়েছে');
         }
-
         // Close on backdrop click
         document.getElementById('location-picker-modal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeLocationPicker();
             }
         });
-
         // Keyboard controls (LightGallery handles its own keys; only handle app modals here)
         document.addEventListener('keydown', function(e) {
             const fullMap = document.getElementById('full-map-modal');
             const isFullMapOpen = fullMap && !fullMap.classList.contains('hidden');
-
             if (e.key === 'Escape') {
                 const modal = document.getElementById('location-picker-modal');
                 if (!modal.classList.contains('hidden')) {
@@ -6007,48 +5237,38 @@
                 // LightGallery handles its own Escape key
             }
         });
-
         // LightGallery replaces the old image lightbox — no manual functions needed.
-
         // ── Full Screen Map Functions ──────────────────────────────
         let fullMapInstance = null;
         let fullMapMarker = null;
         let currentProjectData = null;
-
         function openFullMap() {
             if (!currentProjectData || !currentProjectData.lat_lng) {
                 alert('এই প্রকল্পের জন্য কোনো অবস্থান নির্ধারণ করা হয়নি');
                 return;
             }
-
             const modal = document.getElementById('full-map-modal');
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
-
             // Parse coordinates
             const [lat, lng] = currentProjectData.lat_lng.split(',').map(s => parseFloat(s.trim()));
-
             // Update modal info
             document.getElementById('full-map-title').textContent = currentProjectData.project_name || 'প্রকল্পের অবস্থান';
             document.getElementById('full-map-coords').textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
             document.getElementById('full-map-project-name').textContent = currentProjectData.project_name || '';
             document.getElementById('full-map-google-link').href = `https://www.google.com/maps?q=${lat},${lng}`;
-
             // Initialize map after a short delay to ensure container is rendered
             setTimeout(() => {
                 initFullMap(lat, lng, currentProjectData.project_name);
             }, 100);
         }
-
         function initFullMap(lat, lng, projectName) {
             const container = document.getElementById('full-map-container');
-
             // Remove existing map if any
             if (fullMapInstance) {
                 fullMapInstance.remove();
                 fullMapInstance = null;
             }
-
             // Create new map
             fullMapInstance = L.map(container, {
                 center: [lat, lng],
@@ -6056,13 +5276,11 @@
                 zoomControl: true,
                 scrollWheelZoom: true
             });
-
             // Add tile layer
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '© OpenStreetMap'
             }).addTo(fullMapInstance);
-
             // Add marker
             const customIcon = L.icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -6072,64 +5290,52 @@
                 popupAnchor: [1, -34],
                 shadowSize: [41, 41]
             });
-
             fullMapMarker = L.marker([lat, lng], { icon: customIcon }).addTo(fullMapInstance);
             fullMapMarker.bindPopup(`<strong>${projectName || 'প্রকল্পের অবস্থান'}</strong><br>${lat.toFixed(6)}, ${lng.toFixed(6)}`).openPopup();
-
             // Force map to redraw
             setTimeout(() => {
                 fullMapInstance.invalidateSize();
             }, 200);
         }
-
         function closeFullMap() {
             const modal = document.getElementById('full-map-modal');
             modal.classList.add('hidden');
             document.body.style.overflow = '';
-
             // Clean up map
             if (fullMapInstance) {
                 fullMapInstance.remove();
                 fullMapInstance = null;
             }
         }
-
         // Store current project data when detail modal opens
         const originalShowDetailModal = showDetailModal;
         showDetailModal = function(r) {
             currentProjectData = r;
             originalShowDetailModal(r);
         };
-
         // ── Edit Project Location ──────────────────────────────────
         async function editProjectLocation() {
             if (!currentProjectData) {
                 alert('প্রকল্পের তথ্য পাওয়া যাচ্ছে না');
                 return;
             }
-
             // Store the current location for the location picker
             const currentLatLng = currentProjectData.lat_lng || '';
-
             // Set the input value
             const input = document.getElementById('lat-lng-input');
             if (input) {
                 input.value = currentLatLng;
             }
-
             // Open location picker
             openLocationPicker();
-
             // Override the applySelectedLocation function temporarily
             const originalApply = window.applySelectedLocation;
             window.applySelectedLocation = async function() {
                 const newLatLng = document.getElementById('lat-lng-input').value.trim();
-
                 if (!newLatLng) {
                     alert('অনুগ্রহ করে একটি স্থান নির্বাচন করুন');
                     return;
                 }
-
                 try {
                     // Update project location via API
                     const response = await AuthManager.fetch(
@@ -6139,33 +5345,25 @@
                             body: JSON.stringify({ lat_lng: newLatLng })
                         }
                     );
-
                     if (!response.ok) {
                         throw new Error('অবস্থান আপডেট ব্যর্থ হয়েছে');
                     }
-
                     // Update current project data
                     currentProjectData.lat_lng = newLatLng;
-
                     // Close location picker
                     closeLocationPicker();
-
                     // Reload the detail modal to show updated map
                     showDetailModal(currentProjectData);
-
                     // Show success message
                     alert('প্রকল্পের অবস্থান সফলভাবে আপডেট হয়েছে ✓');
-
                     // Restore original function
                     window.applySelectedLocation = originalApply;
-
                 } catch (error) {
                     alert('অবস্থান আপডেট করতে সমস্যা হয়েছে: ' + error.message);
                 }
             };
         }
     </script>
-
 <!-- ── Document Viewer Popup ─────────────────────────────── -->
 <div id="doc-viewer-backdrop" onclick="if(event.target===this)closeDocViewer()"
      style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.78);
@@ -6203,14 +5401,11 @@
 </div>
 <script>
     function openDocViewer(filePath, originalName, caption, fileType) {
-        console.log('openDocViewer called:', {filePath, originalName, caption, fileType});
         const backdrop = document.getElementById('doc-viewer-backdrop');
         const url = '/uploads/' + filePath;
-        console.log('Constructed URL:', url);
         // Use fileType from database instead of extracting from originalName (which may be a label)
         const ext = fileType ? fileType.toLowerCase() : (originalName.split('.').pop() || '').toLowerCase();
         const icon = (typeof getDocIcon === 'function' ? getDocIcon : (n => ({ bg:'#6b7280', label:'FILE' })))(originalName);
-
         document.getElementById('dv-icon').textContent = icon.label;
         document.getElementById('dv-icon').style.background = icon.bg;
         // For approval memo files, use the nice Bengali label (original_name)
@@ -6221,16 +5416,12 @@
         const downloadFileName = filePath ? filePath.split('/').pop() : originalName;
         document.getElementById('dv-download').href = url;
         document.getElementById('dv-download').download = downloadFileName;
-
         const body = document.getElementById('dv-body');
         const imgExts = ['jpg','jpeg','png','webp','gif','bmp','svg'];
         if (ext === 'pdf') {
             body.style.overflow = 'hidden';
-            console.log('Setting up PDF iframe for URL:', url);
             const iframeHtml = `<iframe src="${url}" type="application/pdf" style="width:100%;height:100%;border:none;display:block;border-radius:8px;"></iframe>`;
-            console.log('Iframe HTML:', iframeHtml);
             body.innerHTML = iframeHtml;
-            console.log('Iframe added to DOM:', body.innerHTML);
         } else if (imgExts.includes(ext)) {
             body.style.overflow = 'auto';
             body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;padding:1.5rem;min-height:300px;">
@@ -6258,12 +5449,10 @@
     }
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDocViewer(); });
 </script>
-
 <script>
     // Project name tooltip — show on row hover, positioned near cursor
     (function() {
         let activeTooltip = null;
-
         function showTooltip(cell, e) {
             const tooltip = cell.querySelector('.project-tooltip');
             if (!tooltip) return;
@@ -6271,12 +5460,10 @@
             positionTooltip(tooltip, e);
             tooltip.classList.add('visible');
         }
-
         function positionTooltip(tooltip, e) {
             const margin = 14;
             const vpW = window.innerWidth;
             const vpH = window.innerHeight;
-
             // Temporarily make visible to measure
             tooltip.style.visibility = 'hidden';
             tooltip.style.display = 'block';
@@ -6284,15 +5471,12 @@
             const th = tooltip.offsetHeight;
             tooltip.style.visibility = '';
             tooltip.style.display = '';
-
             let left = e.clientX + margin;
             let top = e.clientY + margin;
-
             // Flip left if overflows right
             if (left + tw + 10 > vpW) left = e.clientX - tw - margin;
             // Flip arrow accordingly
             if (left < 8) left = 8;
-
             // Flip up if overflows bottom
             const above = top + th + 10 > vpH;
             if (above) {
@@ -6302,13 +5486,11 @@
                 tooltip.classList.remove('tooltip-above');
             }
             if (top < 8) top = 8;
-
             // Position arrow horizontally relative to cursor
             const arrowLeft = Math.min(Math.max(e.clientX - left, 12), tw - 24);
             tooltip.style.setProperty('--arrow-left', arrowLeft + 'px');
             tooltip.style.left = left + 'px';
             tooltip.style.top = top + 'px';
-
             // Dynamic arrow position
             const pseudoStyle = tooltip.querySelector('style') || (() => {
                 const s = document.createElement('style');
@@ -6316,36 +5498,30 @@
                 return s;
             })();
         }
-
         function hideTooltip(cell) {
             const tooltip = cell.querySelector('.project-tooltip');
             if (tooltip) tooltip.classList.remove('visible');
             activeTooltip = null;
         }
-
         document.addEventListener('mouseover', function(e) {
             const cell = e.target.closest('.project-name-cell');
             if (cell) showTooltip(cell, e);
         });
-
         document.addEventListener('mousemove', function(e) {
             const cell = e.target.closest('.project-name-cell');
             if (cell && activeTooltip && cell.contains(activeTooltip)) {
                 positionTooltip(activeTooltip, e);
             }
         });
-
         document.addEventListener('mouseout', function(e) {
             const cell = e.target.closest('.project-name-cell');
             if (cell && !cell.contains(e.relatedTarget)) hideTooltip(cell);
         });
     })();
-
     // Handle URL parameter ?id=xxx to auto-open project detail modal
     (function() {
         const urlParams = new URLSearchParams(window.location.search);
         const projectId = urlParams.get('id');
-
         if (projectId) {
             // Wait for page to fully load before opening modal
             document.addEventListener('DOMContentLoaded', async function() {
@@ -6354,26 +5530,19 @@
                     const response = await AuthManager.fetch(
                         `${AuthManager.API_URL}/projects/${projectId}`
                     );
-
                     if (!response.ok) {
-                        console.error('Failed to fetch project:', response.status);
                         return;
                     }
-
                     const project = await response.json();
-
                     // Store current detail ID
                     currentDetailId = project.id;
                     currentDetailRecord = project;
                     currentProjectData = project;
-
                     // Open the detail modal with project data
                     showDetailModal(project);
-
                     // Remove the id parameter from URL to clean up
                     window.history.replaceState({}, document.title, window.location.pathname);
                 } catch (error) {
-                    console.error('Error loading project from URL:', error);
                 }
             });
         }

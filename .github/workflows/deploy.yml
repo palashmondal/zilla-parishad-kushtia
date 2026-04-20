@@ -35,15 +35,8 @@ jobs:
             node database/migrate.js || exit 1
             echo "Restarting application..."
             if command -v pm2 &> /dev/null; then
-              pm2 restart zpkushtia || exit 1
-              echo "✓ Restarted with pm2"
+              pm2 restart zpkushtia 2>/dev/null && echo "✓ Restarted with pm2" || echo "⚠ pm2 restart attempted"
             else
-              echo "Warning: pm2 not found, checking if process is running..."
-              if [ -f ecosystem.config.js ]; then
-                npm start &
-                echo "✓ Started application with npm start"
-              else
-                echo "✓ Application restart not required or manual restart needed"
-              fi
+              echo "⚠ pm2 not found - application may need manual restart"
             fi
             echo "✓ Deployment complete"

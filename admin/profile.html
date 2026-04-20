@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
     <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
@@ -15,15 +14,12 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
-
     <style>
         html { font-size: 18px; }
         * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
-
         .edit-mode .info-value { display: none; }
         .edit-mode .edit-input { display: block !important; }
         .edit-mode .view-only { display: none; }
-
         .edit-input {
             display: none;
             width: 100%;
@@ -40,7 +36,6 @@
             border-color: #16a34a;
             box-shadow: 0 0 0 3px rgba(22,163,74,0.1);
         }
-
         .avatar-upload { position: relative; cursor: pointer; width: 120px; height: 120px; margin: 0 auto; }
         .avatar-upload input[type="file"] { display: none; }
         .avatar-circle {
@@ -60,7 +55,6 @@
             opacity: 0; transition: opacity 0.2s;
         }
         .avatar-upload:hover .avatar-overlay { opacity: 1; }
-
         .modal {
             display: none; position: fixed; inset: 0;
             background: rgba(0,0,0,0.5); z-index: 1000;
@@ -72,14 +66,11 @@
 <body class="bg-gray-50 flex flex-col min-h-screen">
     <!-- Header -->
     <div id="header-container"></div>
-
     <!-- Navigation -->
     <div id="menu-container"></div>
-
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 flex-1">
         <div class="max-w-3xl mx-auto">
-
             <!-- Profile Card -->
             <div class="bg-white rounded-2xl shadow-md overflow-hidden" id="profileCard">
                 <!-- Card Header -->
@@ -101,7 +92,6 @@
                     <h1 class="text-2xl font-bold text-white" id="fullName">-</h1>
                     <p class="text-green-100 text-sm mt-1" id="displayDesignation">-</p>
                 </div>
-
                 <!-- Profile Info -->
                 <div class="divide-y divide-gray-100">
                     <div class="flex items-center px-8 py-4 view-only">
@@ -136,7 +126,6 @@
                         <span class="text-sm font-medium text-gray-800" id="createdAt">-</span>
                     </div>
                 </div>
-
                 <!-- Actions -->
                 <div class="px-8 py-6 bg-gray-50 border-t border-gray-100">
                     <div class="flex gap-3" id="viewActions">
@@ -157,13 +146,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
-
     <!-- Footer -->
     <div id="footer-container"></div>
-
     <!-- Change Password Modal -->
     <div class="modal" id="passwordModal">
         <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
@@ -192,34 +178,27 @@
             </form>
         </div>
     </div>
-
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/components.js"></script>
     <script>
         DashboardComponents.loadAll('', 'আমার প্রোফাইল');
-
         const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? `http://${window.location.hostname}:3000/api`
             : '/api';
-
         let currentUser = null;
-
         AuthManager.init().then(async (user) => {
             if (!user) return;
             await loadProfile();
         });
-
         async function loadProfile() {
             const token = localStorage.getItem('zpk_admin_token');
             if (!token) return;
-
             try {
                 const response = await fetch(`${API_URL}/auth/me`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (!response.ok) throw new Error('Failed');
                 currentUser = await response.json();
-
                 document.getElementById('fullName').textContent = currentUser.full_name || currentUser.username;
                 document.getElementById('displayDesignation').textContent = currentUser.designation || (currentUser.role === 'admin' ? 'এডমিন ব্যবহারকারী' : 'সাধারণ ব্যবহারকারী');
                 document.getElementById('username').textContent = currentUser.username;
@@ -229,20 +208,16 @@
                 document.getElementById('fullNameInput').value = currentUser.full_name || '';
                 document.getElementById('emailInput').value = currentUser.email || '';
                 document.getElementById('designationInput').value = currentUser.designation || '';
-
                 if (currentUser.last_login) {
                     document.getElementById('lastLogin').textContent = new Date(currentUser.last_login).toLocaleString('bn-BD');
                 }
                 if (currentUser.created_at) {
                     document.getElementById('createdAt').textContent = new Date(currentUser.created_at).toLocaleString('bn-BD');
                 }
-
                 updateAvatar(currentUser);
             } catch (error) {
-                console.error('Profile load error:', error);
             }
         }
-
         function updateAvatar(user) {
             const avatar = document.getElementById('avatar');
             if (user.photo_path) {
@@ -252,13 +227,11 @@
                 avatar.innerHTML = `<span class="text-5xl font-bold text-green-600">${initial}</span>`;
             }
         }
-
         function enableEditMode() {
             document.getElementById('profileCard').classList.add('edit-mode');
             document.getElementById('viewActions').style.display = 'none';
             document.getElementById('editActions').style.display = 'flex';
         }
-
         function cancelEdit() {
             document.getElementById('profileCard').classList.remove('edit-mode');
             document.getElementById('viewActions').style.display = 'flex';
@@ -267,17 +240,14 @@
             document.getElementById('emailInput').value = currentUser.email || '';
             document.getElementById('designationInput').value = currentUser.designation || '';
         }
-
         async function saveProfile() {
             const token = localStorage.getItem('zpk_admin_token');
             if (!token) return;
-
             const data = {
                 full_name: document.getElementById('fullNameInput').value,
                 email: document.getElementById('emailInput').value,
                 designation: document.getElementById('designationInput').value
             };
-
             try {
                 const response = await fetch(`${API_URL}/auth/profile`, {
                     method: 'PUT',
@@ -291,26 +261,21 @@
                 await loadProfile();
                 cancelEdit();
             } catch (error) {
-                console.error('Save profile error:', error);
                 alert('প্রোফাইল সংরক্ষণে ত্রুটি হয়েছে');
             }
         }
-
         function openPhotoUpload() {
             if (document.getElementById('profileCard').classList.contains('edit-mode') || confirm('প্রোফাইল ছবি পরিবর্তন করতে চান?')) {
                 document.getElementById('photoInput').click();
             }
         }
-
         async function uploadPhoto() {
             const token = localStorage.getItem('zpk_admin_token');
             const fileInput = document.getElementById('photoInput');
             const file = fileInput.files[0];
             if (!file || !token) return;
-
             const formData = new FormData();
             formData.append('photo', file);
-
             try {
                 const response = await fetch(`${API_URL}/auth/profile/photo`, {
                     method: 'POST',
@@ -319,7 +284,6 @@
                 });
                 const result = await response.json();
                 if (!response.ok) { alert(result.message || 'ছবি আপলোড ব্যর্থ হয়েছে'); return; }
-
                 const updateResponse = await fetch(`${API_URL}/auth/profile`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
@@ -332,37 +296,30 @@
                     alert('প্রোফাইল ছবি আপডেট হয়েছে!');
                 }
             } catch (error) {
-                console.error('Photo upload error:', error);
                 alert('ছবি আপলোড করতে ত্রুটি হয়েছে');
             }
             fileInput.value = '';
         }
-
         function changePassword() {
             document.getElementById('passwordModal').classList.add('active');
         }
-
         function closePasswordModal() {
             document.getElementById('passwordModal').classList.remove('active');
             document.getElementById('currentPassword').value = '';
             document.getElementById('newPassword').value = '';
             document.getElementById('confirmPassword').value = '';
         }
-
         async function submitPasswordChange(event) {
             event.preventDefault();
             const currentPassword = document.getElementById('currentPassword').value;
             const newPassword = document.getElementById('newPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-
             if (newPassword !== confirmPassword) {
                 alert('নতুন পাসওয়ার্ড এবং নিশ্চিতকরণ পাসওয়ার্ড মিলছে না');
                 return;
             }
-
             const token = localStorage.getItem('zpk_admin_token');
             if (!token) return;
-
             try {
                 const response = await fetch(`${API_URL}/auth/change-password`, {
                     method: 'PUT',
@@ -374,7 +331,6 @@
                 alert('পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!');
                 closePasswordModal();
             } catch (error) {
-                console.error('Password change error:', error);
                 alert('পাসওয়ার্ড পরিবর্তনে ত্রুটি হয়েছে');
             }
         }

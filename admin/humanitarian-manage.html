@@ -9,7 +9,6 @@
     <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
@@ -17,16 +16,13 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
-
     <style>
         html { font-size: 18px; }
         * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
-
         /* Tom Select overrides — green theme, Shurjo */
         .ts-wrapper {
             font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace;
         }
-
         .ts-control {
             border: 1px solid #d1d5db !important;
             border-radius: 0.5rem !important;
@@ -41,7 +37,6 @@
             transition: border-color 0.2s, box-shadow 0.2s !important;
             min-height: unset !important;
         }
-
         .ts-wrapper.focus .ts-control {
             border-color: #10b981 !important;
             box-shadow: 0 0 0 2px rgba(16,185,129,0.4) !important;
@@ -49,7 +44,6 @@
         .ts-control:hover {
             border-color: #6ee7b7 !important;
         }
-
         .ts-dropdown {
             border: 2px solid #10b981 !important;
             border-radius: 0.75rem !important;
@@ -59,7 +53,6 @@
             overflow: hidden !important;
             margin-top: 4px !important;
         }
-
         .ts-dropdown .option {
             padding: 0.6rem 1rem !important;
             font-weight: 500 !important;
@@ -67,22 +60,18 @@
             cursor: pointer !important;
             transition: background 0.15s !important;
         }
-
         .ts-dropdown .option:hover,
         .ts-dropdown .option.active {
             background: #f0fdf4 !important;
             color: #065f46 !important;
         }
-
         .ts-dropdown .option.selected {
             background: #d1fae5 !important;
             color: #065f46 !important;
             font-weight: 700 !important;
         }
-
         /* Hide default caret, Tom Select provides its own */
         .ts-wrapper .ts-control::after { display: none; }
-
         /* Avatar */
         .avatar-placeholder {
             width: 34px;
@@ -92,44 +81,36 @@
             border: 2px solid #e5e7eb;
             flex-shrink: 0;
         }
-
         .avatar-placeholder img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         /* Beautiful Data Table */
         .table-row {
             transition: all 0.2s ease;
         }
-
         .table-row:hover {
             background: #f0fdf4;
         }
-
         /* Sortable Headers */
         .sortable-th {
             cursor: pointer;
             user-select: none;
         }
-
         .sortable-th:hover {
             background: #e5e7eb;
         }
-
         .sortable-th .sort-icon {
             opacity: 0.35;
             transition: all 0.2s ease;
             display: inline-block;
             vertical-align: middle;
         }
-
         .sortable-th.active .sort-icon {
             opacity: 1;
             color: #059669;
         }
-
         /* Beautiful Currency Display */
         .currency-amount {
             display: inline-flex;
@@ -143,20 +124,17 @@
             box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
             transition: all 0.2s ease;
         }
-
         .currency-amount:hover {
             box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
             transform: translateY(-1px);
             border-color: #6ee7b7;
         }
-
         .currency-symbol {
             font-size: 1.125rem;
             font-weight: 700;
             color: #059669;
             opacity: 1;
         }
-
         /* Detail Modal */
         .detail-backdrop {
             opacity: 0;
@@ -173,7 +151,6 @@
             transition: transform 0.32s cubic-bezier(.34,1.56,.64,1), opacity 0.28s ease;
         }
         .detail-backdrop.open .detail-card { transform: translateY(0) scale(1); opacity: 1; }
-
         /* Form modal backdrop */
         #form-modal {
             background: rgba(180,83,9,0.08);
@@ -189,18 +166,15 @@
             transition: filter 0.2s;
         }
         .detail-close-btn:hover { filter: brightness(1.1); }
-
         /* Action Button Animations */
         .action-btn {
             transition: all 0.2s ease;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
-
         .action-btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
         }
-
         .action-btn:active {
             transform: translateY(0);
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -210,10 +184,8 @@
 <body class="bg-gray-50 flex flex-col min-h-screen">
     <!-- Header -->
     <div id="header-container"></div>
-
     <!-- Navigation -->
     <div id="menu-container"></div>
-
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 flex-1">
         <!-- Success/Error Messages -->
@@ -223,7 +195,6 @@
         <div id="error-message" class="hidden mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
             <p id="error-text"></p>
         </div>
-
         <!-- Header Section -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
@@ -238,7 +209,6 @@
                     নতুন রেকর্ড যোগ করুন
                 </a>
             </div>
-
             <!-- Search and Filter -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="md:col-span-2">
@@ -252,15 +222,12 @@
                         </svg>
                         অর্থবছর
                     </label>
-                   
                         <select id="year-filter" class="w-full  border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white hover:border-green-400 transition-all font-medium">
                             <option value="" selected>📅 সকল অর্থবছর</option>
                         </select>
-                   
                 </div>
             </div>
         </div>
-
         <!-- Records List Section -->
         <div class="space-y-4">
             <!-- Loading Spinner -->
@@ -268,7 +235,6 @@
                 <div class="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-green-600"></div>
                 <p class="mt-4 text-lg text-gray-600 font-medium">লোড হচ্ছে...</p>
             </div>
-
             <!-- Single unified table -->
             <div id="table-container" class="hidden bg-white rounded-xl shadow-md overflow-hidden">
                 <table class="w-full table-fixed">
@@ -303,7 +269,6 @@
                     </tbody>
                 </table>
             </div>
-
             <!-- Empty State -->
             <div id="empty-state" class="hidden p-12 text-center bg-white rounded-xl">
                 <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -312,7 +277,6 @@
                 <h3 class="mt-4 text-lg font-semibold text-gray-900">কোনো রেকর্ড পাওয়া যায়নি</h3>
                 <p class="mt-2 text-sm text-gray-500">নতুন রেকর্ড যোগ করতে উপরের বাটনে ক্লিক করুন</p>
             </div>
-
             <!-- Records Per Page Selector & Pagination & Total Count -->
             <div class="flex items-center justify-between gap-4 py-4 px-4">
                 <div id="records-per-page-selector"></div>
@@ -321,7 +285,6 @@
             </div>
         </div>
     </main>
-
     <!-- ── Detail View Modal ── -->
     <div id="detail-modal" class="detail-backdrop fixed inset-0 z-[90] flex items-center justify-center p-4">
         <div class="detail-card bg-white w-full max-w-lg rounded-[1.75rem] shadow-2xl p-6 relative">
@@ -340,7 +303,6 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
-
             <div class="space-y-3 border-t border-emerald-100 pt-4">
                 <!-- Row 1: Parents -->
                 <div class="grid grid-cols-2 gap-3">
@@ -436,7 +398,6 @@
             </div>
         </div>
     </div>
-
     <!-- Add/Edit Modal -->
     <div id="form-modal" class="hidden fixed inset-0 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-xl bg-white">
@@ -448,10 +409,8 @@
                     </svg>
                 </button>
             </div>
-
             <form id="humanitarian-form" class="space-y-6">
                 <input type="hidden" id="record-id" name="id">
-
                 <!-- Personal Information -->
                 <div class="border-b pb-4">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">ব্যক্তিগত তথ্য</h4>
@@ -486,7 +445,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Address Information -->
                 <div class="border-b pb-4">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">ঠিকানা</h4>
@@ -505,7 +463,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Assistance Details -->
                 <div class="border-b pb-4">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">সহায়তা বিবরণ</h4>
@@ -543,7 +500,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Payment Information -->
                 <div>
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">পেমেন্ট তথ্য</h4>
@@ -566,7 +522,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Form Actions -->
                 <div class="flex justify-end gap-3 pt-4 border-t">
                     <button type="button" onclick="closeFormModal()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
@@ -579,19 +534,15 @@
             </form>
         </div>
     </div>
-
     <!-- Footer -->
     <div id="footer-container"></div>
-
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/components.js"></script>
     <script src="assets/js/crud.js"></script>
-
     <script>
         // Initialize Tom Select on all <select> elements
         // Re-run after modal opens so dynamically shown selects are also initialized
         const _tomInstances = new Map();
-
         function initTomSelects() {
             document.querySelectorAll('select').forEach(el => {
                 if (!_tomInstances.has(el)) {
@@ -607,10 +558,8 @@
                 }
             });
         }
-
         // Run on DOM ready and whenever a modal opens
         document.addEventListener('DOMContentLoaded', initTomSelects);
-
         // Patch CRUDManager modal opener to re-init after modal shows
         const _origOpenModal = typeof CRUDManager !== 'undefined' && CRUDManager.openModal;
         document.addEventListener('DOMContentLoaded', () => {
@@ -626,7 +575,6 @@
     <script>
         // Load dashboard components
         DashboardComponents.loadAll('humanitarian', 'মানবিক সহায়তা পরিচালনা');
-
         let currentPage = 1;
         let recordsPerPage = 20;
         let currentSearch = '';
@@ -636,7 +584,6 @@
         let allRecords = [];
         let sortColumn = '';
         let sortDirection = 'asc';
-
         // Random avatars
         const avatars = [
             'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4',
@@ -650,16 +597,13 @@
             'https://api.dicebear.com/7.x/avataaars/svg?seed=Leo&backgroundColor=b3e5fc',
             'https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie&backgroundColor=f8bbd0'
         ];
-
         function getAvatar(id) {
             return avatars[id % avatars.length];
         }
-
         // Initialize — load data immediately (list/years are public endpoints),
         // run auth check in parallel for redirect protection and role-based UI.
         AuthManager.initModule('humanitarian_aid'); // redirect if unauthenticated or no module access
         loadYears().then(() => loadData());
-
         // Search debouncing
         const searchInput = document.getElementById('search-input');
         const debouncedSearch = CRUDManager.debounce(() => {
@@ -668,14 +612,12 @@
             loadData();
         }, 500);
         searchInput.addEventListener('input', debouncedSearch);
-
         // Year filter
         document.getElementById('year-filter').addEventListener('change', (e) => {
             currentYear = e.target.value;
             currentPage = 1;
             loadData();
         });
-
         // Load years for filter
         async function loadYears() {
             try {
@@ -695,44 +637,34 @@
                 });
                 if (ts) ts.refreshOptions(false);
             } catch (error) {
-                console.error('Failed to load years:', error);
             }
         }
-
         // Load data
         async function loadData() {
             const tbody = document.getElementById('table-body');
             const loading = document.getElementById('loading');
             const emptyState = document.getElementById('empty-state');
             const tableContainer = document.getElementById('table-container');
-
             try {
                 loading.classList.remove('hidden');
                 tableContainer.classList.add('hidden');
                 emptyState.classList.add('hidden');
-
                 const params = {
                     page: currentPage,
                     limit: recordsPerPage === 'all' ? 9999 : recordsPerPage,
                     search: currentSearch,
                     year: currentYear
                 };
-
                 const response = await CRUDManager.fetchList('/humanitarian/list', params);
-
                 loading.classList.add('hidden');
-
                 if (!response.data || response.data.length === 0) {
                     emptyState.classList.remove('hidden');
                     return;
                 }
-
                 tableContainer.classList.remove('hidden');
                 tbody.innerHTML = '';
-
                 allRecords = response.data;
                 renderRows();
-
                 // Records per page selector
                 try {
                     CRUDManager.createRecordsPerPageSelector(
@@ -741,9 +673,7 @@
                         'changeRecordsPerPage'
                     );
                 } catch (selectorError) {
-                    console.error('Selector creation error:', selectorError);
                 }
-
                 // Total records count
                 try {
                     const totalRecordsEl = document.getElementById('total-records');
@@ -752,9 +682,7 @@
                         totalRecordsEl.textContent = `মোট সহায়তা সংখ্যাঃ ${bengaliNumber}`;
                     }
                 } catch (countError) {
-                    console.error('Total count error:', countError);
                 }
-
                 // Pagination
                 try {
                     const perPageForPagination = recordsPerPage === 'all' ? response.total : recordsPerPage;
@@ -766,15 +694,12 @@
                         'changePage'
                     );
                 } catch (paginationError) {
-                    console.error('Pagination creation error:', paginationError);
                 }
-
             } catch (error) {
                 loading.classList.add('hidden');
                 CRUDManager.showError('ডেটা লোড করতে ব্যর্থ: ' + error.message);
             }
         }
-
         // Sort table by column
         function sortTable(column) {
             if (sortColumn === column) {
@@ -783,7 +708,6 @@
                 sortColumn = column;
                 sortDirection = 'asc';
             }
-
             // Update header UI
             document.querySelectorAll('.sortable-th').forEach(th => {
                 th.classList.remove('active');
@@ -796,33 +720,27 @@
                 const icon = activeTh.querySelector('.sort-icon');
                 if (icon && sortDirection === 'desc') icon.style.transform = 'rotate(180deg)';
             }
-
             renderRows();
         }
-
         // Render rows (with optional sort)
         function renderRows() {
             const tbody = document.getElementById('table-body');
             const records = [...allRecords];
-
             if (sortColumn) {
                 records.sort((a, b) => {
                     let aVal = a[sortColumn] ?? '';
                     let bVal = b[sortColumn] ?? '';
-
                     if (sortColumn === 'amount_eng') {
                         aVal = parseFloat(aVal) || 0;
                         bVal = parseFloat(bVal) || 0;
                         return sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
                     }
-
                     const aStr = String(aVal).toLowerCase();
                     const bStr = String(bVal).toLowerCase();
                     const cmp = aStr.localeCompare(bStr, 'bn');
                     return sortDirection === 'asc' ? cmp : -cmp;
                 });
             }
-
             tbody.innerHTML = '';
             records.forEach((record) => {
                 const row = document.createElement('tr');
@@ -884,7 +802,6 @@
                 tbody.appendChild(row);
             });
         }
-
         // Show detail modal
         function showDetailModal(r) {
             currentDetailId = r.id;
@@ -909,23 +826,19 @@
             document.getElementById('dm-check-date').innerText  = r.check_date || 'N/A';
             document.getElementById('detail-modal').classList.add('open');
         }
-
         function closeDetailModal() {
             document.getElementById('detail-modal').classList.remove('open');
         }
-
         // Close modal on backdrop click
         document.getElementById('detail-modal').addEventListener('click', function(e) {
             if (e.target === this) closeDetailModal();
         });
-
         // Change page
         function changePage(page) {
             currentPage = page;
             loadData();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
         // Change records per page
         function changeRecordsPerPage(e) {
             const value = e.target ? e.target.value : e.value;
@@ -933,7 +846,6 @@
             currentPage = 1;
             loadData();
         }
-
         // Open add modal
         function openAddModal() {
             editingId = null;
@@ -942,30 +854,24 @@
             document.querySelector('[name="zila"]').value = 'কুষ্টিয়া';
             CRUDManager.openModal('form-modal');
         }
-
         // Close form modal
         function closeFormModal() {
             CRUDManager.closeModal('form-modal');
             editingId = null;
         }
-
         // Edit record
         async function editRecord(id) {
             try {
                 editingId = id;
                 const record = await CRUDManager.fetchList(`/humanitarian/${id}`);
-
                 document.getElementById('modal-title').textContent = 'মানবিক সহায়তা রেকর্ড সম্পাদনা';
-
                 const form = document.getElementById('humanitarian-form');
                 CRUDManager.populateForm(form, record);
-
                 CRUDManager.openModal('form-modal');
             } catch (error) {
                 CRUDManager.showError('রেকর্ড লোড করতে ব্যর্থ: ' + error.message);
             }
         }
-
         // Delete record
         async function deleteRecord(id) {
             try {
@@ -976,21 +882,17 @@
                 CRUDManager.showError('রেকর্ড মুছতে ব্যর্থ: ' + error.message);
             }
         }
-
         // Form submit
         document.getElementById('humanitarian-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-
             try {
                 const formData = CRUDManager.formToJSON(e.target);
-
                 // Remove empty fields
                 Object.keys(formData).forEach(key => {
                     if (formData[key] === '' || formData[key] === null) {
                         delete formData[key];
                     }
                 });
-
                 if (editingId) {
                     await CRUDManager.update('/humanitarian', editingId, formData);
                     CRUDManager.showSuccess('রেকর্ড সফলভাবে আপডেট হয়েছে');
@@ -998,7 +900,6 @@
                     await CRUDManager.create('/humanitarian', formData);
                     CRUDManager.showSuccess('নতুন রেকর্ড সফলভাবে যোগ করা হয়েছে');
                 }
-
                 closeFormModal();
                 await loadData();
             } catch (error) {
