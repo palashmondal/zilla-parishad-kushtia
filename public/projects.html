@@ -1871,7 +1871,7 @@
                 yearPanel.appendChild(option);
             });
         } catch (error) {
-            console.error('✗ Failed to load financial years:', error);
+
             yearPanel.innerHTML = `
                 <div class="year-option active" data-year="all" onmousedown="pickYear(this, event)">
                     <span class="opt-dot"></span> সকল অর্থবছর
@@ -2004,7 +2004,7 @@
             moreHint.classList.toggle('hidden', results.length <= MAX_SHOW);
 
         } catch (error) {
-            console.error('Search error:', error);
+
             resultsEl.innerHTML = '<div style="padding:18px;text-align:center;font-size:14px;color:#d97706;">সার্ভার ত্রুটি। অনুগ্রহ করে আবার চেষ্টা করুন।</div>';
             resultsEl.style.maxHeight = 'none';
             moreHint.classList.add('hidden');
@@ -2466,7 +2466,7 @@
             if (user.role === 'admin') { isAdmin = true; }
             showAdminUI(user);
         } catch (error) {
-            console.error('Auth check failed:', error);
+
             localStorage.removeItem('zpk_admin_token');
             localStorage.removeItem('zpk_admin_user');
             hideAdminUI();
@@ -2716,7 +2716,7 @@
                     }
                 }
             }).catch(err => {
-                console.error('Failed to load memos:', err);
+
             });
         }
 
@@ -2804,7 +2804,7 @@
             const updatedResponse = await fetch(`${API_URL}/projects/${recordId}`);
             if (updatedResponse.ok) { const updatedRecord = await updatedResponse.json(); showDetails(updatedRecord); }
         } catch (error) {
-            console.error('Edit error:', error);
+
             alert('ত্রুটি: ' + error.message);
         } finally {
             if (submitBtn) { submitBtn.disabled = false; }
@@ -2866,7 +2866,7 @@
 
                 const memoSelect = document.getElementById('edit-approval-memo');
                 if (!memoSelect) {
-                    console.warn('Memo select element not found');
+
                     resolve();
                     return;
                 }
@@ -2902,7 +2902,7 @@
                                 option.textContent = label;
                                 memoSelect.appendChild(option);
                             } catch (itemError) {
-                                console.error('Error processing memo item:', memo, itemError);
+
                             }
                         });
                     }
@@ -2915,7 +2915,7 @@
                 }
                 resolve();
             } catch (error) {
-                console.error('Error loading memos:', error);
+
                 const memoSelect = document.getElementById('edit-approval-memo');
                 if (memoSelect) {
                     memoSelect.innerHTML = '<option value="">স্মারক নির্বাচন করুন</option>';
@@ -2944,7 +2944,7 @@
             document.getElementById('search-input').value = '';
             dropdown.classList.add('hidden');
         } catch (error) {
-            console.error('Delete error:', error);
+
             alert('ত্রুটি: ' + error.message);
         }
     }
@@ -2964,12 +2964,12 @@
                                    method === 'আরএফকিউ' ? 'rfq' : method;
             const res = await fetch(`${API_URL}/projects/progress-steps?method=${normalizedMethod}`);
             if (!res.ok) {
-                console.error('Failed to fetch progress steps');
+
                 return [];
             }
             return await res.json();
         } catch (err) {
-            console.error('Error fetching progress steps:', err);
+
             return [];
         }
     }
@@ -3671,7 +3671,7 @@
                     const selectedValue = e.target.value;
                     if (selectedValue && typeof selectedValue === 'string') {
                         loadMemosByFinancialYear(selectedValue).catch(err => {
-                            console.error('Error loading memos on change:', err);
+
                         });
                     }
                 });

@@ -1021,7 +1021,7 @@
                 yearPanel.appendChild(option);
             });
         } catch (error) {
-            console.error('✗ Failed to load financial years:', error);
+
             yearPanel.innerHTML = `
                 <div class="year-option active" data-year="all" onmousedown="pickYear(this, event)">
                     <span class="opt-dot"></span> সকল অর্থবছর
@@ -1145,7 +1145,7 @@
             moreHint.classList.toggle('hidden', results.length <= MAX_SHOW);
 
         } catch (error) {
-            console.error('Search error:', error);
+
             resultsEl.innerHTML = '<div style="padding:18px;text-align:center;font-size:14px;color:#d42b3a;">সার্ভার ত্রুটি। অনুগ্রহ করে আবার চেষ্টা করুন।</div>';
             resultsEl.style.maxHeight = 'none';
             moreHint.classList.add('hidden');
@@ -1222,7 +1222,7 @@
             }
             showAdminUI(user);
         } catch (error) {
-            console.error('Auth check failed:', error);
+
             localStorage.removeItem('zpk_admin_token');
             localStorage.removeItem('zpk_admin_user');
             hideAdminUI();
@@ -1361,9 +1361,9 @@
 
     // ── EDIT MODAL ──
     function openEditModal() {
-        console.log('openEditModal called', currentRecord);
+
         if (!currentRecord) {
-            console.error('No current record available');
+
             return;
         }
 
@@ -1484,16 +1484,16 @@
             }
 
         } catch (error) {
-            console.error('Edit error:', error);
+
             alert('ত্রুটি: ' + error.message);
         }
     }
 
     // ── DELETE MODAL ──
     function openDeleteModal() {
-        console.log('openDeleteModal called', currentRecord);
+
         if (!currentRecord) {
-            console.error('No current record available');
+
             return;
         }
 
@@ -1551,7 +1551,7 @@
             dropdown.classList.add('hidden');
 
         } catch (error) {
-            console.error('Delete error:', error);
+
             alert('ত্রুটি: ' + error.message);
         }
     }

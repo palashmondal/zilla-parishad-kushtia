@@ -1128,7 +1128,7 @@
                 yearPanel.appendChild(option);
             });
         } catch (error) {
-            console.error('Failed to load financial years:', error);
+
             yearPanel.innerHTML = `
                 <div class="year-option active" data-year="all" onmousedown="pickYear(this, event)">
                     <span class="opt-dot"></span> সকল অর্থবছর
@@ -1257,7 +1257,7 @@
             moreHint.classList.toggle('hidden', results.length <= MAX_SHOW);
 
         } catch (error) {
-            console.error('Search error:', error);
+
             resultsEl.innerHTML = '<div style="padding:18px;text-align:center;font-size:14px;color:#ef4444;">সার্ভার ত্রুটি। অনুগ্রহ করে আবার চেষ্টা করুন।</div>';
             resultsEl.style.maxHeight = 'none';
             moreHint.classList.add('hidden');
@@ -1320,7 +1320,7 @@
     // Load unique bank names from database using search endpoint
     async function loadUniqueBanks() {
         try {
-            console.log('Loading unique banks from database...');
+
 
             // Use common search terms including names and numbers
             const searchTerms = ['মোঃ', 'মো', 'আব্দুল', 'রহমান', 'আলী', '01', '02', '03'];
@@ -1329,13 +1329,13 @@
 
             for (const term of searchTerms) {
                 try {
-                    console.log(`Searching for term: "${term}"`);
+
                     const response = await fetch(`${API_URL}/humanitarian/search?q=${encodeURIComponent(term)}`);
-                    console.log(`Response status for "${term}":`, response.status);
+
 
                     if (response.ok) {
                         const results = await response.json();
-                        console.log(`Results for "${term}":`, results.length, 'records');
+
 
                         if (Array.isArray(results)) {
                             allRecords.push(...results);
@@ -1345,28 +1345,28 @@
                                 }
                                 // Log first record's bank field to see the data
                                 if (idx === 0) {
-                                    console.log(`First record bank for "${term}":`, record.bank);
+
                                 }
                             });
                         }
                     } else {
                         const errorData = await response.json();
-                        console.warn(`Failed to fetch records for term "${term}":`, errorData);
+
                     }
                 } catch (err) {
-                    console.warn(`Exception for term "${term}":`, err);
+
                 }
             }
 
             uniqueBanks = Array.from(banks).sort();
-            console.log(`Collected ${allRecords.length} total records from searches`);
-            console.log(`Found ${uniqueBanks.length} unique banks:`, uniqueBanks);
+
+
 
             if (uniqueBanks.length === 0) {
-                console.error('No banks found! Check if records have bank data.');
+
             }
         } catch (error) {
-            console.error('Failed to load banks:', error);
+
             uniqueBanks = [];
         }
     }
@@ -1375,8 +1375,8 @@
     function populateBankDropdown(currentBank) {
         const bankSelect = document.getElementById('edit-bank');
 
-        console.log('Populating bank dropdown. Current bank:', currentBank);
-        console.log('Available banks:', uniqueBanks);
+
+
 
         // Clear existing options
         bankSelect.innerHTML = '';
@@ -1421,7 +1421,7 @@
             bankSelect.insertBefore(currentOption, bankSelect.children[1]); // Insert after placeholder
         }
 
-        console.log(`Populated dropdown with ${bankSelect.options.length} options (including placeholder)`);
+`);
     }
 
     // Check if admin is logged in
@@ -1447,7 +1447,7 @@
             }
             showAdminUI(user);
         } catch (error) {
-            console.error('Auth check failed:', error);
+
             localStorage.removeItem('zpk_admin_token');
             localStorage.removeItem('zpk_admin_user');
             hideAdminUI();
@@ -1587,15 +1587,15 @@
     // ── EDIT MODAL ──
     async function openEditModal() {
         if (!currentRecord) {
-            console.error('No record selected for editing');
+
             return;
         }
 
-        console.log('Opening edit modal for record:', currentRecord);
+
 
         // Ensure banks are loaded before populating dropdown
         if (uniqueBanks.length === 0) {
-            console.log('Banks not loaded yet, loading now...');
+
             await loadUniqueBanks();
         }
 
@@ -1704,7 +1704,7 @@
             }
 
         } catch (error) {
-            console.error('Edit error:', error);
+
             alert('ত্রুটি: ' + error.message);
         }
     }
@@ -1712,7 +1712,7 @@
     // ── DELETE MODAL ──
     function openDeleteModal() {
         if (!currentRecord) {
-            console.error('No record selected for deletion');
+
             return;
         }
 
@@ -1775,7 +1775,7 @@
             dropdown.classList.add('hidden');
 
         } catch (error) {
-            console.error('Delete error:', error);
+
             alert('ত্রুটি: ' + error.message);
         }
     }

@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.maateen.me/siyam-rupali/font.css" rel="stylesheet">
     <style>@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:400;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_400_v2-6a682f6f610beeda14f0.woff2') format('woff2')}@font-face{font-family:"Shurjo";font-display:swap;font-style:normal;font-weight:700;src:url('https://assets.prothomalo.com/prothomalo/assets/ShurjoWeb_700_v2-ef9e058ccc3a98d85030.woff2') format('woff2')}</style>
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
@@ -15,11 +14,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="ZPK Admin" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
-
     <style>
         html { font-size: 18px; }
         * { font-family: Shurjo, "Siyam Rupali", Roboto, Arial, Helvetica, Monospace; }
-
         /* User Detail Modal Styles */
         .user-detail-backdrop {
             opacity: 0;
@@ -39,20 +36,17 @@
             transform: translateY(0) scale(1);
             opacity: 1;
         }
-
         /* User Avatar Styles */
         .user-avatar-large {
             background: linear-gradient(135deg, #10b981, #059669);
             border: 4px solid #fff;
             box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
         }
-
         /* Info Card Styles */
         .info-card {
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
             border: 1px solid #bbf7d0;
         }
-
         /* Badge Styles */
         .detail-badge {
             padding: 6px 14px;
@@ -67,7 +61,6 @@
         .badge-user { background: #dbeafe; color: #1e40af; }
         .badge-active { background: #d1fae5; color: #065f46; }
         .badge-inactive { background: #f3f4f6; color: #374151; }
-
         /* Action Button Styles */
         .detail-action-btn {
             transition: all 0.2s ease;
@@ -81,10 +74,8 @@
 <body class="bg-gray-50 flex flex-col min-h-screen">
     <!-- Header -->
     <div id="header-container"></div>
-
     <!-- Navigation -->
     <div id="menu-container"></div>
-
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 flex-1">
         <!-- Success/Error Messages -->
@@ -94,7 +85,6 @@
         <div id="error-message" class="hidden mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
             <p id="error-text"></p>
         </div>
-
         <!-- Header Section -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-6">
             <div class="flex items-center justify-between">
@@ -110,7 +100,6 @@
                 </button>
             </div>
         </div>
-
         <!-- Table Section -->
         <div class="bg-white rounded-xl shadow-md overflow-hidden">
             <!-- Loading Spinner -->
@@ -118,7 +107,6 @@
                 <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
                 <p class="mt-4 text-gray-600">লোড হচ্ছে...</p>
             </div>
-
             <!-- Table -->
             <div id="table-container" class="overflow-x-auto">
                 <table class="w-full">
@@ -139,7 +127,6 @@
                     </tbody>
                 </table>
             </div>
-
             <!-- Empty State -->
             <div id="empty-state" class="hidden p-8 text-center">
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -150,7 +137,6 @@
             </div>
         </div>
     </main>
-
     <!-- Add/Edit Modal -->
     <div id="form-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
         <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-xl bg-white">
@@ -162,10 +148,8 @@
                     </svg>
                 </button>
             </div>
-
             <form id="user-form" class="space-y-6">
                 <input type="hidden" id="user-id" name="id">
-
                 <!-- Basic Information -->
                 <div class="border-b pb-4">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">মৌলিক তথ্য</h4>
@@ -191,7 +175,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Professional Information -->
                 <div class="border-b pb-4">
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">পেশাগত তথ্য</h4>
@@ -206,7 +189,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Access Control -->
                 <div>
                     <h4 class="text-lg font-semibold text-gray-800 mb-4">অ্যাক্সেস নিয়ন্ত্রণ</h4>
@@ -226,7 +208,6 @@
                             </select>
                         </div>
                     </div>
-
                     <!-- Module Access (hidden for admin role) -->
                     <div id="module-access-section" class="mt-4 hidden">
                         <label class="block text-sm font-medium text-gray-700 mb-2">মডিউল অ্যাক্সেস</label>
@@ -235,7 +216,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Form Actions -->
                 <div class="flex justify-end gap-3 pt-4 border-t">
                     <button type="button" onclick="closeFormModal()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
@@ -248,7 +228,6 @@
             </form>
         </div>
     </div>
-
     <!-- User Detail Modal -->
     <div id="user-detail-modal" class="user-detail-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
         <div class="user-detail-card bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden">
@@ -259,7 +238,6 @@
                         <path stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
-
                 <div class="flex items-center gap-6">
                     <img id="detail-avatar" src="" alt="" class="user-avatar-large w-28 h-28 rounded-full object-cover">
                     <div class="flex-1">
@@ -271,7 +249,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Content Section -->
             <div class="p-8 max-h-[70vh] overflow-y-auto">
                 <!-- Basic Information -->
@@ -301,7 +278,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Account Info -->
                 <div class="mb-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -321,7 +297,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Module Access (non-admin users only) -->
                 <div id="detail-modules-section" class="mb-6 hidden">
                     <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -335,32 +310,26 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-
     <!-- Footer -->
     <div id="footer-container"></div>
-
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/components.js"></script>
     <script src="assets/js/crud.js"></script>
     <script>
         // Load dashboard components
         DashboardComponents.loadAll('users', 'ব্যবহারকারী পরিচালনা');
-
         let editingId = null;
         let usernameCheckTimeout = null;
         let emailCheckTimeout = null;
         let isUsernameAvailable = true;
         let isEmailValid = true;
-
         const MODULES = [
             { name: 'scholarship',      label: 'শিক্ষাবৃত্তি' },
             { name: 'humanitarian_aid', label: 'মানবিক সহায়তা' },
             { name: 'projects',         label: 'প্রকল্প ও বরাদ্দপত্র' }
         ];
-
         function renderModuleToggles(grantedModules = []) {
             const container = document.getElementById('module-toggles');
             container.innerHTML = MODULES.map(mod => {
@@ -381,13 +350,11 @@
                     </div>
                 `;
             }).join('');
-
             // Add click handlers to all toggles
             document.querySelectorAll('#module-toggles .module-row').forEach(row => {
                 row.addEventListener('click', (e) => {
                     const checkbox = row.querySelector('.module-toggle');
                     checkbox.checked = !checkbox.checked;
-
                     // Update visual state
                     const bg = row.querySelector('.module-bg');
                     const dot = row.querySelector('.module-dot');
@@ -401,7 +368,6 @@
                 });
             });
         }
-
         function updateModuleSectionVisibility() {
             const role = document.getElementById('role-select').value;
             const section = document.getElementById('module-access-section');
@@ -411,26 +377,20 @@
                 section.classList.remove('hidden');
             }
         }
-
         document.getElementById('role-select').addEventListener('change', updateModuleSectionVisibility);
-
         // Initialize - Require admin role
         AuthManager.init(true).then(async (user) => {
             if (!user) return;
             await loadData();
         });
-
         // Username availability check
         const usernameInput = document.getElementById('username-input');
         const usernameFeedback = document.getElementById('username-feedback');
-
         if (usernameInput) {
             usernameInput.addEventListener('input', (e) => {
                 const username = e.target.value.trim();
-
                 clearTimeout(usernameCheckTimeout);
                 usernameFeedback.classList.add('hidden');
-
                 if (username.length < 3) {
                     usernameFeedback.textContent = 'ইউজারনেম কমপক্ষে ৩ অক্ষর হতে হবে';
                     usernameFeedback.className = 'text-xs mt-1 text-red-600';
@@ -438,14 +398,12 @@
                     isUsernameAvailable = false;
                     return;
                 }
-
                 usernameCheckTimeout = setTimeout(async () => {
                     try {
                         const response = await AuthManager.fetch(`${AuthManager.API_URL}/users`);
                         if (response.ok) {
                             const users = await response.json();
                             const exists = users.some(u => u.username === username && u.id !== editingId);
-
                             if (exists) {
                                 usernameFeedback.textContent = '✗ এই ইউজারনেম ইতিমধ্যে ব্যবহৃত হয়েছে';
                                 usernameFeedback.className = 'text-xs mt-1 text-red-600';
@@ -458,30 +416,23 @@
                             usernameFeedback.classList.remove('hidden');
                         }
                     } catch (error) {
-                        console.error('Username check error:', error);
                     }
                 }, 500);
             });
         }
-
         // Email validation
         const emailInput = document.getElementById('email-input');
         const emailFeedback = document.getElementById('email-feedback');
-
         if (emailInput) {
             emailInput.addEventListener('input', (e) => {
                 const email = e.target.value.trim();
-
                 clearTimeout(emailCheckTimeout);
                 emailFeedback.classList.add('hidden');
-
                 if (email === '') {
                     isEmailValid = true;
                     return;
                 }
-
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
                 if (!emailRegex.test(email)) {
                     emailFeedback.textContent = '✗ সঠিক ইমেইল ফরম্যাট নয়';
                     emailFeedback.className = 'text-xs mt-1 text-red-600';
@@ -489,14 +440,12 @@
                     isEmailValid = false;
                     return;
                 }
-
                 emailCheckTimeout = setTimeout(async () => {
                     try {
                         const response = await AuthManager.fetch(`${AuthManager.API_URL}/users`);
                         if (response.ok) {
                             const users = await response.json();
                             const exists = users.some(u => u.email === email && u.id !== editingId);
-
                             if (exists) {
                                 emailFeedback.textContent = '✗ এই ইমেইল ইতিমধ্যে ব্যবহৃত হয়েছে';
                                 emailFeedback.className = 'text-xs mt-1 text-red-600';
@@ -509,46 +458,35 @@
                             emailFeedback.classList.remove('hidden');
                         }
                     } catch (error) {
-                        console.error('Email check error:', error);
                     }
                 }, 500);
             });
         }
-
         // Load data
         async function loadData() {
             const tbody = document.getElementById('table-body');
             const loading = document.getElementById('loading');
             const emptyState = document.getElementById('empty-state');
             const tableContainer = document.getElementById('table-container');
-
             try {
                 loading.classList.remove('hidden');
                 tableContainer.classList.add('hidden');
                 emptyState.classList.add('hidden');
-
                 const response = await AuthManager.fetch(`${AuthManager.API_URL}/users`);
-
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
                     throw new Error(errorData.message || `HTTP ${response.status}`);
                 }
-
                 const users = await response.json();
-
                 loading.classList.add('hidden');
-
                 if (!users || users.length === 0) {
                     emptyState.classList.remove('hidden');
                     return;
                 }
-
                 tableContainer.classList.remove('hidden');
                 tbody.innerHTML = '';
-
                 users.forEach((user) => {
                     const avatarUrl = user.photo_path || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name || user.username)}&background=16a34a&color=fff&size=128`;
-
                     const row = document.createElement('tr');
                     row.className = 'hover:bg-gray-50 transition cursor-pointer';
                     row.addEventListener('click', (e) => {
@@ -590,14 +528,11 @@
                     `;
                     tbody.appendChild(row);
                 });
-
             } catch (error) {
                 loading.classList.add('hidden');
-                console.error('Load data error:', error);
                 CRUDManager.showError('ডেটা লোড করতে ব্যর্থ: ' + error.message);
             }
         }
-
         // Open add modal
         function openAddModal() {
             editingId = null;
@@ -606,41 +541,32 @@
             document.querySelector('[name="office_name"]').value = 'জেলা পরিষদ, কুষ্টিয়া';
             document.querySelector('[name="password"]').required = true;
             document.getElementById('password-field').classList.remove('hidden');
-
             // Reset validation feedback
             usernameFeedback.classList.add('hidden');
             emailFeedback.classList.add('hidden');
             isUsernameAvailable = true;
             isEmailValid = true;
-
             renderModuleToggles([]);
             updateModuleSectionVisibility();
-
             CRUDManager.openModal('form-modal');
         }
-
         // Close form modal
         function closeFormModal() {
             CRUDManager.closeModal('form-modal');
             editingId = null;
         }
-
         // Edit record
         async function editRecord(id) {
             try {
                 editingId = id;
                 const response = await AuthManager.fetch(`${AuthManager.API_URL}/users/${id}`);
-
                 if (!response.ok) {
                     throw new Error('ব্যবহারকারী লোড করতে ব্যর্থ');
                 }
-
                 const user = await response.json();
                 const currentUser = AuthManager.getUser();
                 const isEditingSelf = currentUser && currentUser.id === user.id;
-
                 document.getElementById('modal-title').textContent = 'ব্যবহারকারী সম্পাদনা';
-
                 const form = document.getElementById('user-form');
                 form.querySelector('[name="username"]').value = user.username || '';
                 form.querySelector('[name="email"]').value = user.email || '';
@@ -649,22 +575,18 @@
                 form.querySelector('[name="office_name"]').value = user.office_name || 'জেলা পরিষদ, কুষ্টিয়া';
                 form.querySelector('[name="role"]').value = user.role || 'user';
                 form.querySelector('[name="is_active"]').value = user.is_active ? '1' : '0';
-
                 // Reset validation feedback
                 usernameFeedback.classList.add('hidden');
                 emailFeedback.classList.add('hidden');
                 isUsernameAvailable = true;
                 isEmailValid = true;
-
                 // Disable role and status fields if editing self (security)
                 const roleField = form.querySelector('[name="role"]');
                 const statusField = form.querySelector('[name="is_active"]');
-
                 if (isEditingSelf) {
                     roleField.disabled = true;
                     roleField.title = 'আপনি নিজের ভূমিকা পরিবর্তন করতে পারবেন না';
                     roleField.classList.add('bg-gray-100');
-
                     statusField.disabled = true;
                     statusField.title = 'আপনি নিজের অবস্থা পরিবর্তন করতে পারবেন না';
                     statusField.classList.add('bg-gray-100');
@@ -674,7 +596,6 @@
                     statusField.disabled = false;
                     statusField.classList.remove('bg-gray-100');
                 }
-
                 // Password not required for edit
                 document.querySelector('[name="password"]').required = false;
                 document.getElementById('password-field').innerHTML = `
@@ -682,68 +603,55 @@
                     <input type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                     <p class="text-xs text-gray-500 mt-1">পাসওয়ার্ড পরিবর্তন করতে চাইলে এখানে লিখুন</p>
                 `;
-
                 renderModuleToggles(user.modules || []);
                 updateModuleSectionVisibility();
-
                 CRUDManager.openModal('form-modal');
             } catch (error) {
                 CRUDManager.showError('ব্যবহারকারী লোড করতে ব্যর্থ: ' + error.message);
             }
         }
-
         // Delete record
         async function deleteRecord(id, username) {
             if (!confirm(`আপনি কি নিশ্চিত যে "${username}" ব্যবহারকারীকে মুছে ফেলতে চান?`)) {
                 return;
             }
-
             try {
                 const response = await AuthManager.fetch(`${AuthManager.API_URL}/users/${id}`, {
                     method: 'DELETE'
                 });
-
                 if (!response.ok) {
                     throw new Error('ব্যবহারকারী মুছতে ব্যর্থ');
                 }
-
                 CRUDManager.showSuccess('ব্যবহারকারী সফলভাবে মুছে ফেলা হয়েছে');
                 await loadData();
             } catch (error) {
                 CRUDManager.showError('ব্যবহারকারী মুছতে ব্যর্থ: ' + error.message);
             }
         }
-
         // Form submit
         document.getElementById('user-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-
             // Check validation
             if (!isUsernameAvailable) {
                 CRUDManager.showError('ইউজারনেম উপলব্ধ নয়। অন্য একটি ইউজারনেম চেষ্টা করুন।');
                 return;
             }
-
             if (!isEmailValid) {
                 CRUDManager.showError('ইমেইল সঠিক নয় বা ইতিমধ্যে ব্যবহৃত হয়েছে।');
                 return;
             }
-
             try {
                 const formData = new FormData(e.target);
                 const data = {};
-
                 formData.forEach((value, key) => {
                     if (value !== '' && value !== null) {
                         data[key] = value;
                     }
                 });
-
                 // Convert is_active to boolean
                 if (data.is_active !== undefined) {
                     data.is_active = data.is_active === '1';
                 }
-
                 let response;
                 if (editingId) {
                     // Don't send empty password on edit
@@ -760,12 +668,10 @@
                         body: JSON.stringify(data)
                     });
                 }
-
                 const responseData = await response.json();
                 if (!response.ok) {
                     throw new Error(responseData.message || 'সংরক্ষণ করতে ব্যর্থ');
                 }
-
                 // Sync module grants for non-admin users
                 const roleValue = document.getElementById('role-select').value;
                 if (roleValue !== 'admin') {
@@ -779,7 +685,6 @@
                         });
                     }
                 }
-
                 CRUDManager.showSuccess(editingId ? 'ব্যবহারকারী সফলভাবে আপডেট হয়েছে' : 'নতুন ব্যবহারকারী সফলভাবে যোগ করা হয়েছে');
                 closeFormModal();
                 await loadData();
@@ -787,10 +692,8 @@
                 CRUDManager.showError('সংরক্ষণ করতে ব্যর্থ: ' + error.message);
             }
         });
-
         // User Detail Modal Functions
         let currentUserDetail = null;
-
         async function showUserDetail(user) {
             try {
                 // Fetch fresh user data with modules
@@ -799,20 +702,15 @@
                     user = await response.json();
                 }
             } catch (error) {
-                console.error('Failed to fetch fresh user data:', error);
                 // Fall back to the original user object from table
             }
-
             currentUserDetail = user;
-
             // Avatar
             const avatarUrl = user.photo_path || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.full_name || user.username)}&background=16a34a&color=fff&size=256`;
             document.getElementById('detail-avatar').src = avatarUrl;
             document.getElementById('detail-avatar').alt = user.full_name || user.username;
-
             // Full Name
             document.getElementById('detail-full-name').textContent = user.full_name || 'নাম নেই';
-
             // Role Badge
             const roleBadge = document.getElementById('detail-role-badge');
             if (user.role === 'admin') {
@@ -832,7 +730,6 @@
                     সাধারণ ব্যবহারকারী
                 `;
             }
-
             // Status Badge
             const statusBadge = document.getElementById('detail-status-badge');
             if (user.is_active) {
@@ -852,13 +749,11 @@
                     নিষ্ক্রিয়
                 `;
             }
-
             // Basic Information (only DB-backed fields)
             document.getElementById('detail-username').textContent = user.username || '—';
             document.getElementById('detail-email').textContent = user.email || '—';
             document.getElementById('detail-designation').textContent = user.designation || '—';
             document.getElementById('detail-office-name').textContent = user.office_name || '—';
-
             // Account Info
             document.getElementById('detail-created').textContent = user.created_at
                 ? CRUDManager.formatDate(user.created_at)
@@ -866,7 +761,6 @@
             document.getElementById('detail-last-login').textContent = user.last_login
                 ? CRUDManager.formatDate(user.last_login)
                 : 'কখনো লগইন করেননি';
-
             // Module Access (only for non-admin users)
             const modulesSection = document.getElementById('detail-modules-section');
             const modulesList = document.getElementById('detail-modules-list');
@@ -889,32 +783,27 @@
                     `;
                 }).join('');
             }
-
             // Show modal
             document.getElementById('user-detail-modal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
-
         function closeUserDetail() {
             document.getElementById('user-detail-modal').classList.remove('open');
             document.body.style.overflow = '';
             currentUserDetail = null;
         }
-
         function editUserFromDetail() {
             if (currentUserDetail) {
                 closeUserDetail();
                 editRecord(currentUserDetail.id);
             }
         }
-
         // Close modal on backdrop click
         document.getElementById('user-detail-modal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeUserDetail();
             }
         });
-
         // Close modal on Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
