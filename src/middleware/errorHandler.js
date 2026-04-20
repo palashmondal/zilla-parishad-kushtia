@@ -4,7 +4,7 @@ function errorHandler(err, req, res, next) {
     console.error(err.stack);
     res.status(500).json({
         error: 'Internal server error',
-        message: isProduction ? 'An internal error occurred' : err.message
+        message: err.message
     });
 }
 

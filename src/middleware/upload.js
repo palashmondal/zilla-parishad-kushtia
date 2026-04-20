@@ -1,10 +1,13 @@
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 // ── Project image storage ──────────────────────────────────────
 const projectImageStorage = multer.diskStorage({
     destination(req, file, cb) {
-        cb(null, path.join(__dirname, '../../uploads/projects'));
+        const dir = path.join(__dirname, '../../uploads/projects');
+        fs.mkdirSync(dir, { recursive: true });
+        cb(null, dir);
     },
     filename(req, file, cb) {
         const projectId = (req.params.id || 'unknown').replace(/[^a-zA-Z0-9\-]/g, '');
@@ -35,7 +38,9 @@ const uploadProjectImages = multer({
 // ── Project documents storage ──────────────────────────────────────
 const projectDocumentsStorage = multer.diskStorage({
     destination(req, file, cb) {
-        cb(null, path.join(__dirname, '../../uploads/documents'));
+        const dir = path.join(__dirname, '../../uploads/documents');
+        fs.mkdirSync(dir, { recursive: true });
+        cb(null, dir);
     },
     filename(req, file, cb) {
         const projectId = (req.params.id || 'unknown').replace(/[^a-zA-Z0-9\-]/g, '');
@@ -76,7 +81,9 @@ const uploadProjectDocuments = multer({
 // ── Approval Memos document storage ──────────────────────────────────────
 const approvalMemosStorage = multer.diskStorage({
     destination(req, file, cb) {
-        cb(null, path.join(__dirname, '../../uploads/approval-memos'));
+        const dir = path.join(__dirname, '../../uploads/approval-memos');
+        fs.mkdirSync(dir, { recursive: true });
+        cb(null, dir);
     },
     filename(req, file, cb) {
         const memoId = (req.params.id || 'new').replace(/[^a-zA-Z0-9\-]/g, '');
