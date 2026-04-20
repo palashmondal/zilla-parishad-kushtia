@@ -1606,42 +1606,12 @@
                         <div id="prog-current-bar" class="h-2.5 rounded-full transition-all duration-500"
                              style="width:0%;background:linear-gradient(90deg,#fbbf24,#d97706);"></div>
                     </div>
-                    <div class="flex justify-between mt-1.5">
-                        <span class="text-xs text-amber-700 font-medium">ছাড়কৃত: <span id="prog-current-released" class="font-bold">৳ ০</span></span>
-                        <span class="text-xs text-amber-600 font-medium">বরাদ্দ: <span id="prog-current-alloc" class="font-bold">৳ ০</span></span>
-                    </div>
                 </div>
 
                 <!-- Latest Update Status -->
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                     <p class="text-xs font-bold text-gray-600 uppercase tracking-wide mb-1.5">সর্বশেষ আপডেট</p>
                     <p id="prog-latest-status-text" class="text-sm font-semibold text-gray-900 text-center">কার্যক্রম শুরু হয় নাই</p>
-                </div>
-
-                <!-- Section 1: Progress amount -->
-                <div class="form-section">
-                    <!-- Fund release toggle stitch -->
-                    <div class="mt-3">
-                        <button type="button" id="prog-fund-toggle"
-                                onclick="toggleFundRelease()"
-                                class="flex items-center gap-2 text-sm font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg px-3 py-1.5 transition-all">
-                            <svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            তহবিল ছাড় যোগ করুন
-                        </button>
-                        <div id="prog-fund-release-field" class="hidden mt-2.5">
-                            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
-                                ছাড়কৃত অর্থ (টাকা) <span id="prog-fund-required-indicator" class="hidden text-red-400">*</span>
-                            </label>
-                            <div class="relative">
-                                <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-amber-600 font-bold text-sm pointer-events-none">৳</span>
-                                <input type="number" id="prog-released" name="released_amount"
-                                       min="0" step="any" placeholder="0.00"
-                                       class="w-full pl-7 pr-3 py-2 border border-emerald-300 rounded-lg text-sm bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 focus:bg-white hover:border-emerald-400 transition-all">
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Section 2: Status -->
@@ -1674,6 +1644,28 @@
                             <div class="h-2 rounded-full overflow-hidden bg-gray-200">
                                 <div id="prog-step-pct-bar" class="h-2 rounded-full transition-all duration-300"
                                      style="width:0%;background:linear-gradient(90deg,#86efac,#22c55e);"></div>
+                            </div>
+                        </div>
+                        <!-- Fund release toggle -->
+                        <div class="mt-3">
+                            <button type="button" id="prog-fund-toggle"
+                                    onclick="toggleFundRelease()"
+                                    class="flex items-center gap-2 text-sm font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg px-3 py-1.5 transition-all">
+                                <svg id="prog-fund-toggle-icon" class="w-3.5 h-3.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                তহবিল ছাড় যোগ করুন
+                            </button>
+                            <div id="prog-fund-release-field" class="hidden mt-2.5">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                                    ছাড়কৃত অর্থ (টাকা) <span id="prog-fund-required-indicator" class="hidden text-red-400">*</span>
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-amber-600 font-bold text-sm pointer-events-none">৳</span>
+                                    <input type="number" id="prog-released" name="released_amount"
+                                           min="0" step="any" placeholder="0.00"
+                                           class="w-full pl-7 pr-3 py-2 border border-emerald-300 rounded-lg text-sm bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 focus:bg-white hover:border-emerald-400 transition-all">
+                                </div>
                             </div>
                         </div>
                         <!-- Activity Date -->
@@ -3561,10 +3553,6 @@
             const alloc    = parseFloat((_progressRecord && _progressRecord.allocation_amount) || 0);
             document.getElementById('prog-current-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
             document.getElementById('prog-current-bar').style.width = pct + '%';
-            document.getElementById('prog-current-released').textContent =
-                '৳ ' + fmtAmt(released);
-            document.getElementById('prog-current-alloc').textContent =
-                '৳ ' + fmtAmt(alloc);
 
             // Load progress log history FIRST (to set _lastProgressStepId before populating steps)
             await loadProgressModalLog(_progressProjectId);
@@ -3810,7 +3798,6 @@
 
                         document.getElementById('prog-current-pct-label').textContent = CRUDManager.toBengaliNumber(pct) + '%';
                         document.getElementById('prog-current-bar').style.width = pct + '%';
-                        document.getElementById('prog-current-released').textContent = '৳ ' + fmtAmt(released);
                         const fundPct = alloc > 0 ? Math.min(Math.round((released / alloc) * 100), 100) : 0;
                         document.getElementById('dm-fund-release-pct').innerText = fundPct + '%';
                         document.getElementById('dm-fund-release-bar').style.width = fundPct + '%';
