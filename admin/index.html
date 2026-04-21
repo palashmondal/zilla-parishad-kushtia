@@ -147,72 +147,88 @@
     <!-- ══ TOP KPI ROW ═══════════════════════════════════════════ -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" style="align-items:stretch;">
         <!-- Tile 1: Scholarship -->
-        <div class="kpi-tile bg-white border-t-4 border-blue-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+        <div class="kpi-tile bg-white border-t-4 border-blue-500 shadow-sm flex flex-col justify-between" style="min-height:140px;">
             <div>
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">শিক্ষাবৃত্তি</p>
                 <p class="text-3xl font-extrabold text-blue-600 leading-none" id="kpi-sch-count">—</p>
             </div>
             <div class="mt-auto pt-2 border-t border-gray-100">
-                <p class="text-sm font-bold text-blue-500 truncate" id="kpi-sch-amt">—</p>
-                <p class="text-xs text-gray-400">মোট শিক্ষাবৃত্তি অর্থ</p>
+                <p class="text-base font-bold text-emerald-600 truncate" id="kpi-sch-amt">—</p>
+                <p class="text-sm text-emerald-700 font-medium">মোট শিক্ষাবৃত্তি অর্থ</p>
+                <p class="text-[11px] text-gray-400 italic mt-0.5">*২০২৫-২৬ অর্থবছর থেকে অদ্যাবধি</p>
             </div>
         </div>
         <!-- Tile 2: Aid -->
-        <div class="kpi-tile bg-white border-t-4 border-emerald-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+        <div class="kpi-tile bg-white border-t-4 border-emerald-500 shadow-sm flex flex-col justify-between" style="min-height:140px;">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">সহায়তা</p>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">আর্থিক সহায়তা</p>
                 <p class="text-3xl font-extrabold text-emerald-600 leading-none" id="kpi-aid-count">—</p>
             </div>
             <div class="mt-auto pt-2 border-t border-gray-100">
-                <p class="text-sm font-bold text-emerald-500 truncate" id="kpi-aid-amt">—</p>
-                <p class="text-xs text-gray-400">মোট সহায়তা অর্থ</p>
+                <p class="text-base font-bold text-violet-600 truncate" id="kpi-aid-amt">—</p>
+                <p class="text-sm text-violet-700 font-medium">মোট প্রদত্ত অর্থ</p>
+                <p class="text-[11px] text-gray-400 italic mt-0.5">*২০২৪-২৫ অর্থবছর থেকে অদ্যাবধি</p>
             </div>
         </div>
         <!-- Tile 3: Projects -->
-        <div class="kpi-tile bg-white border-t-4 border-violet-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+        <div class="kpi-tile bg-white border-t-4 border-violet-500 shadow-sm flex flex-col justify-between" style="min-height:140px;">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">প্রকল্প</p>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">মোট প্রকল্প</p>
                 <p class="text-3xl font-extrabold text-violet-600 leading-none" id="kpi-proj-count">—</p>
             </div>
             <div class="mt-auto pt-2 border-t border-gray-100">
-                <p class="text-sm font-bold text-green-600" id="kpi-proj-done">—</p>
-                <p class="text-xs text-gray-400">সম্পন্ন প্রকল্প</p>
+                <p class="text-sm font-bold text-emerald-600" id="kpi-released-amount">—</p>
+                <p class="text-xs text-gray-500 font-medium">ছাড়কৃত অर्थ</p>
+                <p class="text-[11px] text-gray-400 italic mt-2">*২০২৪-২৫ অর্থবছর থেকে অদ্যাবধি</p>
             </div>
         </div>
         <!-- Tile 4: Budget -->
-        <div class="kpi-tile bg-white border-t-4 border-amber-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+        <div class="kpi-tile bg-white border-t-4 border-amber-500 shadow-sm flex flex-col justify-between" style="min-height:140px;">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">বাজেট</p>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">মোট প্রকল্প বাজেট</p>
                 <p class="text-2xl font-extrabold text-amber-600 leading-none" id="kpi-alloc">—</p>
-                <p class="text-xs text-gray-400 mt-0.5">মোট বরাদ্দ</p>
             </div>
             <div class="mt-auto pt-2 border-t border-gray-100">
-                <p class="text-sm font-bold text-orange-500" id="kpi-released">—</p>
-                <p class="text-xs text-gray-400">মুক্তকৃত অর্থ</p>
+                <p class="text-base font-bold text-rose-600" id="kpi-released">—</p>
+                <p class="text-sm text-rose-700 font-medium">ছাড়কৃত অর্থ</p>
             </div>
         </div>
         <!-- Tile 5: Delayed -->
-        <div class="kpi-tile bg-white border-t-4 border-rose-400 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+        <div class="kpi-tile bg-white border-t-4 border-rose-400 shadow-sm flex flex-col justify-between" style="min-height:140px;">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">বিলম্বিত</p>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">বিলম্বিত প্রকল্প</p>
                 <p class="text-3xl font-extrabold text-rose-500 leading-none" id="kpi-delayed">—</p>
             </div>
             <div class="mt-auto pt-2 border-t border-gray-100">
-                <p class="text-sm font-bold text-amber-500" id="kpi-ongoing">—</p>
-                <p class="text-xs text-gray-400">চলমান প্রকল্প</p>
+                <p class="text-base font-bold text-emerald-600" id="kpi-ongoing">—</p>
+                <p class="text-sm text-emerald-700 font-medium">প্রকল্প অবস্থা</p>
             </div>
         </div>
         <!-- Tile 6: Avg Progress -->
-        <div class="kpi-tile bg-white border-t-4 border-sky-500 shadow-sm flex flex-col justify-between" style="min-height:110px;">
+        <div class="kpi-tile bg-white border-t-4 border-sky-500 shadow-sm flex flex-col justify-between" style="min-height:140px;">
             <div>
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">গড় অগ্রগতি</p>
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">প্রকল্পের বাস্তবায়ন অগ্রগতি</p>
                 <p class="text-3xl font-extrabold text-sky-600 leading-none" id="kpi-avg-progress">—</p>
             </div>
-            <div class="mt-auto pt-2 border-t border-gray-100">
-                <div class="w-full bg-gray-100 rounded-full h-1.5">
-                    <div id="kpi-progress-bar" class="h-1.5 rounded-full bg-sky-500 transition-all duration-700" style="width:0%"></div>
+            <div class="mt-auto pt-2 border-t border-gray-100 space-y-2">
+                <div>
+                    <div class="flex justify-between items-center mb-0.5">
+                        <p class="text-xs text-gray-600 font-medium">বাস্তবায়ন অগ্রগতি</p>
+                        <p class="text-xs font-bold text-sky-600" id="impl-progress-pct">—</p>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div id="impl-progress-bar" class="h-1.5 rounded-full bg-sky-500 transition-all duration-700 shadow-sm" style="width:0%"></div>
+                    </div>
                 </div>
-                <p class="text-xs text-gray-400 mt-1">সকল প্রকল্পের</p>
+                <div>
+                    <div class="flex justify-between items-center mb-0.5">
+                        <p class="text-xs text-gray-600 font-medium">অর্থ ছাড় অগ্রগতি</p>
+                        <p class="text-xs font-bold text-emerald-600" id="fund-progress-pct">—</p>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div id="fund-progress-bar" class="h-1.5 rounded-full transition-all duration-700 shadow-sm" style="width:0%; background-color: #10b981;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -231,10 +247,18 @@
     <!-- Row 1: Category donut + Year bar + Upazila horizontal bar -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
         <!-- Category donut -->
-        <div class="card md:col-span-3">
-            <div class="card-header">
-                <div class="card-icon bg-blue-100"><svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg></div>
-                <span class="text-sm font-bold text-gray-700">শ্রেণি বিভাজন</span>
+        <div class="card md:col-span-4">
+            <div style="padding:1rem 1.25rem;border-bottom:1px solid #f1f5f9;">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="card-icon bg-blue-100"><svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg></div>
+                    <span class="text-sm font-bold text-gray-700">শ্রেণিভিত্তিক শিক্ষাবৃত্তি বিভাজন</span>
+                </div>
+                <div class="w-full flex items-center gap-2">
+                    <label class="text-xs font-medium text-gray-600 whitespace-nowrap">বছর:</label>
+                    <div class="flex gap-2" id="sch-cat-year-buttons">
+                        <!-- Buttons generated dynamically -->
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="donut-center" style="top:44%">
@@ -247,7 +271,7 @@
             </div>
         </div>
         <!-- Year bar -->
-        <div class="card md:col-span-5">
+        <div class="card md:col-span-4">
             <div class="card-header">
                 <div class="card-icon bg-blue-100"><svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
                 <span class="text-sm font-bold text-gray-700">অর্থ বছর অনুযায়ী শিক্ষার্থী ও অর্থ</span>
@@ -262,7 +286,7 @@
         <div class="card md:col-span-4">
             <div class="card-header">
                 <div class="card-icon bg-indigo-100"><svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg></div>
-                <span class="text-sm font-bold text-gray-700">উপজেলা বিভাজন</span>
+                <span class="text-sm font-bold text-gray-700">উপজেলাভিত্তিক শিক্ষার্থী সংখ্যা</span>
             </div>
             <div class="card-body">
                 <div class="chart-wrap" style="height:240px;">
@@ -520,11 +544,12 @@ function tk(n)  { return typeof CRUDManager !== 'undefined' ? CRUDManager.format
 function pct(a,b) { return b ? Math.round(a/b*100) : 0; }
 function shortTk(v) {
     v = parseFloat(v)||0;
-    if (v >= 1e7) return '৳' + bn(Math.round(v/1e7)) + 'কোটি';
-    if (v >= 1e5) return '৳' + bn(Math.round(v/1e5)) + 'লক্ষ';
+    if (v >= 1e7) return '৳' + bn(Math.round(v/1e7)) + ' কোটি';
+    if (v >= 1e5) return '৳' + bn(Math.round(v/1e5)) + ' লক্ষ';
     return '৳' + bn(Math.round(v));
 }
 const FONT = { family:'Shurjo', size:11 };
+let schCatChartInstance = null; // Store chart instance for updates
 /* ── Chart factories ─────────────────────────────────────── */
 // Register datalabels globally for donut/pie usage
 Chart.register(ChartDataLabels);
@@ -600,134 +625,42 @@ function bar(id, labels, datasets, yFmt=null, opts={}) {
     });
 }
 function hbar(id, labels, data, colors, tFmt=null) {
-    const el = document.getElementById(id); if (!el) return null;
-    return new Chart(el, {
-        type:'bar',
-        data:{ labels, datasets:[{ data, backgroundColor:colors, borderRadius:4, borderSkipped:false }] },
-        options:{
-            indexAxis:'y', responsive:true, maintainAspectRatio:false,
-            plugins:{
-                legend:{ display:false },
-                tooltip:{ callbacks:{ label(c){ return ` ${tFmt?tFmt(c.parsed.x):bn(c.parsed.x)}`; } } },
-                datalabels:{ display:false }
-            },
-            scales:{
-                x:{ ticks:{ font:FONT, callback:v=>tFmt?tFmt(v):bn(v) }, grid:{ color:'#f1f5f9' }, beginAtZero:true },
-                y:{ ticks:{ font:FONT } }
+    try {
+        const el = document.getElementById(id);
+        if (!el) {
+            console.warn(`Canvas #${id} not found`);
+            return null;
+        }
+        return new Chart(el, {
+            type:'bar',
+            data:{ labels, datasets:[{ data, backgroundColor:colors, borderRadius:4, borderSkipped:false }] },
+            options:{
+                indexAxis:'y', responsive:true, maintainAspectRatio:false,
+                plugins:{
+                    legend:{ display:false },
+                    tooltip:{ callbacks:{ label(c){ return ` ${tFmt?tFmt(c.parsed.x):bn(c.parsed.x)}`; } } },
+                    datalabels:{
+                        display:true,
+                        anchor:'end',
+                        align:'end',
+                        font:{ size:11, weight:'600' },
+                        color:'#374151',
+                        formatter:(v)=> tFmt?tFmt(v):bn(v),
+                        padding:{ right:6 }
+                    }
+                },
+                scales:{
+                    x:{ ticks:{ font:FONT, callback:v=>tFmt?tFmt(v):bn(v) }, grid:{ color:'#f1f5f9' }, beginAtZero:true },
+                    y:{ ticks:{ font:FONT } }
+                }
             }
-        }
-    });
-}
-/* ── Rank list renderer ──────────────────────────────────── */
-function rankList(containerId, items, labelKey, countKey, maxCount, barColor, subtitle=null, subtitleFmt=null) {
-    const el = document.getElementById(containerId); if (!el) return;
-    el.innerHTML = items.map((item, i)=>{
-        const label = item[labelKey] || 'অন্যান্য';
-        const count = parseInt(item[countKey]) || 0;
-        const p = pct(count, maxCount);
-        const subText = subtitle && item[subtitle] ? `<span class="ml-2 badge-chip bg-gray-100 text-gray-500">${subtitleFmt ? subtitleFmt(item[subtitle]) : bn(item[subtitle])}</span>` : '';
-        return `<div class="flex items-center gap-3 py-1.5 ${i<items.length-1?'border-b border-gray-50':''}">
-            <span class="w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center flex-shrink-0" style="background:${barColor}22;color:${barColor}">${bn(i+1)}</span>
-            <span class="text-xs text-gray-700 flex-1 truncate" title="${label}">${label}${subText}</span>
-            <span class="text-xs font-bold text-gray-600 flex-shrink-0">${bn(count)}</span>
-            <div class="rank-bar-track">
-                <div class="rank-bar-fill" style="width:${p}%;background:${barColor}"></div>
-            </div>
-        </div>`;
-    }).join('');
-}
-/* ═══════════════════════════════════════════════════════════
-   PROGRESS BAR CHART — dual filter (year + method)
-═══════════════════════════════════════════════════════════ */
-let progressBarInstance = null;
-let allMethods   = [];
-let allYearsProgress = [];
-let byYearAndMethod  = [];
-let activeMethodFilters = new Set();
-let activeYearFilters   = new Set();
-function buildProgressBar() {
-    // Determine which years & methods to show
-    const years   = activeYearFilters.size
-        ? allYearsProgress.filter(y => activeYearFilters.has(y))
-        : allYearsProgress;
-    const methods = activeMethodFilters.size
-        ? allMethods.filter(m => activeMethodFilters.has(m))
-        : allMethods;
-    // Build one dataset per method (grouped bars)
-    const datasets = methods.map((method, i) => {
-        const color = PAL.methods[method] || PAL.mixed[i % PAL.mixed.length];
-        return {
-            label: method,
-            data: years.map(yr => {
-                const row = byYearAndMethod.find(r => r.financial_year === yr && r.implementation_method === method);
-                return row ? parseFloat(row.avg_progress) || 0 : 0;
-            }),
-            backgroundColor: color + 'cc',
-            borderColor: color,
-            borderWidth: 1.5,
-            borderRadius: 5,
-            hoverBackgroundColor: color,
-        };
-    });
-    if (progressBarInstance) { progressBarInstance.destroy(); progressBarInstance = null; }
-    const el = document.getElementById('projProgressBarChart');
-    if (!el) return;
-    // Guard: nothing to show
-    if (!years.length || !datasets.length) {
-        el.style.display = 'none';
-        const msg = el.parentElement.querySelector('.no-data-msg') || document.createElement('p');
-        msg.className = 'no-data-msg text-xs text-gray-400 text-center py-10';
-        msg.textContent = 'ডেটা পাওয়া যায়নি';
-        el.parentElement.appendChild(msg);
-        return;
+        });
+    } catch(e) {
+        console.error('hbar error:', e);
+        return null;
     }
-    el.style.display = '';
-    const oldMsg = el.parentElement.querySelector('.no-data-msg');
-    if (oldMsg) oldMsg.remove();
-    progressBarInstance = new Chart(el, {
-        type: 'bar',
-        data: { labels: years, datasets },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            layout: { padding: { top: 26 } },
-            plugins: {
-                legend: { display: true, position: 'bottom', labels: { font: FONT, padding: 10, boxWidth: 11, boxHeight: 11 } },
-                tooltip: { callbacks: { label(c) { return ` ${c.dataset.label}: ${bn(c.parsed.y)}%`; } } },
-                datalabels: {
-                    anchor: 'end',
-                    align: 'top',
-                    offset: 2,
-                    clip: false,
-                    display(ctx) {
-                        const v = ctx.dataset.data[ctx.dataIndex];
-                        return parseFloat(v) > 0;
-                    },
-                    formatter(value) {
-                        const v = parseFloat(value);
-                        return v > 0 ? bn(Math.round(v)) + '%' : '';
-                    },
-                    font: { family: 'Shurjo', size: 10, weight: '700' },
-                    color(ctx) {
-                        return ctx.dataset.borderColor || '#374151';
-                    },
-                    backgroundColor(ctx) {
-                        return (ctx.dataset.borderColor || '#374151') + '18';
-                    },
-                    borderRadius: 3,
-                    padding: { top: 2, bottom: 2, left: 4, right: 4 },
-                }
-            },
-            scales: {
-                x: { ticks: { font: FONT, maxRotation: 30 }, grid: { display: false } },
-                y: {
-                    ticks: { font: FONT, callback: v => bn(v) + '%' },
-                    grid: { color: '#f1f5f9' }, beginAtZero: true, max: 110
-                }
-            },
-            borderRadius: 5,
-        }
-    });
 }
+
 function makePillGroup(containerId, items, activeSet, color, rebuildFn) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -774,6 +707,7 @@ function renderProgressFilters() {
    MAIN LOADER
 ═══════════════════════════════════════════════════════════ */
 async function loadDashboard() {
+    console.log('loadDashboard called');
     try {
         const [sc, ai, pr] = await Promise.all([
             CRUDManager.fetchList('/scholarship/stats'),
@@ -792,18 +726,25 @@ async function loadDashboard() {
         const released   = parseFloat(pr.total_released)   || 0;
         const avgProg    = parseFloat(pr.avg_progress) || 0;
         /* ── KPI tiles ───────────────────────────────────── */
-        document.getElementById('kpi-sch-count').textContent  = bn(schCount);
-        document.getElementById('kpi-sch-amt').textContent    = shortTk(sc.total_amount||0);
-        document.getElementById('kpi-aid-count').textContent  = bn(aidCount);
-        document.getElementById('kpi-aid-amt').textContent    = shortTk(ai.total_amount||0);
-        document.getElementById('kpi-proj-count').textContent = bn(projCount);
-        document.getElementById('kpi-proj-done').textContent  = bn(projDone) + ' সম্পন্ন';
-        document.getElementById('kpi-alloc').textContent      = shortTk(alloc);
-        document.getElementById('kpi-released').textContent   = shortTk(released);
-        document.getElementById('kpi-delayed').textContent    = bn(projDelay);
-        document.getElementById('kpi-ongoing').textContent    = bn(projOngo) + ' চলমান';
+        document.getElementById('kpi-sch-count').textContent  = bn(schCount) + ' জন';
+        document.getElementById('kpi-sch-amt').textContent    = shortTk(sc.total_amount||0) + ' টাকা';
+        document.getElementById('kpi-aid-count').textContent  = bn(aidCount) + ' জন';
+        document.getElementById('kpi-aid-amt').textContent    = shortTk(ai.total_amount||0) + ' টাকা';
+        document.getElementById('kpi-proj-count').textContent = bn(projCount) + 'টি';
+        document.getElementById('kpi-released-amount').textContent = shortTk(released) + ' টাকা';
+        document.getElementById('kpi-alloc').textContent      = shortTk(alloc) + ' টাকা';
+        document.getElementById('kpi-released').textContent   = shortTk(released) + ' টাকা';
+        document.getElementById('kpi-delayed').textContent    = bn(projDelay) + 'টি';
+        document.getElementById('kpi-ongoing').textContent    = bn(projDone) + 'টি সম্পন্ন, ' + bn(projOngo) + 'টি চলমান';
         document.getElementById('kpi-avg-progress').textContent = bn(avgProg) + '%';
-        document.getElementById('kpi-progress-bar').style.width = avgProg + '%';
+        // Implementation progress
+        const implProgress = avgProg;
+        document.getElementById('impl-progress-pct').textContent = bn(Math.round(implProgress)) + '%';
+        document.getElementById('impl-progress-bar').style.width = implProgress + '%';
+        // Fund disbursement progress
+        const fundProgress = alloc > 0 ? (released / alloc * 100) : 0;
+        document.getElementById('fund-progress-pct').textContent = bn(Math.round(fundProgress)) + '%';
+        document.getElementById('fund-progress-bar').style.width = fundProgress + '%';
         /* ── Project status tiles ────────────────────────── */
         document.getElementById('proj-total').textContent    = bn(projCount);
         document.getElementById('proj-done').textContent     = bn(projDone);
@@ -817,26 +758,155 @@ async function loadDashboard() {
         const schUpaz  = (sc.byUpazila||[]).sort((a,b)=>b.count-a.count).slice(0,10);
         const schSchools=(sc.bySchool||[]).sort((a,b)=>b.count-a.count);
         document.getElementById('sch-cat-total').textContent = bn(schCount);
-        // Category donut
-        donut('schCatDonut',
-            schCats.map(c=>c.category||'অন্যান্য'),
-            schCats.map(c=>parseInt(c.count)),
-            PAL.blue
-        );
-        // Year grouped bar (count bars + amount line via dual axis?)
-        // Simpler: stacked bars per year coloured by index
-        bar('schYearBar',
-            schYears.map(y=>y.financial_year||'—'),
-            [{
-                label:'শিক্ষার্থী',
-                data: schYears.map(y=>parseInt(y.count)),
-                backgroundColor: schYears.map((_,i)=> PAL.blue[Math.min(i,PAL.blue.length-1)]),
-                borderRadius:5, yAxisID:'y'
-            }],
-            null,
-            { plugins:{ legend:{ display:false } } }
-        );
+        // Category donut with year filter
+        const schCatColors = {'SSC':'#3b82f6', 'HSC':'#10b981', 'Honors':'#f59e0b'};
+        function updateSchCatDonut(selectedYear) {
+            // Destroy old chart if it exists
+            if (schCatChartInstance) {
+                schCatChartInstance.destroy();
+                schCatChartInstance = null;
+            }
+
+            let filtered = schCats;
+            // Filter by year if selected
+            if (selectedYear) {
+                filtered = schCats.filter(c => c.financial_year === selectedYear);
+            } else {
+                // When "সব" is selected, combine categories across all years
+                const combined = {};
+                schCats.forEach(c => {
+                    if (!combined[c.category]) {
+                        combined[c.category] = { category: c.category, count: 0 };
+                    }
+                    combined[c.category].count += parseInt(c.count) || 0;
+                });
+                filtered = Object.values(combined);
+            }
+
+            const sorted = filtered.sort((a,b) => {
+                const order = {'SSC':0, 'HSC':1, 'Honors':2};
+                return (order[a.category] ?? 99) - (order[b.category] ?? 99);
+            });
+            const colors = sorted.map(c => schCatColors[c.category] || '#94a3b8');
+            schCatChartInstance = donut('schCatDonut',
+                sorted.map(c=>c.category||'অন্যান্য'),
+                sorted.map(c=>parseInt(c.count)),
+                colors
+            );
+            document.getElementById('sch-cat-total').textContent = bn(sorted.reduce((a,c)=>a+parseInt(c.count||0),0));
+        }
+        updateSchCatDonut('');
+        // Generate year filter buttons dynamically from available years
+        const buttonContainer = document.getElementById('sch-cat-year-buttons');
+        const yearOptions = [{ value: '', label: 'সব' }, ...schYears.map(y => ({ value: y.financial_year, label: bn(y.financial_year) }))];
+        yearOptions.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'sch-cat-year-btn text-xs px-4 py-1.5 rounded-full border-2 font-medium cursor-pointer transition';
+            btn.dataset.year = opt.value;
+            btn.textContent = opt.label;
+            if (idx === 0) {
+                btn.className += ' border-gray-300 text-gray-700';
+            } else {
+                btn.className += ' border-gray-200 text-gray-600 hover:border-blue-300';
+            }
+            buttonContainer.appendChild(btn);
+        });
+        // Year filter button clicks
+        document.querySelectorAll('.sch-cat-year-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.sch-cat-year-btn').forEach(b => {
+                    b.classList.remove('border-blue-500', 'bg-blue-50', 'text-blue-700', 'border-gray-300');
+                    b.classList.add('border-gray-200', 'text-gray-600');
+                });
+                this.classList.remove('border-gray-200', 'text-gray-600');
+                this.classList.add('border-blue-500', 'bg-blue-50', 'text-blue-700', 'border-gray-300');
+                updateSchCatDonut(this.dataset.year);
+            });
+        });
+        // Set initial active button
+        document.querySelector('[data-year=""]').classList.add('border-blue-500', 'bg-blue-50', 'text-blue-700', 'border-gray-300');
+        document.querySelector('[data-year=""]').classList.remove('border-gray-200', 'text-gray-600');
+        // Year grouped bar (count + amount) with dual axes
+        const schYearAxisLabels = {
+            id: 'schYearAxisLabels',
+            afterDraw(chart) {
+                const { ctx, chartArea, scales } = chart;
+                ctx.save();
+                ctx.font = `bold 11px ${FONT.family||'sans-serif'}`;
+                ctx.fillStyle = '#6b7280';
+                if (scales.y && scales.y.display !== false) {
+                    ctx.textAlign = 'left';
+                    ctx.fillText('শিক্ষার্থী', scales.y.left, chartArea.bottom + 36);
+                }
+                if (scales.y1 && scales.y1.display !== false) {
+                    ctx.textAlign = 'right';
+                    ctx.fillText('টাকা (লক্ষ)', scales.y1.right, chartArea.bottom + 36);
+                }
+                ctx.restore();
+            }
+        };
+        const schYearChart = new Chart(document.getElementById('schYearBar'), {
+            type:'bar',
+            data:{
+                labels: schYears.map(y=>y.financial_year||'—'),
+                datasets: [
+                    { label:'শিক্ষার্থী', data: schYears.map(y=>parseInt(y.count)), backgroundColor: schYears.map((_,i)=> PAL.blue[Math.min(i,PAL.blue.length-1)]), borderRadius:4, yAxisID:'y', barPercentage:0.7, categoryPercentage:0.8 },
+                    { label:'বিতরণকৃত অর্থ (লক্ষ)', data: schYears.map(y=>Math.round(parseFloat(y.total_amount||0)/100000)), backgroundColor: schYears.map((_,i)=> PAL.emerald[Math.min(i,PAL.emerald.length-1)]), borderRadius:4, yAxisID:'y1', barPercentage:0.7, categoryPercentage:0.8 }
+                ]
+            },
+            options:{
+                responsive:true, maintainAspectRatio:false,
+                layout:{ padding:{ top:28 } },
+                plugins:{
+                    legend:{
+                        display:true,
+                        position:'bottom',
+                        labels:{ font:FONT, padding:15, boxWidth:12, boxHeight:12 },
+                        onClick(e, legendItem, legend) {
+                            const chart = legend.chart;
+                            const idx = legendItem.datasetIndex;
+                            if (chart.isDatasetVisible(idx)) chart.hide(idx);
+                            else chart.show(idx);
+                            const studentVisible = chart.isDatasetVisible(0);
+                            if (!studentVisible) {
+                                chart.data.datasets[1].yAxisID = 'y';
+                                chart.options.scales.y1.display = false;
+                            } else {
+                                chart.data.datasets[1].yAxisID = 'y1';
+                                chart.options.scales.y1.display = true;
+                            }
+                            chart.update();
+                        }
+                    },
+                    tooltip:{ callbacks:{ label(c){ return ` ${c.dataset.label||''}: ${bn(c.parsed.y)}`; } } },
+                    datalabels:{
+                        display: true,
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 4,
+                        font: { ...FONT, weight: 'bold', size: 11 },
+                        color: '#374151',
+                        formatter(value, ctx) {
+                            if (!value) return '';
+                            const suffix = ctx.datasetIndex === 0 ? ' জন' : ' লক্ষ';
+                            return bn(value) + suffix;
+                        }
+                    }
+                },
+                scales:{
+                    x:{ ticks:{ font:FONT, maxRotation:35, minRotation:0 }, grid:{ display:false } },
+                    y:{ position:'left', ticks:{ font:FONT, callback:v=>bn(v) }, grid:{ color:'#f1f5f9' }, beginAtZero:true },
+                    y1:{ position:'right', ticks:{ font:FONT, callback:v=>bn(v) }, grid:{ display:false }, beginAtZero:true }
+                },
+                borderRadius:5
+            },
+            plugins: [schYearAxisLabels]
+        });
+
+
+
         // Upazila horizontal bar
+        console.log('About to call hbar for schUpazilaBar, schUpaz:', schUpaz);
         hbar('schUpazilaBar',
             schUpaz.map(u=>u.upazila||'—'),
             schUpaz.map(u=>parseInt(u.count)),
@@ -902,6 +972,9 @@ async function loadDashboard() {
             projMethods.map(m=>parseInt(m.count)),
             [PAL.methods['টেন্ডার'],PAL.methods['সিপিপিসি'],PAL.methods['আরএফকিউ'],...PAL.mixed]
         );
+        // Update KPI with method breakdown
+        const methodText = projMethods.filter(m => m.implementation_method !== 'আরএফকিউ').map(m => bn(m.count) + 'টি ' + (m.implementation_method||'—')).join(', ');
+        document.getElementById('kpi-proj-done').textContent = methodText;
         // Alloc vs Released grouped bar
         bar('projAllocReleasedBar',
             projYears.map(y=>y.financial_year||'—'),

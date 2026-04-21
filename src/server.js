@@ -65,18 +65,39 @@ app.use((req, res, next) => {
 
 app.use(morgan(isProduction ? 'combined' : 'dev'));
 
+// Force UTF-8 charset for all responses
+app.use((req, res, next) => {
+    const origJson = res.json;
+    res.json = function(data) {
+        res.charset = 'utf-8';
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        return origJson.call(this, data);
+    };
+    next();
+});
+
 // Static files (no rate limiting on static assets)
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/admin', express.static(path.join(__dirname, '..', 'admin')));
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use('/favicon', express.static(path.join(__dirname, '..', 'favicon')));
 
+// Set UTF-8 charset for API responses
+const utf8Middleware = (req, res, next) => {
+    const originalJson = res.json;
+    res.json = function(data) {
+        res.set('Content-Type', 'application/json; charset=utf-8');
+        return originalJson.call(this, data);
+    };
+    next();
+};
+
 // API routes (rate limiting applied only to API endpoints)
 // Conditionally apply rate limiting - disabled in development
 if (isProduction) {
-    app.use('/api', generalLimiter, apiRoutes);
+    app.use('/api', utf8Middleware, generalLimiter, apiRoutes);
 } else {
-    app.use('/api', apiRoutes);
+    app.use('/api', utf8Middleware, apiRoutes);
 }
 
 // Redirect root to projects

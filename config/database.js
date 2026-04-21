@@ -8,14 +8,22 @@ const pool = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    charset: 'utf8mb4'
+    charset: 'utf8mb4',
+    collation: 'utf8mb4_unicode_ci'
 });
 
-// Test connection on startup
+// Test connection on startup and set charset
 pool.getConnection()
-    .then(connection => {
-        console.log('✓ Database connected successfully');
-        connection.release();
+    .then(async connection => {
+        try {
+            await connection.execute("SET NAMES utf8mb4");
+            await connection.execute("SET CHARACTER SET utf8mb4");
+            console.log('✓ Database connected successfully (charset: utf8mb4)');
+        } catch (err) {
+            console.error('✗ Failed to set charset:', err.message);
+        } finally {
+            connection.release();
+        }
     })
     .catch(err => {
         console.error('✗ Database connection failed:', err.message);

@@ -288,124 +288,124 @@
     </main>
     <!-- ── Detail View Modal ── -->
     <div id="detail-modal" class="detail-backdrop fixed inset-0 z-[90] flex items-center justify-center p-4">
-        <div class="detail-card bg-white w-full max-w-lg rounded-[1.75rem] shadow-2xl p-6 relative">
+        <div class="detail-card bg-white w-full max-w-xl rounded-[2rem] shadow-2xl p-8 relative">
             <!-- Header -->
-            <div class="flex items-start justify-between mb-4">
-                <div class="flex items-center gap-3 flex-1">
+            <div class="flex items-start justify-between mb-5">
+                <div class="flex items-center gap-4 flex-1">
                     <div id="dm-avatar" class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 border-2 border-gray-200">
                         <img id="dm-avatar-img" src="" alt="" class="w-full h-full object-cover">
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h2 id="dm-name" class="text-xl font-extrabold text-slate-900 leading-tight mb-0.5"></h2>
-                        <p id="dm-category" class="text-sm font-semibold text-emerald-600"></p>
+                        <h2 id="dm-name" class="text-2xl font-extrabold text-slate-900 leading-tight mb-0.5"></h2>
+                        <p id="dm-category" class="text-base font-semibold text-emerald-600"></p>
                     </div>
                 </div>
                 <button onclick="closeDetailModal()" class="text-slate-300 hover:text-red-500 transition-colors p-1 flex-shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
-            <div class="space-y-3 border-t border-emerald-100 pt-4">
+            <div class="space-y-4 border-t border-emerald-100 pt-5">
                 <!-- Row 1: Parents -->
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">পিতার নাম</p>
-                        <p id="dm-father" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">পিতার নাম</p>
+                        <p id="dm-father" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">মাতার নাম</p>
-                        <p id="dm-mother" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">মাতার নাম</p>
+                        <p id="dm-mother" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                 </div>
                 <!-- Row 2: Address & Mobile -->
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">ঠিকানা</p>
-                        <p id="dm-address" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">ঠিকানা</p>
+                        <p id="dm-address" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">মোবাইল</p>
-                        <p id="dm-mobile" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">মোবাইল</p>
+                        <p id="dm-mobile" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                 </div>
                 <!-- Row 3: Upazila, Zila, NID -->
-                <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">উপজেলা</p>
-                        <p id="dm-upazila" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">উপজেলা</p>
+                        <p id="dm-upazila" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">জেলা</p>
-                        <p id="dm-zila" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">জেলা</p>
+                        <p id="dm-zila" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">এনআইডি/জন্ম নিবন্ধন</p>
-                        <p id="dm-nid" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">এনআইডি/জন্ম নিবন্ধন</p>
+                        <p id="dm-nid" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                 </div>
                 <!-- Row 4: Profession, Relation, Year -->
-                <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">পেশা</p>
-                        <p id="dm-profession" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">পেশা</p>
+                        <p id="dm-profession" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">সম্পর্ক</p>
-                        <p id="dm-relation" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">সম্পর্ক</p>
+                        <p id="dm-relation" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                     <div>
-                        <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">অর্থবছর</p>
-                        <p id="dm-year" class="font-semibold text-slate-800 text-[14px]"></p>
+                        <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">অর্থবছর</p>
+                        <p id="dm-year" class="font-semibold text-slate-800 text-[17px]"></p>
                     </div>
                 </div>
                 <!-- Application Details -->
                 <div>
-                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">আবেদনের বিবরণ</p>
-                    <p id="dm-app-details" class="text-[13px] text-slate-600 bg-gray-50 rounded-lg p-2 leading-relaxed"></p>
+                    <p class="text-[12px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">আবেদনের বিবরণ</p>
+                    <p id="dm-app-details" class="text-[16px] text-slate-600 bg-gray-50 rounded-lg p-2.5 leading-relaxed"></p>
                 </div>
                 <!-- Amount Box -->
-                <div class="detail-amount-box p-4 rounded-xl">
+                <div class="detail-amount-box p-5 rounded-xl">
                     <div class="flex justify-between items-center mb-3">
                         <div>
-                            <p class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">জেলা পরিষদ কর্তৃক প্রদত্ত অর্থ</p>
-                            <p id="dm-amount" class="text-xl font-black text-emerald-700 tracking-tight"></p>
+                            <p class="text-[12px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">জেলা পরিষদ কর্তৃক প্রদত্ত অর্থ</p>
+                            <p id="dm-amount" class="text-2xl font-black text-emerald-700 tracking-tight"></p>
                         </div>
                         <div class="text-right">
-                            <p class="text-[9px] font-bold text-emerald-800 uppercase tracking-wider mb-1">ব্যাংক</p>
-                            <p id="dm-bank" class="text-[13px] font-semibold text-emerald-700"></p>
+                            <p class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-1">ব্যাংক</p>
+                            <p id="dm-bank" class="text-[16px] font-semibold text-emerald-700"></p>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-2 pt-2 border-t border-emerald-300">
                         <div>
-                            <p class="text-[9px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">চেক নম্বর</p>
-                            <p id="dm-check-no" class="font-semibold text-emerald-700 text-[12px]"></p>
+                            <p class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">চেক নম্বর</p>
+                            <p id="dm-check-no" class="font-semibold text-emerald-700 text-[14px]"></p>
                         </div>
                         <div>
-                            <p class="text-[9px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">চেকের তারিখ</p>
-                            <p id="dm-check-date" class="font-semibold text-emerald-700 text-[12px]"></p>
+                            <p class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider mb-0.5">চেকের তারিখ</p>
+                            <p id="dm-check-date" class="font-semibold text-emerald-700 text-[14px]"></p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="flex gap-3 mt-4">
-                <button onclick="closeDetailModal(); editRecord(currentDetailId)" class="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl shadow-lg text-[14px] transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+            <div class="flex gap-3 mt-5 pt-4 border-t border-gray-100">
+                <button onclick="closeDetailModal(); editRecord(currentDetailId)" class="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg text-[17px] transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
                     সম্পাদনা
                 </button>
-                <button data-role="admin" onclick="closeDetailModal(); deleteRecord(currentDetailId)" class="flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow-lg text-[14px] transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                <button data-role="admin" onclick="closeDetailModal(); deleteRecord(currentDetailId)" class="flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-bold py-3.5 rounded-xl shadow-lg text-[17px] transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     মুছুন
                 </button>
-                <button onclick="closeDetailModal()" class="detail-close-btn px-6 text-white font-bold py-3 rounded-xl shadow-lg text-[14px]">বন্ধ</button>
+                <button onclick="closeDetailModal()" class="detail-close-btn px-7 text-white font-bold py-3.5 rounded-xl shadow-lg text-[17px]">বন্ধ</button>
             </div>
         </div>
     </div>
     <!-- Add/Edit Modal -->
     <div id="form-modal" class="hidden fixed inset-0 overflow-y-auto h-full w-full z-50">
-        <div class="relative top-20 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-xl bg-white">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-bold text-gray-900" id="modal-title">নতুন মানবিক সহায়তা রেকর্ড</h3>
+        <div class="relative top-20 mx-auto p-6 border w-full max-w-5xl shadow-lg rounded-xl bg-white">
+            <div class="flex items-center justify-between mb-7">
+                <h3 class="text-[1.75rem] font-bold text-gray-900" id="modal-title">নতুন মানবিক সহায়তা রেকর্ড</h3>
                 <button onclick="closeFormModal()" class="text-gray-400 hover:text-gray-600">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
@@ -414,81 +414,81 @@
                 <input type="hidden" id="record-id" name="id">
                 <!-- Personal Information -->
                 <div class="border-b pb-4">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">ব্যক্তিগত তথ্য</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-4">ব্যক্তিগত তথ্য</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">নাম <span class="text-red-500">*</span></label>
-                            <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">নাম <span class="text-red-500">*</span></label>
+                            <input type="text" name="name" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">পিতার নাম <span class="text-red-500">*</span></label>
-                            <input type="text" name="father_name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">পিতার নাম <span class="text-red-500">*</span></label>
+                            <input type="text" name="father_name" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">মাতার নাম</label>
-                            <input type="text" name="mother_name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">মাতার নাম</label>
+                            <input type="text" name="mother_name" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">NID/জন্ম নিবন্ধন নং</label>
-                            <input type="text" name="nid_birth_reg_no" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">NID/জন্ম নিবন্ধন নং</label>
+                            <input type="text" name="nid_birth_reg_no" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">পেশা</label>
-                            <input type="text" name="profession" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">পেশা</label>
+                            <input type="text" name="profession" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">সুবিধাভোগীর সাথে সম্পর্ক</label>
-                            <input type="text" name="relation_to_beneficiary" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">সুবিধাভোগীর সাথে সম্পর্ক</label>
+                            <input type="text" name="relation_to_beneficiary" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">মোবাইল নম্বর</label>
-                            <input type="text" name="mobile" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">মোবাইল নম্বর</label>
+                            <input type="text" name="mobile" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                     </div>
                 </div>
                 <!-- Address Information -->
                 <div class="border-b pb-4">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">ঠিকানা</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-4">ঠিকানা</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">সম্পূর্ণ ঠিকানা</label>
-                            <textarea name="address" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"></textarea>
+                            <label class="block text-base font-medium text-gray-700 mb-1">সম্পূর্ণ ঠিকানা</label>
+                            <textarea name="address" rows="2" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"></textarea>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">উপজেলা</label>
-                            <input type="text" name="upazila" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">উপজেলা</label>
+                            <input type="text" name="upazila" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">জেলা</label>
-                            <input type="text" name="zila" value="কুষ্টিয়া" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">জেলা</label>
+                            <input type="text" name="zila" value="কুষ্টিয়া" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                     </div>
                 </div>
                 <!-- Assistance Details -->
                 <div class="border-b pb-4">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">সহায়তা বিবরণ</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-4">সহায়তা বিবরণ</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">শ্রেণী</label>
-                            <input type="text" name="category" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">শ্রেণী</label>
+                            <input type="text" name="category" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">অর্থবছর <span class="text-red-500">*</span></label>
-                            <input type="text" name="financial_year" required placeholder="২০২৩-২৪" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">অর্থবছর <span class="text-red-500">*</span></label>
+                            <input type="text" name="financial_year" required placeholder="২০২৩-২৪" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">পরিমাণ (টাকা) <span class="text-red-500">*</span></label>
-                            <input type="number" name="amount_eng" required step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">পরিমাণ (টাকা) <span class="text-red-500">*</span></label>
+                            <input type="number" name="amount_eng" required step="0.01" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                            <label class="block text-base font-medium text-gray-700 mb-1">
                                 <svg class="w-4 h-4 inline mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                                 অবস্থা
                             </label>
                             <div class="relative">
-                                <select name="status" class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 bg-white hover:border-green-400 transition-all font-medium">
+                                <select name="status" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 bg-white hover:border-green-400 transition-all font-medium">
                                     <option value="pending">⏳ মুলতুবি</option>
                                     <option value="approved">✅ অনুমোদিত</option>
                                     <option value="disbursed">💰 বিতরণকৃত</option>
@@ -496,39 +496,39 @@
                             </div>
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">আবেদনের বিবরণ</label>
-                            <textarea name="application_details" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"></textarea>
+                            <label class="block text-base font-medium text-gray-700 mb-1">আবেদনের বিবরণ</label>
+                            <textarea name="application_details" rows="2" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"></textarea>
                         </div>
                     </div>
                 </div>
                 <!-- Payment Information -->
                 <div>
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">পেমেন্ট তথ্য</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <h4 class="text-xl font-semibold text-gray-800 mb-4">পেমেন্ট তথ্য</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ব্যাংক</label>
-                            <input type="text" name="bank" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">ব্যাংক</label>
+                            <input type="text" name="bank" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">চেক নম্বর</label>
-                            <input type="text" name="check_no" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">চেক নম্বর</label>
+                            <input type="text" name="check_no" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">চেক তারিখ</label>
-                            <input type="date" name="check_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">চেক তারিখ</label>
+                            <input type="date" name="check_date" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                         <div class="md:col-span-3">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">রেফারেন্স</label>
-                            <input type="text" name="reference" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                            <label class="block text-base font-medium text-gray-700 mb-1">রেফারেন্স</label>
+                            <input type="text" name="reference" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
                         </div>
                     </div>
                 </div>
                 <!-- Form Actions -->
                 <div class="flex justify-end gap-3 pt-4 border-t">
-                    <button type="button" onclick="closeFormModal()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                    <button type="button" onclick="closeFormModal()" class="px-7 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-base">
                         বাতিল
                     </button>
-                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                    <button type="submit" class="px-7 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-base">
                         সংরক্ষণ করুন
                     </button>
                 </div>
