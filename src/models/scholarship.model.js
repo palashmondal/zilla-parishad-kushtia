@@ -95,13 +95,22 @@ const scholarshipModel = {
             const [upazilaResult] = await conn.execute(
                 'SELECT upazila, COUNT(*) as count FROM scholarship WHERE upazila IS NOT NULL AND upazila != \'\' GROUP BY upazila ORDER BY count DESC'
             );
+            let categoryAvgResult = [];
+            try {
+                [categoryAvgResult] = await conn.execute(
+                    'SELECT category, COUNT(*) as count, COALESCE(AVG(amount), 0) as avg_amount FROM scholarship WHERE category IS NOT NULL AND category != \'\' GROUP BY category ORDER BY count DESC'
+                );
+            } catch(e) {
+                console.error('byCategoryAvg query failed:', e.message);
+            }
             return {
                 total_count: totalResult[0].total_count,
                 total_amount: totalResult[0].total_amount,
                 byCategory: categoryResult,
                 byYear: yearResult,
                 bySchool: schoolResult,
-                byUpazila: upazilaResult
+                byUpazila: upazilaResult,
+                byCategoryAvg: categoryAvgResult
             };
         } finally {
             conn.release();
