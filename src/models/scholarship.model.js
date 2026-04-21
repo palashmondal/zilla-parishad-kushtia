@@ -76,29 +76,36 @@ const scholarshipModel = {
     },
 
     async getStats() {
-        const [totalResult] = await pool.execute(
-            'SELECT COUNT(*) as total_count, COALESCE(SUM(amount), 0) as total_amount FROM scholarship'
-        );
-        const [categoryResult] = await pool.execute(
-            'SELECT category, COUNT(*) as count FROM scholarship GROUP BY category ORDER BY count DESC'
-        );
-        const [yearResult] = await pool.execute(
-            'SELECT financial_year, COUNT(*) as count, COALESCE(SUM(amount),0) as total_amount FROM scholarship GROUP BY financial_year ORDER BY financial_year ASC'
-        );
-        const [schoolResult] = await pool.execute(
-            'SELECT school, COUNT(*) as count FROM scholarship WHERE school IS NOT NULL AND school != \'\' GROUP BY school ORDER BY count DESC LIMIT 15'
-        );
-        const [upazilaResult] = await pool.execute(
-            'SELECT upazila, COUNT(*) as count FROM scholarship WHERE upazila IS NOT NULL AND upazila != \'\' GROUP BY upazila ORDER BY count DESC'
-        );
-        return {
-            total_count: totalResult[0].total_count,
-            total_amount: totalResult[0].total_amount,
-            byCategory: categoryResult,
-            byYear: yearResult,
-            bySchool: schoolResult,
-            byUpazila: upazilaResult
-        };
+        const conn = await pool.getConnection();
+        try {
+            await conn.execute('SET NAMES utf8mb4');
+
+            const [totalResult] = await conn.execute(
+                'SELECT COUNT(*) as total_count, COALESCE(SUM(amount), 0) as total_amount FROM scholarship'
+            );
+            const [categoryResult] = await conn.execute(
+                'SELECT financial_year, category, COUNT(*) as count FROM scholarship GROUP BY financial_year, category ORDER BY financial_year DESC, count DESC'
+            );
+            const [yearResult] = await conn.execute(
+                'SELECT financial_year, COUNT(*) as count, COALESCE(SUM(amount),0) as total_amount FROM scholarship GROUP BY financial_year ORDER BY financial_year ASC'
+            );
+            const [schoolResult] = await conn.execute(
+                'SELECT school, COUNT(*) as count FROM scholarship WHERE school IS NOT NULL AND school != \'\' GROUP BY school ORDER BY count DESC LIMIT 15'
+            );
+            const [upazilaResult] = await conn.execute(
+                'SELECT upazila, COUNT(*) as count FROM scholarship WHERE upazila IS NOT NULL AND upazila != \'\' GROUP BY upazila ORDER BY count DESC'
+            );
+            return {
+                total_count: totalResult[0].total_count,
+                total_amount: totalResult[0].total_amount,
+                byCategory: categoryResult,
+                byYear: yearResult,
+                bySchool: schoolResult,
+                byUpazila: upazilaResult
+            };
+        } finally {
+            conn.release();
+        }
     },
 
     async create(data) {
