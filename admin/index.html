@@ -128,7 +128,7 @@
     <div class="relative overflow-hidden rounded-2xl mb-6 px-7 py-5"
          style="background: linear-gradient(130deg,#0f2d4a 0%,#145235 45%,#0f2d4a 100%);">
         <div class="absolute inset-0 pointer-events-none overflow-hidden">
-            <div style="position:absolute;right:-60px;top:-60px;width:280px;height:280px;background:rgba(255,255,255,0.04);border-radius:50%;"></div>
+            <div style="position:absolute;right:-60px;top:-60px;width:280px;height:240px;background:rgba(255,255,255,0.04);border-radius:50%;"></div>
             <div style="position:absolute;left:-40px;bottom:-80px;width:200px;height:200px;background:rgba(255,255,255,0.03);border-radius:50%;"></div>
         </div>
         <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -295,7 +295,7 @@
             </div>
         </div>
     </div>
-    <!-- Row 1b: Top schools bar + Category avg amount -->
+    <!-- Row 1b: Top schools bar + Category total amount by FY -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <!-- Top 10 schools bar -->
         <div class="card">
@@ -304,12 +304,12 @@
                 <span class="text-sm font-bold text-gray-700">শীর্ষ ১০ বিদ্যালয় — শিক্ষার্থী সংখ্যা</span>
             </div>
             <div class="card-body">
-                <div class="chart-wrap" style="height:280px;">
+                <div class="chart-wrap" style="height:320px;">
                     <canvas id="schTopSchoolsBar"></canvas>
                 </div>
             </div>
         </div>
-        <!-- Category avg amount bar -->
+        <!-- Category total amount bar -->
         <div class="card">
             <div class="card-header">
                 <div class="card-icon bg-amber-100"><svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
@@ -319,19 +319,6 @@
                 <div class="chart-wrap" style="height:320px;">
                     <canvas id="schCatAvgBar"></canvas>
                 </div>
-            </div>
-        </div>
-    </div>
-    <!-- Row 2: Top schools ranking -->
-    <div class="card mb-4">
-        <div class="card-header">
-            <div class="card-icon bg-sky-100"><svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
-            <span class="text-sm font-bold text-gray-700">শীর্ষ বিদ্যালয় — সর্বাধিক শিক্ষাবৃত্তি প্রাপক</span>
-            <span class="ml-auto badge-chip bg-sky-100 text-sky-700">শীর্ষ ১৫টি</span>
-        </div>
-        <div class="card-body">
-            <div class="rank-scroll" id="school-rank-list">
-                <p class="text-xs text-gray-400">লোড হচ্ছে...</p>
             </div>
         </div>
     </div>
@@ -347,9 +334,10 @@
         <div class="section-divider-line bg-emerald-200"></div>
         <a href="/admin/humanitarian-manage.html" class="text-xs font-semibold text-emerald-600 whitespace-nowrap hover:underline flex items-center gap-1">পরিচালনা <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg></a>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+    <!-- Row 1: Year bar + Upazila bar (50/50) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <!-- Year grouped bar (count + amount) -->
-        <div class="card md:col-span-5">
+        <div class="card">
             <div class="card-header">
                 <div class="card-icon bg-emerald-100"><svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg></div>
                 <span class="text-sm font-bold text-gray-700">অর্থ বছর — উপকারভোগী ও বিতরণ</span>
@@ -360,24 +348,8 @@
                 </div>
             </div>
         </div>
-        <!-- Category donut -->
-        <div class="card md:col-span-3">
-            <div class="card-header">
-                <div class="card-icon bg-emerald-100"><svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg></div>
-                <span class="text-sm font-bold text-gray-700">বিভাগ বিতরণ</span>
-            </div>
-            <div class="card-body">
-                <div class="donut-center" style="top:44%">
-                    <p class="text-2xl font-extrabold text-gray-800" id="aid-cat-total">—</p>
-                    <p class="text-xs text-gray-400">মোট</p>
-                </div>
-                <div class="chart-wrap" style="height:220px;">
-                    <canvas id="aidCatDonut"></canvas>
-                </div>
-            </div>
-        </div>
         <!-- Upazila horizontal bar -->
-        <div class="card md:col-span-4">
+        <div class="card">
             <div class="card-header">
                 <div class="card-icon bg-teal-100"><svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg></div>
                 <span class="text-sm font-bold text-gray-700">উপজেলা তুলনা</span>
@@ -389,15 +361,34 @@
             </div>
         </div>
     </div>
-    <!-- Category amount comparison line/bar combo -->
-    <div class="card mb-4">
-        <div class="card-header">
-            <div class="card-icon bg-teal-100"><svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
-            <span class="text-sm font-bold text-gray-700">বিভাগ অনুযায়ী — উপকারভোগী সংখ্যা ও মোট অর্থ তুলনা</span>
+    <!-- Row 2: Category donut (40%) + Category comparison (60%) -->
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+        <!-- Category donut -->
+        <div class="card md:col-span-2">
+            <div class="card-header">
+                <div class="card-icon bg-emerald-100"><svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">বিভাগ বিতরণ</span>
+            </div>
+            <div class="card-body">
+                <div class="donut-center" style="top:44%">
+                    <p class="text-2xl font-extrabold text-gray-800" id="aid-cat-total">—</p>
+                    <p class="text-xs text-gray-400">মোট</p>
+                </div>
+                <div class="chart-wrap" style="height:240px;">
+                    <canvas id="aidCatDonut"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="chart-wrap" style="height:220px;">
-                <canvas id="aidCatCompareBar"></canvas>
+        <!-- Category amount comparison line/bar combo -->
+        <div class="card md:col-span-3">
+            <div class="card-header">
+                <div class="card-icon bg-teal-100"><svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">বিভাগ অনুযায়ী — উপকারভোগী সংখ্যা ও মোট অর্থ তুলনা</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap" style="height:240px;">
+                    <canvas id="aidCatCompareBar"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -414,32 +405,36 @@
         <a href="/admin/projects-manage.html" class="text-xs font-semibold text-violet-600 whitespace-nowrap hover:underline flex items-center gap-1">পরিচালনা <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg></a>
     </div>
     <!-- Status tiles -->
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-        <div class="rounded-xl p-4 bg-violet-50 border border-violet-100 text-center">
-            <p class="text-2xl font-extrabold text-violet-700" id="proj-total">—</p>
-            <p class="text-xs text-gray-500 mt-0.5">মোট প্রকল্প</p>
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-2 mb-4">
+        <div class="border-2 border-gray-300 rounded-lg px-3 py-4 bg-violet-50 text-center">
+            <p class="text-2xl font-bold text-violet-700" id="proj-total">—</p>
+            <p class="text-xs text-gray-600 mt-2 font-medium">মোট প্রকল্প</p>
         </div>
-        <div class="rounded-xl p-4 bg-emerald-50 border border-emerald-100 text-center">
-            <p class="text-2xl font-extrabold text-emerald-700" id="proj-done">—</p>
-            <p class="text-xs text-gray-500 mt-0.5">সম্পন্ন</p>
+        <div class="border-2 border-gray-300 rounded-lg px-3 py-4 bg-emerald-50 text-center">
+            <p class="text-2xl font-bold text-emerald-700" id="proj-done">—</p>
+            <p class="text-xs text-gray-600 mt-2 font-medium">সম্পন্ন</p>
         </div>
-        <div class="rounded-xl p-4 bg-sky-50 border border-sky-100 text-center">
-            <p class="text-2xl font-extrabold text-sky-700" id="proj-ongoing">—</p>
-            <p class="text-xs text-gray-500 mt-0.5">চলমান</p>
+        <div class="border-2 border-gray-300 rounded-lg px-3 py-4 bg-sky-50 text-center">
+            <p class="text-2xl font-bold text-sky-700" id="proj-ongoing">—</p>
+            <p class="text-xs text-gray-600 mt-2 font-medium">চলমান</p>
         </div>
-        <div class="rounded-xl p-4 bg-rose-50 border border-rose-100 text-center">
-            <p class="text-2xl font-extrabold text-rose-600" id="proj-delayed">—</p>
-            <p class="text-xs text-gray-500 mt-0.5">বিলম্বিত</p>
+        <div class="border-2 border-gray-300 rounded-lg px-3 py-4 bg-rose-50 text-center">
+            <p class="text-2xl font-bold text-rose-600" id="proj-delayed">—</p>
+            <p class="text-xs text-gray-600 mt-2 font-medium">বিলম্বিত</p>
         </div>
-        <div class="rounded-xl p-4 bg-amber-50 border border-amber-100 text-center">
-            <p class="text-2xl font-extrabold text-amber-700" id="proj-avg-pct">—%</p>
-            <p class="text-xs text-gray-500 mt-0.5">গড় অগ্রগতি</p>
+        <div class="border-2 border-gray-300 rounded-lg px-3 py-4 bg-slate-50 text-center">
+            <p class="text-2xl font-bold text-slate-700" id="proj-pending">—</p>
+            <p class="text-xs text-gray-600 mt-2 font-medium">অপেক্ষমাণ</p>
+        </div>
+        <div class="border-2 border-gray-300 rounded-lg px-3 py-4 bg-amber-50 text-center">
+            <p class="text-2xl font-bold text-amber-700"><span id="proj-avg-pct">—</span><span class="text-amber-700"> %</span></p>
+            <p class="text-xs text-gray-600 mt-2 font-medium">গড় অগ্রগতি</p>
         </div>
     </div>
-    <!-- Row: Type donut + Status bar + Method donut -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+    <!-- Row: Type donut + CPPC Status + TENDER & RFQ Status (equal width) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <!-- Type donut -->
-        <div class="card md:col-span-3">
+        <div class="card">
             <div class="card-header">
                 <div class="card-icon bg-violet-100"><svg class="w-4 h-4 text-violet-600" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg></div>
                 <span class="text-sm font-bold text-gray-700">প্রকল্পের ধরন</span>
@@ -449,43 +444,43 @@
                     <p class="text-xl font-extrabold text-gray-800" id="proj-type-total">—</p>
                     <p class="text-xs text-gray-400">প্রকল্প</p>
                 </div>
-                <div class="chart-wrap" style="height:220px;">
+                <div class="chart-wrap" style="height:230px;">
                     <canvas id="projTypeDonut"></canvas>
                 </div>
             </div>
         </div>
-        <!-- Status polar/bar -->
-        <div class="card md:col-span-5">
+        <!-- CPPC Status -->
+        <div class="card">
             <div class="card-header">
                 <div class="card-icon bg-fuchsia-100"><svg class="w-4 h-4 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
-                <span class="text-sm font-bold text-gray-700">প্রকল্পের বর্তমান অবস্থা</span>
+                <span class="text-sm font-bold text-gray-700">সিপিপিসি - বর্তমান অবস্থা</span>
             </div>
             <div class="card-body">
                 <div class="chart-wrap" style="height:230px;">
-                    <canvas id="projStatusBar"></canvas>
+                    <canvas id="projCppcStatusBar"></canvas>
                 </div>
             </div>
         </div>
-        <!-- Implementation method donut -->
-        <div class="card md:col-span-4">
+        <!-- TENDER & RFQ Status -->
+        <div class="card">
             <div class="card-header">
-                <div class="card-icon bg-indigo-100"><svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
-                <span class="text-sm font-bold text-gray-700">বাস্তবায়ন পদ্ধতি</span>
+                <div class="card-icon bg-fuchsia-100"><svg class="w-4 h-4 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">টেন্ডার ও আরএফকিউ - অবস্থা</span>
             </div>
             <div class="card-body">
                 <div class="chart-wrap" style="height:230px;">
-                    <canvas id="projMethodDonut"></canvas>
+                    <canvas id="projTenderRfqStatusBar"></canvas>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Row: Allocation vs Released per year + Fund types -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+    <!-- Row: Allocation vs Released per year + Fund type ranking -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <!-- Alloc vs Released grouped bar -->
-        <div class="card md:col-span-7">
+        <div class="card">
             <div class="card-header">
                 <div class="card-icon bg-amber-100"><svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-                <span class="text-sm font-bold text-gray-700">অর্থ বছর — বরাদ্দ বনাম মুক্তকৃত অর্থ</span>
+                <span class="text-sm font-bold text-gray-700">অর্থবছর ভিত্তিক বরাদ্দ বনাম ছাড়কৃত অর্থ</span>
             </div>
             <div class="card-body">
                 <div class="chart-wrap" style="height:250px;">
@@ -494,25 +489,29 @@
             </div>
         </div>
         <!-- Fund type ranking -->
-        <div class="card md:col-span-5">
+        <div class="card">
             <div class="card-header">
                 <div class="card-icon bg-orange-100"><svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
-                <span class="text-sm font-bold text-gray-700">তহবিলের উৎস তুলনা</span>
+                <span class="text-sm font-bold text-gray-700">প্রকল্প তহবিলের তুলনা</span>
             </div>
             <div class="card-body">
                 <div class="rank-scroll" id="fund-type-rank-list">
                     <p class="text-xs text-gray-400">লোড হচ্ছে...</p>
                 </div>
+                <div style="border-top: 1px solid #f1f5f9; margin-top: 1rem; padding-top: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="text-xs text-gray-400 font-medium">বছর:</span>
+                    <div class="flex gap-1 flex-wrap" id="fund-type-fy-filter-pills"></div>
+                </div>
             </div>
         </div>
     </div>
-    <!-- Row: Progress bar chart (filterable) + Method performance radar -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+    <!-- Row: Progress bar + Implementation method -->
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
         <!-- Progress grouped bar with dual filter -->
-        <div class="card md:col-span-8">
+        <div class="card md:col-span-3">
             <div class="card-header flex-wrap gap-2">
                 <div class="card-icon bg-sky-100"><svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
-                <span class="text-sm font-bold text-gray-700">গড় অগ্রগতি (%) — বছর ও পদ্ধতি ফিল্টার</span>
+                <span class="text-sm font-bold text-gray-700">গড় অগ্রগতি (%) — বছর ও পদ্ধতি ভিত্তিক</span>
                 <div class="ml-auto flex flex-wrap items-center gap-3">
                     <!-- Year filter -->
                     <div class="flex items-center gap-1">
@@ -532,18 +531,19 @@
                 </div>
             </div>
         </div>
-        <!-- Method performance radar -->
-        <div class="card md:col-span-4">
+        <!-- Implementation method donut -->
+        <div class="card md:col-span-2">
             <div class="card-header">
-                <div class="card-icon bg-fuchsia-100"><svg class="w-4 h-4 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg></div>
-                <div>
-                    <span class="text-sm font-bold text-gray-700">পদ্ধতি কর্মক্ষমতা</span>
-                    <p class="text-xs text-gray-400">প্রকল্প সংখ্যা · গড় অগ্রগতি · বরাদ্দ</p>
-                </div>
+                <div class="card-icon bg-indigo-100"><svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+                <span class="text-sm font-bold text-gray-700">বাস্তবায়ন পদ্ধতি</span>
             </div>
             <div class="card-body">
-                <div class="chart-wrap" style="height:230px;">
-                    <canvas id="methodRadarChart"></canvas>
+                <div class="chart-wrap" style="height:250px;">
+                    <canvas id="projMethodDonut"></canvas>
+                </div>
+                <div style="border-top: 1px solid #f1f5f9; margin-top: 1rem; padding-top: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="text-xs text-gray-400 font-medium">বছর:</span>
+                    <div class="flex gap-1 flex-wrap" id="method-fy-filter-pills"></div>
                 </div>
             </div>
         </div>
@@ -575,10 +575,21 @@ function shortTk(v) {
     if (v >= 1e5) return '৳' + bn(Math.round(v/1e5)) + ' লক্ষ';
     return '৳' + bn(Math.round(v));
 }
+function shortTkPrecise(v) {
+    v = parseFloat(v)||0;
+    if (v >= 1e7) return '৳' + bn((v/1e7).toFixed(2)) + ' কোটি';
+    if (v >= 1e5) return '৳' + bn((v/1e5).toFixed(2)) + ' লক্ষ';
+    return '৳' + bn(v.toFixed(0));
+}
 const FONT = { family:'Shurjo', size:11 };
 let schCatChartInstance = null; // Store chart instance for updates
 let byYearAndMethod = [], allMethods = [], allYearsProgress = [];
 let activeYearFilters = new Set(['all']), activeMethodFilters = new Set(['all']);
+let byYearAndMethodDetail = [], allYearsMethod = [];
+let activeMethodFYFilters = new Set(['all']);
+let _methodDonutChart = null;
+let byYearAndFundTypeDetail = [], allYearsFundType = [];
+let activeFundTypeFYFilters = new Set(['all']);
 /* ── Chart factories ─────────────────────────────────────── */
 // Register datalabels globally for donut/pie usage
 Chart.register(ChartDataLabels);
@@ -653,20 +664,21 @@ function bar(id, labels, datasets, yFmt=null, opts={}) {
         }
     });
 }
-function rankList(containerId, items, labelKey, countKey, maxCount, barColor, subtitle=null, subtitleFmt=null) {
+function rankList(containerId, items, labelKey, countKey, maxCount, barColor, subtitle=null, subtitleFmt=null, countFmt=null) {
     const el = document.getElementById(containerId); if (!el) return;
     el.innerHTML = items.map((item, i)=>{
         const label = item[labelKey] || 'অন্যান্য';
-        const count = parseInt(item[countKey]) || 0;
+        const count = parseFloat(item[countKey]) || 0;
         const p = pct(count, maxCount);
-        const subText = subtitle && item[subtitle] ? `<span class="ml-2 badge-chip bg-gray-100 text-gray-500">${subtitleFmt ? subtitleFmt(item[subtitle]) : bn(item[subtitle])}</span>` : '';
+        const subText = subtitle && item[subtitle] ? ` (${subtitleFmt ? subtitleFmt(item[subtitle]) : bn(item[subtitle])}টি প্রকল্প)` : '';
+        const countDisplay = countFmt ? countFmt(count) : bn(parseInt(count));
         return `<div class="flex items-center gap-3 py-1.5 ${i<items.length-1?'border-b border-gray-50':''}">
             <span class="w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center flex-shrink-0" style="background:${barColor}22;color:${barColor}">${bn(i+1)}</span>
-            <span class="text-xs text-gray-700 flex-1 truncate" title="${label}">${label}${subText}</span>
-            <span class="text-xs font-bold text-gray-600 flex-shrink-0">${bn(count)}</span>
-            <div class="rank-bar-track">
+            <span class="text-xs text-gray-700 flex-shrink-0" title="${label}">${label}${subText}</span>
+            <div class="rank-bar-track flex-1">
                 <div class="rank-bar-fill" style="width:${p}%;background:${barColor}"></div>
             </div>
+            <span class="text-xs font-bold text-gray-600 flex-shrink-0 whitespace-nowrap">${countDisplay}</span>
         </div>`;
     }).join('');
 }
@@ -723,6 +735,7 @@ function makePillGroup(containerId, items, activeSet, color, rebuildFn) {
             const allPill = container.querySelector('[data-value="all"]');
             if (isAll) {
                 activeSet.clear();
+                activeSet.add('all');
                 container.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
                 pill.classList.add('active');
             } else {
@@ -730,11 +743,15 @@ function makePillGroup(containerId, items, activeSet, color, rebuildFn) {
                     activeSet.delete(value);
                     pill.classList.remove('active');
                 } else {
+                    activeSet.delete('all');
                     activeSet.add(value);
                     pill.classList.add('active');
                     if (allPill) allPill.classList.remove('active');
                 }
-                if (activeSet.size === 0 && allPill) allPill.classList.add('active');
+                if (activeSet.size === 0) {
+                    activeSet.add('all');
+                    if (allPill) allPill.classList.add('active');
+                }
             }
             rebuildFn();
         };
@@ -773,11 +790,55 @@ function buildProgressBar() {
         el.closest('.chart-wrap').innerHTML = '<p class="text-xs text-gray-400 text-center pt-10">তথ্য পাওয়া যায়নি</p>';
         return;
     }
-    _progressBarChart = bar('projProgressBarChart', years, datasets, v => bn(v) + '%');
+    _progressBarChart = bar('projProgressBarChart', years, datasets, v => bn(v) + '%', {
+        plugins: {
+            legend: { display: true, position: 'bottom', labels: { font: FONT, padding: 10, boxWidth: 11, boxHeight: 11 } },
+            datalabels: {
+                display: true, anchor: 'end', align: 'end', offset: 4, font: {...FONT, weight: 'bold', size: 10}, color: '#374151',
+                formatter: v => bn(v) + '%'
+            }
+        },
+        layout: { padding: { top: 30 } }
+    });
 }
 function renderProgressFilters() {
     makePillGroup('year-filter-pills',   allYearsProgress,  activeYearFilters,   '#0ea5e9', buildProgressBar);
     makePillGroup('method-filter-pills', allMethods,        activeMethodFilters, '#8b5cf6', buildProgressBar);
+}
+function buildMethodDonut() {
+    const fyAll = activeMethodFYFilters.size === 0 || activeMethodFYFilters.has('all');
+    const filtered = fyAll ? byYearAndMethodDetail : byYearAndMethodDetail.filter(r => activeMethodFYFilters.has(r.financial_year));
+    const byMethod = {};
+    filtered.forEach(r => {
+        if (!byMethod[r.implementation_method]) byMethod[r.implementation_method] = 0;
+        byMethod[r.implementation_method] += parseInt(r.count) || 0;
+    });
+    const methods = Object.keys(byMethod).sort((a, b) => byMethod[b] - byMethod[a]);
+    const counts = methods.map(m => byMethod[m]);
+    const colors = methods.map(m => PAL.methods[m] || PAL.mixed[methods.indexOf(m) % PAL.mixed.length]);
+    const el = document.getElementById('projMethodDonut');
+    if (!el) return;
+    if (_methodDonutChart) { _methodDonutChart.destroy(); _methodDonutChart = null; }
+    _methodDonutChart = donut('projMethodDonut', methods, counts, colors);
+}
+function renderMethodFilters() {
+    makePillGroup('method-fy-filter-pills', allYearsMethod, activeMethodFYFilters, '#6366f1', buildMethodDonut);
+}
+function buildFundTypeRank() {
+    const fyAll = activeFundTypeFYFilters.size === 0 || activeFundTypeFYFilters.has('all');
+    const filtered = fyAll ? byYearAndFundTypeDetail : byYearAndFundTypeDetail.filter(r => activeFundTypeFYFilters.has(r.financial_year));
+    const byFund = {};
+    filtered.forEach(r => {
+        if (!byFund[r.fund_type]) byFund[r.fund_type] = { total_allocation: 0, count: 0 };
+        byFund[r.fund_type].total_allocation += parseFloat(r.total_allocation) || 0;
+        byFund[r.fund_type].count += parseInt(r.count) || 0;
+    });
+    const funds = Object.keys(byFund).sort((a, b) => byFund[b].total_allocation - byFund[a].total_allocation);
+    const maxAlloc = Math.max(...funds.map(f => byFund[f].total_allocation)) || 1;
+    rankList('fund-type-rank-list', funds.map(f => ({ fund_type: f, ...byFund[f] })), 'fund_type', 'total_allocation', maxAlloc, '#f59e0b', 'count', bn, v => shortTkPrecise(v));
+}
+function renderFundTypeFilters() {
+    makePillGroup('fund-type-fy-filter-pills', allYearsFundType, activeFundTypeFYFilters, '#f59e0b', buildFundTypeRank);
 }
 /* ═══════════════════════════════════════════════════════════
    MAIN LOADER
@@ -797,7 +858,8 @@ async function loadDashboard() {
         const projCount  = parseInt(pr.total_count)  || 0;
         const projDone   = parseInt(pr.completed_count) || 0;
         const projDelay  = parseInt(pr.delayed_count) || 0;
-        const projOngo   = projCount - projDone;
+        const projOngo   = parseInt(pr.ongoing_count) || 0;
+        const projPending = projCount - projDone - projOngo - projDelay;
         const alloc      = parseFloat(pr.total_allocation) || 0;
         const released   = parseFloat(pr.total_released)   || 0;
         const avgProg    = parseFloat(pr.avg_progress) || 0;
@@ -826,7 +888,8 @@ async function loadDashboard() {
         document.getElementById('proj-done').textContent     = bn(projDone);
         document.getElementById('proj-ongoing').textContent  = bn(projOngo);
         document.getElementById('proj-delayed').textContent  = bn(projDelay);
-        document.getElementById('proj-avg-pct').textContent  = bn(avgProg);
+        document.getElementById('proj-pending').textContent  = bn(Math.max(0, projPending));
+        document.getElementById('proj-avg-pct').textContent  = bn(Math.round(avgProg * 10) / 10);
         document.getElementById('proj-type-total').textContent = bn(projCount);
         /* ══ SCHOLARSHIP CHARTS ══════════════════════════════ */
         const schCats  = (sc.byCategory||[]).sort((a,b)=>b.count-a.count);
@@ -989,11 +1052,7 @@ async function loadDashboard() {
             schUpaz.map(u=>parseInt(u.count)),
             schUpaz.map((_,i)=> PAL.mixed[i%PAL.mixed.length])
         );
-        // School rank list
-        rankList('school-rank-list', schSchools, 'school', 'count', schSchools[0]?.count||1, '#3b82f6');
         // Top 10 schools horizontal bar
-        console.log('[DEBUG] schSchools:', schSchools);
-        console.log('[DEBUG] schCatAvg:', schCatAvg);
         if (schSchools.length > 0) {
             hbar('schTopSchoolsBar',
                 schSchools.slice(0,10).map(s=>s.school||'—'),
@@ -1045,59 +1104,96 @@ async function loadDashboard() {
         const aidYears = (ai.byYear||[]).sort((a,b)=>(a.financial_year||'').localeCompare(b.financial_year||''));
         const aidUpaz  = (ai.byUpazila||[]).sort((a,b)=>b.count-a.count).slice(0,10);
         document.getElementById('aid-cat-total').textContent = bn(aidCount);
-        // Year grouped bar (count + total_amount)
+        // Year grouped bar (count + total_amount on dual Y-axes)
         bar('aidYearBar',
             aidYears.map(y=>y.financial_year||'—'),
             [
-                { label:'উপকারভোগী', data:aidYears.map(y=>parseInt(y.count)), backgroundColor:'#10b981', borderRadius:4 }
+                { label:'উপকারভোগী (সংখ্যা)', data:aidYears.map(y=>parseInt(y.count)), backgroundColor:'#3b82f6', borderRadius:4, yAxisID:'y' },
+                { label:'বিতরণকৃত অর্থ (লক্ষ)', data:aidYears.map(y=>Math.round(parseFloat(y.total_amount||0)/100000)), backgroundColor:'#f97316', borderRadius:4, yAxisID:'y1' }
             ],
-            null
+            null,
+            {
+                plugins:{
+                    legend:{ display:true, position:'bottom', labels:{ font:FONT, padding:10, boxWidth:11, boxHeight:11 } },
+                    datalabels:{
+                        display:true, anchor:'end', align:'end', offset:4, font:{...FONT, weight:'bold', size:10}, color:'#374151',
+                        formatter:(v,ctx) => {
+                            const isCount = ctx.datasetIndex === 0;
+                            return isCount ? bn(v)+' জন' : bn(Math.round(v*100000))+' টাকা';
+                        }
+                    }
+                },
+                layout:{ padding:{ top:40, bottom:10 } },
+                scales:{ y1:{ position:'right', ticks:{ font:FONT, callback:v=>bn(v) }, grid:{ display:false }, beginAtZero:true } }
+            }
         );
         // Category donut
         donut('aidCatDonut',
             aidCats.map(c=>c.category||'অন্যান্য'),
             aidCats.map(c=>parseInt(c.count)),
-            PAL.emerald
+            PAL.mixed
         );
         // Upazila horizontal bar
         hbar('aidUpazilaBar',
             aidUpaz.map(u=>u.upazila||'—'),
             aidUpaz.map(u=>parseInt(u.count)),
-            aidUpaz.map((_,i)=>['#059669','#10b981','#34d399','#0d9488','#0891b2','#2563eb','#7c3aed','#be185d','#ea580c','#ca8a04'][i%10])
+            aidUpaz.map((_,i)=>['#059669','#10b981','#34d399','#0d9488','#0891b2','#2563eb','#7c3aed','#be185d','#ea580c','#ca8a04'][i%10]),
+            v => bn(v)+' জন'
         );
-        // Category compare bar (count vs amount)
+        // Category compare bar (count vs amount) - horizontal
         bar('aidCatCompareBar',
             aidCats.map(c=>c.category||'অন্যান্য'),
             [
-                { label:'উপকারভোগী', data:aidCats.map(c=>parseInt(c.count)), backgroundColor:'#10b981', borderRadius:4 },
-                { label:'মোট অর্থ (লক্ষ)', data:aidCats.map(c=>Math.round(parseFloat(c.total_amount||0)/100000)), backgroundColor:'#34d399', borderRadius:4 }
+                { label:'উপকারভোগী', data:aidCats.map(c=>parseInt(c.count)), backgroundColor:'#8b5cf6', borderRadius:4 },
+                { label:'মোট অর্থ (লক্ষ)', data:aidCats.map(c=>Math.round(parseFloat(c.total_amount||0)/100000)), backgroundColor:'#ec4899', borderRadius:4 }
             ],
-            v => bn(v)
+            v => bn(v),
+            {
+                indexAxis:'y',
+                plugins:{
+                    legend:{ display:true, position:'bottom', labels:{ font:FONT, padding:10, boxWidth:11, boxHeight:11 } },
+                    datalabels:{
+                        display:true, anchor:'end', align:'end', offset:4, font:{...FONT, weight:'bold', size:10}, color:'#374151',
+                        formatter:(v,ctx) => {
+                            const isCount = ctx.datasetIndex === 0;
+                            return isCount ? bn(v)+' জন' : bn(v)+' লক্ষ';
+                        }
+                    }
+                },
+                scales:{ x:{ ticks:{ callback:v=>bn(v) }, grid:{ color:'#f1f5f9' }, beginAtZero:true }, y:{ ticks:{ font:FONT } } }
+            }
         );
         /* ══ PROJECT CHARTS ══════════════════════════════════ */
         const projTypes  = (pr.byType||[]).sort((a,b)=>b.count-a.count);
         const projYears  = (pr.byYear||[]).sort((a,b)=>(a.financial_year||'').localeCompare(b.financial_year||''));
         const projMethods= (pr.byMethod||[]).sort((a,b)=>b.count-a.count);
-        const projStatuses=(pr.byStatus||[]).sort((a,b)=>b.count-a.count).slice(0,10);
         const projFunds  = (pr.byFundType||[]).sort((a,b)=>b.count-a.count);
+        const allStatuses=(pr.byStatus||[]);
+        const cppcStatuses = allStatuses.filter(s=>s.implementation_method==='সিপিপিসি').sort((a,b)=>b.count-a.count);
+        const tenderRfqStatuses = allStatuses.filter(s=>['টেন্ডার','আরএফকিউ'].includes(s.implementation_method||'')).sort((a,b)=>b.count-a.count);
         // Type donut
         donut('projTypeDonut',
             projTypes.map(t=>t.project_type||'অন্যান্য'),
             projTypes.map(t=>parseInt(t.count)),
-            PAL.violet
+            PAL.mixed
         );
-        // Status horizontal bar
-        hbar('projStatusBar',
-            projStatuses.map(s=>s.current_status||'—'),
-            projStatuses.map(s=>parseInt(s.count)),
-            projStatuses.map((_,i)=>PAL.status[i%PAL.status.length])
+        // CPPC Status horizontal bar
+        hbar('projCppcStatusBar',
+            cppcStatuses.map(s=>s.current_status||'—'),
+            cppcStatuses.map(s=>parseInt(s.count)),
+            cppcStatuses.map((_,i)=>PAL.status[i%PAL.status.length])
         );
-        // Method donut
-        donut('projMethodDonut',
-            projMethods.map(m=>m.implementation_method||'—'),
-            projMethods.map(m=>parseInt(m.count)),
-            [PAL.methods['টেন্ডার'],PAL.methods['সিপিপিসি'],PAL.methods['আরএফকিউ'],...PAL.mixed]
+        // TENDER & RFQ Status horizontal bar
+        hbar('projTenderRfqStatusBar',
+            tenderRfqStatuses.map(s=>s.current_status||'—'),
+            tenderRfqStatuses.map(s=>parseInt(s.count)),
+            tenderRfqStatuses.map((_,i)=>PAL.status[i%PAL.status.length])
         );
+        // Method donut with FY filter
+        byYearAndMethodDetail = (pr.byYearAndMethod || []);
+        allYearsMethod = [...new Set(byYearAndMethodDetail.map(r=>r.financial_year).filter(Boolean))].sort();
+        renderMethodFilters();
+        buildMethodDonut();
         // Update KPI with method breakdown
         const methodText = projMethods.filter(m => m.implementation_method !== 'আরএফকিউ').map(m => bn(m.count) + 'টি ' + (m.implementation_method||'—')).join(', ');
         const kpiProjDone = document.getElementById('kpi-proj-done');
@@ -1109,11 +1205,26 @@ async function loadDashboard() {
                 { label:'বরাদ্দ', data:projYears.map(y=>Math.round(parseFloat(y.total_allocation||0)/100000)), backgroundColor:'#8b5cf6', borderRadius:4 },
                 { label:'মুক্তকৃত', data:projYears.map(y=>Math.round(parseFloat(y.total_released||0)/100000)), backgroundColor:'#34d399', borderRadius:4 }
             ],
-            v => '৳'+bn(v)+'লক্ষ'
+            v => '৳'+bn(v)+'লক্ষ',
+            {
+                plugins:{
+                    legend:{ display:true, position:'bottom', labels:{ font:FONT, padding:10, boxWidth:11, boxHeight:11 } },
+                    datalabels:{
+                        display:true, anchor:'end', align:'end', offset:4, font:{...FONT, weight:'bold', size:10}, color:'#374151',
+                        formatter:v => {
+                            if (v >= 100) return bn(Math.round(v/100 * 10) / 10) + ' কোটি';
+                            return bn(v) + ' লক্ষ';
+                        }
+                    }
+                },
+                layout:{ padding:{ top:30 } }
+            }
         );
-        // Fund type rank list
-        rankList('fund-type-rank-list', projFunds, 'fund_type', 'count', projFunds[0]?.count||1, '#f59e0b',
-            'total_allocation', shortTk);
+        // Fund type rank list with FY filter
+        byYearAndFundTypeDetail = (pr.byYearAndFundType || []);
+        allYearsFundType = [...new Set(byYearAndFundTypeDetail.map(r=>r.financial_year).filter(Boolean))].sort();
+        renderFundTypeFilters();
+        buildFundTypeRank();
         /* ── Progress bar with dual filter ────────────────── */
         byYearAndMethod  = (pr.byYearAndMethod || []);
         // Fallback: if byYearAndMethod is empty but byYear + byMethod exist,

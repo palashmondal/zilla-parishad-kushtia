@@ -198,10 +198,18 @@ const projectsModel = {
              FROM projects WHERE fund_type IS NOT NULL AND fund_type != ''
              GROUP BY fund_type ORDER BY count DESC LIMIT 12`
         );
+        const [yearFundTypeResult] = await pool.execute(
+            `SELECT financial_year, fund_type, COUNT(*) as count,
+                    COALESCE(SUM(allocation_amount),0) as total_allocation
+             FROM projects
+             WHERE financial_year IS NOT NULL AND fund_type IS NOT NULL AND fund_type != ''
+             GROUP BY financial_year, fund_type
+             ORDER BY financial_year ASC, count DESC`
+        );
         const [statusResult] = await pool.execute(
-            `SELECT current_status, COUNT(*) as count
-             FROM projects WHERE current_status IS NOT NULL AND current_status != ''
-             GROUP BY current_status ORDER BY count DESC LIMIT 10`
+            `SELECT current_status, implementation_method, COUNT(*) as count
+             FROM projects WHERE current_status IS NOT NULL AND current_status != '' AND implementation_method IS NOT NULL AND implementation_method != ''
+             GROUP BY current_status, implementation_method ORDER BY implementation_method, count DESC`
         );
         const [yearProgressResult] = await pool.execute(
             `SELECT financial_year, implementation_method,
@@ -224,7 +232,8 @@ const projectsModel = {
             byMethod: methodResult,
             byFundType: fundTypeResult,
             byStatus: statusResult,
-            byYearAndMethod: yearProgressResult
+            byYearAndMethod: yearProgressResult,
+            byYearAndFundType: yearFundTypeResult
         };
     },
 
