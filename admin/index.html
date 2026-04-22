@@ -313,10 +313,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-icon bg-amber-100"><svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-                <span class="text-sm font-bold text-gray-700">শ্রেণিভিত্তিক গড় বৃত্তির পরিমাণ</span>
+                <span class="text-sm font-bold text-gray-700">শ্রেণিভিত্তিক মোট বৃত্তির পরিমাণ</span>
             </div>
             <div class="card-body">
-                <div class="chart-wrap" style="height:280px;">
+                <div class="chart-wrap" style="height:320px;">
                     <canvas id="schCatAvgBar"></canvas>
                 </div>
             </div>
@@ -577,6 +577,8 @@ function shortTk(v) {
 }
 const FONT = { family:'Shurjo', size:11 };
 let schCatChartInstance = null; // Store chart instance for updates
+let byYearAndMethod = [], allMethods = [], allYearsProgress = [];
+let activeYearFilters = new Set(['all']), activeMethodFilters = new Set(['all']);
 /* ── Chart factories ─────────────────────────────────────── */
 // Register datalabels globally for donut/pie usage
 Chart.register(ChartDataLabels);
@@ -743,6 +745,35 @@ function makePillGroup(containerId, items, activeSet, color, rebuildFn) {
     allPill.classList.add('active');
     container.appendChild(allPill);
     items.forEach(item => container.appendChild(createPill(item, item, false)));
+}
+let _progressBarChart = null;
+function buildProgressBar() {
+    const yearAll   = activeYearFilters.size === 0   || activeYearFilters.has('all');
+    const methodAll = activeMethodFilters.size === 0 || activeMethodFilters.has('all');
+    const filtered  = byYearAndMethod.filter(r =>
+        (yearAll   || activeYearFilters.has(r.financial_year)) &&
+        (methodAll || activeMethodFilters.has(r.implementation_method))
+    );
+    const years   = [...new Set(filtered.map(r => r.financial_year).filter(Boolean))].sort();
+    const methods = [...new Set(filtered.map(r => r.implementation_method).filter(Boolean))].sort();
+    const colors  = ['#0ea5e9','#8b5cf6','#f59e0b','#10b981','#ef4444'];
+    const datasets = methods.map((m, i) => ({
+        label: m,
+        data: years.map(y => {
+            const row = filtered.find(r => r.financial_year === y && r.implementation_method === m);
+            return row ? Math.round(parseFloat(row.avg_progress)||0) : 0;
+        }),
+        backgroundColor: colors[i % colors.length],
+        borderRadius: 4
+    }));
+    const el = document.getElementById('projProgressBarChart');
+    if (!el) return;
+    if (_progressBarChart) { _progressBarChart.destroy(); _progressBarChart = null; }
+    if (!years.length) {
+        el.closest('.chart-wrap').innerHTML = '<p class="text-xs text-gray-400 text-center pt-10">তথ্য পাওয়া যায়নি</p>';
+        return;
+    }
+    _progressBarChart = bar('projProgressBarChart', years, datasets, v => bn(v) + '%');
 }
 function renderProgressFilters() {
     makePillGroup('year-filter-pills',   allYearsProgress,  activeYearFilters,   '#0ea5e9', buildProgressBar);
@@ -973,28 +1004,32 @@ async function loadDashboard() {
             document.getElementById('schTopSchoolsBar').closest('.chart-wrap').innerHTML =
                 '<p class="text-xs text-gray-400 text-center pt-10">বিদ্যালয়ের তথ্য পাওয়া যায়নি</p>';
         }
-        // Category avg amount bar
+        // Category total amount grouped bar — FY on X-axis, one dataset per category
         if (schCatAvg.length > 0) {
+        const catFYs   = [...new Set(schCatAvg.map(r => r.financial_year).filter(Boolean))].sort();
+        const catNames = [...new Set(schCatAvg.map(r => r.category).filter(Boolean))].sort();
+        const catColors = { 'JSC':'#f59e0b', 'SSC':'#3b82f6', 'HSC':'#10b981', 'Honors':'#8b5cf6' };
+        const catDatasets = catNames.map((cat, i) => ({
+            label: cat,
+            data: catFYs.map(fy => {
+                const row = schCatAvg.find(r => r.financial_year === fy && r.category === cat);
+                return row ? Math.round(parseFloat(row.total_amount||0)) : 0;
+            }),
+            backgroundColor: catColors[cat] || PAL.mixed[i % PAL.mixed.length],
+            borderRadius: 4,
+            barPercentage: 0.75
+        }));
         new Chart(document.getElementById('schCatAvgBar'), {
             type:'bar',
-            data:{
-                labels: schCatAvg.map(c=>c.category||'—'),
-                datasets:[{
-                    label:'গড় বৃত্তি (টাকা)',
-                    data: schCatAvg.map(c=>Math.round(parseFloat(c.avg_amount||0))),
-                    backgroundColor:['#3b82f6','#10b981','#f59e0b'],
-                    borderRadius:5,
-                    barPercentage:0.5
-                }]
-            },
+            data:{ labels: catFYs, datasets: catDatasets },
             options:{
                 responsive:true, maintainAspectRatio:false,
                 plugins:{
-                    legend:{ display:false },
-                    tooltip:{ callbacks:{ label(c){ return ` গড়: ${bn(c.parsed.y)} টাকা`; } } },
-                    datalabels:{ display:true, anchor:'end', align:'end', offset:4, font:{...FONT, weight:'bold', size:11}, color:'#374151', formatter:v=>bn(v)+' ৳' }
+                    legend:{ display:true, position:'bottom', labels:{ font:FONT, padding:10, boxWidth:11, boxHeight:11 } },
+                    tooltip:{ callbacks:{ label(c){ return ` ${c.dataset.label}: ${bn(c.parsed.y)} টাকা`; } } },
+                    datalabels:{ display:true, anchor:'end', align:'end', offset:2, font:{...FONT, weight:'bold', size:10}, color:'#374151', formatter:v => v > 0 ? bn(v)+' টাকা' : '' }
                 },
-                layout:{ padding:{ top:28 } },
+                layout:{ padding:{ top:30 } },
                 scales:{
                     x:{ ticks:{ font:FONT }, grid:{ display:false } },
                     y:{ ticks:{ font:FONT, callback:v=>bn(v) }, grid:{ color:'#f1f5f9' }, beginAtZero:true }
@@ -1065,7 +1100,8 @@ async function loadDashboard() {
         );
         // Update KPI with method breakdown
         const methodText = projMethods.filter(m => m.implementation_method !== 'আরএফকিউ').map(m => bn(m.count) + 'টি ' + (m.implementation_method||'—')).join(', ');
-        document.getElementById('kpi-proj-done').textContent = methodText;
+        const kpiProjDone = document.getElementById('kpi-proj-done');
+        if (kpiProjDone) kpiProjDone.textContent = methodText;
         // Alloc vs Released grouped bar
         bar('projAllocReleasedBar',
             projYears.map(y=>y.financial_year||'—'),
