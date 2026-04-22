@@ -98,7 +98,7 @@ const scholarshipModel = {
             let categoryAvgResult = [];
             try {
                 [categoryAvgResult] = await conn.execute(
-                    'SELECT category, COUNT(*) as count, COALESCE(AVG(amount), 0) as avg_amount FROM scholarship WHERE category IS NOT NULL AND category != \'\' GROUP BY category ORDER BY count DESC'
+                    'SELECT financial_year, category, COUNT(*) as count, COALESCE(AVG(amount), 0) as avg_amount, COALESCE(SUM(amount), 0) as total_amount FROM scholarship WHERE category IS NOT NULL AND category != \'\' AND financial_year IS NOT NULL AND financial_year != \'\' GROUP BY financial_year, category ORDER BY financial_year, category'
                 );
             } catch(e) {
                 console.error('byCategoryAvg query failed:', e.message);
