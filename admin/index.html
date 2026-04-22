@@ -178,7 +178,7 @@
             </div>
             <div class="mt-auto pt-2 border-t border-gray-100">
                 <p class="text-sm font-bold text-emerald-600" id="kpi-released-amount">—</p>
-                <p class="text-xs text-gray-500 font-medium">ছাড়কৃত অर्थ</p>
+                <p class="text-xs text-gray-500 font-medium">সমাপ্তির হার</p>
                 <p class="text-[11px] text-gray-400 italic mt-2" id="kpi-proj-fy">*২০২৪-২৫ অর্থবছর থেকে অদ্যাবধি</p>
             </div>
         </div>
@@ -872,16 +872,17 @@ async function loadDashboard() {
         const latestProjYear = projYearsForKPI[0] || '२०२४-२५';
         /* ── KPI tiles ───────────────────────────────────── */
         document.getElementById('kpi-sch-count').textContent  = bn(schCount) + ' জন';
-        document.getElementById('kpi-sch-amt').textContent    = shortTkPrecise(sc.total_amount||0) + ' টাকা';
+        document.getElementById('kpi-sch-amt').textContent    = shortTkPrecise(sc.total_amount||0);
         document.getElementById('kpi-sch-fy').textContent = '*' + bn(latestSchYear) + ' অর্থবছর থেকে অদ্যাবধি';
         document.getElementById('kpi-aid-count').textContent  = bn(aidCount) + ' জন';
-        document.getElementById('kpi-aid-amt').textContent    = shortTkPrecise(ai.total_amount||0) + ' টাকা';
+        document.getElementById('kpi-aid-amt').textContent    = shortTkPrecise(ai.total_amount||0);
         document.getElementById('kpi-aid-fy').textContent = '*' + bn(latestAidYear) + ' অর্থবছর থেকে অদ্যাবধি';
         document.getElementById('kpi-proj-count').textContent = bn(projCount) + 'টি';
-        document.getElementById('kpi-released-amount').textContent = shortTkPrecise(released) + ' টাকা';
+        const completionRate = projCount > 0 ? Math.round((projDone / projCount) * 100) : 0;
+        document.getElementById('kpi-released-amount').textContent = bn(completionRate) + '%';
         document.getElementById('kpi-proj-fy').textContent = '*' + bn(latestProjYear) + ' অর্থবছর থেকে অদ্যাবধি';
-        document.getElementById('kpi-alloc').textContent      = shortTkPrecise(alloc) + ' টাকা';
-        document.getElementById('kpi-released').textContent   = shortTkPrecise(released) + ' টাকা';
+        document.getElementById('kpi-alloc').textContent      = shortTkPrecise(alloc);
+        document.getElementById('kpi-released').textContent   = shortTkPrecise(released);
         document.getElementById('kpi-delayed').textContent    = bn(projDelay) + 'টি';
         document.getElementById('kpi-ongoing').textContent    = bn(projDone) + 'টি সম্পন্ন, ' + bn(projOngo) + 'টি চলমান';
         document.getElementById('kpi-avg-progress').textContent = bn(avgProg) + '%';
