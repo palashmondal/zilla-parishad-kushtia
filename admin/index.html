@@ -872,16 +872,16 @@ async function loadDashboard() {
         const latestProjYear = projYearsForKPI[0] || '२०२४-२५';
         /* ── KPI tiles ───────────────────────────────────── */
         document.getElementById('kpi-sch-count').textContent  = bn(schCount) + ' জন';
-        document.getElementById('kpi-sch-amt').textContent    = shortTk(sc.total_amount||0) + ' টাকা';
+        document.getElementById('kpi-sch-amt').textContent    = shortTkPrecise(sc.total_amount||0) + ' টাকা';
         document.getElementById('kpi-sch-fy').textContent = '*' + bn(latestSchYear) + ' অর্থবছর থেকে অদ্যাবধি';
         document.getElementById('kpi-aid-count').textContent  = bn(aidCount) + ' জন';
-        document.getElementById('kpi-aid-amt').textContent    = shortTk(ai.total_amount||0) + ' টাকা';
+        document.getElementById('kpi-aid-amt').textContent    = shortTkPrecise(ai.total_amount||0) + ' টাকা';
         document.getElementById('kpi-aid-fy').textContent = '*' + bn(latestAidYear) + ' অর্থবছর থেকে অদ্যাবধি';
         document.getElementById('kpi-proj-count').textContent = bn(projCount) + 'টি';
-        document.getElementById('kpi-released-amount').textContent = shortTk(released) + ' টাকা';
+        document.getElementById('kpi-released-amount').textContent = shortTkPrecise(released) + ' টাকা';
         document.getElementById('kpi-proj-fy').textContent = '*' + bn(latestProjYear) + ' অর্থবছর থেকে অদ্যাবধি';
-        document.getElementById('kpi-alloc').textContent      = shortTk(alloc) + ' টাকা';
-        document.getElementById('kpi-released').textContent   = shortTk(released) + ' টাকা';
+        document.getElementById('kpi-alloc').textContent      = shortTkPrecise(alloc) + ' টাকা';
+        document.getElementById('kpi-released').textContent   = shortTkPrecise(released) + ' টাকা';
         document.getElementById('kpi-delayed').textContent    = bn(projDelay) + 'টি';
         document.getElementById('kpi-ongoing').textContent    = bn(projDone) + 'টি সম্পন্ন, ' + bn(projOngo) + 'টি চলমান';
         document.getElementById('kpi-avg-progress').textContent = bn(avgProg) + '%';
