@@ -155,7 +155,7 @@
             <div class="mt-auto pt-2 border-t border-gray-100">
                 <p class="text-base font-bold text-emerald-600 truncate" id="kpi-sch-amt">—</p>
                 <p class="text-sm text-emerald-700 font-medium">মোট শিক্ষাবৃত্তি অর্থ</p>
-                <p class="text-[11px] text-gray-400 italic mt-0.5">*২০২৫-২৬ অর্থবছর থেকে অদ্যাবধি</p>
+                <p class="text-[11px] text-gray-400 italic mt-0.5" id="kpi-sch-fy">*২০২৫-২৬ অর্থবছর থেকে অদ্যাবধি</p>
             </div>
         </div>
         <!-- Tile 2: Aid -->
@@ -863,13 +863,23 @@ async function loadDashboard() {
         const alloc      = parseFloat(pr.total_allocation) || 0;
         const released   = parseFloat(pr.total_released)   || 0;
         const avgProg    = parseFloat(pr.avg_progress) || 0;
+        /* ── Get latest years from data ──────────────────── */
+        const schYearsForKPI = (sc.byYear||[]).map(y=>y.financial_year).filter(Boolean).sort().reverse();
+        const aidYearsForKPI = (ai.byYear||[]).map(y=>y.financial_year).filter(Boolean).sort().reverse();
+        const projYearsForKPI = (pr.byYear||[]).map(y=>y.financial_year).filter(Boolean).sort().reverse();
+        const latestSchYear = schYearsForKPI[0] || '२०२५-२६';
+        const latestAidYear = aidYearsForKPI[0] || '२०२४-२५';
+        const latestProjYear = projYearsForKPI[0] || '२०२४-२५';
         /* ── KPI tiles ───────────────────────────────────── */
         document.getElementById('kpi-sch-count').textContent  = bn(schCount) + ' জন';
         document.getElementById('kpi-sch-amt').textContent    = shortTk(sc.total_amount||0) + ' টাকা';
+        document.getElementById('kpi-sch-fy').textContent = '*' + bn(latestSchYear) + ' অর্থবছর থেকে অদ্যাবধি';
         document.getElementById('kpi-aid-count').textContent  = bn(aidCount) + ' জন';
         document.getElementById('kpi-aid-amt').textContent    = shortTk(ai.total_amount||0) + ' টাকা';
+        document.getElementById('kpi-aid-fy').textContent = '*' + bn(latestAidYear) + ' অর্থবছর থেকে অদ্যাবধি';
         document.getElementById('kpi-proj-count').textContent = bn(projCount) + 'টি';
         document.getElementById('kpi-released-amount').textContent = shortTk(released) + ' টাকা';
+        document.getElementById('kpi-proj-fy').textContent = '*' + bn(latestProjYear) + ' অর্থবছর থেকে অদ্যাবধি';
         document.getElementById('kpi-alloc').textContent      = shortTk(alloc) + ' টাকা';
         document.getElementById('kpi-released').textContent   = shortTk(released) + ' টাকা';
         document.getElementById('kpi-delayed').textContent    = bn(projDelay) + 'টি';
