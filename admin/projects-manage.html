@@ -3882,8 +3882,6 @@
                     // Trigger the change event to populate the date/number fields
                     onApprovalMemoChange();
                 }
-                // ID field readonly while editing (ID is the PK)
-                document.getElementById('form-id').setAttribute('readonly', 'readonly');
                 // Clear pending photo state for this edit session
                 pendingFiles = [];
                 renderPendingPreviews();
@@ -4883,6 +4881,26 @@
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'সংরক্ষণ করুন';
                     return;
+                }
+                // Check project_id uniqueness
+                if (formData.project_id && formData.project_id.trim()) {
+                    const projectId = formData.project_id.trim();
+                    const isDuplicate = allRecords.some(record =>
+                        record.project_id &&
+                        record.project_id.trim() === projectId &&
+                        record.id !== editingId
+                    );
+                    if (isDuplicate) {
+                        const errorModal = document.getElementById('error-modal');
+                        if (errorModal) {
+                            showErrorModal(`প্রকল্প আইডি '${projectId}' ইতিমধ্যে বিদ্যমান। অনুগ্রহ করে একটি অনন্য প্রকল্প আইডি ব্যবহার করুন।`, 'প্রকল্প আইডি অনন্য নয়');
+                        } else {
+                            alert(`প্রকল্প আইডি '${projectId}' ইতিমধ্যে বিদ্যমান। অনুগ্রহ করে একটি অনন্য প্রকল্প আইডি ব্যবহার করুন।`);
+                        }
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'সংরক্ষণ করুন';
+                        return;
+                    }
                 }
                 // Strip empty date strings so they go as NULL
                 ['start_date', 'expected_end_date', 'actual_end_date'].forEach(k => {
