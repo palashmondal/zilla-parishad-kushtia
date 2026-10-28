@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 const pool = require('../config/database');
 const { createObjectCsvWriter } = require('csv-writer');
@@ -47,7 +46,7 @@ async function exportHonorsScholarships() {
         ];
 
         // Output path
-        const outputPath = path.join(__dirname, '../honors_scholarships.csv');
+        const outputPath = path.join(__dirname, '../data/honors_scholarships.csv');
 
         const csvWriter = createObjectCsvWriter({
             path: outputPath,
@@ -58,11 +57,6 @@ async function exportHonorsScholarships() {
         await csvWriter.writeRecords(records);
         console.log(`✅ Exported to: ${outputPath}`);
         console.log(`📊 Total records: ${records.length}`);
-
-        // Copy to Downloads
-        const downloadPath = '/Users/palashmondal/Downloads/honors_scholarships_120.csv';
-        fs.copyFileSync(outputPath, downloadPath);
-        console.log(`✅ Copied to Downloads: ${downloadPath}\n`);
 
         await pool.end();
         process.exit(0);

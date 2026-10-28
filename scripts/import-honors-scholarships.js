@@ -5,7 +5,7 @@ const parse = require('csv-parse');
 
 // Parse CSV and import honors scholarships
 async function importHonorsScholarships() {
-    const filePath = path.join(__dirname, '../scholarship_honors.csv');
+    const filePath = path.join(__dirname, '../data/scholarship_honors.csv');
 
     if (!fs.existsSync(filePath)) {
         console.error('❌ File not found:', filePath);

@@ -15,7 +15,7 @@ All authentication and UI components have been successfully implemented:
 ## Default Admin Credentials
 
 **Username:** `admin`
-**Password:** `admin123`
+**Password:** set via `scripts/fix-admin-password.js` (not stored here)
 **Email:** admin@zpkushtia.org
 **Role:** admin
 

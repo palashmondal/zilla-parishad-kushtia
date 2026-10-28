@@ -45,7 +45,7 @@ async function exportScholarships() {
         ];
 
         // Output directory
-        const outputDir = path.join(__dirname, '../exports');
+        const outputDir = path.join(__dirname, '../data/exports');
         if (!fs.existsSync(outputDir)) {
             fs.mkdirSync(outputDir, { recursive: true });
         }
