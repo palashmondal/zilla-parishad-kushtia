@@ -1,7 +1,8 @@
 # ZP Kushtia Tools
+
 ## জেলা পরিষদ, কুষ্টিয়া
 
-A web-based toolset for Zilla Parishad, Kushtia to manage and search beneficiary records including **Education Scholarships** and **Humanitarian Financial Aid**.
+Web application for Zilla Parishad, Kushtia to publish and manage beneficiary records and development projects: **Education Scholarships**, **Humanitarian Financial Aid**, **Development Projects** and **Approval Memos**, with a role-based admin panel.
 
 **Live:** [https://zpkushtia.org](https://zpkushtia.org)
 
@@ -9,13 +10,30 @@ A web-based toolset for Zilla Parishad, Kushtia to manage and search beneficiary
 
 ## Features
 
-- **Scholarship Search** — Search education scholarship beneficiaries by name, parent name, school, phone, or upazila
-- **Humanitarian Aid Search** — Search financial aid records by name, NID, profession, address, or category
-- **Multi-keyword Search** — Space-separated keywords with relevance-based ranking
-- **Year Filtering** — Filter results by financial year
-- **Bengali Language UI** — Full UTF-8MB4 support with Hind Siliguri font
-- **Responsive Design** — Mobile, tablet, and desktop compatible
-- **Rate Limiting** — API protection against abuse
+### Public site
+
+- **Project Search** (`/projects.html`, home page): search development projects by name, upazila, financial year or memo number, with progress status
+- **Scholarship Search** (`/scholarship.html`): search scholarship beneficiaries by name, parent name, institution, phone or upazila
+- **Humanitarian Aid Search** (`/humanitarian_aid.html`): search aid records by name, NID, profession, address or category
+- **Dashboard** (`/dashboard.html`): summary of projects, scholarships and aid by financial year
+- Multi-keyword search with relevance ranking and financial-year filtering
+- Bengali UI (Hind Siliguri), fully responsive
+
+### Admin panel (`/admin`)
+
+- JWT login, profile management with photo upload, password change
+- **Users**: create and manage admin users, assign module access (scholarship, humanitarian aid, projects)
+- **Scholarships / Humanitarian Aid**: add, edit and delete records
+- **Projects**: full CRUD, progress tracking by implementation method, photo and document uploads, duplicate detection
+- **Approval Memos**: manage memos and link them to projects
+- **Project Map**: projects plotted by upazila
+- KPI dashboard with filters and charts
+
+### Security
+
+- bcrypt password hashing, JWT authentication, per-module authorization
+- Rate limiting on API, search and login endpoints
+- Prepared statements for all database queries
 
 ---
 
@@ -23,12 +41,13 @@ A web-based toolset for Zilla Parishad, Kushtia to manage and search beneficiary
 
 | Layer | Technology |
 |-------|-----------|
-| Runtime | Node.js |
+| Runtime | Node.js 18+ |
 | Backend | Express.js |
 | Database | MySQL 9.x (utf8mb4) |
-| Frontend | HTML5, Vanilla JavaScript, Tailwind CSS (CDN) |
-| Web Server | Nginx (ServBay) reverse proxy |
-| SSL | ServBay managed certificates |
+| Auth | JSON Web Tokens, bcryptjs |
+| Uploads | Multer |
+| Frontend | HTML5, Vanilla JavaScript, Tailwind CSS |
+| Hosting | Nginx reverse proxy, pm2, GitHub Actions deploy |
 
 ---
 
@@ -36,156 +55,107 @@ A web-based toolset for Zilla Parishad, Kushtia to manage and search beneficiary
 
 ```
 zpkushtia.org/
-├── config/
-│   └── database.js              # MySQL connection pool
+├── config/                  # Database pool, JWT and upload config
 ├── src/
-│   ├── server.js                # Express app entry point
-│   ├── middleware/
-│   │   ├── rateLimiter.js       # Rate limiting (general, search, login)
-│   │   └── errorHandler.js      # Global error handler
-│   ├── routes/
-│   │   ├── index.js             # Route aggregator
-│   │   ├── scholarship.routes.js
-│   │   └── humanitarian.routes.js
+│   ├── server.js            # Express entry point
+│   ├── routes/              # auth, users, scholarship, humanitarian, projects, approval-memos
 │   ├── controllers/
-│   │   ├── scholarship.controller.js
-│   │   └── humanitarian.controller.js
-│   └── models/
-│       ├── scholarship.model.js
-│       └── humanitarian.model.js
-├── public/                      # Static files served by Express
-│   ├── index.html               # Redirects to scholarship.html
-│   ├── scholarship.html         # Scholarship search page
-│   ├── humanitarian_aid.html    # Humanitarian aid search page
-│   └── assets/
-│       └── images/zpk_logo.jpg
-├── favicon/                     # Favicon assets
-├── ssl/                         # SSL certificates (gitignored)
-├── zpk_mysql_structure.sql      # Database schema
-├── package.json
-├── .env                         # Environment config (gitignored)
-└── .gitignore
+│   ├── models/              # SQL queries
+│   ├── middleware/          # auth, rate limiter, upload, error handler
+│   ├── utils/               # progress calculation, location helpers
+│   └── data/                # upazila coordinates
+├── public/                  # Public pages, compiled CSS, images
+├── admin/                   # Admin panel pages, shared components and scripts
+├── database/
+│   ├── zpkushti_zpk_structure_only.sql   # Full schema
+│   ├── admin_users_table.sql             # Initial admin account
+│   ├── migrate.js                        # Migration runner
+│   └── migrations/                       # Incremental SQL migrations
+├── scripts/                 # Import/export and maintenance scripts
+├── docs/                    # Development notes and schema reference
+├── favicon/
+├── data/                    # Local CSV imports/exports (gitignored)
+└── uploads/                 # Uploaded files (gitignored)
 ```
 
 ---
 
 ## Setup
 
-### Prerequisites
-
-- Node.js 18+
-- MySQL 8.0+
-- npm
-
-### 1. Clone the repository
+### 1. Install
 
 ```bash
-git clone https://github.com/your-username/zpkushtia.org.git
-cd zpkushtia.org
-```
-
-### 2. Install dependencies
-
-```bash
+git clone https://github.com/palashmondal/zilla-parishad-kushtia.git
+cd zilla-parishad-kushtia
 npm install
 ```
 
-### 3. Create the database
+### 2. Database
 
 ```bash
-mysql -u root -p < zpk_mysql_structure.sql
+mysql -u root -p -e "CREATE DATABASE zpkushti_zpk CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+mysql -u root -p zpkushti_zpk < database/zpkushti_zpk_structure_only.sql
+node database/migrate.js
 ```
 
-This creates the `zpk` database with two tables: `scholarship` and `humanitarian_aid`.
+Then create the first admin account with `database/admin_users_table.sql` or `scripts/fix-admin-password.js`, and change the password after the first login.
 
-### 4. Configure environment
+### 3. Environment
 
-Create a `.env` file in the project root:
+Create `.env` in the project root:
 
 ```env
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_password
-DB_NAME=zpk
+DB_NAME=zpkushti_zpk
 
 PORT=3000
 HTTPS_PORT=3443
-
 USE_HTTPS=false
+
+JWT_SECRET=a_long_random_string
+
 CORS_ORIGINS=http://localhost:3000
 NODE_ENV=development
 ```
 
-### 5. Start the server
+### 4. Run
 
 ```bash
-# Development (auto-restart on changes)
-npm run dev
-
-# Production
-npm start
+npm run dev     # development, auto-restart
+npm start       # production
 ```
 
-The application will be available at `http://localhost:3000`.
+The site runs at `http://localhost:3000`, the admin panel at `http://localhost:3000/admin`.
+
+### 5. Styles
+
+Pages use the compiled `public/output.css`. After changing Tailwind classes, rebuild it:
+
+```bash
+npx tailwindcss -i public/styles.css -o public/output.css --minify
+```
 
 ---
 
-## Database Schema
+## Database
 
-### Database: `zpkushti_zpk`
+| Table | Purpose |
+|-------|---------|
+| `scholarship` | Education scholarship beneficiaries |
+| `humanitarian_aid` | Humanitarian financial aid records |
+| `projects` | Development projects |
+| `project_progress_log` | Progress updates per project |
+| `progress_step_definitions` | Progress steps by implementation method |
+| `project_images`, `project_documents` | Project uploads |
+| `approval_memos` | Approval memos linked to projects |
+| `admin_users`, `user_modules` | Admin accounts and module access |
+| `migrations` | Applied migrations |
 
-### Table: `scholarship`
+Amounts are stored as `DECIMAL(10,2)`. Phone, NID and serial numbers are stored as `VARCHAR` to keep leading zeros. See [docs/database-schema.md](docs/database-schema.md) for column details.
 
-| Column | Type | Description |
-|--------|------|-------------|
-| id | INT (PK) | Auto-increment ID |
-| serial | VARCHAR(20) | Original serial number |
-| name | VARCHAR(255) | Student name (আবেদনকারীর নাম) |
-| father_name | VARCHAR(255) | Father's name (পিতার নাম) |
-| mother_name | VARCHAR(255) | Mother's name (মাতার নাম) |
-| sang | VARCHAR(255) | Village/area (সাং) |
-| post | VARCHAR(255) | Post office (পোস্ট) |
-| upazila | VARCHAR(100) | Sub-district (উপজেলা) |
-| zila | VARCHAR(100) | District, default: কুষ্টিয়া |
-| phone | VARCHAR(20) | Mobile number |
-| passing_year | VARCHAR(120) | Year of passing |
-| school | VARCHAR(500) | Institution name |
-| gpa | VARCHAR(500) | GPA |
-| category | VARCHAR(50) | SSC / HSC / JSC |
-| financial_year | VARCHAR(20) | Financial year |
-| amount | DECIMAL(10,2) | Scholarship amount |
-| status | VARCHAR(50) | Payment status, default: Delivered |
-
-**Indexes:** name, father_name, mother_name, school, phone, upazila, full-text search on (name, father_name, mother_name, school)
-
-### Table: `humanitarian_aid`
-
-| Column | Type | Description |
-|--------|------|-------------|
-| id | INT (PK) | Auto-increment ID |
-| financial_year | VARCHAR(20) | Financial year (অর্থবছর) |
-| name | VARCHAR(255) | Applicant name |
-| father_name | VARCHAR(255) | Father's name |
-| mother_name | VARCHAR(255) | Mother's name |
-| nid_birth_reg_no | VARCHAR(50) | NID / Birth registration number |
-| profession | VARCHAR(255) | Profession |
-| relation_to_beneficiary | VARCHAR(100) | Relation to beneficiary |
-| address | TEXT | Full address |
-| upazila | VARCHAR(100) | Sub-district |
-| zila | VARCHAR(100) | District, default: কুষ্টিয়া |
-| mobile | VARCHAR(20) | Mobile number |
-| category | VARCHAR(100) | Aid category |
-| amount_eng | DECIMAL(10,2) | Amount in numeric format |
-| bank | VARCHAR(255) | Bank name |
-| check_no | VARCHAR(50) | Check number |
-| check_date | VARCHAR(50) | Check date |
-| reference | VARCHAR(255) | Reference |
-| application_details | TEXT | Application details |
-| status | VARCHAR(50) | Payment status, default: Delivered |
-
-**Indexes:** name, father_name, mother_name, nid, mobile, address, financial_year, upazila, category
-
-### Humanitarian Aid Categories
+### Humanitarian aid categories
 
 | Category | Description |
 |----------|-------------|
@@ -197,68 +167,69 @@ The application will be available at `http://localhost:3000`.
 | দরিদ্র ও অসহায় ব্যক্তির জন্য মানবিক সহায়তা | Aid for poor and helpless persons |
 | জুলাই যোদ্ধার জন্য মানবিক সহায়তা | Aid for July fighters |
 | বীর মুক্তিযোদ্ধার জন্য মানবিক সহায়তা | Aid for freedom fighters |
-| জেলা পরিষদ কর্মচারী কল্যাণ | Aid for staffs of zilla parishad |
+| জেলা পরিষদ কর্মচারী কল্যাণ | Welfare for Zilla Parishad staff |
+
 ---
 
-## API Endpoints
+## API
 
-Base URL: `http://localhost:3000/api`
+All endpoints are under `/api`. `GET /api/health` returns server status.
 
-### General
+Read endpoints are public. Write endpoints require a JWT (`Authorization: Bearer <token>`) and access to the relevant module.
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/health` | Server health check |
+### Scholarship and Humanitarian Aid
 
-### Scholarship
+`{module}` is `scholarship` or `humanitarian`.
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/scholarship/search?q={query}&year={year}` | Search beneficiaries (top 10 by relevance) |
-| GET | `/api/scholarship/:id` | Get beneficiary by ID |
-| GET | `/api/scholarship/years` | List available financial years |
-| GET | `/api/scholarship/stats` | Total count, by category, by year |
-| GET | `/api/scholarship/list?page=1&limit=20&search=&year=` | Paginated list |
+| GET | `/api/{module}/search?q=&year=` | Search, top results by relevance |
+| GET | `/api/{module}/list?page=1&limit=20&search=&year=` | Paginated list |
+| GET | `/api/{module}/years` | Financial years |
+| GET | `/api/{module}/stats` | Totals by category and year |
+| GET | `/api/{module}/:id` | Single record |
+| POST | `/api/{module}` | Create |
+| PUT | `/api/{module}/:id` | Update |
+| DELETE | `/api/{module}/:id` | Delete |
 
-### Humanitarian Aid
+### Projects
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/humanitarian/search?q={query}&year={year}` | Search beneficiaries (top 10 by relevance) |
-| GET | `/api/humanitarian/:id` | Get beneficiary by ID |
-| GET | `/api/humanitarian/years` | List available financial years |
-| GET | `/api/humanitarian/stats` | Total count, by category, by year |
-| GET | `/api/humanitarian/list?page=1&limit=20&search=&year=` | Paginated list |
+| GET | `/api/projects/search`, `/list`, `/years`, `/stats`, `/upazilas` | Search, list and lookups |
+| GET | `/api/projects/map-data` | Projects for the map |
+| GET | `/api/projects/progress-steps` | Progress step definitions |
+| GET | `/api/projects/:id`, `/:id/progress`, `/:id/images`, `/:id/documents` | Project details |
+| POST | `/api/projects`, `/check-duplicates` | Create, duplicate check |
+| PUT / DELETE | `/api/projects/:id` | Update, delete |
+| POST / DELETE | `/api/projects/:id/progress`, `/images`, `/documents` | Manage progress and uploads |
+
+### Approval Memos
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/approval-memos/list`, `/years`, `/check-memo-number` | List and lookups |
+| GET | `/api/approval-memos/:id`, `/:id/projects` | Memo and linked projects |
+| POST / PUT / DELETE | `/api/approval-memos[/:id]` | Manage memos |
+
+### Auth and Users
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/login` | Log in, returns JWT |
+| GET | `/api/auth/me`, `/modules` | Current user and module access |
+| PUT | `/api/auth/profile`, `/change-password` | Update own profile |
+| POST | `/api/auth/profile/photo` | Upload profile photo |
+| GET / POST / PUT / DELETE | `/api/users[/:id]` | Manage users (admin only) |
 
 ---
 
 ## Deployment
 
-The production site runs on ServBay with Nginx as a reverse proxy:
-
-- Nginx handles SSL termination on port 443
-- Nginx proxies requests to Node.js on `http://localhost:3000`
-- Domain: `zpkushtia.org`
-
-```bash
-# Start production server
-npm start
-
-# Start with auto-restart (development)
-npm run dev
-```
-
----
-
-## Roadmap
-
-- [ ] Authentication system (JWT, multi-user with admin/user roles)
-- [ ] Admin dashboard with CRUD operations
-- [ ] Project management tool with photo uploads
-- [ ] Landing page with navigation to all tools
+Every push to `main` deploys through GitHub Actions (`.github/workflows/deploy.yml`). The workflow connects over SSH, pulls the code, installs dependencies, creates the upload folders, runs `database/migrate.js` and restarts the app with pm2. Nginx handles SSL and proxies to Node.js on port 3000.
 
 ---
 
 ## License
 
-This project is developed for Zilla Parishad, Kushtia (জেলা পরিষদ, কুষ্টিয়া).
+Developed for Zilla Parishad, Kushtia (জেলা পরিষদ, কুষ্টিয়া).
