@@ -146,3 +146,8 @@ ssl/
 
 # Beneficiary data exports (contain personal info, never commit)
 data/
+
+# Internal working notes (local only)
+docs/PHASE3_PROGRESS.md
+docs/PLAN.md
+docs/TESTING.md
